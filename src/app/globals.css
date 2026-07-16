@@ -1,0 +1,85 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Noto+Serif:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap');
+
+@layer base {
+  :root {
+    --maroon: #3A1414;
+    --gold: #C4922A;
+    --star: #E8C97A;
+  }
+
+  body {
+    @apply bg-surface text-gray-900 font-sans antialiased;
+  }
+
+  * {
+    @apply border-border;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-maroon hover:bg-maroon-dark text-white font-semibold px-5 py-2.5 rounded-lg transition-all duration-150 font-cinzel tracking-wide disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+  .btn-gold {
+    @apply bg-gradient-to-r from-gold to-gold-light hover:from-gold-light hover:to-gold text-white font-bold px-5 py-2.5 rounded-lg transition-all duration-150 font-cinzel tracking-wide;
+  }
+  .btn-ghost {
+    @apply border border-border hover:border-gold text-gray-600 hover:text-maroon font-medium px-4 py-2 rounded-lg transition-all duration-150;
+  }
+  .card {
+    @apply bg-white border border-border rounded-xl shadow-card;
+  }
+  .card-hd {
+    @apply px-5 py-3.5 border-b border-border flex items-center gap-2.5;
+  }
+  .card-title {
+    @apply font-cinzel font-semibold text-maroon text-sm tracking-wide;
+  }
+  .card-bd {
+    @apply p-5;
+  }
+  .input {
+    @apply w-full border border-border rounded-lg px-3.5 py-2.5 text-sm bg-white focus:outline-none focus:border-gold focus:ring-2 focus:ring-gold/20 transition-all;
+  }
+  .select {
+    @apply w-full border border-border rounded-lg px-3.5 py-2.5 text-sm bg-white focus:outline-none focus:border-gold focus:ring-2 focus:ring-gold/20 transition-all appearance-none cursor-pointer;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23A8A29E' stroke-width='2.5'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    padding-right: 32px;
+  }
+  .label {
+    @apply block text-xs font-bold text-gray-500 uppercase tracking-widest mb-1.5;
+  }
+  .badge-ok   { @apply inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200; }
+  .badge-warn { @apply inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-amber-50  text-amber-700  border border-amber-200;  }
+  .badge-err  { @apply inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-red-50    text-red-700    border border-red-200;    }
+  .badge-gold { @apply inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-gold/10  text-gold       border border-gold/30;     }
+  .section-title {
+    @apply font-cinzel font-bold text-maroon text-xl tracking-wide;
+  }
+  .page-header {
+    @apply mb-6;
+  }
+  .page-header h1 {
+    @apply font-cinzel font-bold text-2xl text-maroon mb-1;
+  }
+  .page-header p {
+    @apply text-sm text-gray-500;
+  }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #D4C4A0; border-radius: 3px; }
+
+/* Gold focus ring */
+*:focus-visible {
+  outline: 2px solid #C4922A;
+  outline-offset: 2px;
+}
