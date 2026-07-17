@@ -11,10 +11,18 @@ export const chartApi = axios.create({
   headers: { 'Content-Type': 'application/json' },
 })
 
-// Attach token to every chart request
+// Attach token + language to every chart request
 chartApi.interceptors.request.use(cfg => {
   const token = localStorage.getItem('vh_token')
   if (token) cfg.headers!['Authorization'] = `Bearer ${token}`
+  // Add language param from store
+  try {
+    const stored = JSON.parse(localStorage.getItem('vh-store') || '{}')
+    const lang = stored?.state?.language || 'en'
+    if (lang && lang !== 'en') {
+      cfg.params = { ...cfg.params, lang }
+    }
+  } catch {}
   return cfg
 })
 
@@ -42,18 +50,12 @@ chartApi.interceptors.response.use(
   }
 )
 
-// Helper — unwraps ApiResponse<T> wrapper
 export async function apiGet<T>(url: string): Promise<T | null> {
-  try {
-    const res = await chartApi.get(url)
-    return (res.data?.data ?? res.data) as T
-  } catch { return null }
+  try { const res = await chartApi.get(url); return (res.data?.data ?? res.data) as T }
+  catch { return null }
 }
 
-export async function apiPost<T>(url: string, body: unknown, useAuth = true): Promise<T | null> {
-  try {
-    const client = useAuth ? chartApi : authApi
-    const res = await client.post(url, body)
-    return (res.data?.data ?? res.data) as T
-  } catch { return null }
+export async function apiPost<T>(url: string, body: unknown): Promise<T | null> {
+  try { const res = await chartApi.post(url, body); return (res.data?.data ?? res.data) as T }
+  catch { return null }
 }
