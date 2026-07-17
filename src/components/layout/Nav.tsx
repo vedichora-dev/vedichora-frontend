@@ -3,12 +3,12 @@ import { useState, useRef, useEffect } from 'react'
 import Link from 'next/link'
 import { useRouter, usePathname } from 'next/navigation'
 import { useStore } from '@/store'
-import { useTheme } from '@/store/theme'
+import { useTheme, THEME_META } from '@/store/theme'
 import { CURRENCIES, LANGUAGES } from '@/lib/constants'
 import { getInitials } from '@/lib/utils'
 import { Menu, X, ChevronDown, LogOut, LayoutDashboard, Star } from 'lucide-react'
 
-const NAV = [
+const NAV_LINKS = [
   { href:'/', label:'Horoscope' },
   { href:'/chart', label:'Kundali' },
   { href:'/match', label:'Matching' },
@@ -27,35 +27,20 @@ const MORE = [
   { href:'/varshaphal', label:'Varshaphal' },
 ]
 
-// Simple dropdown — closes on outside CLICK (not mousedown)
-// so child onMouseDown fires before close
-function DD({ label, children }: { label: React.ReactNode; children: React.ReactNode }) {
+function DD({ trigger, children }: { trigger: React.ReactNode; children: React.ReactNode }) {
   const [open, setOpen] = useState(false)
   const ref = useRef<HTMLDivElement>(null)
-
   useEffect(() => {
-    if (!open) return
-    const close = (e: MouseEvent) => {
-      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false)
-    }
-    // Use setTimeout so this handler is added AFTER the opening click settles
-    const t = setTimeout(() => document.addEventListener('click', close), 0)
-    return () => { clearTimeout(t); document.removeEventListener('click', close) }
-  }, [open])
-
+    const h = (e: MouseEvent) => { if (!ref.current?.contains(e.target as Node)) setOpen(false) }
+    document.addEventListener('click', h)
+    return () => document.removeEventListener('click', h)
+  }, [])
   return (
-    <div ref={ref} style={{position:'relative',display:'inline-block'}}>
-      <button
-        onClick={() => setOpen(o => !o)}
-        style={{display:'flex',alignItems:'center',gap:'4px',padding:'5px 10px',
-          border:'1px solid var(--bd)',borderRadius:'20px',background:'var(--bg2)',
-          color:'var(--tx2)',fontSize:'11px',fontWeight:700,cursor:'pointer',fontFamily:'inherit'}}
-      >{label}</button>
+    <div className="relative" ref={ref}>
+      <div onClick={() => setOpen(o => !o)}>{trigger}</div>
       {open && (
-        <div style={{position:'absolute',top:'calc(100% + 6px)',right:0,zIndex:9999,
-          minWidth:'180px',background:'var(--surf)',border:'1px solid var(--bd)',
-          borderRadius:'10px',boxShadow:'0 8px 24px rgba(0,0,0,.15)',
-          overflow:'hidden',animation:'fadeIn .1s ease'}}>
+        <div style={{background:'var(--surf)',border:'1px solid var(--bd)',boxShadow:'var(--sh3)'}}
+          className="absolute right-0 top-full mt-1.5 rounded-xl z-50 py-1.5 min-w-[190px] animate-[fadeIn_.15s_ease]">
           {children}
         </div>
       )}
@@ -63,194 +48,138 @@ function DD({ label, children }: { label: React.ReactNode; children: React.React
   )
 }
 
-// Item uses onMouseDown so it fires BEFORE outside-click closes dropdown
-function Item({ children, onSelect, href }: { children: React.ReactNode; onSelect?: () => void; href?: string }) {
-  const s: React.CSSProperties = {
-    display:'flex', alignItems:'center', gap:'8px', width:'100%',
-    padding:'9px 14px', fontSize:'13px', color:'var(--tx2)',
-    background:'none', border:'none', cursor:'pointer',
-    fontFamily:'inherit', textAlign:'left', textDecoration:'none',
-  }
-  const handle = (e: React.MouseEvent) => {
-    e.preventDefault()
-    e.stopPropagation()
-    if (onSelect) onSelect()
-  }
-  if (href) return <Link href={href} style={s} onMouseDown={handle}>{children}</Link>
-  return (
-    <button style={s} onMouseDown={handle}
-      onMouseEnter={e => e.currentTarget.style.background = 'var(--bg2)'}
-      onMouseLeave={e => e.currentTarget.style.background = 'none'}>
-      {children}
-    </button>
-  )
-}
-
-function Sep() {
-  return <div style={{height:'1px',background:'var(--bd)',margin:'4px 0'}} />
-}
-
-function DH({ label }: { label: string }) {
-  return <div style={{padding:'6px 14px 4px',fontSize:'9px',fontWeight:800,
-    color:'var(--txm)',textTransform:'uppercase',letterSpacing:'.08em',
-    borderBottom:'1px solid var(--bd)',marginBottom:'2px'}}>{label}</div>
+function DI({ children, onClick, href }: { children: React.ReactNode; onClick?: () => void; href?: string }) {
+  const cls = "flex items-center gap-2.5 px-4 py-2.5 text-sm w-full text-left cursor-pointer transition-colors hover:opacity-80"
+  const style = { color:'var(--tx2)' }
+  if (href) return <Link href={href} className={cls} style={style}>{children}</Link>
+  return <button className={cls} style={style} onClick={onClick}>{children}</button>
 }
 
 export default function Nav() {
   const router = useRouter()
-  const path = usePathname()
-  const { token, user, currency, currencySym, language, languageFlag,
-          chartMode, setCurrency, setLanguage, setChartMode, logout } = useStore()
-  const { theme, themes, meta, setTheme } = useTheme() as any
+  const pathname = usePathname()
+  const { token, user, currency, currencySym, languageFlag, language, chartMode, setCurrency, setLanguage, setChartMode, logout } = useStore()
+  const { theme, themes, meta, setTheme } = useTheme()
   const [mob, setMob] = useState(false)
 
-  const logout_ = () => { logout(); router.push('/signin') }
+  const handleLogout = () => { logout(); router.push('/signin') }
 
   return (
     <>
-      <nav style={{position:'sticky',top:0,zIndex:200,height:'54px',
-        background:'var(--surf)',borderBottom:'1px solid var(--bd)',
-        display:'flex',alignItems:'center',gap:'8px',padding:'0 16px',
-        boxShadow:'var(--sh1)',overflow:'visible'}}>
-
+      <nav style={{background:'var(--surf)',borderBottom:'1px solid var(--bd)'}}
+        className="sticky top-0 z-40 h-14 flex items-center gap-3 px-4 shadow-sm">
         {/* Logo */}
-        <Link href="/" style={{display:'flex',alignItems:'center',gap:'8px',
-          textDecoration:'none',flexShrink:0,marginRight:'4px'}}>
-          <div style={{width:'32px',height:'32px',borderRadius:'8px',
-            background:'var(--acc)',display:'flex',alignItems:'center',justifyContent:'center'}}>
-            <Star style={{width:'16px',height:'16px',color:'var(--gold)',fill:'var(--gold)'}} />
+        <Link href="/" className="flex items-center gap-2 mr-1 shrink-0">
+          <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{background:'var(--maroon)'}}>
+            <Star className="w-4 h-4 fill-current" style={{color:'var(--star)'}} />
           </div>
-          <span style={{fontFamily:'Cinzel,serif',fontWeight:700,fontSize:'15px',color:'var(--acc)'}}>
-            Vedic<em style={{color:'var(--gold)',fontStyle:'normal'}}>Hora</em>
+          <span className="font-cinzel font-bold text-base" style={{color:'var(--maroon)'}}>
+            Vedic<span style={{color:'var(--gold)'}}>Hora</span>
           </span>
         </Link>
 
         {/* Mode */}
-        <div style={{display:'flex',background:'var(--bg2)',border:'1px solid var(--bd)',
-          borderRadius:'8px',padding:'2px',gap:'2px',flexShrink:0}}>
+        <div className="flex rounded-lg p-0.5 gap-0.5 shrink-0" style={{background:'var(--bg2)',border:'1px solid var(--bd)'}}>
           {(['north','south'] as const).map(m => (
-            <button key={m} onClick={() => setChartMode(m)} style={{
-              padding:'3px 11px',borderRadius:'6px',fontSize:'11px',fontWeight:600,
-              border:'none',cursor:'pointer',fontFamily:'inherit',textTransform:'capitalize',
-              background:chartMode===m?'var(--acc)':'transparent',
-              color:chartMode===m?'#fff':'var(--txm)',transition:'all .15s'}}>
-              {m}
-            </button>
+            <button key={m} onClick={() => setChartMode(m)}
+              className="px-3 py-1 rounded-md text-xs font-semibold transition-all capitalize"
+              style={chartMode===m ? {background:'var(--maroon)',color:'#fff'} : {color:'var(--txm)'}}>{m}</button>
           ))}
         </div>
 
         {/* Nav links */}
-        <div className="hidden lg:flex" style={{flex:1,justifyContent:'center',
-          display:'flex',alignItems:'center',gap:'0'}}>
-          {NAV.map(l => (
-            <Link key={l.href} href={l.href} style={{
-              padding:'5px 11px',borderRadius:'6px',fontSize:'13px',
-              fontWeight:path===l.href?700:500,textDecoration:'none',
-              color:path===l.href?'var(--acc)':'var(--tx2)',
-              borderBottom:path===l.href?'2px solid var(--gold)':'2px solid transparent',
-            }}>{l.label}</Link>
+        <div className="hidden lg:flex items-center gap-0 flex-1 justify-center">
+          {NAV_LINKS.map(l => (
+            <Link key={l.href} href={l.href}
+              className="px-3 py-1.5 rounded-md text-sm font-medium transition-colors"
+              style={pathname===l.href ? {color:'var(--maroon)',fontWeight:700,borderBottom:'2px solid var(--gold)'} : {color:'var(--tx2)'}}>
+              {l.label}
+            </Link>
           ))}
-          {/* More */}
-          <div style={{position:'relative'}}>
-            <DD label={<>More <ChevronDown style={{width:'12px',height:'12px'}} /></>}>
-              <DH label="More pages" />
-              {MORE.map(l => <Item key={l.href} href={l.href} onSelect={() => {}}>{l.label}</Item>)}
-              <Sep />
-              <Item href="/western" onSelect={() => {}}>🌐 Western layout</Item>
-            </DD>
-          </div>
+          <DD trigger={
+            <button className="flex items-center gap-1 px-3 py-1.5 rounded-md text-sm font-medium transition-colors" style={{color:'var(--tx2)'}}>
+              More <ChevronDown className="w-3.5 h-3.5" />
+            </button>
+          }>
+            {MORE.map(l => <DI key={l.href} href={l.href}>{l.label}</DI>)}
+            <div style={{borderTop:'1px solid var(--bd)',margin:'4px 0'}} />
+            <DI href="/western">🌐 Western layout</DI>
+          </DD>
         </div>
 
         {/* Right */}
-        <div style={{display:'flex',alignItems:'center',gap:'6px',
-          marginLeft:'auto',flexShrink:0}}>
-
+        <div className="flex items-center gap-2 ml-auto shrink-0">
           {/* Language */}
-          <DD label={<>{languageFlag} {language.slice(0,2).toUpperCase()}</>}>
-            <DH label="Language" />
-            {LANGUAGES.map(l => (
-              <Item key={l.code} onSelect={() => { setLanguage(l.code, l.flag); }}>
-                {l.flag} {l.label}
-              </Item>
-            ))}
+          <DD trigger={
+            <button className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-full text-xs font-bold transition-all"
+              style={{border:'1px solid var(--bd)',background:'var(--bg2)',color:'var(--tx2)'}}>
+              {languageFlag} {language.slice(0,2).toUpperCase()}
+            </button>
+          }>
+            <div className="px-3 py-1.5 text-xs font-bold uppercase tracking-widest" style={{color:'var(--txm)',borderBottom:'1px solid var(--bd)'}}>Language</div>
+            {LANGUAGES.map(l => <DI key={l.code} onClick={() => setLanguage(l.code, l.flag)}>{l.flag} {l.label}</DI>)}
           </DD>
 
           {/* Currency */}
-          <DD label={<>{currencySym} {currency}</>}>
-            <DH label="Currency" />
-            {CURRENCIES.map(c => (
-              <Item key={c.code} onSelect={() => setCurrency(c.code, c.sym)}>
-                {c.flag} {c.sym} {c.name}
-              </Item>
-            ))}
+          <DD trigger={
+            <button className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-full text-xs font-bold transition-all"
+              style={{border:'1px solid var(--bd)',background:'var(--bg2)',color:'var(--tx2)'}}>
+              {currencySym} {currency}
+            </button>
+          }>
+            <div className="px-3 py-1.5 text-xs font-bold uppercase tracking-widest" style={{color:'var(--txm)',borderBottom:'1px solid var(--bd)'}}>Currency</div>
+            {CURRENCIES.map(c => <DI key={c.code} onClick={() => setCurrency(c.code, c.sym)}>{c.flag} {c.sym} {c.name}</DI>)}
           </DD>
 
           {/* Theme */}
-          <DD label={
-            <span style={{width:'18px',height:'18px',borderRadius:'50%',display:'inline-block',
-              background:meta[theme]?.swatch||'var(--acc)',border:'2px solid var(--gold)'}} />
+          <DD trigger={
+            <button className="w-7 h-7 rounded-full border-2 transition-all" title="Change theme"
+              style={{border:'2px solid var(--gold)',background:meta[theme]?.swatch||'var(--maroon)'}} />
           }>
-            <DH label="Theme" />
-            <div style={{display:'grid',gridTemplateColumns:'repeat(4,1fr)',
-              gap:'6px',padding:'8px 10px 4px'}}>
-              {themes.filter((t,i,a)=>a.findIndex(x=>x.key===t.key)===i).map(t => (
-                <button key={t.key} onMouseDown={() => setTheme(t.key)}
-                  title={meta[t.key]?.label}
-                  style={{display:'flex',flexDirection:'column',alignItems:'center',
-                    gap:'3px',padding:'5px 3px',border:theme===t.key?
-                    '1.5px solid var(--gold)':'1.5px solid transparent',
-                    borderRadius:'8px',background:'none',cursor:'pointer'}}>
-                  <div style={{width:'22px',height:'22px',borderRadius:'50%',
-                    background:meta[t.key]?.swatch}} />
-                  <span style={{fontSize:'8px',color:'var(--tx2)',whiteSpace:'nowrap'}}>
-                    {meta[t.key]?.label}
-                  </span>
+            <div className="px-3 py-1.5 text-xs font-bold uppercase tracking-widest" style={{color:'var(--txm)',borderBottom:'1px solid var(--bd)'}}>Theme</div>
+            <div className="grid grid-cols-3 gap-1.5 p-3">
+              {themes.map(t => (
+                <button key={t} onClick={() => setTheme(t)} title={meta[t].label}
+                  className="flex flex-col items-center gap-1 p-1.5 rounded-lg transition-all"
+                  style={theme===t ? {background:'var(--acc-l)',border:'1.5px solid var(--gold)'} : {border:'1.5px solid transparent'}}>
+                  <div className="w-6 h-6 rounded-full" style={{background:meta[t].swatch}} />
+                  <span className="text-xs" style={{color:'var(--tx2)'}}>{meta[t].label}</span>
                 </button>
               ))}
             </div>
           </DD>
 
-          <div style={{width:'1px',height:'18px',background:'var(--bd)',margin:'0 2px'}} />
-
           {/* Auth */}
           {token && user ? (
-            <DD label={
-              <span style={{width:'30px',height:'30px',borderRadius:'50%',
-                background:'var(--acc)',color:'#fff',fontSize:'11px',fontWeight:700,
-                display:'inline-flex',alignItems:'center',justifyContent:'center'}}>
-                {getInitials(user.displayName)}
-              </span>
+            <DD trigger={
+              <button className="w-8 h-8 rounded-full text-white text-xs font-bold flex items-center justify-center"
+                style={{background:'var(--maroon)'}}>{getInitials(user.displayName)}</button>
             }>
-              <div style={{padding:'8px 14px 6px',borderBottom:'1px solid var(--bd)'}}>
-                <div style={{fontSize:'13px',fontWeight:600,color:'var(--acc)'}}>{user.displayName}</div>
-                <div style={{fontSize:'11px',color:'var(--txm)'}}>{user.email}</div>
+              <div className="px-4 py-2.5" style={{borderBottom:'1px solid var(--bd)'}}>
+                <div className="text-sm font-semibold" style={{color:'var(--maroon)'}}>{user.displayName}</div>
+                <div className="text-xs" style={{color:'var(--txm)'}}>{user.email}</div>
               </div>
-              <Item href="/dashboard" onSelect={() => {}}><LayoutDashboard style={{width:'14px',height:'14px'}} /> Dashboard</Item>
-              <Item href="/chart" onSelect={() => {}}><Star style={{width:'14px',height:'14px'}} /> My Charts</Item>
-              <Sep />
-              <Item onSelect={logout_}><LogOut style={{width:'14px',height:'14px',color:'#DC2626'}} /> <span style={{color:'#DC2626'}}>Sign out</span></Item>
+              <DI href="/dashboard"><LayoutDashboard className="w-4 h-4" /> Dashboard</DI>
+              <DI href="/chart"><Star className="w-4 h-4" /> My Charts</DI>
+              <div style={{borderTop:'1px solid var(--bd)',margin:'4px 0'}} />
+              <DI onClick={handleLogout}><LogOut className="w-4 h-4 text-red-500" /> <span className="text-red-600">Sign out</span></DI>
             </DD>
           ) : (
-            <div style={{display:'flex',gap:'8px'}}>
-              <Link href="/signin" className="btn-ghost" style={{fontSize:'13px',padding:'5px 12px',textDecoration:'none'}}>Sign in</Link>
-              <Link href="/signup" className="btn-primary" style={{fontSize:'13px',padding:'5px 12px',textDecoration:'none'}}>Get started</Link>
+            <div className="flex items-center gap-2">
+              <Link href="/signin" className="btn-ghost text-sm py-1.5 px-3">Sign in</Link>
+              <Link href="/signup" className="btn-primary text-sm py-1.5 px-3.5">Get started</Link>
             </div>
           )}
-
-          <button className="lg:hidden" onClick={() => setMob(o=>!o)}
-            style={{background:'none',border:'none',cursor:'pointer',padding:'4px',color:'var(--tx)'}}>
-            {mob ? <X style={{width:'20px',height:'20px'}} /> : <Menu style={{width:'20px',height:'20px'}} />}
+          <button className="lg:hidden p-1.5" onClick={() => setMob(o=>!o)}>
+            {mob ? <X className="w-5 h-5" style={{color:'var(--tx)'}} /> : <Menu className="w-5 h-5" style={{color:'var(--tx)'}} />}
           </button>
         </div>
       </nav>
-
       {mob && (
-        <div style={{position:'fixed',inset:0,top:'54px',background:'var(--surf)',
-          zIndex:30,padding:'16px',overflowY:'auto'}}>
-          {[...NAV,...MORE].map(l => (
+        <div className="lg:hidden fixed inset-0 top-14 z-30 p-4 overflow-y-auto" style={{background:'var(--surf)'}}>
+          {[...NAV_LINKS,...MORE].map(l => (
             <Link key={l.href} href={l.href} onClick={() => setMob(false)}
-              style={{display:'block',padding:'11px 16px',fontSize:'14px',
-                color:'var(--tx2)',textDecoration:'none',borderRadius:'8px'}}>
+              className="block px-4 py-3 rounded-lg text-sm font-medium transition-colors" style={{color:'var(--tx2)'}}>
               {l.label}
             </Link>
           ))}
