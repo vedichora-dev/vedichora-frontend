@@ -4,28 +4,35 @@ import { useRouter } from 'next/navigation'
 import { useStore } from '@/store'
 import { calculateChart } from '@/api'
 import { to24Hour } from '@/lib/utils'
+import { useT, usePlanetName, useSignName } from '@/lib/i18n'
 import DatePicker, { DateValue } from '@/components/ui/DatePicker'
 import PlanetTable from '@/components/chart/PlanetTable'
 import NorthChart from '@/components/chart/NorthChart'
-import { MapPin, User, ChevronRight, Download } from 'lucide-react'
+import { MapPin, User, ChevronRight, Download, Save } from 'lucide-react'
 
-const EMPTY_DATE: DateValue = { dd: 0, mm: 0, yyyy: 0, hr: 8, mi: 30, ap: 'AM' }
+const EMPTY: DateValue = { dd:0, mm:0, yyyy:0 }
 
 export default function ChartPage() {
   const router = useRouter()
-  const { token, setHoroId, chartMode } = useStore()
-  const [name, setName]   = useState('')
-  const [dob, setDob]     = useState<DateValue>(EMPTY_DATE)
-  const [place, setPlace] = useState('')
+  const { token, setHoroId, chartMode, setRedirectAfterLogin } = useStore()
+  const t = useT()
+  const getPlanet = usePlanetName()
+  const getSign = useSignName()
+
+  const [name, setName]     = useState('')
+  const [dob, setDob]       = useState<DateValue>(EMPTY)
+  const [place, setPlace]   = useState('')
   const [loading, setLoading] = useState(false)
-  const [err, setErr]     = useState('')
+  const [err, setErr]       = useState('')
   const [result, setResult] = useState<any>(null)
+  const [saved, setSaved]   = useState(false)
 
   const handleGenerate = async () => {
-    if (!dob.dd || !dob.mm || !dob.yyyy) { setErr('Please select Day, Month and Year'); return }
-    if (!place.trim()) { setErr('Please enter place of birth'); return }
+    if (!dob.dd || !dob.mm || !dob.yyyy) { setErr(t('chart.generate') + ' — ' + t('chart.day')); return }
+    if (!place.trim()) { setErr(t('chart.place')); return }
 
     if (!token) {
+      setRedirectAfterLogin('/chart')
       sessionStorage.setItem('pending_chart', JSON.stringify({ dob, place, name }))
       router.push('/signup')
       return
@@ -33,9 +40,12 @@ export default function ChartPage() {
 
     setLoading(true); setErr('')
     try {
-      const { hour, minute } = dob.unknownTime ? { hour: 12, minute: 0 } : to24Hour(dob.hr || 12, dob.mi || 0, dob.ap || 'AM')
+      const { hour, minute } = dob.unknownTime
+        ? { hour:12, minute:0 }
+        : to24Hour(dob.hr||12, dob.mi||0, dob.ap||'AM')
+
       const res = await calculateChart({
-        PersonName: name || 'My Chart',
+        PersonName: name || t('chart.title'),
         Year: dob.yyyy, Month: dob.mm, Day: dob.dd,
         Hour: hour, Minute: minute, Second: 0,
         PlaceName: place,
@@ -45,94 +55,132 @@ export default function ChartPage() {
       const data = res.data?.data
       if (data) {
         setResult(data)
-        if (data.horoscopeId || data.id) setHoroId(data.horoscopeId || data.id)
+        const id = data.horoscopeId || data.id
+        if (id) { setHoroId(id); localStorage.setItem('vh_horoid', id) }
       } else {
         setErr(res.data?.message || 'Chart calculation failed')
       }
     } catch (e: any) {
-      setErr(e.response?.data?.message || 'Chart calculation failed — check your details')
-    } finally {
-      setLoading(false)
+      setErr(e.response?.data?.message || 'Chart calculation failed — please check your details')
+    } finally { setLoading(false) }
+  }
+
+  // Restore pending chart after login
+  if (typeof window !== 'undefined' && token) {
+    const pending = sessionStorage.getItem('pending_chart')
+    if (pending && !result && !loading) {
+      try {
+        const saved = JSON.parse(pending)
+        sessionStorage.removeItem('pending_chart')
+        if (saved.dob) {
+          setDob(saved.dob)
+          if (saved.place) setPlace(saved.place)
+          if (saved.name) setName(saved.name)
+          setTimeout(handleGenerate, 200)
+        }
+      } catch {}
     }
   }
 
   const stats = result ? [
-    { label: 'Lagna',          value: result.ascendantName || '—' },
-    { label: 'Moon Sign',      value: result.moonRasi || result.moonSign || '—' },
-    { label: 'Nakshatra',      value: result.nakshatra || result.planets?.find((p:any)=>p.planet==='Moon')?.nakshatraName || '—' },
-    { label: 'Current Dasha',  value: result.currentDashaLord || result.vimshottariDasa?.[0]?.planet || '—' },
+    { label: t('chart.lagna'),     value: getSign(result.ascendantName||result.lagna||'—') },
+    { label: t('chart.rashi'),     value: getSign(result.moonRasi||result.moonSign||'—') },
+    { label: t('chart.nakshatra'), value: result.nakshatra||result.planets?.find((p:any)=>p.planet==='Moon')?.nakshatraName||'—' },
+    { label: t('chart.dasha'),     value: result.currentDashaLord||result.vimshottariDasa?.[0]?.planet||'—' },
   ] : []
 
+  // Translate planets in result
+  const translatedPlanets = result?.planets?.map((p: any) => ({
+    ...p,
+    planet: getPlanet(p.planet || p.Planet || ''),
+    rasiName: getSign(p.rasiName || p.rasi || ''),
+    nakshatraName: p.nakshatraName || p.nakshatra || '—',
+  })) || []
+
   return (
-    <div className="max-w-6xl mx-auto px-4 py-8">
+    <div className="page-wrap">
       <div className="page-header">
-        <h1>Birth Chart Calculator</h1>
-        <p>Enter birth details to generate your Vedic chart — free</p>
+        <h1>{t('chart.title')}</h1>
+        <p>{t('chart.subtitle')}</p>
       </div>
 
-      <div className="grid lg:grid-cols-5 gap-6">
-        {/* Form */}
+      <div style={{display:'grid',gridTemplateColumns:'1fr',gap:'24px'}} className="lg:grid-cols-5">
         <div className="lg:col-span-2">
           <div className="card">
             <div className="card-hd">
-              <User className="w-4 h-4 text-gold" />
-              <span className="card-title">Birth Details</span>
+              <User style={{width:'16px',height:'16px',color:'var(--gold)'}} />
+              <span className="card-title">{t('chart.section')}</span>
             </div>
-            <div className="card-bd space-y-5">
+            <div className="card-bd" style={{display:'flex',flexDirection:'column',gap:'20px'}}>
               <div>
-                <label className="label">Full name</label>
-                <input className="input" value={name} onChange={e => setName(e.target.value)} placeholder="e.g. Ravi Kumar" />
+                <label className="label">{t('chart.name')}</label>
+                <input className="input" value={name} onChange={e=>setName(e.target.value)}
+                  placeholder={t('chart.name_placeholder')} />
+              </div>
+              <div>
+                <label className="label">{t('chart.dob')}</label>
+                <DatePicker value={dob} onChange={setDob} showTime showUnknown prefix="c" />
+              </div>
+              <div>
+                <label className="label">
+                  <MapPin style={{width:'12px',height:'12px',display:'inline',marginRight:'4px'}} />
+                  {t('chart.place')}
+                </label>
+                <input className="input" value={place} onChange={e=>setPlace(e.target.value)}
+                  placeholder={t('chart.place_placeholder')} />
               </div>
 
-              <div>
-                <label className="label">Date &amp; Time of Birth</label>
-                <DatePicker value={dob} onChange={setDob} showTime showUnknown />
-              </div>
-
-              <div>
-                <label className="label"><MapPin className="w-3 h-3 inline mr-1" />Place of birth</label>
-                <input className="input" value={place} onChange={e => setPlace(e.target.value)} placeholder="Start typing city..." />
-              </div>
-
-              {err && <p className="text-sm text-red-600 bg-red-50 border border-red-100 rounded-lg px-3 py-2">{err}</p>}
-
-              {!token && (
-                <p className="text-xs text-amber-700 bg-amber-50 border border-amber-200 rounded-lg px-3 py-2.5">
-                  🔒 Sign in to generate your chart — it's free
-                </p>
+              {err && (
+                <div className="text-sm rounded-lg px-3 py-2" style={{background:'var(--bad-l,#FBEAE6)',color:'var(--bad,#7A1F1F)',border:'1px solid rgba(122,31,31,.2)'}}>
+                  {err}
+                </div>
               )}
 
-              <button onClick={handleGenerate} disabled={loading}
-                className="btn-primary w-full py-3 flex items-center justify-center gap-2 font-cinzel text-sm">
-                {loading ? (
-                  <><span className="animate-spin inline-block w-4 h-4 border-2 border-white border-t-transparent rounded-full" /> Calculating…</>
-                ) : (
-                  <> Generate chart <ChevronRight className="w-4 h-4" /></>
-                )}
+              {!token && (
+                <div className="text-xs rounded-lg px-3 py-2.5" style={{background:'var(--warn-l,#FBF0DC)',color:'var(--warn,#9C6B14)',border:'1px solid rgba(156,107,20,.2)'}}>
+                  🔒 {t('chart.signin_required')}
+                </div>
+              )}
+
+              <button onClick={handleGenerate} disabled={loading} className="btn-primary w-full font-cinzel"
+                style={{padding:'12px',display:'flex',alignItems:'center',justifyContent:'center',gap:'8px'}}>
+                {loading
+                  ? <><span className="animate-spin inline-block w-4 h-4 border-2 border-white border-t-transparent rounded-full" /> {t('chart.generating')}</>
+                  : <>{t('chart.generate')} <ChevronRight style={{width:'16px',height:'16px'}} /></>
+                }
               </button>
             </div>
           </div>
         </div>
 
-        {/* Result */}
-        <div className="lg:col-span-3 space-y-5">
+        <div style={{gridColumn:'span 3',display:'flex',flexDirection:'column',gap:'20px'}}>
           {result ? (
             <>
               {/* Stat cards */}
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+              <div style={{display:'grid',gridTemplateColumns:'repeat(2,1fr)',gap:'12px'}} className="sm:grid-cols-4">
                 {stats.map(s => (
-                  <div key={s.label} className="card p-4 text-center">
-                    <div className="text-xs text-gray-400 uppercase tracking-wider mb-1.5">{s.label}</div>
-                    <div className="font-cinzel font-bold text-maroon text-sm">{s.value}</div>
+                  <div key={s.label} className="card" style={{padding:'16px',textAlign:'center'}}>
+                    <div className="text-xs uppercase tracking-wider mb-1.5" style={{color:'var(--txm)',fontSize:'10px',fontWeight:700}}>{s.label}</div>
+                    <div className="font-cinzel font-bold" style={{color:'var(--acc)',fontSize:'14px'}}>{s.value}</div>
                   </div>
                 ))}
               </div>
 
-              {/* Chart + Planet table */}
-              <div className="grid md:grid-cols-2 gap-5">
+              {/* Chart + Table */}
+              <div style={{display:'grid',gridTemplateColumns:'1fr',gap:'20px'}} className="md:grid-cols-2">
                 <div className="card">
                   <div className="card-hd">
                     <span className="card-title">{chartMode === 'north' ? 'North Indian' : 'South Indian'} Chart</span>
+                    <div style={{display:'flex',gap:'4px',marginLeft:'auto'}}>
+                      {['north','south'].map(m=>(
+                        <button key={m} style={{padding:'2px 8px',borderRadius:'4px',fontSize:'11px',
+                          border:'1px solid var(--bd)',cursor:'pointer',fontFamily:'inherit',
+                          background:chartMode===m?'var(--acc)':'transparent',
+                          color:chartMode===m?'#fff':'var(--txm)'}}>
+                          {m.charAt(0).toUpperCase()+m.slice(1)}
+                        </button>
+                      ))}
+                    </div>
                   </div>
                   <div className="card-bd">
                     <NorthChart planets={result.planets || []} />
@@ -141,51 +189,54 @@ export default function ChartPage() {
 
                 <div className="card">
                   <div className="card-hd"><span className="card-title">Planet Positions</span></div>
-                  <PlanetTable planets={result.planets || []} />
+                  <PlanetTable planets={translatedPlanets} />
                 </div>
               </div>
 
               {/* Dasha */}
               {result.vimshottariDasa?.length > 0 && (
                 <div className="card">
-                  <div className="card-hd"><span className="card-title">Vimshottari Dasha</span></div>
-                  <div className="card-bd">
-                    <div className="grid sm:grid-cols-2 gap-2">
-                      {result.vimshottariDasa.slice(0,8).map((d: any, i: number) => (
-                        <div key={i} className="flex items-center justify-between px-3 py-2 rounded-lg bg-gray-50 border border-border">
-                          <span className="text-sm font-medium text-maroon">{d.planet} MD</span>
-                          <span className="text-xs text-gray-400">{d.startYear || d.start || ''}–{d.endYear || d.end || ''}</span>
-                        </div>
-                      ))}
-                    </div>
+                  <div className="card-hd"><span className="card-title">{t('chart.dasha')} — Vimshottari</span></div>
+                  <div className="card-bd" style={{display:'grid',gridTemplateColumns:'repeat(2,1fr)',gap:'8px'}}>
+                    {result.vimshottariDasa.slice(0,8).map((d:any,i:number) => (
+                      <div key={i} style={{display:'flex',alignItems:'center',justifyContent:'space-between',
+                        padding:'8px 12px',borderRadius:'8px',border:'1px solid var(--bd)',background:'var(--bg2)'}}>
+                        <span style={{fontSize:'13px',fontWeight:600,color:'var(--acc)'}}>{getPlanet(d.planet)} MD</span>
+                        <span style={{fontSize:'11px',color:'var(--txm)'}}>{d.startYear||d.start||''}–{d.endYear||d.end||''}</span>
+                      </div>
+                    ))}
                   </div>
                 </div>
               )}
 
-              {/* Download + upgrade */}
-              <div className="bg-gradient-to-r from-maroon/5 to-gold/5 border border-gold/20 rounded-xl p-5 flex items-center justify-between gap-4 flex-wrap">
-                <div>
-                  <div className="font-cinzel font-semibold text-maroon">Save chart + daily predictions</div>
-                  <p className="text-xs text-gray-500 mt-0.5">Navamsha D9 · Shadbala · Full Dasha tree · PDF download</p>
-                </div>
-                <div className="flex gap-2">
-                  <button onClick={() => window.print()}
-                    className="btn-ghost text-xs py-2 px-3.5 flex items-center gap-1.5">
-                    <Download className="w-3.5 h-3.5" /> PDF
-                  </button>
-                  {!token && (
-                    <button onClick={() => router.push('/signup')} className="btn-primary text-xs py-2 px-4">
-                      Sign up free
-                    </button>
-                  )}
-                </div>
+              {/* Save + Download */}
+              <div style={{display:'flex',gap:'12px',flexWrap:'wrap'}}>
+                <button onClick={()=>setSaved(true)} className="btn-ghost" style={{display:'flex',alignItems:'center',gap:'6px',padding:'10px 18px'}}>
+                  <Save style={{width:'14px',height:'14px'}} />
+                  {saved ? '✓ Saved' : t('chart.save')}
+                </button>
+                <button onClick={()=>window.print()} className="btn-ghost" style={{display:'flex',alignItems:'center',gap:'6px',padding:'10px 18px'}}>
+                  <Download style={{width:'14px',height:'14px'}} />
+                  {t('chart.download')}
+                </button>
               </div>
+
+              {!token && (
+                <div style={{background:'linear-gradient(135deg,rgba(var(--acc-rgb,122,31,31),.05),rgba(196,146,42,.05))',
+                  border:'1px solid rgba(196,146,42,.2)',borderRadius:'16px',padding:'24px',textAlign:'center'}}>
+                  <div className="font-cinzel font-semibold mb-2" style={{color:'var(--acc)'}}>Save your chart + daily predictions</div>
+                  <p style={{fontSize:'13px',color:'var(--txm)',marginBottom:'16px'}}>Navamsha · Shadbala · Full Dasha tree · PDF download</p>
+                  <button onClick={()=>{setRedirectAfterLogin('/chart');router.push('/signup')}} className="btn-primary font-cinzel text-sm" style={{padding:'8px 20px'}}>
+                    Sign up free
+                  </button>
+                </div>
+              )}
             </>
           ) : (
-            <div className="card p-10 flex flex-col items-center justify-center text-center gap-4 h-full min-h-64">
-              <div className="text-5xl">🌟</div>
-              <div className="font-cinzel font-semibold text-maroon">Your chart will appear here</div>
-              <p className="text-sm text-gray-400 max-w-xs">Enter your birth details and click Generate chart to see your complete Vedic horoscope</p>
+            <div className="card" style={{padding:'60px 32px',display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',textAlign:'center',gap:'16px',minHeight:'280px'}}>
+              <div style={{fontSize:'48px'}}>🌟</div>
+              <div className="font-cinzel font-semibold" style={{color:'var(--acc)',fontSize:'16px'}}>{t('chart.title')}</div>
+              <p style={{fontSize:'13px',color:'var(--txm)',maxWidth:'280px'}}>{t('chart.subtitle')}</p>
             </div>
           )}
         </div>
