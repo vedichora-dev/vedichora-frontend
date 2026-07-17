@@ -325,3 +325,70 @@ body {
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: var(--bd-s, #CFBE98); border-radius: 3px; }
 *:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+
+/* ═══════════════════════════════════════════════════════════
+   RESPONSIVE — mobile first
+   ═══════════════════════════════════════════════════════════ */
+
+/* Base: mobile */
+.page-wrap { padding: 16px 12px; }
+.card { border-radius: 12px; }
+.card-hd { padding: 12px 14px 0; }
+.card-bd { padding: 12px 14px 14px; }
+
+/* Hide desktop nav links on mobile */
+@media (max-width: 768px) {
+  .desktop-nav { display: none !important; }
+  .page-wrap { padding: 12px 10px; }
+
+  /* Zodiac strip — smaller on mobile */
+  .zodiac-strip button span:first-child { font-size: 12px !important; }
+  .zodiac-strip button span:nth-child(2) { font-size: 8px !important; }
+
+  /* Home page grid: stack on mobile */
+  .home-grid { grid-template-columns: 1fr !important; }
+  .home-grid .lg\:col-span-2 { grid-column: span 1 !important; }
+
+  /* Chart page: full width form on mobile */
+  .chart-grid { grid-template-columns: 1fr !important; }
+
+  /* Nav: reduce padding */
+  nav { padding: 0 10px !important; }
+  nav .logo-text { font-size: 13px !important; }
+
+  /* Cards full width */
+  .card { margin-bottom: 12px; }
+
+  /* Buttons full width on mobile */
+  .btn-full-mobile { width: 100% !important; }
+
+  /* Typography scale down */
+  h1 { font-size: 20px !important; }
+  h2 { font-size: 16px !important; }
+  .font-cinzel { font-size: 13px !important; }
+
+  /* Domain grid: 2 col on mobile */
+  .domain-grid { grid-template-columns: 1fr 1fr !important; gap: 8px !important; }
+
+  /* Hide currency on very small screens */
+  .currency-pill { display: none !important; }
+
+  /* Match page: stack persons */
+  .match-grid { grid-template-columns: 1fr !important; }
+}
+
+@media (max-width: 480px) {
+  .page-wrap { padding: 8px; }
+  nav { height: 48px !important; }
+  .zodiac-strip button { padding: 5px 0 4px !important; }
+  .zodiac-strip button svg { width: 14px !important; height: 14px !important; }
+  .zodiac-strip button span:nth-child(2) { font-size: 7px !important; }
+  h1 { font-size: 18px !important; }
+}
+
+/* Tablet */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .page-wrap { padding: 20px 16px; }
+  .home-grid { grid-template-columns: 1fr 1.5fr !important; }
+}
+
