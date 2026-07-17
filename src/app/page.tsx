@@ -20,11 +20,11 @@ export default function HomePage() {
 
   useEffect(() => {
     setLoading(true)
-    getRasiHoroscope(sel).then(data => {
+    getRasiHoroscope(sel, language).then(data => {
       setHoroscope(data)
       setLoading(false)
     }).catch(() => setLoading(false))
-  }, [sel])
+  }, [sel, language])
 
   const rasi = RASI[sel]
   const signName = getSign(rasi.vd)  // translates based on selected language
