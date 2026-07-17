@@ -13,6 +13,7 @@ export default function HomePage() {
   const [horoscope, setHoroscope] = useState<any>(null)
   const [loading, setLoading] = useState(false)
   const [period, setPeriod] = useState<'Daily'|'Weekly'|'Monthly'>('Daily')
+  const { language } = useStore()
   const getSign = useSignName()
   const t = useT()
 
@@ -38,7 +39,7 @@ export default function HomePage() {
 
   return (
     <div>
-      <ZodiacStrip selected={sel} onSelect={setSel} />
+      <ZodiacStrip key={language} selected={sel} onSelect={setSel} />
 
       <div style={{maxWidth:'1200px',margin:'0 auto',padding:'24px 16px'}}>
         <div style={{display:'grid',gridTemplateColumns:'1fr 2fr',gap:'24px'}} className="lg:grid-cols-5">
