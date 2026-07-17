@@ -39,7 +39,7 @@ export default function ZodiacStrip({ selected, onSelect }: Props) {
   const [scores, setScores] = useState<number[]>(RASI.map(r => r.sc.Daily))
 
   useEffect(() => {
-    getHoroscopeAll().then((d: any) => {
+    getHoroscopeAll(language).then((d: any) => {
       if (Array.isArray(d) && d.length)
         setScores(d.map((x: any) => x.overallScore || x.score || 70))
     }).catch(() => {})
