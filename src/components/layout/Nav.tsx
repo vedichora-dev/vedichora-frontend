@@ -45,9 +45,10 @@ function DD({ trigger, children }: { trigger: React.ReactNode; children: React.R
   const [open, setOpen] = useState(false)
   const ref = useRef<HTMLDivElement>(null)
   useEffect(() => {
+    // Use 'click' not 'mousedown' so child onClick fires BEFORE dropdown closes
     const h = (e: MouseEvent) => { if (!ref.current?.contains(e.target as Node)) setOpen(false) }
-    document.addEventListener('mousedown', h)
-    return () => document.removeEventListener('mousedown', h)
+    document.addEventListener('click', h)
+    return () => document.removeEventListener('click', h)
   }, [])
   return (
     <div style={{position:'relative',display:'inline-block'}} ref={ref}>
@@ -73,8 +74,12 @@ function DI({ children, onClick, href }: { children: React.ReactNode; onClick?: 
   const style = {display:'flex',alignItems:'center',gap:'8px',padding:'8px 14px',
     fontSize:'13px',color:'var(--tx2)',cursor:'pointer',width:'100%',textAlign:'left' as const,
     background:'none',border:'none',fontFamily:'inherit',textDecoration:'none'}
+  const handleClick = (e: React.MouseEvent) => {
+    e.stopPropagation()
+    if (onClick) onClick()
+  }
   if (href) return <Link href={href} style={style}>{children}</Link>
-  return <button style={style} onClick={onClick} onMouseEnter={e=>{e.currentTarget.style.background='var(--bg2)'}} onMouseLeave={e=>{e.currentTarget.style.background='none'}}>{children}</button>
+  return <button style={style} onClick={handleClick} onMouseEnter={e=>{e.currentTarget.style.background='var(--bg2)'}} onMouseLeave={e=>{e.currentTarget.style.background='none'}}>{children}</button>
 }
 
 export default function Nav() {
