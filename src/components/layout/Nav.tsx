@@ -124,7 +124,7 @@ export default function Nav() {
         <div style={{display:'flex',alignItems:'center',flex:1,justifyContent:'center'}} className="hidden lg:flex">
           {NAV_LINKS.map(l => (
             <Link key={l.href} href={l.href} style={{
-              padding:'6px 12px',borderRadius:'6px',fontSize:'13.5px',fontWeight:500,
+              padding:'6px 12px',borderRadius:'6px',fontSize:'13.5px',
               textDecoration:'none',transition:'color .15s',
               color: pathname===l.href ? 'var(--acc)' : 'var(--tx2)',
               fontWeight: pathname===l.href ? 700 : 500,
