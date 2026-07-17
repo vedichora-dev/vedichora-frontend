@@ -13,8 +13,8 @@ export const authProfile = () =>
   })
 
 // ── HOROSCOPE (public) ────────────────────────────────────────
-export const getHoroscopeAll = () =>
-  apiGet<any[]>('/api/horoscope/daily/all')
+export const getHoroscopeAll = (lang = 'en') =>
+  apiGet<any[]>(`/api/horoscope/daily/all?lang=${lang}`)
 
 export const getRasiHoroscope = (idx: number, lang = 'en') =>
   apiGet<any>(`/api/horoscope/rasi/${idx}/daily?lang=${lang}`)
