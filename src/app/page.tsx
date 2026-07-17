@@ -5,6 +5,7 @@ import { RASI } from '@/lib/constants'
 import { getRasiHoroscope } from '@/api'
 import { scoreColor } from '@/lib/utils'
 import { useSignName, useT } from '@/lib/i18n'
+import { useStore } from '@/store'
 
 const DOMAIN_KEYS = ['Love','Career','Health','Finance']
 
