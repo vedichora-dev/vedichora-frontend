@@ -3,117 +3,141 @@ import { useState, useEffect } from 'react'
 import ZodiacStrip from '@/components/layout/ZodiacStrip'
 import { RASI } from '@/lib/constants'
 import { getRasiHoroscope } from '@/api'
-import { scoreColor, scoreDot } from '@/lib/utils'
+import { scoreColor } from '@/lib/utils'
+import { useSignName, useT } from '@/lib/i18n'
 
-const DOMAINS = ['Love','Career','Health','Finance']
+const DOMAIN_KEYS = ['Love','Career','Health','Finance']
 
 export default function HomePage() {
   const [sel, setSel] = useState(0)
   const [horoscope, setHoroscope] = useState<any>(null)
   const [loading, setLoading] = useState(false)
+  const [period, setPeriod] = useState<'Daily'|'Weekly'|'Monthly'>('Daily')
+  const getSign = useSignName()
+  const t = useT()
 
   useEffect(() => {
     setLoading(true)
     getRasiHoroscope(sel).then(data => {
       setHoroscope(data)
       setLoading(false)
-    })
+    }).catch(() => setLoading(false))
   }, [sel])
 
   const rasi = RASI[sel]
-  const score = horoscope?.overallScore || horoscope?.score || 72
-  const prediction = horoscope?.prediction || horoscope?.summary || `${rasi.vd} is under the influence of ${rasi.lord}. This is a period for reflection and action. Focus on your core strengths and trust the cosmic guidance of your ruling planet.`
+  const signName = getSign(rasi.vd)  // translates based on selected language
+  const score = horoscope?.overallScore || horoscope?.score || rasi.sc.Daily
+  const prediction = horoscope?.prediction || horoscope?.summary ||
+    `${signName} is under the influence of ${rasi.lord}. This is a period for reflection and action. Focus on your core strengths and trust the cosmic guidance of your ruling planet.`
   const domainScores = horoscope?.domainScores || { Love:68, Career:82, Health:71, Finance:65 }
+
+  const domainLabels: Record<string,string> = {
+    Love: t('home.love'), Career: t('home.career'),
+    Health: t('home.health'), Finance: t('home.finance')
+  }
 
   return (
     <div>
       <ZodiacStrip selected={sel} onSelect={setSel} />
 
-      <div className="max-w-6xl mx-auto px-4 py-6">
-        <div className="grid lg:grid-cols-5 gap-6">
-          {/* Sign hero */}
-          <div className="lg:col-span-2 space-y-4">
-            <div className="card p-6">
-              <div className="flex items-start justify-between mb-4">
-                <div>
-                  <h2 className="font-cinzel font-bold text-2xl text-maroon">{rasi.vd}</h2>
-                  <div className="text-xs text-gray-400 mt-0.5">{rasi.dates}</div>
-                  <div className="text-xs text-gray-500 mt-1">🔥 {rasi.element} · Ruled by {rasi.lord}</div>
-                </div>
-                {/* Score gauge */}
-                <div className="text-center">
-                  <div className={`font-cinzel font-black text-3xl ${scoreColor(score)}`}>{score}</div>
-                  <div className="text-xs text-gray-400">TODAY</div>
+      <div style={{maxWidth:'1200px',margin:'0 auto',padding:'24px 16px'}}>
+        <div style={{display:'grid',gridTemplateColumns:'1fr 2fr',gap:'24px'}} className="lg:grid-cols-5">
+
+          {/* Sign card */}
+          <div className="card" style={{padding:'24px'}}>
+            <div style={{display:'flex',alignItems:'flex-start',justifyContent:'space-between',marginBottom:'20px'}}>
+              <div>
+                <h2 style={{fontFamily:'Cinzel,serif',fontWeight:700,fontSize:'22px',
+                  color:'var(--acc)',marginBottom:'4px',textTransform:'uppercase'}}>{signName}</h2>
+                <div style={{fontSize:'12px',color:'var(--txm)'}}>{rasi.dates}</div>
+                <div style={{fontSize:'12px',color:'var(--txm)',marginTop:'2px'}}>
+                  {rasi.element === 'Fire' ? '🔥' : rasi.element === 'Earth' ? '🌿' : rasi.element === 'Air' ? '💨' : '💧'}{' '}
+                  {rasi.element} · Ruled by {rasi.lord}
                 </div>
               </div>
+              <div style={{textAlign:'center'}}>
+                <div style={{fontFamily:'Cinzel,serif',fontWeight:900,fontSize:'36px',lineHeight:1,
+                  color:score>=75?'var(--good,#2D5C45)':score>=60?'var(--warn,#9C6B14)':'var(--bad,#7A1F1F)'}}>
+                  {score}
+                </div>
+                <div style={{fontSize:'9px',color:'var(--txm)',fontWeight:700,letterSpacing:'.06em',
+                  textTransform:'uppercase',marginTop:'2px'}}>TODAY</div>
+              </div>
+            </div>
 
-              {/* Domain bars */}
-              <div className="space-y-2.5">
-                {DOMAINS.map(d => {
+            {/* Domain bars */}
+            <div style={{display:'flex',flexDirection:'column',gap:'10px'}}>
+              {DOMAIN_KEYS.map(d => {
+                const s = domainScores[d] || domainScores[d.toLowerCase()] || 65
+                return (
+                  <div key={d}>
+                    <div style={{display:'flex',justifyContent:'space-between',fontSize:'12px',marginBottom:'4px'}}>
+                      <span style={{color:'var(--tx2)'}}>{domainLabels[d]}</span>
+                      <span style={{fontWeight:600,color:'var(--tx)'}}>{s}</span>
+                    </div>
+                    <div style={{height:'5px',background:'var(--bd)',borderRadius:'3px',overflow:'hidden'}}>
+                      <div style={{height:'100%',width:`${s}%`,borderRadius:'3px',transition:'width .7s',
+                        background:s>=75?'var(--good,#2D5C45)':s>=60?'var(--gold)':'var(--bad,#7A1F1F)'}} />
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
+
+            <div style={{marginTop:'16px',paddingTop:'14px',borderTop:'1px solid var(--bd)',
+              display:'flex',gap:'16px',fontSize:'11px',color:'var(--txm)'}}>
+              <span>Lucky colour: <strong style={{color:'var(--tx)'}}>{rasi.lucky[0]}</strong></span>
+              <span>Number: <strong style={{color:'var(--tx)'}}>{rasi.lucky[1]}</strong></span>
+            </div>
+          </div>
+
+          {/* Prediction card */}
+          <div className="card">
+            <div className="card-hd">
+              <span className="card-title">Daily Horoscope · {signName}</span>
+              <div style={{display:'flex',gap:'4px',marginLeft:'auto'}}>
+                {(['Daily','Weekly','Monthly'] as const).map(p => (
+                  <button key={p} onClick={() => setPeriod(p)}
+                    style={{
+                      padding:'4px 10px', borderRadius:'6px', fontSize:'11px',
+                      border: period===p ? '1px solid var(--gold)' : '1px solid var(--bd)',
+                      background: period===p ? 'var(--acc-l,#FBEAE6)' : 'transparent',
+                      color: period===p ? 'var(--acc)' : 'var(--txm)',
+                      cursor:'pointer', fontFamily:'inherit',
+                    }}>{p}</button>
+                ))}
+              </div>
+            </div>
+            <div className="card-bd">
+              {loading ? (
+                <div style={{display:'flex',flexDirection:'column',gap:'8px'}}>
+                  {[1,2,3].map(i => <div key={i} style={{height:'14px',background:'var(--bd)',borderRadius:'4px',
+                    width:i===3?'60%':'100%',animation:'pulse 1.5s infinite'}} />)}
+                </div>
+              ) : (
+                <p style={{fontSize:'14px',lineHeight:1.8,color:'var(--tx2)',
+                  borderLeft:'3px solid var(--gold)',paddingLeft:'14px',fontStyle:'italic',marginBottom:'20px'}}>
+                  {prediction}
+                </p>
+              )}
+
+              <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:'12px'}}>
+                {DOMAIN_KEYS.map(d => {
                   const s = domainScores[d] || domainScores[d.toLowerCase()] || 65
+                  const c = s>=75?'var(--good,#2D5C45)':s>=60?'var(--warn,#9C6B14)':'var(--bad,#7A1F1F)'
                   return (
-                    <div key={d}>
-                      <div className="flex justify-between text-xs mb-1">
-                        <span className="text-gray-500">{d}</span>
-                        <span className="font-semibold text-maroon">{s}</span>
+                    <div key={d} style={{background:'var(--bg2)',borderRadius:'12px',
+                      padding:'14px',border:'1px solid var(--bd)'}}>
+                      <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:'8px'}}>
+                        <span style={{fontSize:'12px',color:'var(--tx2)'}}>{domainLabels[d]}</span>
+                        <span style={{fontSize:'22px',fontWeight:900,fontFamily:'Cinzel,serif',color:c}}>{s}</span>
                       </div>
-                      <div className="h-1.5 bg-gray-100 rounded-full overflow-hidden">
-                        <div className="h-full bg-gradient-to-r from-gold to-gold-star rounded-full transition-all duration-700"
-                          style={{ width: `${s}%` }} />
+                      <div style={{height:'4px',background:'var(--bd)',borderRadius:'2px',overflow:'hidden'}}>
+                        <div style={{height:'100%',width:`${s}%`,background:c,borderRadius:'2px',transition:'width .7s'}} />
                       </div>
                     </div>
                   )
                 })}
-              </div>
-
-              {/* Lucky */}
-              <div className="mt-4 pt-4 border-t border-border flex gap-3 text-xs text-gray-400">
-                <span>Lucky colour: <strong className="text-maroon">{rasi.lucky[0]}</strong></span>
-                <span>·</span>
-                <span>Number: <strong className="text-maroon">{rasi.lucky[1]}</strong></span>
-              </div>
-            </div>
-          </div>
-
-          {/* Prediction */}
-          <div className="lg:col-span-3 space-y-4">
-            <div className="card">
-              <div className="card-hd">
-                <span className="card-title">Daily Horoscope · {rasi.vd}</span>
-                <div className="flex gap-1 ml-auto">
-                  {['Daily','Weekly','Monthly'].map(p => (
-                    <button key={p} className="text-xs px-2.5 py-1 rounded-md border border-border hover:border-gold hover:text-maroon transition-colors text-gray-400">{p}</button>
-                  ))}
-                </div>
-              </div>
-              <div className="card-bd">
-                {loading ? (
-                  <div className="animate-pulse space-y-2">
-                    <div className="h-4 bg-gray-100 rounded w-full" />
-                    <div className="h-4 bg-gray-100 rounded w-4/5" />
-                    <div className="h-4 bg-gray-100 rounded w-3/5" />
-                  </div>
-                ) : (
-                  <p className="text-sm text-gray-700 leading-relaxed border-l-4 border-gold pl-4 italic">{prediction}</p>
-                )}
-
-                <div className="grid grid-cols-2 gap-3 mt-5">
-                  {DOMAINS.map(d => {
-                    const s = domainScores[d] || domainScores[d.toLowerCase()] || 65
-                    return (
-                      <div key={d} className="bg-gray-50 rounded-xl p-3.5 border border-border">
-                        <div className="flex items-center justify-between mb-1.5">
-                          <span className="text-xs font-semibold text-gray-600">{d}</span>
-                          <span className={`text-lg font-black font-cinzel ${scoreColor(s)}`}>{s}</span>
-                        </div>
-                        <div className="h-1 bg-gray-200 rounded-full">
-                          <div className={`h-full rounded-full ${s>=75?'bg-emerald-500':s>=55?'bg-amber-400':'bg-red-400'}`}
-                            style={{ width:`${s}%` }} />
-                        </div>
-                      </div>
-                    )
-                  })}
-                </div>
               </div>
             </div>
           </div>
