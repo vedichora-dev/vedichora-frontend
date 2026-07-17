@@ -3,9 +3,11 @@ import { useState, useEffect } from 'react'
 import { getAstrologers } from '@/api'
 import { SAMPLE_ASTROLOGERS } from '@/lib/constants'
 import AstrologerCard from '@/components/consult/AstrologerCard'
+import { useT } from '@/lib/i18n'
 import { Search, SlidersHorizontal } from 'lucide-react'
 
 export default function ConsultPage() {
+  const t = useT()
   const [astros, setAstros] = useState(SAMPLE_ASTROLOGERS)
   const [search, setSearch] = useState('')
   const [filter, setFilter] = useState({ specialty:'', online: false })
@@ -24,8 +26,8 @@ export default function ConsultPage() {
   return (
     <div className="max-w-6xl mx-auto px-4 py-8">
       <div className="page-header">
-        <h1>Consult an Astrologer</h1>
-        <p>Talk to expert Jyotishis · First 10 minutes FREE</p>
+        <h1>{t('consult.title')}</h1>
+        <p>{t('consult.subtitle')}</p>
       </div>
 
       {/* Hero banner */}
