@@ -19,96 +19,96 @@ const MOON_SIGNS = [
   { name:'Pisces',      elem:'Water', color:'#6C3483', planet:'Neptune', trait:'Dreamy, empathic, spiritual',   dates:'Feb 19–Mar 20' },
 ]
 
-const PREDS: Record<string,Record<string,string>> = {
+const PREDS: {[key:string]:{[key:string]:string}} = {
   Aries: {
-    Love:'Your directness is magnetic right now. Someone appreciates your honesty — let yourself be seen without armour.',
-    Career:'Bold moves pay off this week. Trust your instincts on a decision you've been sitting with.',
+    Love:'Your directness is magnetic right now. Someone appreciates your honesty -- let yourself be seen without armour.',
+    Career:'Bold moves pay off this week. Trust your instincts on a decision you\'ve been sitting with.',
     Wellbeing:'Channel excess energy into movement. Your body thrives when your mind is challenged.',
-    Finance:'An opportunity to act decisively on a financial matter — do your homework first, then commit fully.',
+    Finance:'An opportunity to act decisively on a financial matter -- do your homework first, then commit fully.',
   },
   Taurus: {
-    Love:'Patience in love is your strength. Depth of connection matters more than speed — trust the slow build.',
+    Love:'Patience in love is your strength. Depth of connection matters more than speed -- trust the slow build.',
     Career:'Your reliability is noticed by those who matter. Steady progress brings you closer to a significant milestone.',
     Wellbeing:'Honour your need for rest and sensory pleasure. A peaceful environment restores you deeply.',
     Finance:'Conservative choices serve you well now. Security is being built even when it feels slow.',
   },
   Gemini: {
-    Love:'Conversation is your love language — and it's working beautifully. Keep the exchange light, curious and fun.',
+    Love:'Conversation is your love language -- and it\'s working beautifully. Keep the exchange light, curious and fun.',
     Career:'Multiple ideas are competing for your attention. Choose the one with the most genuine excitement behind it.',
     Wellbeing:'Your nervous system needs grounding. Short walks in nature calm the constant mental chatter.',
     Finance:'Research before committing. Your natural curiosity will find the best option if you look carefully.',
   },
   Cancer: {
-    Love:'Your emotional intelligence makes you extraordinarily lovable. Let someone see your vulnerability — it connects.',
-    Career:'Trust your intuition on a workplace dynamic. You sense something others have missed — you're right.',
+    Love:'Your emotional intelligence makes you extraordinarily lovable. Let someone see your vulnerability -- it connects.',
+    Career:'Trust your intuition on a workplace dynamic. You sense something others have missed -- you\'re right.',
     Wellbeing:'Home is your sanctuary right now. Nourishing food and meaningful connections restore you completely.',
-    Finance:'Family and home-related finances come into focus. Security matters — trust your cautious instincts.',
+    Finance:'Family and home-related finances come into focus. Security matters -- trust your cautious instincts.',
   },
   Leo: {
     Love:'Your warmth draws people in effortlessly. A creative shared experience deepens a bond meaningfully.',
-    Career:'Step forward and own your expertise. Leadership is not arrogance — it's answering a genuine call.',
+    Career:'Step forward and own your expertise. Leadership is not arrogance -- it\'s answering a genuine call.',
     Wellbeing:'Joy is medicine for you. Seek out what genuinely makes your heart light and follow it deliberately.',
-    Finance:'Generosity brings return. Investing in yourself — skills, appearance, confidence — pays real dividends.',
+    Finance:'Generosity brings return. Investing in yourself -- skills, appearance, confidence -- pays real dividends.',
   },
   Virgo: {
     Love:'Your attentiveness is a profound form of love. Notice how your small gestures create lasting impressions.',
-    Career:'A detail you've been refining is ready. Perfectionism served its purpose — now release and present.',
+    Career:'A detail you\'ve been refining is ready. Perfectionism served its purpose -- now release and present.',
     Wellbeing:'Digestive health and daily routine are your foundations. Small consistent habits build remarkable resilience.',
-    Finance:'Analysis pays off. You see what others miss — trust your careful reading of a financial situation.',
+    Finance:'Analysis pays off. You see what others miss -- trust your careful reading of a financial situation.',
   },
   Libra: {
     Love:'Balance in giving and receiving is your lesson now. You deserve the same thoughtfulness you offer others.',
     Career:'Your ability to see all sides makes you invaluable in a current negotiation or collaboration.',
-    Wellbeing:'Beauty and harmony are not luxuries — they're necessities for your wellbeing. Create them deliberately.',
-    Finance:'Fair exchange matters. Ensure partnerships — financial or professional — are genuinely equitable.',
+    Wellbeing:'Beauty and harmony are not luxuries -- they\'re necessities for your wellbeing. Create them deliberately.',
+    Finance:'Fair exchange matters. Ensure partnerships -- financial or professional -- are genuinely equitable.',
   },
   Scorpio: {
-    Love:'Profound emotional honesty opens a door you've kept guarded. Someone is ready to meet you at that depth.',
-    Career:'Your research and insight give you an edge others simply don't have. Use this power responsibly.',
+    Love:'Profound emotional honesty opens a door you\'ve kept guarded. Someone is ready to meet you at that depth.',
+    Career:'Your research and insight give you an edge others simply don\'t have. Use this power responsibly.',
     Wellbeing:'Transformation requires releasing the old. Let go of what no longer serves with intention and grace.',
     Finance:'Hidden assets or overlooked opportunities surface now. Look below the obvious layer.',
   },
   Sagittarius: {
     Love:'Your optimism is contagious and deeply attractive. Adventures shared create bonds that last.',
-    Career:'Think bigger. The horizon you've been aiming for is closer than your current vantage point suggests.',
+    Career:'Think bigger. The horizon you\'ve been aiming for is closer than your current vantage point suggests.',
     Wellbeing:'Freedom of movement feeds your soul. Travel, exploration or simply new environments restore you fully.',
-    Finance:'Expansive thinking opens financial doors — while keeping practicality close to ensure sound choices.',
+    Finance:'Expansive thinking opens financial doors -- while keeping practicality close to ensure sound choices.',
   },
   Capricorn: {
     Love:'Your devotion runs deep though you show it quietly. Let someone see the warmth beneath the composure.',
     Career:'Long-term effort is crystallising into something tangible. Recognition arrives in proportion to your patience.',
-    Wellbeing:'Rest without guilt. Your body is asking for recovery — honour it as part of your high standards.',
-    Finance:'Disciplined choices made earlier are bearing fruit. Stay the course — the plan is working.',
+    Wellbeing:'Rest without guilt. Your body is asking for recovery -- honour it as part of your high standards.',
+    Finance:'Disciplined choices made earlier are bearing fruit. Stay the course -- the plan is working.',
   },
   Aquarius: {
     Love:'Your uniqueness is your greatest gift in relationship. Someone values your unconventional perspective deeply.',
-    Career:'Innovation you've championed is gaining ground. The future belongs to those who imagined it clearly.',
+    Career:'Innovation you\'ve championed is gaining ground. The future belongs to those who imagined it clearly.',
     Wellbeing:'Community and belonging nourish your spirit as much as solitude. Seek both with intentionality.',
     Finance:'Unconventional financial ideas deserve serious consideration now. Research thoroughly then act boldly.',
   },
   Pisces: {
     Love:'Your empathy creates extraordinary intimacy. Allow yourself to receive as generously as you give.',
-    Career:'Creative and intuitive work reaches new heights. Trust impressions that don't have immediate logical backing.',
+    Career:'Creative and intuitive work reaches new heights. Trust impressions that don\'t have immediate logical backing.',
     Wellbeing:'Water, sleep and creative expression are your three pillars of health. Prioritise all three deliberately.',
     Finance:'Intuition about a financial matter is worth examining carefully. Look beyond surface appearances.',
   },
 }
 
-const COMPAT: Record<string,{score:number,label:string,desc:string}> = {
-  'Fire-Fire':{score:88,label:'Blazing Together',desc:'Passionate, energetic and mutually inspiring. You push each other towards greatness — just watch for power clashes.'},
+const COMPAT: {[key:string]:{score:number,label:string,desc:string}} = {
+  'Fire-Fire':{score:88,label:'Blazing Together',desc:'Passionate, energetic and mutually inspiring. You push each other towards greatness -- just watch for power clashes.'},
   'Fire-Air':{score:85,label:'Fan the Flames',desc:'Air fuels Fire beautifully. Stimulating conversation, shared adventures and genuine mutual admiration flow naturally.'},
-  'Fire-Earth':{score:62,label:'Grounded Sparks',desc:'Earth steadies Fire while Fire energises Earth. Different rhythms — but real growth happens when you honour the contrast.'},
-  'Fire-Water':{score:67,label:'Steam & Intensity',desc:'Magnetic chemistry with emotional complexity. Deep bonds form when both partners honour each other's very different needs.'},
+  'Fire-Earth':{score:62,label:'Grounded Sparks',desc:'Earth steadies Fire while Fire energises Earth. Different rhythms -- but real growth happens when you honour the contrast.'},
+  'Fire-Water':{score:67,label:'Steam & Intensity',desc:'Magnetic chemistry with emotional complexity. Deep bonds form when both partners honour each other\'s very different needs.'},
   'Earth-Earth':{score:92,label:'Built to Last',desc:'Exceptional loyalty, shared values and quiet devotion. You build together with patience and an eye firmly on the long term.'},
   'Earth-Water':{score:88,label:'Fertile Ground',desc:'Water nourishes Earth while Earth provides Water with security. A naturally supportive, emotionally rich partnership.'},
-  'Earth-Air':{score:58,label:'Different Rhythms',desc:'Air brings ideas, Earth brings follow-through. Real complementarity exists — patience and appreciation bridge the gap.'},
+  'Earth-Air':{score:58,label:'Different Rhythms',desc:'Air brings ideas, Earth brings follow-through. Real complementarity exists -- patience and appreciation bridge the gap.'},
   'Earth-Fire':{score:62,label:'Grounded Sparks',desc:'Different energies that teach each other. Earth provides stability while Fire brings excitement neither could create alone.'},
   'Air-Air':{score:86,label:'Meeting of Minds',desc:'Brilliant intellectual connection, endless conversation and shared curiosity keep this partnership lively and genuinely fresh.'},
-  'Air-Water':{score:71,label:'Heart & Mind',desc:'Head meets heart — complementary when you communicate about your different processing styles with patience and curiosity.'},
-  'Air-Fire':{score:85,label:'Fan the Flames',desc:'Dynamic and stimulating. Ideas inspire action, adventure is always possible and you genuinely bring out each other's best.'},
-  'Air-Earth':{score:58,label:'Different Rhythms',desc:'Air sees possibility, Earth seeks proof. Together you are more complete — appreciate what the other brings unconditionally.'},
+  'Air-Water':{score:71,label:'Heart & Mind',desc:'Head meets heart -- complementary when you communicate about your different processing styles with patience and curiosity.'},
+  'Air-Fire':{score:85,label:'Fan the Flames',desc:'Dynamic and stimulating. Ideas inspire action, adventure is always possible and you genuinely bring out each other\'s best.'},
+  'Air-Earth':{score:58,label:'Different Rhythms',desc:'Air sees possibility, Earth seeks proof. Together you are more complete -- appreciate what the other brings unconditionally.'},
   'Water-Water':{score:90,label:'Oceanic Bond',desc:'Extraordinary emotional depth, intuitive understanding and a profoundly healing bond that few other combinations achieve.'},
-  'Water-Fire':{score:67,label:'Steam & Intensity',desc:'Intense chemistry — emotional Water and passionate Fire create a magnetic connection that is never boring or predictable.'},
+  'Water-Fire':{score:67,label:'Steam & Intensity',desc:'Intense chemistry -- emotional Water and passionate Fire create a magnetic connection that is never boring or predictable.'},
   'Water-Earth':{score:88,label:'Fertile Ground',desc:'Deep mutual nourishment. Earth provides the security Water craves; Water brings emotional richness Earth quietly needs.'},
   'Water-Air':{score:71,label:'Heart & Mind',desc:'Feeling meets intellect. With genuine communication and curiosity about your differences, this becomes beautifully complementary.'},
 }
@@ -120,7 +120,7 @@ function getMoon(dd:number,mm:number,yyyy:number):number{
 
 function getCompat(a:number,b:number){
   const ea=MOON_SIGNS[a].elem,eb=MOON_SIGNS[b].elem
-  return COMPAT[`${ea}-${eb}`]||COMPAT[`${eb}-${ea}`]||{score:72,label:'Unique Connection',desc:'Your combination is rare — growth comes through genuine curiosity about each other.'}
+  return COMPAT[`${ea}-${eb}`]||COMPAT[`${eb}-${ea}`]||{score:72,label:'Unique Connection',desc:'Your combination is rare -- growth comes through genuine curiosity about each other.'}
 }
 
 const CURRENCIES=[
@@ -264,7 +264,7 @@ export default function WesternPage(){
             <div style={{textAlign:'center',marginBottom:'40px'}}>
               <div style={{fontSize:'11px',color:'var(--w-gold)',fontWeight:700,letterSpacing:'.12em',textTransform:'uppercase',marginBottom:'12px'}}>Daily Moon Reading</div>
               <h1 style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:'clamp(28px,4vw,46px)',fontWeight:700,lineHeight:1.15,color:'var(--w-tx)',marginBottom:'12px'}}>Your Moon Sign Reveals<br/>Your Emotional World</h1>
-              <p style={{fontSize:'15px',color:'var(--w-tx2)',maxWidth:'460px',margin:'0 auto',lineHeight:1.7}}>Your Moon sign governs your emotional instincts, deepest needs and inner life — more revealing than any Sun sign.</p>
+              <p style={{fontSize:'15px',color:'var(--w-tx2)',maxWidth:'460px',margin:'0 auto',lineHeight:1.7}}>Your Moon sign governs your emotional instincts, deepest needs and inner life -- more revealing than any Sun sign.</p>
             </div>
 
             {moonIdx===null ? (
@@ -345,12 +345,12 @@ export default function WesternPage(){
                   })}
                 </div>
 
-                {/* Personalised report CTA — stays on Western, no redirect to Vedic */}
+                {/* Personalised report CTA -- stays on Western, no redirect to Vedic */}
                 <div style={{background:`linear-gradient(135deg,${theme.acc}12,${theme.gold}08)`,border:`1px solid ${theme.acc}30`,borderRadius:'20px',padding:'36px',textAlign:'center'}}>
                   <div style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:'22px',fontWeight:600,color:'var(--w-acc)',marginBottom:'10px'}}>Your Complete Cosmic Portrait</div>
                   <p style={{fontSize:'14px',color:'var(--w-tx2)',marginBottom:'24px',maxWidth:'400px',margin:'0 auto 24px',lineHeight:1.7}}>Full natal chart · Year ahead forecast · Relationship compatibility · Life purpose reading</p>
                   <div style={{display:'flex',gap:'12px',justifyContent:'center',flexWrap:'wrap'}}>
-                    {btn('Get Full Reading — Free',()=>setTab('chart'))}
+                    {btn('Get Full Reading -- Free',()=>setTab('chart'))}
                     <button onClick={()=>setMoonIdx(null)} style={{background:'transparent',color:'var(--w-tx2)',border:'1px solid var(--w-bd)',padding:'12px 20px',borderRadius:'10px',fontSize:'13px',cursor:'pointer'}}>Try another date</button>
                   </div>
                 </div>
@@ -365,7 +365,7 @@ export default function WesternPage(){
             <div style={{textAlign:'center',marginBottom:'40px'}}>
               <div style={{fontSize:'11px',color:'var(--w-gold)',fontWeight:700,letterSpacing:'.12em',textTransform:'uppercase',marginBottom:'12px'}}>Moon Sign Compatibility</div>
               <h1 style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:'clamp(28px,4vw,44px)',fontWeight:700,color:'var(--w-tx)',lineHeight:1.15,marginBottom:'12px'}}>Are You Truly Compatible?</h1>
-              <p style={{fontSize:'15px',color:'var(--w-tx2)',maxWidth:'440px',margin:'0 auto',lineHeight:1.7}}>Moon sign compatibility reveals the emotional foundation of any relationship — the most reliable measure of long-term harmony.</p>
+              <p style={{fontSize:'15px',color:'var(--w-tx2)',maxWidth:'440px',margin:'0 auto',lineHeight:1.7}}>Moon sign compatibility reveals the emotional foundation of any relationship -- the most reliable measure of long-term harmony.</p>
             </div>
 
             <div style={{background:'var(--w-surf)',border:'1px solid var(--w-bd)',borderRadius:'20px',padding:'36px',boxShadow:'0 4px 24px rgba(0,0,0,.06)',marginBottom:'28px'}}>
@@ -445,7 +445,7 @@ export default function WesternPage(){
                 <div style={{textAlign:'center'}}>
                   <div style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:'17px',color:'var(--w-acc)',marginBottom:'8px'}}>Want the complete picture?</div>
                   <p style={{fontSize:'13px',color:'var(--w-tx2)',marginBottom:'20px'}}>Full synastry chart · Month-by-month relationship forecast · Personalised guidance</p>
-                  {btn(`Get Full Compatibility Report — ${curr.sym}29`,()=>alert('Full report coming soon — join waitlist'))}
+                  {btn(`Get Full Compatibility Report -- ${curr.sym}29`,()=>alert('Full report coming soon -- join waitlist'))}
                 </div>
               </div>
             )}
@@ -488,7 +488,7 @@ export default function WesternPage(){
                   <div style={{fontSize:'10px',color:'var(--w-tx2)',fontWeight:700,textTransform:'uppercase',letterSpacing:'.06em',marginBottom:'6px'}}>Place of birth</div>
                   <input placeholder="City, Country" style={{width:'100%',padding:'10px 12px',borderRadius:'10px',border:'1.5px solid var(--w-bd)',background:'var(--w-bg)',color:'var(--w-tx)',fontSize:'14px',boxSizing:'border-box',fontFamily:'inherit',outline:'none'}} />
                 </div>
-                <div style={{textAlign:'center'}}>{btn('Generate My Chart — Free ✦',()=>alert('Chart generation — connect to API'))}</div>
+                <div style={{textAlign:'center'}}>{btn('Generate My Chart -- Free ✦',()=>alert('Chart generation -- connect to API'))}</div>
                 <p style={{textAlign:'center',fontSize:'11px',color:'var(--w-tx2)',margin:0,opacity:.6}}>Premium reports from {curr.sym}19 · No subscription</p>
               </div>
             </div>
