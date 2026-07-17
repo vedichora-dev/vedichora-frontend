@@ -32,18 +32,27 @@ export const useStore = create<AppState>()(
       chartMode: 'north',
       redirectAfterLogin: null,
       setAuth: (token, refreshToken, user) => {
-        localStorage.setItem('vh_token', token)
-        localStorage.setItem('vh_refresh', refreshToken)
+        if (typeof localStorage !== 'undefined') {
+          localStorage.setItem('vh_token', token)
+          localStorage.setItem('vh_refresh', refreshToken)
+        }
         set({ token, refreshToken, user })
       },
       setHoroId: (currentHoroId) => set({ currentHoroId }),
       setCurrency: (currency, currencySym) => set({ currency, currencySym }),
-      setLanguage: (language, languageFlag) => set({ language, languageFlag }),
+      setLanguage: (language, languageFlag) => {
+        // Persist to localStorage so API client can read it
+        if (typeof localStorage !== 'undefined') {
+          localStorage.setItem('vh_lang', language)
+        }
+        set({ language, languageFlag })
+      },
       setChartMode: (chartMode) => set({ chartMode }),
       setRedirectAfterLogin: (redirectAfterLogin) => set({ redirectAfterLogin }),
       logout: () => {
-        localStorage.clear()
-        set({ token: null, refreshToken: null, user: null, currentHoroId: null, redirectAfterLogin: null })
+        if (typeof localStorage !== 'undefined') localStorage.clear()
+        set({ token: null, refreshToken: null, user: null,
+              currentHoroId: null, redirectAfterLogin: null })
       },
     }),
     { name: 'vh-store' }
