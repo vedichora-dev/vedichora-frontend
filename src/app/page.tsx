@@ -29,8 +29,12 @@ export default function HomePage() {
   const rasi = RASI[sel]
   const signName = getSign(rasi.vd)  // translates based on selected language
   const score = horoscope?.overallScore || horoscope?.score || rasi.sc.Daily
-  const prediction = horoscope?.prediction || horoscope?.summary ||
+  const prediction = horoscope?.generalPrediction || horoscope?.GeneralPrediction || horoscope?.prediction || horoscope?.summary ||
     `${signName} is under the influence of ${rasi.lord}. This is a period for reflection and action. Focus on your core strengths and trust the cosmic guidance of your ruling planet.`
+  const mood = horoscope?.overallMood || horoscope?.OverallMood || ''
+  const favorable = horoscope?.favorableFor || horoscope?.FavorableFor || ''
+  const avoid = horoscope?.avoidFor || horoscope?.AvoidFor || ''
+  const moonNote = horoscope?.moonNote || horoscope?.MoonNote || ''
   const domainScores = horoscope?.domainScores || { Love:68, Career:82, Health:71, Finance:65 }
 
   const domainLabels: Record<string,string> = {
@@ -111,6 +115,17 @@ export default function HomePage() {
               </div>
             </div>
             <div className="card-bd">
+              {/* Mood badge */}
+              {mood && (
+                <div style={{display:'flex',gap:'8px',marginBottom:'12px',flexWrap:'wrap'}}>
+                  <span style={{padding:'3px 10px',borderRadius:'20px',fontSize:'11px',fontWeight:700,
+                    background: mood.includes('சாதக')||mood.includes('शुभ')||mood.includes('Auspi') ? 'rgba(74,222,128,.15)' : mood.includes('சவால்')||mood.includes('चुनौती')||mood.includes('Chall') ? 'rgba(248,113,113,.15)' : 'rgba(251,191,36,.15)',
+                    color: mood.includes('சாதக')||mood.includes('शुभ')||mood.includes('Auspi') ? '#16A34A' : mood.includes('சவால்')||mood.includes('चुनौती')||mood.includes('Chall') ? '#DC2626' : '#B45309',
+                  }}>{mood}</span>
+                  {moonNote && <span style={{fontSize:'11px',color:'var(--txm)',padding:'3px 0'}}>{moonNote}</span>}
+                </div>
+              )}
+
               {loading ? (
                 <div style={{display:'flex',flexDirection:'column',gap:'8px'}}>
                   {[1,2,3].map(i => <div key={i} style={{height:'14px',background:'var(--bd)',borderRadius:'4px',
@@ -141,6 +156,25 @@ export default function HomePage() {
                   )
                 })}
               </div>
+            </div>
+
+              {/* Favorable / Avoid */}
+              {(favorable || avoid) && (
+                <div style={{marginTop:'16px',display:'grid',gridTemplateColumns:'1fr 1fr',gap:'10px'}}>
+                  {favorable && (
+                    <div style={{background:'rgba(74,222,128,.08)',borderRadius:'8px',padding:'10px 12px',border:'1px solid rgba(74,222,128,.2)'}}>
+                      <div style={{fontSize:'10px',fontWeight:700,color:'#16A34A',marginBottom:'4px',textTransform:'uppercase',letterSpacing:'.05em'}}>✓ Favorable</div>
+                      <div style={{fontSize:'12px',color:'var(--tx2)'}}>{favorable}</div>
+                    </div>
+                  )}
+                  {avoid && (
+                    <div style={{background:'rgba(248,113,113,.08)',borderRadius:'8px',padding:'10px 12px',border:'1px solid rgba(248,113,113,.2)'}}>
+                      <div style={{fontSize:'10px',fontWeight:700,color:'#DC2626',marginBottom:'4px',textTransform:'uppercase',letterSpacing:'.05em'}}>✗ Avoid</div>
+                      <div style={{fontSize:'12px',color:'var(--tx2)'}}>{avoid}</div>
+                    </div>
+                  )}
+                </div>
+              )}
             </div>
           </div>
         </div>
