@@ -1,6 +1,7 @@
 'use client'
 import { useState } from 'react'
 import { matchCharts } from '@/api'
+import { useT } from '@/lib/i18n'
 import { to24Hour } from '@/lib/utils'
 import DatePicker, { DateValue } from '@/components/ui/DatePicker'
 import { Heart } from 'lucide-react'
@@ -23,6 +24,7 @@ const PATHU = [
 ]
 
 export default function MatchPage() {
+  const t = useT()
   const [d1, setD1] = useState<DateValue>(EMPTY)
   const [d2, setD2] = useState<DateValue>(EMPTY)
   const [n1, setN1] = useState(''); const [p1, setP1] = useState('')
@@ -38,8 +40,8 @@ export default function MatchPage() {
     try {
       const t1 = to24Hour(d1.hr||6, d1.mi||0, d1.ap||'AM')
       const t2 = to24Hour(d2.hr||6, d2.mi||0, d2.ap||'AM')
-      const person1 = { Year:d1.yyyy,Month:d1.mm,Day:d1.dd,Hour:t1.hour,Minute:t1.minute,PlaceName:p1||'Chennai',PersonName:n1||'Person 1' }
-      const person2 = { Year:d2.yyyy,Month:d2.mm,Day:d2.dd,Hour:t2.hour,Minute:t2.minute,PlaceName:p2||'Chennai',PersonName:n2||'Person 2' }
+      const person1 = { Year:d1.yyyy,Month:d1.mm,Day:d1.dd,Hour:t1.hour,Minute:t1.minute,PlaceName:p1||'Chennai',PersonName:n1||t('match.person1') }
+      const person2 = { Year:d2.yyyy,Month:d2.mm,Day:d2.dd,Hour:t2.hour,Minute:t2.minute,PlaceName:p2||'Chennai',PersonName:n2||t('match.person2') }
       const res = await matchCharts(person1, person2)
       setResult(res.data?.data || res.data)
     } catch { setErr('Calculation failed — please try again') }
@@ -61,8 +63,8 @@ export default function MatchPage() {
       {/* Forms */}
       <div className="grid md:grid-cols-2 gap-5 mb-6">
         {[
-          { label:'Person 1', n:n1, setN:setN1, p:p1, setP:setP1, d:d1, setD:setD1 },
-          { label:'Person 2', n:n2, setN:setN2, p:p2, setP:setP2, d:d2, setD:setD2 },
+          { label:t('match.person1'), n:n1, setN:setN1, p:p1, setP:setP1, d:d1, setD:setD1 },
+          { label:t('match.person2'), n:n2, setN:setN2, p:p2, setP:setP2, d:d2, setD:setD2 },
         ].map((f, i) => (
           <div key={i} className="card">
             <div className="card-hd"><Heart className="w-4 h-4 text-gold" /><span className="card-title">{f.label}</span></div>
