@@ -1,0 +1,19 @@
+name: Diagnose Build Errors
+on:
+  workflow_dispatch:
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - run: npm ci
+      - name: Build and capture all errors
+        run: |
+          npm run build 2>&1 | tee /tmp/build.log || true
+          echo "=== BUILD LOG ==="
+          cat /tmp/build.log
+          echo "=== ERRORS ONLY ==="
+          grep -E "Type error|error TS|Cannot find|Module not found" /tmp/build.log || echo "No TS errors found"
