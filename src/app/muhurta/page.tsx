@@ -18,7 +18,7 @@ export default function MuhurtaPage() {
     setLoading(true)
     try {
       const res = await calcMuhurta({ eventType, place, fromDate, toDate })
-      setResults(res as any[] || [])
+      setResults((res as any)?.data?.data || (res as any)?.data || [])
       if (!results.length) setResults([
         { date:"15 Aug 2026", time:"10:30 AM", quality:"Excellent", tithi:"Panchami", nakshatra:"Rohini", score:92 },
         { date:"22 Aug 2026", time:"07:15 AM", quality:"Very Good", tithi:"Dwadashi", nakshatra:"Pushya", score:85 },
