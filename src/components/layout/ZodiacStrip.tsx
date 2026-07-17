@@ -53,12 +53,12 @@ export default function ZodiacStrip({ selected, onSelect }: Props) {
       display: 'flex',
       width: '100%',
       background: 'var(--strip,#3A1414)',
-      borderBottom: '2px solid rgba(212,165,43,.25)',
+      borderBottom: '2px solid var(--strip-bd,rgba(212,165,43,.2))',
     }}>
       {RASI_KEYS.map((key, i) => {
         const active = i === selected
         const score = scores[i] || 70
-        const col = active ? '#D4A52B' : 'rgba(232,201,122,.75)'
+        const col = active ? 'var(--strip-sel,#D4A52B)' : 'var(--strip-tx,rgba(232,201,122,.75))'
         return (
           <button
             key={`${key}-${language}`}
@@ -74,9 +74,9 @@ export default function ZodiacStrip({ selected, onSelect }: Props) {
               justifyContent: 'center',
               gap: '3px',
               padding: '6px 0 5px',
-              background: active ? 'rgba(212,165,43,.15)' : 'transparent',
+              background: active ? 'var(--strip-chip,rgba(212,165,43,.15))' : 'transparent',
               border: 'none',
-              borderBottom: active ? '2.5px solid #D4A52B' : '2.5px solid transparent',
+              borderBottom: active ? '2.5px solid var(--strip-sel,#D4A52B)' : '2.5px solid transparent',
               cursor: 'pointer',
               color: col,
               transition: 'all .15s',
@@ -86,8 +86,8 @@ export default function ZodiacStrip({ selected, onSelect }: Props) {
             <svg
               viewBox="0 0 24 24"
               width={20} height={20}
-              fill={active ? '#D4A52B' : 'rgba(232,201,122,.85)'}
-              stroke={active ? '#D4A52B' : 'rgba(232,201,122,.85)'}
+              fill={active ? 'var(--strip-sel,#D4A52B)' : 'var(--strip-tx,rgba(232,201,122,.85))'}
+              stroke={active ? 'var(--strip-sel,#D4A52B)' : 'var(--strip-tx,rgba(232,201,122,.85))'}
               strokeWidth="0.5"
               xmlns="http://www.w3.org/2000/svg"
               dangerouslySetInnerHTML={{ __html: RASI_SVG[key] || '' }}
