@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { useRouter, usePathname } from 'next/navigation'
 import { useStore } from '@/store'
 import { useTheme } from '@/store/theme'
-import { CURRENCIES, LANGUAGES, THEMES } from '@/lib/constants'
+import { CURRENCIES, LANGUAGES } from '@/lib/constants'
 import { getInitials } from '@/lib/utils'
 import { Menu, X, ChevronDown, LogOut, LayoutDashboard, Star } from 'lucide-react'
 
@@ -101,7 +101,7 @@ export default function Nav() {
   const path = usePathname()
   const { token, user, currency, currencySym, language, languageFlag,
           chartMode, setCurrency, setLanguage, setChartMode, logout } = useStore()
-  const { theme, themes, meta, setTheme } = useTheme()
+  const { theme, themes, meta, setTheme } = useTheme() as any
   const [mob, setMob] = useState(false)
 
   const logout_ = () => { logout(); router.push('/signin') }
