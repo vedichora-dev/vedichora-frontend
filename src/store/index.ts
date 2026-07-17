@@ -13,11 +13,13 @@ interface AppState {
   language: string
   languageFlag: string
   chartMode: 'north' | 'south'
+  redirectAfterLogin: string | null
   setAuth: (token: string, refresh: string, user: User) => void
   setHoroId: (id: string) => void
   setCurrency: (code: string, sym: string) => void
   setLanguage: (code: string, flag: string) => void
   setChartMode: (mode: 'north' | 'south') => void
+  setRedirectAfterLogin: (path: string | null) => void
   logout: () => void
 }
 
@@ -28,6 +30,7 @@ export const useStore = create<AppState>()(
       currency: 'INR', currencySym: '₹',
       language: 'en', languageFlag: '🇮🇳',
       chartMode: 'north',
+      redirectAfterLogin: null,
       setAuth: (token, refreshToken, user) => {
         localStorage.setItem('vh_token', token)
         localStorage.setItem('vh_refresh', refreshToken)
@@ -37,9 +40,10 @@ export const useStore = create<AppState>()(
       setCurrency: (currency, currencySym) => set({ currency, currencySym }),
       setLanguage: (language, languageFlag) => set({ language, languageFlag }),
       setChartMode: (chartMode) => set({ chartMode }),
+      setRedirectAfterLogin: (redirectAfterLogin) => set({ redirectAfterLogin }),
       logout: () => {
         localStorage.clear()
-        set({ token: null, refreshToken: null, user: null, currentHoroId: null })
+        set({ token: null, refreshToken: null, user: null, currentHoroId: null, redirectAfterLogin: null })
       },
     }),
     { name: 'vh-store' }
