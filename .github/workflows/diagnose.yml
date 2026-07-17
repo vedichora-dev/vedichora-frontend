@@ -9,11 +9,11 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
-      - run: npm ci
-      - name: Build and capture all errors
+      - run: npm ci --legacy-peer-deps
+      - name: Run build and show ALL errors
         run: |
-          npm run build 2>&1 | tee /tmp/build.log || true
-          echo "=== BUILD LOG ==="
-          cat /tmp/build.log
-          echo "=== ERRORS ONLY ==="
-          grep -E "Type error|error TS|Cannot find|Module not found" /tmp/build.log || echo "No TS errors found"
+          npx tsc --noEmit 2>&1 | head -100
+          echo "---TSC DONE---"
+          npm run build 2>&1 | grep -A5 -B2 "Type error\|error TS\|Cannot find\|Module not found\|Failed to compile" | head -80
+          echo "---BUILD DONE---"
+        continue-on-error: true
