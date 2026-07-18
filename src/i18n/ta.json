@@ -64,13 +64,18 @@
   },
   "home": {
     "daily": "தினசரி",
-    "weekly": "வார",
-    "monthly": "மாத",
+    "weekly": "வாரம்",
+    "monthly": "மாதம்",
     "yearly": "வருட",
     "love": "காதல்",
     "career": "தொழில்",
     "health": "உடல்நலம்",
-    "finance": "பண நிலை"
+    "finance": "பண நிலை",
+    "lucky_colour": "அதிர்ஷ்ட வண்ணம்",
+    "lucky_number": "எண்",
+    "favorable": "சாதகமானது",
+    "avoid": "தவிர்க்க வேண்டியவை",
+    "moon_note": "சந்திரன்"
   },
   "auth": {
     "signin_title": "மீண்டும் வரவேற்கிறோம்",
