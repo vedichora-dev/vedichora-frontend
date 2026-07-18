@@ -9,8 +9,10 @@ const ABBR: Record<string,string> = {
 // South Indian fixed rasi grid 4x4 (corners empty)
 // Row 0: _ Pis Ari Tau | Row 1: Aqu _ _ Gem
 // Row 2: Cap _ _ Can  | Row 3: Sag Sco Lib Vir
+// South Indian: top-row starts Pisces (no leading null)
+// Row0: Pis Ari Tau Gem | Row1: Aqu _ _ Can | Row2: Cap _ _ Leo | Row3: Sag Sco Lib Vir
 const GRID: (number|null)[] = [
-  null,11,0,1,  10,null,null,2,  9,null,null,3,  8,7,6,5
+  11,0,1,2,  10,null,null,3,  9,null,null,4,  8,7,6,5
 ]
 
 export default function SouthIndianChart({ planets, ascendant }: Props) {
