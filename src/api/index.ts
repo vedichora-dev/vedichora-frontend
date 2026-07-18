@@ -130,3 +130,43 @@ export const verifyPhoneOtp = (phone: string, otp: string) =>
 // ── PDF ──────────────────────────────────────────────────────
 export const getPdfBasic = (horoId: string) =>
   chartApi.get(`/api/pdf/chart/${horoId}/basic`, { responseType: 'blob' })
+// ── STRENGTH (Shadbala, Ashtakavarga, Varga) ─────────────────
+export const getShadbala      = (id: string) => chartApi.get(`/api/strength/${id}/shadbala`)
+export const getAshtakavarga  = (id: string) => chartApi.get(`/api/strength/${id}/ashtakavarga`)
+export const getVargaChart    = (id: string, divisor: number) => chartApi.get(`/api/strength/${id}/varga/${divisor}`)
+export const getStrengthNatal = (id: string) => chartApi.get(`/api/strength/natal/${id}`)
+
+// ── SPECIAL LAGNAS (Arudha etc) ───────────────────────────────
+export const getSpecialLagnas = (id: string) => chartApi.get(`/api/transit/${id}/special-lagnas`)
+
+// ── DOSHAS ────────────────────────────────────────────────────
+export const getDoshas        = (id: string) => chartApi.get(`/api/dosha/${id}`)
+export const getMangalDosha   = (id: string) => chartApi.get(`/api/dosha/${id}/mangal`)
+export const getKaalsarpa     = (id: string) => chartApi.get(`/api/dosha/${id}/kaalsarpa`)
+
+// ── FORECAST ──────────────────────────────────────────────────
+export const getForecastDaily   = (id: string) => chartApi.get(`/api/forecast/${id}/daily`)
+export const getForecastWeekly  = (id: string) => chartApi.get(`/api/forecast/${id}/weekly`)
+export const getForecastMonthly = (id: string) => chartApi.get(`/api/forecast/${id}/monthly`)
+
+// ── INTERPRET ─────────────────────────────────────────────────
+export const getInterpret        = (id: string) => chartApi.get(`/api/interpret/${id}`)
+export const getInterpretPersonality = (id: string) => chartApi.get(`/api/interpret/${id}/personality`)
+export const getInterpretMarriage    = (id: string) => chartApi.get(`/api/interpret/${id}/marriage`)
+export const getInterpretCareer      = (id: string) => chartApi.get(`/api/interpret/${id}/career`)
+export const getInterpretCurrentPeriod = (id: string) => chartApi.get(`/api/interpret/${id}/current-period`)
+
+// ── CHART REPORT ──────────────────────────────────────────────
+export const getChartReportStage1 = (id: string) => chartApi.get(`/api/chart-report/${id}/stage1`)
+export const getChartReportStage2 = (id: string) => chartApi.get(`/api/chart-report/${id}/stage2`)
+
+// ── PDF (blob) ────────────────────────────────────────────────
+export const downloadPdfBasic = (id: string) =>
+  chartApi.get(`/api/pdf/chart/${id}/basic`, { responseType: 'blob' })
+export const downloadPdfFull  = (id: string) =>
+  chartApi.get(`/api/pdf/chart/${id}/full`,  { responseType: 'blob' })
+
+// ── PREDICTION EXTRAS ─────────────────────────────────────────
+export const getGoodBadTimes    = (id: string) => chartApi.get(`/api/prediction/${id}/good-bad-times`)
+export const getDifficultPeriods= (id: string) => chartApi.get(`/api/prediction/${id}/difficult-periods`)
+export const getGoodPeriods     = (id: string) => chartApi.get(`/api/prediction/${id}/good-periods`)
