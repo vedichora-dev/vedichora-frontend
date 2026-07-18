@@ -137,12 +137,15 @@ export default function ChartPage() {
   const handlePdf = async () => {
     if (!horoId) return
     try {
+      // PdfController returns HTML — open in new tab for print/save as PDF
       const res = await downloadPdfBasic(horoId)
-      const blob = new Blob([res.data], { type: 'application/pdf' })
-      const url  = URL.createObjectURL(blob)
-      const a    = document.createElement('a')
-      a.href = url; a.download = `vedichora-chart-${horoId}.pdf`; a.click()
-      URL.revokeObjectURL(url)
+      const html = typeof res.data === 'string' ? res.data : JSON.stringify(res.data, null, 2)
+      const win = window.open('', '_blank')
+      if (win) {
+        win.document.write(html)
+        win.document.close()
+        setTimeout(() => win.print(), 500)
+      }
     } catch { alert('PDF generation failed. Please try again.') }
   }
 
@@ -390,10 +393,18 @@ export default function ChartPage() {
     )
 
     // ── D9 NAVAMSHA ──
-    if (tab==='varga') return (
-      <div>
-        {!data ? <div style={{padding:'20px',color:'var(--txm)',fontSize:'13px'}}>
-          Navamsha data not available</div> :
+    if (tab==='varga') {
+      // Navamsha from /api/strength/{id}/varga/9
+      let vargaPlanets: any[] = []
+      try {
+        const vd = data?.data || data
+        vargaPlanets = Array.isArray(vd?.planets) ? vd.planets :
+                       Array.isArray(vd) ? vd : []
+      } catch { vargaPlanets = [] }
+      return (
+        <div>
+          {vargaPlanets.length===0 ? <div style={{padding:'20px',color:'var(--txm)',fontSize:'13px'}}>
+            Navamsha (D9) data not available</div> :
         <div style={{overflowX:'auto'}}>
           <div style={{fontSize:'12px',fontWeight:700,color:'var(--acc)',marginBottom:'12px',
             fontFamily:'Cinzel,serif'}}>D9 Navamsha Chart</div>
@@ -417,30 +428,45 @@ export default function ChartPage() {
             ))}</tbody>
           </table>
         </div>}
-      </div>
-    )
+        </div>
+      )
+    }
 
     // ── ARUDHA LAGNAS ──
-    if (tab==='arudha') return (
-      <div>
-        {!data ? <div style={{padding:'20px',color:'var(--txm)',fontSize:'13px'}}>
-          Special lagnas data not available</div> :
-        <div style={{display:'grid',gridTemplateColumns:'repeat(2,1fr)',gap:'10px'}}>
-          {Object.entries(data||{}).map(([key,val]:any)=>(
-            <div key={key} style={{background:'var(--bg2)',borderRadius:'10px',
-              padding:'12px',border:'1px solid var(--bd)'}}>
-              <div style={{fontSize:'11px',fontWeight:700,color:'var(--acc)',
-                fontFamily:'Cinzel,serif',marginBottom:'4px'}}>{key}</div>
-              <div style={{fontSize:'13px',color:'var(--tx)'}}>
-                {typeof val==='string'?gSign(val):
-                 typeof val==='number'?gSign(String(val)):
-                 val?.rasiName?gSign(val.rasiName):JSON.stringify(val)}
-              </div>
+    if (tab==='arudha') {
+      // API returns {success, data: {horaLagna, ghatiLagna, varnadaLagna, sreeLagna, ...}}
+      const lagnas = data?.data || data
+      const LAGNA_LABELS: Record<string,string> = {
+        horaLagna:'Hora Lagna', ghatiLagna:'Ghati Lagna', varnadaLagna:'Varnada Lagna',
+        sreeLagna:'Sree Lagna', induLagna:'Indu Lagna', karkamsaLagna:'Karkamsa',
+        svanamsaLagna:'Svanamsa', niryanapadaLagna:'Niryanapadha',
+        upapada:'Upapada Lagna', arudhaLagna:'Arudha Lagna (AL)',
+      }
+      return (
+        <div>
+          {!lagnas ? <div style={{padding:'20px',color:'var(--txm)',fontSize:'13px'}}>
+            Arudha/Special Lagnas not available</div> :
+          <div>
+            <div style={{fontSize:'12px',color:'var(--txm)',marginBottom:'12px'}}>
+              Special Lagnas (Jaimini) — calculated from {gSign(lagna)} Lagna
             </div>
-          ))}
-        </div>}
-      </div>
-    )
+            <div style={{display:'grid',gridTemplateColumns:'repeat(3,1fr)',gap:'10px'}}>
+              {Object.entries(lagnas||{}).filter(([k])=>typeof lagnas[k]==='string').map(([key,val]:any)=>(
+                <div key={key} style={{background:'var(--bg2)',borderRadius:'10px',
+                  padding:'12px 14px',border:'1px solid var(--bd)'}}>
+                  <div style={{fontSize:'10px',fontWeight:700,color:'var(--txm)',
+                    marginBottom:'4px',textTransform:'uppercase',letterSpacing:'.04em'}}>
+                    {LAGNA_LABELS[key]||key.replace(/([A-Z])/g,' $1').trim()}
+                  </div>
+                  <div style={{fontSize:'14px',fontWeight:700,color:'var(--acc)',
+                    fontFamily:'Cinzel,serif'}}>{gSign(val)}</div>
+                </div>
+              ))}
+            </div>
+          </div>}
+        </div>
+      )
+    }
 
     // ── DOSHAS ──
     if (tab==='dosha') return (
@@ -482,23 +508,31 @@ export default function ChartPage() {
     if (tab==='interpret') return (
       <div style={{display:'flex',flexDirection:'column',gap:'16px'}}>
         {!data ? <div style={{padding:'20px',color:'var(--txm)',fontSize:'13px'}}>
-          Analysis not available</div> :
+          Analysis not available — requires AI key</div> :
         [
-          {key:'personality',label:'Personality'},
-          {key:'career',label:'Career'},
+          {key:'personality',label:'Personality & Character'},
+          {key:'career',label:'Career & Profession'},
           {key:'marriage',label:'Marriage & Relationships'},
-          {key:'currentPeriod',label:'Current Period'},
+          {key:'currentPeriod',label:'Current Period Analysis'},
         ].map(({key,label})=>{
-          const section = (data as any)[key]
-          if (!section) return null
+          // Each section is {success, data: {horoscopeId, topic, interpretation}}
+          const raw = (data as any)[key]
+          if (!raw) return null
+          const text = raw?.data?.interpretation || raw?.interpretation ||
+                       raw?.data?.text || raw?.text || raw?.summary ||
+                       (typeof raw==='string'?raw:null)
           return (
             <div key={key} className="card">
               <div className="card-hd">
                 <span className="card-title">{label}</span>
+                {raw?.data?.currentDasa&&(
+                  <span style={{marginLeft:'auto',fontSize:'11px',color:'var(--gold)'}}>
+                    {raw.data.currentDasa}
+                  </span>
+                )}
               </div>
               <div className="card-bd" style={{fontSize:'13px',lineHeight:1.8,color:'var(--tx2)'}}>
-                {section?.summary||section?.text||section?.analysis||
-                 (typeof section==='string'?section:JSON.stringify(section))}
+                {text||<span style={{color:'var(--txm)'}}>AI interpretation temporarily unavailable</span>}
               </div>
             </div>
           )
@@ -507,19 +541,78 @@ export default function ChartPage() {
     )
 
     // ── FULL REPORT ──
-    if (tab==='report') return (
-      <div>
-        {!data ? <div style={{padding:'20px',color:'var(--txm)',fontSize:'13px'}}>
-          Full report not available</div> :
-        <div style={{fontSize:'13px',lineHeight:1.8,color:'var(--tx2)'}}>
-          {data?.reportHtml
-            ? <div dangerouslySetInnerHTML={{__html:data.reportHtml}}/>
-            : <pre style={{whiteSpace:'pre-wrap',fontFamily:'inherit'}}>
-                {data?.content||data?.text||JSON.stringify(data,null,2)}
-              </pre>}
-        </div>}
-      </div>
-    )
+    if (tab==='report') {
+      const report = data?.data || data
+      const basic = report?.basic
+      const planets = report?.planets || []
+      return (
+        <div style={{display:'flex',flexDirection:'column',gap:'16px'}}>
+          {!report ? <div style={{padding:'20px',color:'var(--txm)',fontSize:'13px'}}>
+            Full report not available</div> :
+          <>
+            {/* Basic info */}
+            {basic && (
+              <div style={{display:'grid',gridTemplateColumns:'repeat(4,1fr)',gap:'10px'}}>
+                {[
+                  {l:'Name',v:basic.personName},
+                  {l:'Lagna',v:gSign(basic.lagnaName||basic.ascendantName||'—')},
+                  {l:'Moon',v:gSign(basic.moonSign||basic.moonRasi||'—')},
+                  {l:'Nakshatra',v:basic.nakshatra},
+                ].map(s=>(
+                  <div key={s.l} style={{background:'var(--bg2)',borderRadius:'8px',
+                    padding:'10px',border:'1px solid var(--bd)',textAlign:'center'}}>
+                    <div style={{fontSize:'9px',color:'var(--txm)',textTransform:'uppercase',
+                      letterSpacing:'.05em',marginBottom:'4px'}}>{s.l}</div>
+                    <div style={{fontSize:'13px',fontWeight:700,color:'var(--acc)',
+                      fontFamily:'Cinzel,serif'}}>{s.v||'—'}</div>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {/* Planet positions from report */}
+            {planets.length > 0 && (
+              <div className="card">
+                <div className="card-hd"><span className="card-title">Planetary Positions</span></div>
+                <div style={{overflowX:'auto'}}>
+                  <table style={{width:'100%',borderCollapse:'collapse',fontSize:'12px'}}>
+                    <thead><tr style={{borderBottom:'2px solid var(--bd)'}}>
+                      {['Planet','Rasi','Degree','Nakshatra','Retro'].map(h=>(
+                        <th key={h} style={{padding:'7px 10px',textAlign:'left',fontSize:'9px',
+                          fontWeight:700,textTransform:'uppercase',color:'var(--txm)'}}>{h}</th>
+                      ))}
+                    </tr></thead>
+                    <tbody>{planets.map((p:any,i:number)=>(
+                      <tr key={i} style={{borderBottom:'1px solid var(--bd)',
+                        background:i%2?'var(--bg2)':'transparent'}}>
+                        <td style={{padding:'7px 10px',fontWeight:700,color:'var(--acc)',
+                          fontFamily:'Cinzel,serif'}}>{gPlanet(p.planet||p.Planet||'')} </td>
+                        <td style={{padding:'7px 10px'}}>{gSign(p.rasi||p.rasiName||p.Rasi||'—')}</td>
+                        <td style={{padding:'7px 10px',color:'var(--txm)',fontSize:'11px'}}>
+                          {typeof(p.degree||p.longitude)==='number'?(p.degree||p.longitude).toFixed(2)+'°':'—'}</td>
+                        <td style={{padding:'7px 10px'}}>{p.nakshatra||p.nakshatraName||'—'}</td>
+                        <td style={{padding:'7px 10px',textAlign:'center'}}>
+                          {(p.retrograde||p.isRetrograde)&&<span style={{color:'#F87171'}}>℞</span>}</td>
+                      </tr>
+                    ))}</tbody>
+                  </table>
+                </div>
+              </div>
+            )}
+
+            {/* Interpretation if present */}
+            {report?.interpretation && (
+              <div className="card">
+                <div className="card-hd"><span className="card-title">AI Interpretation</span></div>
+                <div className="card-bd" style={{fontSize:'13px',lineHeight:1.8,color:'var(--tx2)'}}>
+                  {report.interpretation}
+                </div>
+              </div>
+            )}
+          </>}
+        </div>
+      )
+    }
 
     return <div style={{padding:'20px',color:'var(--txm)'}}>Select a tab to view data</div>
   }
