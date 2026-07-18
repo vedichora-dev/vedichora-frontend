@@ -59,3 +59,5 @@ export async function apiPost<T>(url: string, body: unknown): Promise<T | null> 
   try { const res = await chartApi.post(url, body); return (res.data?.data ?? res.data) as T }
   catch { return null }
 }
+export const authApiPost = (url: string, data: any) =>
+  authApi.post(url, data)
