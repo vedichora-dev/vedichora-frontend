@@ -1,0 +1,27 @@
+
+> vedichora@1.0.0 build
+> next build
+
+⚠ No build cache found. Please configure build caching for faster rebuilds. Read more: https://nextjs.org/docs/messages/no-cache
+Attention: Next.js now collects completely anonymous telemetry regarding usage.
+This information is used to shape Next.js' roadmap and prioritize features.
+You can learn more, including how to opt-out if you'd not like to participate in this anonymous program, by visiting the following URL:
+https://nextjs.org/telemetry
+
+   ▲ Next.js 14.0.4
+
+   Creating an optimized production build ...
+ ✓ Compiled successfully
+   Linting and checking validity of types ...
+Failed to compile.
+
+./src/app/chart/page.tsx:41:16
+Type error: 'res' is possibly 'null'.
+
+[0m [90m 39 |[39m     [36mtry[39m {[0m
+[0m [90m 40 |[39m       [36mconst[39m res [33m=[39m [36mawait[39m listCharts()[0m
+[0m[31m[1m>[22m[39m[90m 41 |[39m       setSaved(res[33m.[39mdata [33m||[39m [])[0m
+[0m [90m    |[39m                [31m[1m^[22m[39m[0m
+[0m [90m 42 |[39m     } [36mcatch[39m { }[0m
+[0m [90m 43 |[39m     setLoadingSaved([36mfalse[39m)[0m
+[0m [90m 44 |[39m   }[33m,[39m [token])[0m
