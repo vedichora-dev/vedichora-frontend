@@ -122,7 +122,7 @@ export default function ChartPage() {
         PersonName: name.trim()||'My Chart',
         Year:dob.yyyy, Month:dob.mm, Day:dob.dd,
         Hour:hour, Minute:minute, Second:0,
-        PlaceName:place, Latitude:lat, Longitude:lng,
+        PlaceName:place,
         UtcOffsetHours:5.5, AyanamsaType:'Lahiri',
       })
       const data = (res as any)?.data?.data||(res as any)?.data
