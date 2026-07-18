@@ -392,3 +392,31 @@ body {
   .home-grid { grid-template-columns: 1fr 1.5fr !important; }
 }
 
+/* ── Chart page form grid — responsive ── */
+.form-grid {
+  grid-template-columns: 1fr 1fr 1fr 1fr auto !important;
+}
+@media (max-width: 900px) {
+  .form-grid { grid-template-columns: 1fr 1fr !important; }
+  .form-grid > div:last-child { grid-column: span 2; }
+}
+@media (max-width: 600px) {
+  .form-grid { grid-template-columns: 1fr !important; }
+  .form-grid > div:last-child { grid-column: span 1; }
+}
+
+/* ── Chart duo (Rasi + Navamsha side by side) ── */
+.chart-duo {
+  grid-template-columns: 1fr 1fr !important;
+}
+@media (max-width: 768px) {
+  .chart-duo { grid-template-columns: 1fr !important; }
+}
+
+/* ── Saved charts strip scrollbar ── */
+.saved-strip::-webkit-scrollbar { height: 4px; }
+.saved-strip::-webkit-scrollbar-track { background: transparent; }
+.saved-strip::-webkit-scrollbar-thumb { background: var(--bd); border-radius: 4px; }
+
+/* ── Spin animation ── */
+@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
