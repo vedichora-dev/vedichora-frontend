@@ -1,6 +1,6 @@
 'use client'
 import { useState } from 'react'
-import { calculateChart, matchCharts } from '@/api'
+import { calculateChart, matchCharts, listCharts } from '@/api'
 import { useT } from '@/lib/i18n'
 import { to24Hour } from '@/lib/utils'
 import DatePicker, { DateValue } from '@/components/ui/DatePicker'
@@ -44,6 +44,21 @@ function PersonForm({
 export default function MatchPage() {
   const t = useT()
 
+
+  // Saved charts for selection
+  const [saved, setSaved]     = useState<any[]>([])
+  const [mode1,  setMode1]    = useState<'saved'|'new'>('new')
+  const [mode2,  setMode2]    = useState<'saved'|'new'>('new')
+  const [selId1, setSelId1]   = useState('')
+  const [selId2, setSelId2]   = useState('')
+
+  useEffect(() => {
+    if (!token) return
+    listCharts().then((res:any) => {
+      setSaved(Array.isArray(res) ? res : res?.data || [])
+    }).catch(() => {})
+  }, [token])
+
   const [n1, setN1] = useState('')
   const [n2, setN2] = useState('')
   const [d1, setD1] = useState<DateValue>(EMPTY)
@@ -56,6 +71,25 @@ export default function MatchPage() {
   const [err, setErr] = useState('')
 
   const handle = async () => {
+    // If using saved charts, match directly
+    if (mode1 === 'saved' && mode2 === 'saved' && selId1 && selId2) {
+      setLoading(true); setErr(''); setResult(null)
+      try {
+        const mres = await matchCharts(selId1, selId2)
+        const mdata = mres?.data?.data || mres?.data
+        if (mdata) {
+          const c1 = saved.find((c:any)=>(c.horoscopeId||c.HoroscopeId)===selId1)
+          const c2 = saved.find((c:any)=>(c.horoscopeId||c.HoroscopeId)===selId2)
+          setResult({ ...mdata,
+            name1: c1?.personName||c1?.PersonName||'Person 1',
+            name2: c2?.personName||c2?.PersonName||'Person 2',
+          })
+        } else setErr('Match failed')
+      } catch(e:any) { setErr(e?.response?.data?.message||'Match failed') }
+      setLoading(false)
+      return
+    }
+
     if (!d1.dd||!d1.mm||!d1.yyyy) { setErr('Enter Person 1 date of birth'); return }
     if (!d2.dd||!d2.mm||!d2.yyyy) { setErr('Enter Person 2 date of birth'); return }
     if (!p1.trim()) { setErr('Enter Person 1 place of birth'); return }
