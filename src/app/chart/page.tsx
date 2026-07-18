@@ -38,7 +38,7 @@ export default function ChartPage() {
     setLoadingSaved(true)
     try {
       const res = await listCharts()
-      setSaved(res?.data || [])
+      setSaved(Array.isArray(res) ? res : (res as any)?.data || [])
     } catch { }
     setLoadingSaved(false)
   }, [token])
@@ -51,7 +51,7 @@ export default function ChartPage() {
     setLoading(true); setErr('')
     try {
       const res = await getChart(horoId)
-      const data = res.data || res
+      const data = (res as any)?.data || res
       if (data) {
         setResult(data)
         setHoroId(horoId)
