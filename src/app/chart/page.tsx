@@ -206,7 +206,7 @@ export default function ChartPage() {
               No saved charts yet — generate one below
             </div>
           ) : (
-            <div style={{display:'flex',gap:'8px',overflowX:'auto',paddingBottom:'4px'}}>
+            <div className='saved-strip' style={{display:'flex',gap:'8px',overflowX:'auto',paddingBottom:'6px'}}>
               {saved.map((c:any)=>{
                 const id  = c.horoscopeId||c.HoroscopeId
                 const nm  = c.personName||c.PersonName||'Chart'
@@ -606,7 +606,7 @@ export default function ChartPage() {
               )}
 
               {/* ── DOSHAS ── */}
-              {tab==='dosha' && !isLoading('dosha') && (
+              {tab==='dosha' && !tabLoad['dosha'] && (
                 <div style={{display:'flex',flexDirection:'column',gap:'12px'}}>
                   {!data('dosha') ? <div style={{padding:'20px',color:'var(--txm)'}}>Dosha data not available</div> :
                   (() => {
