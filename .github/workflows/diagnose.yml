@@ -13,10 +13,8 @@ jobs:
           node-version: '20'
       - run: npm install --legacy-peer-deps
       - name: Capture build errors
-        run: |
-          npm run build 2>&1 | tail -60 > build-errors.txt || true
-          cat build-errors.txt
-      - name: Commit error log
+        run: npm run build 2>&1 | tail -80 > build-errors.txt || true
+      - name: Commit
         run: |
           git config user.email "ci@vedichora.com"
           git config user.name "CI Bot"
