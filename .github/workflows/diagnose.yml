@@ -9,22 +9,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
-      - name: Install
-        run: npm ci --legacy-peer-deps
-      - name: Run TSC and build, save errors
-        run: |
-          echo "=== TSC OUTPUT ===" > /tmp/errors.txt
-          npx tsc --noEmit 2>&1 | head -60 >> /tmp/errors.txt || true
-          echo "" >> /tmp/errors.txt
-          echo "=== BUILD OUTPUT ===" >> /tmp/errors.txt
-          npm run build 2>&1 | tail -50 >> /tmp/errors.txt || true
-          cat /tmp/errors.txt
+      - run: npm ci --legacy-peer-deps
+      - name: Full build output
+        run: npm run build 2>&1 || true
         continue-on-error: true
-      - name: Commit error log
-        run: |
-          git config user.email "ci@vedichora.com"
-          git config user.name "CI"
-          cp /tmp/errors.txt build-errors.txt
-          git add build-errors.txt
-          git commit -m "ci: build error log" || echo "nothing to commit"
-          git push
