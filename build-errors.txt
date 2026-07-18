@@ -15,13 +15,13 @@ https://nextjs.org/telemetry
    Linting and checking validity of types ...
 Failed to compile.
 
-./src/app/chart/page.tsx:125:26
-Type error: Object literal may only specify known properties, and 'Latitude' does not exist in type 'ChartRequest'.
+./e2e/helpers.ts:54:14
+Type error: Expected 2-3 arguments, but got 1.
 
-[0m [90m 123 |[39m         [33mYear[39m[33m:[39mdob[33m.[39myyyy[33m,[39m [33mMonth[39m[33m:[39mdob[33m.[39mmm[33m,[39m [33mDay[39m[33m:[39mdob[33m.[39mdd[33m,[39m[0m
-[0m [90m 124 |[39m         [33mHour[39m[33m:[39mhour[33m,[39m [33mMinute[39m[33m:[39mminute[33m,[39m [33mSecond[39m[33m:[39m[35m0[39m[33m,[39m[0m
-[0m[31m[1m>[22m[39m[90m 125 |[39m         [33mPlaceName[39m[33m:[39mplace[33m,[39m [33mLatitude[39m[33m:[39mlat[33m,[39m [33mLongitude[39m[33m:[39mlng[33m,[39m[0m
-[0m [90m     |[39m                          [31m[1m^[22m[39m[0m
-[0m [90m 126 |[39m         [33mUtcOffsetHours[39m[33m:[39m[35m5.5[39m[33m,[39m [33mAyanamsaType[39m[33m:[39m[32m'Lahiri'[39m[33m,[39m[0m
-[0m [90m 127 |[39m       })[0m
-[0m [90m 128 |[39m       [36mconst[39m data [33m=[39m (res [36mas[39m any)[33m?[39m[33m.[39mdata[33m?[39m[33m.[39mdata[33m||[39m(res [36mas[39m any)[33m?[39m[33m.[39mdata[0m
+[0m [90m 52 |[39m[0m
+[0m [90m 53 |[39m   [90m// Select Day[39m[0m
+[0m[31m[1m>[22m[39m[90m 54 |[39m   [36mawait[39m page[33m.[39mselectOption([32m'select[id*="c-dd"], select'[39m)[33m.[39mfirst()[33m.[39mselectOption([33mString[39m(opts[33m.[39mday))[0m
+[0m [90m    |[39m              [31m[1m^[22m[39m[0m
+[0m [90m 55 |[39m   [0m
+[0m [90m 56 |[39m   [90m// Select Month[39m[0m
+[0m [90m 57 |[39m   [36mconst[39m months [33m=[39m [[32m''[39m[33m,[39m[32m'January'[39m[33m,[39m[32m'February'[39m[33m,[39m[32m'March'[39m[33m,[39m[32m'April'[39m[33m,[39m[32m'May'[39m[33m,[39m[32m'June'[39m[33m,[39m[0m
