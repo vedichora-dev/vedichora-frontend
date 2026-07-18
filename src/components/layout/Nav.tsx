@@ -6,7 +6,7 @@ import { useStore } from '@/store'
 import { useTheme, THEME_META } from '@/store/theme'
 import { CURRENCIES, LANGUAGES } from '@/lib/constants'
 import { getInitials } from '@/lib/utils'
-import { Menu, X, ChevronDown, LogOut, LayoutDashboard, Star } from 'lucide-react'
+import { Menu, X, ChevronDown, LogOut, LayoutDashboard, Star, BarChart3 } from 'lucide-react'
 
 const NAV_LINKS = [
   { href:'/', label:'Horoscope' },
