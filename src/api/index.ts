@@ -116,3 +116,13 @@ export const getVarshaphal = (id: string, year: number) =>
 
 export const getVarshaphalMonthly = (id: string, year: number) =>
   apiGet<any>(`/api/compat/${id}/${year}/monthly`)
+
+// ── OTP ─────────────────────────────────────────────────────
+export const sendEmailOtp   = (email: string) =>
+  authApiPost('/api/auth/email-otp/send', { email })
+export const verifyEmailOtp = (email: string, otp: string) =>
+  authApiPost('/api/auth/email-otp/verify', { email, otp })
+export const sendPhoneOtp   = (phone: string) =>
+  authApiPost('/api/auth/otp/send', { phone })
+export const verifyPhoneOtp = (phone: string, otp: string) =>
+  authApiPost('/api/auth/otp/verify', { phone, otp })
