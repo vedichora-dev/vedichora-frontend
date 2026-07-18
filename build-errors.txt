@@ -13,41 +13,15 @@ https://nextjs.org/telemetry
    Creating an optimized production build ...
  ✓ Compiled successfully
    Linting and checking validity of types ...
-   Collecting page data ...
-   Generating static pages (0/21) ...
-   Generating static pages (5/21) 
-   Generating static pages (10/21) 
-   Generating static pages (15/21) 
- ✓ Generating static pages (21/21) 
-   Finalizing page optimization ...
-   Collecting build traces ...
+Failed to compile.
 
-Route (app)                              Size     First Load JS
-┌ ○ /                                    10.8 kB         123 kB
-├ ○ /_not-found                          869 B          82.8 kB
-├ ○ /about                               2.44 kB        84.4 kB
-├ ○ /api-docs                            1.87 kB        86.8 kB
-├ ○ /chart                               15.1 kB         127 kB
-├ ○ /consult                             9.25 kB         121 kB
-├ ○ /dashboard                           1.45 kB         114 kB
-├ ○ /learn                               2.52 kB        84.4 kB
-├ ○ /match                               10.5 kB         123 kB
-├ ○ /muhurta                             2.63 kB         115 kB
-├ ○ /numerology                          2.87 kB         112 kB
-├ ○ /remedies                            1.85 kB        83.8 kB
-├ ○ /shop                                2.09 kB         114 kB
-├ ○ /signin                              2.93 kB         122 kB
-├ ○ /signup                              2.68 kB         122 kB
-├ ○ /transits                            1.83 kB         114 kB
-├ ○ /varshaphal                          1.89 kB         114 kB
-├ ○ /western                             10 kB          98.7 kB
-└ ○ /yogas                               1.78 kB        86.7 kB
-+ First Load JS shared by all            81.9 kB
-  ├ chunks/938-cac2006256170abd.js       26.7 kB
-  ├ chunks/fd9d1056-591193791e59a9f8.js  53.3 kB
-  ├ chunks/main-app-b4533ec2e702cf2a.js  220 B
-  └ chunks/webpack-6c63cab75398e329.js   1.74 kB
+./src/app/page.tsx:15:9
+Type error: Type 'number' must have a '[Symbol.iterator]()' method that returns an iterator.
 
-
-○  (Static)  prerendered as static content
-
+[0m [90m 13 |[39m   [36mconst[39m [horoscope[33m,[39m setHoroscope] [33m=[39m useState[33m<[39m[33many[39m[33m>[39m([36mnull[39m)[0m
+[0m [90m 14 |[39m   [36mconst[39m [loading[33m,[39m setLoading] [33m=[39m useState([36mfalse[39m)[0m
+[0m[31m[1m>[22m[39m[90m 15 |[39m   [36mconst[39m [period[33m,[39m setPeriod] [33m=[39m useState[33m<[39m[33mt[39m([32m'home.daily'[39m)[33m|[39mt([32m'home.weekly'[39m)[33m|[39mt([32m'home.monthly'[39m)[33m>[39m(t([32m'home.daily'[39m))[0m
+[0m [90m    |[39m         [31m[1m^[22m[39m[0m
+[0m [90m 16 |[39m   [36mconst[39m { language } [33m=[39m useStore()[0m
+[0m [90m 17 |[39m   [36mconst[39m getSign [33m=[39m useSignName()[0m
+[0m [90m 18 |[39m   [36mconst[39m t [33m=[39m useT()[0m
