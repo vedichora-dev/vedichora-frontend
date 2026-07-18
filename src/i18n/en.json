@@ -70,7 +70,12 @@
     "love": "Love",
     "career": "Career",
     "health": "Health",
-    "finance": "Finance"
+    "finance": "Finance",
+    "lucky_colour": "Lucky colour",
+    "lucky_number": "Number",
+    "favorable": "Favorable",
+    "avoid": "Avoid",
+    "moon_note": "Moon"
   },
   "auth": {
     "signin_title": "Welcome back",
