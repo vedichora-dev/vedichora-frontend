@@ -118,13 +118,16 @@ export default function ChartPage() {
     try {
       const {hour,minute} = dob.unknownTime
         ? {hour:12,minute:0} : to24Hour(dob.hr||12, dob.mi||0, dob.ap||'AM')
-      const res = await calculateChart({
+      const payload = {
         PersonName: name.trim()||'My Chart',
         Year:dob.yyyy, Month:dob.mm, Day:dob.dd,
         Hour:hour, Minute:minute, Second:0,
-        PlaceName:place,
+        PlaceName:place||'Chennai, India',
         UtcOffsetHours:5.5, AyanamsaType:'Lahiri',
-      })
+      }
+      console.log('Chart payload:', JSON.stringify(payload))
+      if (!payload.PlaceName) payload.PlaceName = 'Chennai, India'
+      const res = await calculateChart(payload)
       const data = (res as any)?.data?.data||(res as any)?.data
       if (data) {
         const id = data.horoscopeId||data.id||''
@@ -134,8 +137,19 @@ export default function ChartPage() {
         await loadSaved()
         // Load navamsha
         if (id) getVargaChart(id, 9).then(nr => setNavData(nr?.data)).catch(()=>{})
-      } else setErr((res as any)?.data?.message||'Calculation failed')
-    } catch(e:any) { setErr(e?.response?.data?.message||'Calculation failed') }
+      } else {
+        const errMsg = (res as any)?.data?.message || (res as any)?.message || 'Calculation failed'
+        const errDetails = (res as any)?.data?.errors || []
+        setErr(Array.isArray(errDetails) && errDetails.length 
+          ? errDetails.join(' · ') 
+          : errMsg)
+      }
+    } catch(e:any) {
+      const errData = e?.response?.data
+      const errMsg = errData?.message || errData?.errors?.join(' · ') || e?.message || 'Calculation failed'
+      console.error('Chart error:', errData)
+      setErr(errMsg)
+    }
     setLoading(false)
   }
 
