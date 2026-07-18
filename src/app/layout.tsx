@@ -7,12 +7,6 @@ import dynamic from 'next/dynamic'
 // Client-only components — must be dynamically imported in server layout
 const A11yPanel = dynamic(() => import('@/components/ui/A11yPanel'), { ssr: false })
 
-export const viewport = {
-  width: 'device-width',
-  initialScale: 1,
-  maximumScale: 5,
-}
-
 export const metadata: Metadata = {
   title: 'VedicHora — Vedic Astrology Platform',
   description: 'Free Kundali, daily horoscope, compatibility matching, and live astrologer consultations',
