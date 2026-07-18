@@ -4,15 +4,22 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
       - run: npm install --legacy-peer-deps
-      - name: Full build output
-        run: npm run build 2>&1 | grep -E "Type error|error TS|Cannot find|Module not found|Syntax|Unexpected token" | head -30 || true
-        continue-on-error: true
-      - name: TSC check
-        run: npx tsc --noEmit 2>&1 | head -40 || true
-        continue-on-error: true
+      - name: Capture build errors
+        run: |
+          npm run build 2>&1 | tail -60 > build-errors.txt || true
+          cat build-errors.txt
+      - name: Commit error log
+        run: |
+          git config user.email "ci@vedichora.com"
+          git config user.name "CI Bot"
+          git add build-errors.txt
+          git diff --staged --quiet || git commit -m "ci: build error log [skip ci]"
+          git push || true
