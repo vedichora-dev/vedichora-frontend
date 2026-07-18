@@ -1,194 +1,258 @@
 'use client'
 import { useState } from 'react'
-import { matchCharts } from '@/api'
+import { calculateChart, matchCharts } from '@/api'
 import { useT } from '@/lib/i18n'
 import { to24Hour } from '@/lib/utils'
 import DatePicker, { DateValue } from '@/components/ui/DatePicker'
-import { Heart } from 'lucide-react'
+import { Heart, ChevronRight, RefreshCw } from 'lucide-react'
 
-const EMPTY: DateValue = { dd: 0, mm: 0, yyyy: 0, hr: 6, mi: 0, ap: 'AM' }
+const EMPTY: DateValue = { dd:0, mm:0, yyyy:0 }
 
-const ASHTA = [
-  { name:'Varna',       meaning:'Spiritual compatibility',  max:1  },
-  { name:'Vasya',       meaning:'Mutual attraction',        max:2  },
-  { name:'Tara',        meaning:'Birth star compatibility', max:3  },
-  { name:'Yoni',        meaning:'Sexual compatibility',     max:4  },
-  { name:'Graha Maitri',meaning:'Mental compatibility',     max:5  },
-  { name:'Gana',        meaning:'Temperament',              max:6  },
-  { name:'Bhakoot',     meaning:'Moon sign placement',      max:7  },
-  { name:'Nadi',        meaning:'Health and progeny',       max:8  },
-]
-
-const PATHU = [
-  'Dinam','Ganam','Mahendram','Stree Deergham','Yoni','Rasi','Rasiyathipathi','Vedha','Vasya','Rajju'
-]
+function PersonForm({
+  title, prefix, name, setName, dob, setDob, place, setPlace
+}: any) {
+  const t = useT()
+  return (
+    <div className="card">
+      <div className="card-hd">
+        <Heart style={{width:'14px',height:'14px',color:'#F87171'}}/>
+        <span className="card-title">{title}</span>
+      </div>
+      <div className="card-bd" style={{display:'flex',flexDirection:'column',gap:'14px'}}>
+        <div>
+          <label className="label">{t('chart.name')}</label>
+          <input className="input" value={name}
+            onChange={e=>setName(e.target.value)}
+            placeholder="Full name (optional)"/>
+        </div>
+        <div>
+          <label className="label">{t('chart.dob')}</label>
+          <DatePicker value={dob} onChange={setDob} showTime showUnknown prefix={prefix}/>
+        </div>
+        <div>
+          <label className="label">{t('chart.place')}</label>
+          <input className="input" value={place}
+            onChange={e=>setPlace(e.target.value)}
+            placeholder={t('chart.place_placeholder')}/>
+        </div>
+      </div>
+    </div>
+  )
+}
 
 export default function MatchPage() {
   const t = useT()
+
+  const [n1, setN1] = useState('')
+  const [n2, setN2] = useState('')
   const [d1, setD1] = useState<DateValue>(EMPTY)
   const [d2, setD2] = useState<DateValue>(EMPTY)
-  const [n1, setN1] = useState(''); const [p1, setP1] = useState('')
-  const [n2, setN2] = useState(''); const [p2, setP2] = useState('')
+  const [p1, setP1] = useState('')
+  const [p2, setP2] = useState('')
+
+  const [result, setResult] = useState<any>(null)
   const [loading, setLoading] = useState(false)
   const [err, setErr] = useState('')
-  const [result, setResult] = useState<any>(null)
 
-  const handleCalc = async () => {
-    if (!d1.dd||!d1.mm||!d1.yyyy) { setErr('Please enter Person 1 date of birth'); return }
-    if (!d2.dd||!d2.mm||!d2.yyyy) { setErr('Please enter Person 2 date of birth'); return }
-    setLoading(true); setErr('')
+  const handle = async () => {
+    if (!d1.dd||!d1.mm||!d1.yyyy) { setErr('Enter Person 1 date of birth'); return }
+    if (!d2.dd||!d2.mm||!d2.yyyy) { setErr('Enter Person 2 date of birth'); return }
+    if (!p1.trim()) { setErr('Enter Person 1 place of birth'); return }
+    if (!p2.trim()) { setErr('Enter Person 2 place of birth'); return }
+
+    setLoading(true); setErr(''); setResult(null)
     try {
-      const t1 = to24Hour(d1.hr||6, d1.mi||0, d1.ap||'AM')
-      const t2 = to24Hour(d2.hr||6, d2.mi||0, d2.ap||'AM')
-      const person1 = { Year:d1.yyyy,Month:d1.mm,Day:d1.dd,Hour:t1.hour,Minute:t1.minute,PlaceName:p1||'Chennai',PersonName:n1||t('match.person1') }
-      const person2 = { Year:d2.yyyy,Month:d2.mm,Day:d2.dd,Hour:t2.hour,Minute:t2.minute,PlaceName:p2||'Chennai',PersonName:n2||t('match.person2') }
-      const res = await matchCharts(person1, person2)
-      setResult(res.data?.data || res.data)
-    } catch { setErr('Calculation failed — please try again') }
-    finally { setLoading(false) }
+      const t1 = d1.unknownTime ? {hour:12,minute:0} : to24Hour(d1.hr||12,d1.mi||0,d1.ap||'AM')
+      const t2 = d2.unknownTime ? {hour:12,minute:0} : to24Hour(d2.hr||12,d2.mi||0,d2.ap||'AM')
+
+      // Step 1: Calculate both charts
+      const [c1res, c2res] = await Promise.all([
+        calculateChart({
+          PersonName:n1||'Person 1', Year:d1.yyyy, Month:d1.mm, Day:d1.dd,
+          Hour:t1.hour, Minute:t1.minute, Second:0,
+          PlaceName:p1, UtcOffsetHours:5.5, AyanamsaType:'Lahiri'
+        }),
+        calculateChart({
+          PersonName:n2||'Person 2', Year:d2.yyyy, Month:d2.mm, Day:d2.dd,
+          Hour:t2.hour, Minute:t2.minute, Second:0,
+          PlaceName:p2, UtcOffsetHours:5.5, AyanamsaType:'Lahiri'
+        })
+      ])
+
+      const chart1 = c1res?.data?.data || c1res?.data
+      const chart2 = c2res?.data?.data || c2res?.data
+
+      if (!chart1?.horoscopeId || !chart2?.horoscopeId) {
+        setErr('Could not calculate one or both charts. Check birth details.')
+        setLoading(false); return
+      }
+
+      // Step 2: Match using saved IDs
+      const mres = await matchCharts(chart1.horoscopeId, chart2.horoscopeId)
+      const mdata = mres?.data?.data || mres?.data
+      if (mdata) {
+        setResult({ ...mdata, name1: n1||'Person 1', name2: n2||'Person 2', chart1, chart2 })
+      } else {
+        setErr('Compatibility calculation failed. Please try again.')
+      }
+    } catch(e:any) {
+      setErr(e?.response?.data?.message || 'Calculation failed — please try again')
+    }
+    setLoading(false)
   }
 
-  const ashtaScore = result?.ashtaKootaScore ?? result?.ashtaKoota?.totalScore ?? 24
-  const pathuScore = result?.pathuPoruthamScore ?? result?.pathuPorutham?.totalScore ?? 7
-  const ashtaRows  = result?.ashtaKoota?.factors || result?.ashta || []
-  const pathuRows  = result?.pathuPorutham?.factors || result?.pathu || []
+  const score = result?.ashtaKootaScore ?? result?.AshtaKootaScore ?? 0
+  const total = result?.ashtaKootaTotal ?? result?.AshtaKootaTotal ?? 36
+  const pScore = result?.pathuPoruthamScore ?? result?.PathuPoruthamScore ?? 0
+  const pTotal = result?.pathuPoruthamTotal ?? result?.PathuPoruthamTotal ?? 10
+  const mangal = result?.mangalDosha ?? result?.MangalDosha
+  const kuta = result?.kootaDetails || result?.KootaDetails || []
+  const pct = Math.round((score/total)*100)
+
+  const scoreColor = pct>=70?'#16A34A':pct>=50?'#B45309':'#DC2626'
 
   return (
-    <div className="max-w-6xl mx-auto px-4 py-8">
-      <div className="page-header">
-        <h1>Compatibility Matching</h1>
-        <p>Ashta Koota · Pathu Porutham · Mangal Dosha · Dasa Sandhi</p>
+    <div style={{maxWidth:'1200px',margin:'0 auto',padding:'20px 16px'}}>
+      <div className="page-header" style={{marginBottom:'24px'}}>
+        <h1>{t('match.title')}</h1>
+        <p style={{fontSize:'13px',color:'var(--txm)',marginTop:'4px'}}>
+          {t('match.subtitle')}
+        </p>
       </div>
 
-      {/* Forms */}
-      <div className="grid md:grid-cols-2 gap-5 mb-6">
-        {[
-          { label:t('match.person1'), n:n1, setN:setN1, p:p1, setP:setP1, d:d1, setD:setD1 },
-          { label:t('match.person2'), n:n2, setN:setN2, p:p2, setP:setP2, d:d2, setD:setD2 },
-        ].map((f, i) => (
-          <div key={i} className="card">
-            <div className="card-hd"><Heart className="w-4 h-4 text-gold" /><span className="card-title">{f.label}</span></div>
-            <div className="card-bd space-y-4">
-              <div><label className="label">Name</label>
-                <input className="input" value={f.n} onChange={e=>f.setN(e.target.value)} placeholder="Person's name" /></div>
-              <div><label className="label">Date &amp; time of birth</label>
-                <DatePicker value={f.d} onChange={f.setD} showTime /></div>
-              <div><label className="label">Place of birth</label>
-                <input className="input" value={f.p} onChange={e=>f.setP(e.target.value)} placeholder="City, Country" /></div>
-            </div>
-          </div>
-        ))}
+      {/* Input forms */}
+      <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:'20px',marginBottom:'20px'}}
+        className="match-grid">
+        <PersonForm title={t('match.person1')} prefix="p1"
+          name={n1} setName={setN1} dob={d1} setDob={setD1} place={p1} setPlace={setP1}/>
+        <PersonForm title={t('match.person2')} prefix="p2"
+          name={n2} setName={setN2} dob={d2} setDob={setD2} place={p2} setPlace={setP2}/>
       </div>
 
-      {err && <p className="text-sm text-red-600 bg-red-50 border border-red-200 rounded-xl px-4 py-3 mb-4">{err}</p>}
+      {err && (
+        <div style={{padding:'12px 16px',borderRadius:'10px',marginBottom:'16px',
+          background:'rgba(220,38,38,.08)',border:'1px solid rgba(220,38,38,.2)',
+          fontSize:'13px',color:'#DC2626'}}>{err}</div>
+      )}
 
-      <button onClick={handleCalc} disabled={loading} className="btn-primary w-full py-3 font-cinzel text-sm mb-8 flex items-center justify-center gap-2">
-        {loading ? <><span className="animate-spin w-4 h-4 border-2 border-white border-t-transparent rounded-full inline-block" /> Calculating…</> : 'Calculate Compatibility →'}
+      <button onClick={handle} disabled={loading}
+        className="btn-primary" style={{width:'100%',padding:'14px',
+          fontFamily:'Cinzel,serif',fontSize:'15px',display:'flex',
+          alignItems:'center',justifyContent:'center',gap:'10px',marginBottom:'24px'}}>
+        {loading
+          ? <><RefreshCw style={{width:'16px',height:'16px',animation:'spin 1s linear infinite'}}/> Calculating...</>
+          : <>{t('match.calculate')} <ChevronRight style={{width:'16px',height:'16px'}}/></>}
       </button>
 
-      {/* Result */}
+      {/* Results */}
       {result && (
-        <div className="space-y-5 animate-fade-in">
-          {/* Score banner */}
-          <div className="bg-gradient-to-r from-maroon-dark via-maroon to-maroon-light rounded-2xl p-6 flex flex-wrap gap-6 items-center text-white">
-            <div className="text-center">
-              <div className="font-cinzel font-black text-5xl text-gold-star">{ashtaScore}</div>
-              <div className="text-white/40 text-xs mt-0.5">out of 36</div>
-              <div className="text-gold-star text-xs font-bold mt-1">Ashta Koota</div>
+        <div style={{display:'flex',flexDirection:'column',gap:'20px'}}>
+
+          {/* Overall score */}
+          <div className="card" style={{padding:'28px',textAlign:'center'}}>
+            <div style={{fontSize:'13px',color:'var(--txm)',marginBottom:'8px',fontWeight:600}}>
+              {result.name1} × {result.name2}
             </div>
-            <div className="w-px h-16 bg-white/15" />
-            <div className="text-center">
-              <div className="font-cinzel font-black text-5xl text-gold-star">{pathuScore}</div>
-              <div className="text-white/40 text-xs mt-0.5">out of 10</div>
-              <div className="text-gold-star text-xs font-bold mt-1">Pathu Porutham</div>
+            <div style={{fontFamily:'Cinzel,serif',fontWeight:900,fontSize:'64px',
+              lineHeight:1,color:scoreColor,marginBottom:'4px'}}>{pct}%</div>
+            <div style={{fontSize:'13px',color:'var(--txm)',marginBottom:'20px'}}>
+              Overall Compatibility
             </div>
-            <div className="flex-1 min-w-40">
-              <div className="font-cinzel font-bold text-lg">{ashtaScore >= 24 ? 'Good Match' : ashtaScore >= 18 ? 'Average Match' : 'Below Average'}</div>
-              <div className="text-white/50 text-xs mt-1">
-                {ashtaScore >= 24 ? 'Strong compatibility across most factors' : 'Some areas need attention — consult an astrologer'}
+            <div style={{width:'100%',height:'8px',background:'var(--bd)',borderRadius:'4px',
+              overflow:'hidden',maxWidth:'400px',margin:'0 auto'}}>
+              <div style={{height:'100%',width:`${pct}%`,background:scoreColor,
+                borderRadius:'4px',transition:'width 1s'}}/>
+            </div>
+          </div>
+
+          {/* Score breakdown */}
+          <div style={{display:'grid',gridTemplateColumns:'1fr 1fr 1fr',gap:'14px'}}>
+            {[
+              {label:'Ashta Koota',  score,  max:total,  desc:'28 factors across 8 kootas'},
+              {label:'Pathu Porutham', score:pScore, max:pTotal, desc:'10 Tamil matching factors'},
+              {label:'Mangal Dosha', score: mangal===false?0:mangal===true?1:0,
+               max:1, desc:mangal===false?'No Mangal Dosha':'Mangal Dosha present'},
+            ].map(s=>{
+              const pct2 = Math.round((s.score/s.max)*100)
+              const c = s.label.includes('Mangal')
+                ? (s.score===0?'#16A34A':'#DC2626')
+                : pct2>=70?'#16A34A':pct2>=50?'#B45309':'#DC2626'
+              return (
+                <div key={s.label} className="card" style={{padding:'20px',textAlign:'center'}}>
+                  <div style={{fontSize:'10px',fontWeight:700,color:'var(--txm)',
+                    textTransform:'uppercase',letterSpacing:'.06em',marginBottom:'8px'}}>
+                    {s.label}
+                  </div>
+                  <div style={{fontFamily:'Cinzel,serif',fontWeight:900,fontSize:'36px',
+                    color:c,lineHeight:1,marginBottom:'4px'}}>
+                    {s.label.includes('Mangal')
+                      ? (s.score===0?'✓ Clear':'⚠ Present')
+                      : `${s.score}/${s.max}`}
+                  </div>
+                  <div style={{fontSize:'11px',color:'var(--txm)'}}>{s.desc}</div>
+                </div>
+              )
+            })}
+          </div>
+
+          {/* Chart details */}
+          <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:'14px'}}>
+            {[
+              {name:result.name1, chart:result.chart1},
+              {name:result.name2, chart:result.chart2},
+            ].map((person,i)=>{
+              const moon = person.chart?.planets?.find((p:any)=>p.planet==='Moon'||p.Planet==='Moon')
+              return (
+                <div key={i} className="card" style={{padding:'16px'}}>
+                  <div style={{fontFamily:'Cinzel,serif',fontWeight:700,fontSize:'14px',
+                    color:'var(--acc)',marginBottom:'8px'}}>{person.name}</div>
+                  <div style={{display:'flex',flexDirection:'column',gap:'4px',fontSize:'12px',color:'var(--tx2)'}}>
+                    <div><span style={{color:'var(--txm)'}}>Lagna: </span>
+                      {person.chart?.ascendantName||'—'}</div>
+                    <div><span style={{color:'var(--txm)'}}>Moon: </span>
+                      {moon?.rasiName||'—'}</div>
+                    <div><span style={{color:'var(--txm)'}}>Nakshatra: </span>
+                      {moon?.nakshatraName||'—'}</div>
+                  </div>
+                </div>
+              )
+            })}
+          </div>
+
+          {/* Koota details if available */}
+          {kuta.length > 0 && (
+            <div className="card">
+              <div className="card-hd"><span className="card-title">Ashta Koota Details</span></div>
+              <div style={{overflowX:'auto'}}>
+                <table style={{width:'100%',borderCollapse:'collapse',fontSize:'12px'}}>
+                  <thead><tr style={{borderBottom:'2px solid var(--bd)'}}>
+                    {['Koota','Max','Score','Status'].map(h=>(
+                      <th key={h} style={{padding:'8px 12px',textAlign:'left',fontSize:'9px',
+                        fontWeight:700,textTransform:'uppercase',color:'var(--txm)'}}>{h}</th>
+                    ))}
+                  </tr></thead>
+                  <tbody>{kuta.map((k:any,i:number)=>{
+                    const ks = k.score||k.Score||0
+                    const km = k.maxScore||k.MaxScore||k.max||1
+                    const ok = ks >= km*0.5
+                    return (
+                      <tr key={i} style={{borderBottom:'1px solid var(--bd)',
+                        background:i%2?'var(--bg2)':'transparent'}}>
+                        <td style={{padding:'8px 12px',fontWeight:600,color:'var(--tx)',
+                          fontFamily:'Cinzel,serif'}}>{k.kootaName||k.KootaName||k.name||`Koota ${i+1}`}</td>
+                        <td style={{padding:'8px 12px',color:'var(--txm)'}}>{km}</td>
+                        <td style={{padding:'8px 12px',fontWeight:700,
+                          color:ok?'#16A34A':'#DC2626'}}>{ks}</td>
+                        <td style={{padding:'8px 12px',fontSize:'11px',
+                          color:ok?'#16A34A':'#DC2626'}}>{ok?'✓ Compatible':'✗ Incompatible'}</td>
+                      </tr>
+                    )
+                  })}</tbody>
+                </table>
               </div>
             </div>
-          </div>
+          )}
 
-          {/* Ashta Koota table */}
-          <div className="card">
-            <div className="card-hd"><span className="card-title">Ashta Koota — 8 Factor Analysis</span>
-              <span className="ml-auto text-xs text-gray-400">North Indian tradition</span></div>
-            <div className="overflow-x-auto">
-              <table className="w-full text-sm">
-                <thead><tr className="bg-maroon/5 border-b border-border">
-                  <th className="px-4 py-2.5 text-left text-xs font-semibold text-maroon uppercase tracking-wider">Factor</th>
-                  <th className="px-4 py-2.5 text-left text-xs font-semibold text-maroon uppercase tracking-wider">Meaning</th>
-                  <th className="px-4 py-2.5 text-center text-xs font-semibold text-maroon uppercase tracking-wider">Max</th>
-                  <th className="px-4 py-2.5 text-center text-xs font-semibold text-maroon uppercase tracking-wider">Score</th>
-                  <th className="px-4 py-2.5 text-left text-xs font-semibold text-maroon uppercase tracking-wider">Status</th>
-                </tr></thead>
-                <tbody className="divide-y divide-border">
-                  {ASHTA.map((row, i) => {
-                    const apiRow = ashtaRows[i] || {}
-                    const score = apiRow.score ?? (i === 7 ? 0 : row.max)
-                    const isOk = score >= row.max * 0.6
-                    return (
-                      <tr key={row.name} className="hover:bg-gold/3">
-                        <td className="px-4 py-2.5 font-semibold text-maroon">{row.name}</td>
-                        <td className="px-4 py-2.5 text-gray-500">{apiRow.meaning || row.meaning}</td>
-                        <td className="px-4 py-2.5 text-center text-gray-400">{row.max}</td>
-                        <td className="px-4 py-2.5 text-center font-bold text-maroon">{score}</td>
-                        <td className="px-4 py-2.5">
-                          <span className={score === 0 ? 'badge-err' : isOk ? 'badge-ok' : 'badge-warn'}>
-                            {score === 0 && i === 7 ? '⚠ Dosha' : isOk ? '✓ Good' : 'Partial'}
-                          </span>
-                        </td>
-                      </tr>
-                    )
-                  })}
-                  <tr className="bg-maroon/5 font-bold">
-                    <td className="px-4 py-2.5 font-bold text-maroon">Total</td>
-                    <td />
-                    <td className="px-4 py-2.5 text-center text-maroon font-bold">36</td>
-                    <td className="px-4 py-2.5 text-center text-maroon font-black font-cinzel text-base">{ashtaScore}</td>
-                    <td className="px-4 py-2.5"><span className="badge-gold">{ashtaScore >= 24 ? 'Above average' : 'Below average'}</span></td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-
-          {/* Pathu Porutham */}
-          <div className="card">
-            <div className="card-hd"><span className="card-title">Pathu Porutham — South Indian (Tamil) Tradition</span></div>
-            <div className="overflow-x-auto">
-              <table className="w-full text-sm">
-                <thead><tr className="bg-maroon/5 border-b border-border">
-                  <th className="px-4 py-2.5 text-left text-xs font-semibold text-maroon uppercase tracking-wider">Porutham</th>
-                  <th className="px-4 py-2.5 text-left text-xs font-semibold text-maroon uppercase tracking-wider">Signifies</th>
-                  <th className="px-4 py-2.5 text-left text-xs font-semibold text-maroon uppercase tracking-wider">Status</th>
-                </tr></thead>
-                <tbody className="divide-y divide-border">
-                  {PATHU.map((name, i) => {
-                    const apiRow = pathuRows[i] || {}
-                    const ok = apiRow.isCompatible !== false
-                    return (
-                      <tr key={name} className="hover:bg-gold/3">
-                        <td className="px-4 py-2.5 font-semibold text-maroon">{name}</td>
-                        <td className="px-4 py-2.5 text-gray-500">{apiRow.meaning || '—'}</td>
-                        <td className="px-4 py-2.5">
-                          <span className={ok ? 'badge-ok' : 'badge-warn'}>{ok ? '✓ Compatible' : '⚡ Neutral'}</span>
-                        </td>
-                      </tr>
-                    )
-                  })}
-                </tbody>
-              </table>
-            </div>
-          </div>
-
-          {/* Upgrade CTA */}
-          <div className="bg-gradient-to-r from-maroon/5 to-gold/5 border border-gold/20 rounded-xl p-5 text-center">
-            <div className="font-cinzel font-semibold text-maroon mb-1">Get the full compatibility report</div>
-            <p className="text-xs text-gray-500 mb-4">Nadi remedy plan · Optimal muhurta dates · AI interpretation · PDF download</p>
-            <button className="btn-gold px-6 py-2.5 text-sm font-cinzel">Full report — ₹399</button>
-          </div>
         </div>
       )}
     </div>
