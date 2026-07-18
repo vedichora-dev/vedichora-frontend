@@ -70,7 +70,12 @@
     "love": "प्रेम",
     "career": "करियर",
     "health": "स्वास्थ्य",
-    "finance": "धन"
+    "finance": "धन",
+    "lucky_colour": "शुभ रंग",
+    "lucky_number": "अंक",
+    "favorable": "शुभ",
+    "avoid": "परहेज",
+    "moon_note": "चंद्र"
   },
   "auth": {
     "signin_title": "वापस स्वागत है",
