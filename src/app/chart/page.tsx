@@ -124,6 +124,7 @@ export default function ChartPage() {
         Hour:hour, Minute:minute, Second:0,
         PlaceName:place||'Chennai, India',
         UtcOffsetHours:5.5, AyanamsaType:'Lahiri',
+        Language:language,
       }
       console.log('Chart payload:', JSON.stringify(payload))
       if (!payload.PlaceName) payload.PlaceName = 'Chennai, India'
