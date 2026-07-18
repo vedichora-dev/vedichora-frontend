@@ -12,7 +12,7 @@ export default function HomePage() {
   const [sel, setSel] = useState(0)
   const [horoscope, setHoroscope] = useState<any>(null)
   const [loading, setLoading] = useState(false)
-  const [period, setPeriod] = useState<t('home.daily')|t('home.weekly')|t('home.monthly')>(t('home.daily'))
+  const [period, setPeriod] = useState<'Daily'|'Weekly'|'Monthly'>('Daily')
   const { language } = useStore()
   const getSign = useSignName()
   const t = useT()
