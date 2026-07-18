@@ -113,8 +113,8 @@ export default function ChartPage() {
   const handleGenerate = async () => {
     if (!dob.dd||!dob.mm||!dob.yyyy) { setErr('Enter date of birth'); return }
     if (!place.trim()) { setErr('Enter place of birth'); return }
-    if (!token) { setRedirectAfterLogin('/chart'); router.push('/signup'); return }
     setLoading(true); setErr(''); setResult(null); setTabData({}); setNavData(null)
+    const isGuest = !token
     try {
       const {hour,minute} = dob.unknownTime
         ? {hour:12,minute:0} : to24Hour(dob.hr||12, dob.mi||0, dob.ap||'AM')
@@ -133,9 +133,9 @@ export default function ChartPage() {
       if (data) {
         const id = data.horoscopeId||data.id||''
         setResult(data); setHoroIdL(id)
-        if (id) { setHoroId(id); localStorage.setItem('vh_horoid',id) }
+        if (id && token) { setHoroId(id); localStorage.setItem('vh_horoid',id) }
         setTab('rasi'); setShowForm(false)
-        await loadSaved()
+        if (token) await loadSaved()
         // Load navamsha
         if (id) getVargaChart(id, 9).then(nr => setNavData(nr?.data)).catch(()=>{})
       } else {
