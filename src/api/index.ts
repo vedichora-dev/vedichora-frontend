@@ -140,7 +140,6 @@ export const getStrengthNatal = (id: string) => chartApi.get(`/api/strength/nata
 export const getSpecialLagnas = (id: string) => chartApi.get(`/api/transit/${id}/special-lagnas`)
 
 // ── DOSHAS ────────────────────────────────────────────────────
-export const getDoshas        = (id: string) => chartApi.get(`/api/dosha/${id}`)
 export const getMangalDosha   = (id: string) => chartApi.get(`/api/dosha/${id}/mangal`)
 export const getKaalsarpa     = (id: string) => chartApi.get(`/api/dosha/${id}/kaalsarpa`)
 
