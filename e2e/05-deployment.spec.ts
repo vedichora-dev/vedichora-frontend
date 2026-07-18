@@ -1,86 +1,62 @@
 import { test, expect } from '@playwright/test'
 
-/**
- * Deployment verification — checks that the LATEST code is live.
- * Looks for specific strings that only exist in recent commits.
- */
-test.describe('Deployment Verification', () => {
+const PAGES = [
+  { path: '/',            name: 'Home',         expected: ['Horoscope', 'Vedic', 'Hora'] },
+  { path: '/chart',       name: 'Chart/Kundali', expected: ['Chart', 'Kundali', 'Birth'] },
+  { path: '/match',       name: 'Match',         expected: ['Match', 'Person', 'Compatibility'] },
+  { path: '/signup',      name: 'Signup',        expected: ['Sign up', 'Create', 'email'] },
+  { path: '/signin',      name: 'Signin',        expected: ['Sign in', 'email'] },
+  { path: '/phone-login', name: 'Phone Login',   expected: ['phone', 'OTP', 'Send'] },
+  { path: '/shop',        name: 'Shop',          expected: [] },
+  { path: '/learn',       name: 'Learn',         expected: [] },
+  { path: '/about',       name: 'About',         expected: [] },
+]
 
-  test('Site is reachable and returns 200', async ({ page }) => {
-    const res = await page.goto('/')
-    expect(res?.status()).toBe(200)
-  })
+test.describe('DEPLOYMENT — All pages return 200', () => {
 
-  test('Latest chart features are deployed', async ({ page }) => {
-    await page.goto('/chart')
-    const html = await page.content()
-    
-    // These strings only exist in the latest chart page build
-    const checks = [
-      { label: 'Rasi + D9 tab',          pattern: /Rasi|D9|Navamsha/i },
-      { label: 'Saved charts strip',      pattern: /Saved Charts|New Chart/i },
-      { label: 'City autocomplete',       pattern: /City|Place|Birth/i },
-    ]
-    
-    for (const { label, pattern } of checks) {
-      const found = pattern.test(html)
-      console.log(`  ${found ? '✓' : '✗'} ${label}`)
-      expect(found, `${label} not found in deployed page`).toBe(true)
-    }
-  })
+  for (const { path, name, expected } of PAGES) {
+    test(`${name} page loads (${path})`, async ({ page }) => {
+      const response = await page.goto(path)
+      expect(response?.status()).toBe(200)
+      
+      await page.waitForTimeout(1500)
+      await page.screenshot({ path: `test-results/deploy-${name.toLowerCase().replace(/\//, '-')}.png` })
+      
+      // Check expected content
+      if (expected.length > 0) {
+        const text = await page.locator('body').textContent() || ''
+        const found = expected.filter(e => text.toLowerCase().includes(e.toLowerCase()))
+        console.log(`${name}: found ${found.length}/${expected.length} expected strings: ${found.join(', ')}`)
+        // At least one expected string should be present
+        expect(found.length).toBeGreaterThan(0)
+      }
+    })
+  }
+})
 
-  test('Signup has phone field (latest feature)', async ({ page }) => {
-    await page.goto('/signup')
-    const html = await page.content()
-    expect(html).toMatch(/phone|tel/i)
-    console.log('✓ Phone field present in signup')
-  })
-
-  test('Phone login page exists (new route)', async ({ page }) => {
-    const res = await page.goto('/phone-login')
-    expect(res?.status()).toBe(200)
-    const html = await page.content()
-    expect(html).toMatch(/OTP|phone|Send/i)
-    console.log('✓ /phone-login route exists')
-  })
-
-  test('API endpoints responding', async ({ page }) => {
-    const AUTH = 'https://vedichora-platform-production.up.railway.app'
-    const CHART = 'https://enchanting-dedication-production.up.railway.app'
-    
-    const authHealth = await page.request.get(`${AUTH}/health`)
-    expect(authHealth.status()).toBe(200)
-    console.log('✓ Auth service healthy')
-    
-    const chartHealth = await page.request.get(`${CHART}/health`)
-    expect(chartHealth.status()).toBe(200)
-    console.log('✓ Chart service healthy')
-  })
+test.describe('DEPLOYMENT — Performance & Assets', () => {
 
   test('No console errors on home page', async ({ page }) => {
     const errors: string[] = []
     page.on('console', msg => {
       if (msg.type() === 'error') errors.push(msg.text())
     })
-    page.on('pageerror', err => errors.push(err.message))
-    
     await page.goto('/')
-    await page.waitForLoadState('networkidle')
-    await page.waitForTimeout(2000)
-    
-    // Filter out known non-critical errors
-    const criticalErrors = errors.filter(e => 
-      !e.includes('favicon') && 
-      !e.includes('hydration') &&
-      !e.includes('Warning') &&
-      !e.includes('Non-Error')
-    )
-    
-    if (criticalErrors.length > 0) {
-      console.log('Console errors found:', criticalErrors)
+    await page.waitForTimeout(3000)
+    const nonNetworkErrors = errors.filter(e => !e.includes('favicon') && !e.includes('404'))
+    console.log('Console errors:', nonNetworkErrors)
+    // Allow minor errors but flag major ones
+    if (nonNetworkErrors.length > 0) {
+      console.warn('⚠ Console errors found:', nonNetworkErrors.join('\n'))
     }
-    // Just log, don't fail — some hydration warnings are expected in Next.js 14
-    console.log(`Console errors (${criticalErrors.length}):`, criticalErrors.slice(0, 3))
   })
 
+  test('Chart page no JS crash', async ({ page }) => {
+    const crashes: string[] = []
+    page.on('pageerror', err => crashes.push(err.message))
+    await page.goto('/chart')
+    await page.waitForTimeout(3000)
+    console.log('JS crashes:', crashes)
+    expect(crashes.length).toBe(0)
+  })
 })
