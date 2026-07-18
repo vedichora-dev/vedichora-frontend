@@ -119,10 +119,10 @@ export const getVarshaphalMonthly = (id: string, year: number) =>
 
 // ── OTP ─────────────────────────────────────────────────────
 export const sendEmailOtp   = (email: string) =>
-  authApiPost('/api/auth/email-otp/send', { email })
+  authApi.post('/api/auth/email-otp/send', { email })
 export const verifyEmailOtp = (email: string, otp: string) =>
-  authApiPost('/api/auth/email-otp/verify', { email, otp })
+  authApi.post('/api/auth/email-otp/verify', { email, otp })
 export const sendPhoneOtp   = (phone: string) =>
-  authApiPost('/api/auth/otp/send', { phone })
+  authApi.post('/api/auth/otp/send', { phone })
 export const verifyPhoneOtp = (phone: string, otp: string) =>
-  authApiPost('/api/auth/otp/verify', { phone, otp })
+  authApi.post('/api/auth/otp/verify', { phone, otp })
