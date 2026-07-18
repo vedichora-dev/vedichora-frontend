@@ -48,6 +48,9 @@ export const getStage1Report = (id: string) =>
   apiGet<any>(`/api/chart-report/${id}/stage1`)
 
 // ── MATCH ─────────────────────────────────────────────────────
+export const calculateMatch = (p1: any, p2: any) =>
+  chartApi.post('/api/chart/calculate-match', { person1: p1, person2: p2 })
+
 export const matchCharts = (p1: any, p2: any) =>
   chartApi.post('/api/chart/match', { Person1: p1, Person2: p2 })
     .catch(() => chartApi.post('/api/compat/score', { Person1: p1, Person2: p2 }))
