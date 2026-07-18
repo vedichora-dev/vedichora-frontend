@@ -126,3 +126,7 @@ export const sendPhoneOtp   = (phone: string) =>
   authApi.post('/api/auth/otp/send', { phone })
 export const verifyPhoneOtp = (phone: string, otp: string) =>
   authApi.post('/api/auth/otp/verify', { phone, otp })
+
+// ── PDF ──────────────────────────────────────────────────────
+export const getPdfBasic = (horoId: string) =>
+  chartApi.get(`/api/pdf/chart/${horoId}/basic`, { responseType: 'blob' })
