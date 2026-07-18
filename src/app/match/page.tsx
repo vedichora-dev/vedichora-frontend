@@ -4,6 +4,7 @@ import { calculateChart, matchCharts } from '@/api'
 import { useT } from '@/lib/i18n'
 import { to24Hour } from '@/lib/utils'
 import DatePicker, { DateValue } from '@/components/ui/DatePicker'
+import CityAutocomplete from '@/components/ui/CityAutocomplete'
 import { Heart, ChevronRight, RefreshCw } from 'lucide-react'
 
 const EMPTY: DateValue = { dd:0, mm:0, yyyy:0 }
