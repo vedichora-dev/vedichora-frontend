@@ -111,7 +111,7 @@ export default function HomePage() {
             <div className="card-hd">
               <span className="card-title">Daily Horoscope · {signName}</span>
               <div style={{display:'flex', gap:'4px', marginLeft:'auto'}}>
-                {([t('home.daily'),t('home.weekly'),t('home.monthly')] as const).map(p => (
+                {(['Daily', 'Weekly', 'Monthly'] as const).map(p => (
                   <button key={p} onClick={() => setPeriod(p)} style={{
                     padding:'4px 10px', borderRadius:'6px', fontSize:'11px',
                     border: period===p ? '1px solid var(--gold)' : '1px solid var(--bd)',
