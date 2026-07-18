@@ -21,12 +21,15 @@ export const getRasiHoroscope = (idx: number, lang = 'en') =>
 
 // ── CHART ─────────────────────────────────────────────────────
 export interface ChartRequest {
-  PersonName: string
+  PersonName?: string
   Year: number; Month: number; Day: number
   Hour: number; Minute: number; Second: number
-  PlaceName: string
-  UtcOffsetHours: number
-  AyanamsaType: 'Lahiri' | 'Raman' | 'Krishnamurti'
+  PlaceName?: string
+  Latitude?: number
+  Longitude?: number
+  UtcOffsetHours?: number
+  AyanamsaType?: string
+  Language?: string
 }
 export const calculateChart = (body: ChartRequest) =>
   chartApi.post('/api/chart/calculate', body)
