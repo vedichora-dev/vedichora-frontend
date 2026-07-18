@@ -3,7 +3,7 @@ import { useState, useEffect, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import { useStore } from '@/store'
 import {
-  calculateChart, listCharts, getChart,
+  calculateChart, calculateChartGuest, listCharts, getChart,
   getShadbala, getAshtakavarga, getVargaChart,
   getSpecialLagnas, getDoshas, downloadPdfBasic,
   getInterpretPersonality, getInterpretCareer,
