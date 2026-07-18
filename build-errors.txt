@@ -15,13 +15,13 @@ https://nextjs.org/telemetry
    Linting and checking validity of types ...
 Failed to compile.
 
-./src/app/chart/page.tsx:41:16
-Type error: 'res' is possibly 'null'.
+./src/app/chart/page.tsx:41:21
+Type error: Property 'data' does not exist on type 'any[]'.
 
 [0m [90m 39 |[39m     [36mtry[39m {[0m
 [0m [90m 40 |[39m       [36mconst[39m res [33m=[39m [36mawait[39m listCharts()[0m
-[0m[31m[1m>[22m[39m[90m 41 |[39m       setSaved(res[33m.[39mdata [33m||[39m [])[0m
-[0m [90m    |[39m                [31m[1m^[22m[39m[0m
+[0m[31m[1m>[22m[39m[90m 41 |[39m       setSaved(res[33m?[39m[33m.[39mdata [33m||[39m [])[0m
+[0m [90m    |[39m                     [31m[1m^[22m[39m[0m
 [0m [90m 42 |[39m     } [36mcatch[39m { }[0m
 [0m [90m 43 |[39m     setLoadingSaved([36mfalse[39m)[0m
 [0m [90m 44 |[39m   }[33m,[39m [token])[0m
