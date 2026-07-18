@@ -38,7 +38,7 @@ export default function ChartPage() {
     setLoadingSaved(true)
     try {
       const res = await listCharts()
-      setSaved(res.data || [])
+      setSaved(res?.data || [])
     } catch { }
     setLoadingSaved(false)
   }, [token])
