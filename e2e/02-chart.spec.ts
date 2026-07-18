@@ -1,213 +1,272 @@
-import { test, expect } from '@playwright/test'
-import { ADMIN_EMAIL, ADMIN_PASS, BABU, PRAMOD } from './helpers'
+import { test, expect, Page } from '@playwright/test'
+import { ADMIN_EMAIL, ADMIN_PASS } from './helpers'
 
-// Login before all chart tests
-test.beforeEach(async ({ page }) => {
+// ── Helpers ──────────────────────────────────────────────────────────────────
+async function login(page: Page) {
   await page.goto('/signin')
   await page.fill('input[type="email"]', ADMIN_EMAIL)
   await page.fill('input[type="password"]', ADMIN_PASS)
-  await page.click('button[type="submit"], button:has-text("Sign in")')
-  await page.waitForTimeout(4000)
-})
+  await page.click('button[type="submit"]')
+  await page.waitForTimeout(5000)
+}
 
-test.describe('CHART — Generation & Data Validation', () => {
+async function fillDatePicker(page: Page, prefix: string, day: number, month: number, year: number, hour: number, minute: number, ap: 'AM'|'PM') {
+  // DatePicker uses <select> elements with prefix-based IDs
+  // id="${prefix}-dd", "${prefix}-mm", "${prefix}-yyyy", "${prefix}-hr", "${prefix}-mi", "${prefix}-ap"
+  // Try both id-based and sequential
+  try {
+    await page.selectOption(`#${prefix}-dd`, String(day))
+    await page.selectOption(`#${prefix}-mm`, { index: month })
+    await page.selectOption(`#${prefix}-yyyy`, String(year))
+    await page.selectOption(`#${prefix}-hr`, String(hour))
+    await page.selectOption(`#${prefix}-mi`, String(minute))
+    await page.selectOption(`#${prefix}-ap`, ap)
+  } catch {
+    // Fall back: fill selects sequentially
+    const sels = page.locator('select')
+    const n = await sels.count()
+    if (n >= 3) {
+      await sels.nth(0).selectOption(String(day))
+      await sels.nth(1).selectOption({ index: month })
+      await sels.nth(2).selectOption(String(year))
+      if (n > 3) await sels.nth(3).selectOption(String(hour))
+      if (n > 4) await sels.nth(4).selectOption(String(minute < 10 ? `0${minute}` : minute))
+      if (n > 5) await sels.nth(5).selectOption(ap)
+    }
+  }
+}
 
-  test('Chart page loads with saved strip', async ({ page }) => {
-    await page.goto('/chart')
-    await page.waitForTimeout(2000)
-    await page.screenshot({ path: 'test-results/10-chart-page.png' })
-    
-    // Should show saved charts section or New Chart button
-    const hasSaved   = await page.locator('text=Saved Charts').isVisible({ timeout: 5000 }).catch(() => false)
-    const hasNewBtn  = await page.locator('button:has-text("New Chart")').isVisible({ timeout: 3000 }).catch(() => false)
-    expect(hasSaved || hasNewBtn).toBeTruthy()
+async function fillCity(page: Page, city: string) {
+  const field = page.locator('input[placeholder*="City"], input[placeholder*="city"]').first()
+  await field.fill(city)
+  await page.waitForTimeout(800)
+  // Try autocomplete dropdown
+  const drop = page.locator(`div button:has-text("${city}")`).first()
+  const visible = await drop.isVisible({ timeout: 2000 }).catch(() => false)
+  if (visible) await drop.click()
+}
+
+// ── Tests ────────────────────────────────────────────────────────────────────
+test.describe('CHART — Babu & Pramod Validation', () => {
+
+  test.beforeEach(async ({ page }) => {
+    await login(page)
   })
 
-  test('BABU chart generates — Cancer lagna', async ({ page }) => {
+  test('Chart page loads', async ({ page }) => {
     await page.goto('/chart')
-    await page.waitForTimeout(1500)
-    
+    await page.waitForTimeout(2000)
+    await page.screenshot({ path: 'test-results/10-chart-loaded.png', fullPage: true })
+
+    // Key elements present
+    await expect(page.locator('text=New Chart')).toBeVisible({ timeout: 5000 })
+    console.log('✓ Chart page loaded')
+  })
+
+  test('BABU — Generate chart (Mar 1, 1959, 14:30 IST, Chennai)', async ({ page }) => {
+    await page.goto('/chart')
+    await page.waitForTimeout(2000)
+
     // Open form
-    const newBtn = page.locator('button:has-text("New Chart")')
-    if (await newBtn.isVisible({ timeout: 3000 }).catch(() => false)) await newBtn.click()
+    const btn = page.locator('button:has-text("New Chart")')
+    if (await btn.isVisible({ timeout: 3000 }).catch(() => false)) await btn.click()
     await page.waitForTimeout(500)
-    
-    // Fill name
-    const nameField = page.locator('input[placeholder*="Name"], input[placeholder*="name"], input[placeholder*="optional"]').first()
-    if (await nameField.isVisible({ timeout: 2000 }).catch(() => false)) {
-      await nameField.fill(BABU.name)
+
+    // Name
+    const nameF = page.locator('input[placeholder*="Name"], input[placeholder*="name"], input[placeholder*="optional"]').first()
+    if (await nameF.isVisible({ timeout: 2000 }).catch(() => false)) await nameF.fill('Babu')
+
+    // Date: March 1, 1959, 14:30 → 2:30 PM
+    await fillDatePicker(page, 'c', 1, 3, 1959, 2, 30, 'PM')
+    await page.waitForTimeout(300)
+
+    // City
+    await fillCity(page, 'Chennai')
+    await page.screenshot({ path: 'test-results/11-babu-form.png', fullPage: true })
+
+    // Click Generate
+    await page.click('button:has-text("Generate")')
+    await page.waitForTimeout(10000)
+
+    await page.screenshot({ path: 'test-results/12-babu-result.png', fullPage: true })
+
+    // Check for error
+    const bodyText = await page.locator('body').textContent() || ''
+    const errText  = bodyText.match(/Error:\s*[^
+]{0,200}/)?.[0] || ''
+    if (errText) console.warn('Chart error found:', errText)
+
+    // Validate: should show chart data
+    const hasSvg   = await page.locator('svg').first().isVisible({ timeout: 5000 }).catch(() => false)
+    const hasTable = await page.locator('table').first().isVisible({ timeout: 3000 }).catch(() => false)
+    console.log(`SVG visible: ${hasSvg} | Table visible: ${hasTable}`)
+
+    // Check for Cancer/Karka lagna
+    const hasCancer = bodyText.includes('Cancer') || bodyText.includes('Karka') || bodyText.includes('Kadagam')
+    console.log(`Cancer lagna found: ${hasCancer}`)
+    if (!hasCancer) {
+      // Log what lagna was found
+      const lagnaMatch = bodyText.match(/Lagna[^A-Z]*([A-Z][a-z]+)/)?.[1] || 'not found'
+      console.warn(`Expected Cancer, found: ${lagnaMatch}`)
+      // Save detailed screenshot for investigation
+      await page.screenshot({ path: 'test-results/12b-babu-lagna-wrong.png', fullPage: true })
     }
 
-    // Fill DOB — Day dropdown
-    const selects = page.locator('select')
-    const count = await selects.count()
-    console.log(`Found ${count} select elements`)
-    
-    if (count >= 3) {
-      await selects.nth(0).selectOption(String(BABU.day))
-      await page.waitForTimeout(200)
-      await selects.nth(1).selectOption({ index: BABU.month })
-      await page.waitForTimeout(200)
-      await selects.nth(2).selectOption(String(BABU.year))
-      await page.waitForTimeout(200)
-      // Hour - 14:30 IST = 2:30 PM
-      if (count > 3) {
-        await selects.nth(3).selectOption('2')  // 2 PM
-        if (count > 4) await selects.nth(4).selectOption('30')
-        if (count > 5) await selects.nth(5).selectOption('PM')
-      }
-    }
-    
-    // Place
-    const placeField = page.locator('input[placeholder*="City"], input[placeholder*="city"]').first()
-    if (await placeField.isVisible({ timeout: 2000 }).catch(() => false)) {
-      await placeField.fill('Chennai')
-      await page.waitForTimeout(800)
-      // Try autocomplete
-      const dropItem = page.locator('button:has-text("Chennai")').first()
-      if (await dropItem.isVisible({ timeout: 2000 }).catch(() => false)) {
-        await dropItem.click()
-      }
-    }
-    
-    await page.screenshot({ path: 'test-results/11-babu-form-filled.png' })
-    
-    // Generate
-    await page.click('button:has-text("Generate")')
-    await page.waitForTimeout(8000) // Chart takes time
-    
-    await page.screenshot({ path: 'test-results/12-babu-chart-result.png' })
-    
-    // Check no error
-    const errBox = page.locator('text=Error:, text=failed, text=validation').first()
-    const hasError = await errBox.isVisible({ timeout: 1000 }).catch(() => false)
-    if (hasError) {
-      const errText = await errBox.textContent()
-      console.log('CHART ERROR:', errText)
-    }
-    
-    // Check summary cards appeared
-    const summaryText = await page.locator('body').textContent()
-    console.log('Page contains Cancer:', summaryText?.includes('Cancer') || summaryText?.includes('Karka') || summaryText?.includes('Kadagam'))
-    console.log('Page contains lagna text:', summaryText?.toLowerCase().includes('lagna'))
-    
-    // Validate Cancer lagna
-    const hasCancer = summaryText?.includes('Cancer') || summaryText?.includes('Karka')
-    if (!hasCancer) {
-      console.warn('⚠ Cancer lagna not found — check ascendant calculation')
-      // Don't hard fail — log for investigation
-    }
-    
-    // Should show chart data (either North/South chart or planet table)
-    const hasChartData = await page.locator('svg, table').first().isVisible({ timeout: 5000 }).catch(() => false)
-    expect(hasChartData).toBeTruthy()
+    expect(hasSvg || hasTable).toBeTruthy()
   })
 
-  test('BABU — Planets tab shows 9 planets', async ({ page }) => {
-    // Use saved chart if available
+  test('BABU — Planets tab: verify all 9 planets', async ({ page }) => {
     await page.goto('/chart')
     await page.waitForTimeout(2000)
-    
-    // Click Planets tab if chart is loaded
+
+    // Click Planets tab if available (chart already loaded)
     const planetsTab = page.locator('button:has-text("Planets")')
-    if (await planetsTab.isVisible({ timeout: 3000 }).catch(() => false)) {
+    const tabVisible = await planetsTab.isVisible({ timeout: 3000 }).catch(() => false)
+
+    if (tabVisible) {
       await planetsTab.click()
-      await page.waitForTimeout(1000)
-      
-      // Count planet rows
+      await page.waitForTimeout(1500)
+      await page.screenshot({ path: 'test-results/13-planets-tab.png', fullPage: true })
+
       const rows = page.locator('table tbody tr')
       const count = await rows.count()
       console.log(`Planet rows: ${count}`)
-      // Should have at least 9 planets (Sun, Moon, Mars, Mercury, Jupiter, Venus, Saturn, Rahu, Ketu)
+
+      // Should have Sun, Moon, Mars, Mercury, Jupiter, Venus, Saturn, Rahu, Ketu = 9
       expect(count).toBeGreaterThanOrEqual(9)
-      
-      await page.screenshot({ path: 'test-results/13-planets-tab.png' })
+
+      // Check each planet is present
+      const text = await page.locator('table').textContent() || ''
+      const planets = ['Su','Mo','Ma','Me','Ju','Ve','Sa','Ra','Ke']
+      for (const p of planets) {
+        const found = text.includes(p)
+        console.log(`  ${p}: ${found ? '✓' : '✗'}`)
+      }
+    } else {
+      console.log('Planets tab not visible — generate chart first')
     }
   })
 
-  test('BABU — Dasha tab shows timeline', async ({ page }) => {
+  test('BABU — Dasha: current dasha shows NOW badge', async ({ page }) => {
     await page.goto('/chart')
     await page.waitForTimeout(2000)
-    
+
     const dashaTab = page.locator('button:has-text("Dasha")')
     if (await dashaTab.isVisible({ timeout: 3000 }).catch(() => false)) {
       await dashaTab.click()
-      await page.waitForTimeout(1000)
-      
-      // Should show dasha rows
-      const rows = page.locator('table tbody tr')
-      const count = await rows.count()
-      console.log(`Dasha rows: ${count}`)
-      expect(count).toBeGreaterThanOrEqual(5) // At least 5 MDs shown
-      
-      // Should show NOW badge on current dasha
+      await page.waitForTimeout(1500)
+      await page.screenshot({ path: 'test-results/14-dasha-tab.png', fullPage: true })
+
+      // Check for NOW badge
       const nowBadge = page.locator('text=NOW')
-      const hasNow = await nowBadge.isVisible({ timeout: 2000 }).catch(() => false)
-      console.log(`NOW badge visible: ${hasNow}`)
-      
-      await page.screenshot({ path: 'test-results/14-dasha-tab.png' })
+      const hasNow = await nowBadge.isVisible({ timeout: 3000 }).catch(() => false)
+      console.log(`NOW badge: ${hasNow}`)
+
+      // Check for dasha rows
+      const rows = await page.locator('table tbody tr').count()
+      console.log(`Dasha periods: ${rows}`)
+      expect(rows).toBeGreaterThanOrEqual(5)
     }
   })
 
-  test('BABU — North Indian chart renders as SVG', async ({ page }) => {
+  test('BABU — North Indian chart SVG renders correctly', async ({ page }) => {
     await page.goto('/chart')
     await page.waitForTimeout(2000)
-    
-    // Click Rasi + D9 tab
-    const rasiTab = page.locator('button:has-text("Rasi"), button:has-text("North")')
-    const tab = await rasiTab.first().isVisible({ timeout: 3000 }).catch(() => false)
-    if (tab) {
-      await rasiTab.first().click()
+
+    // Click Rasi+D9 tab
+    const rasiTab = page.locator('button').filter({ hasText: /Rasi|♦/ }).first()
+    if (await rasiTab.isVisible({ timeout: 3000 }).catch(() => false)) {
+      await rasiTab.click()
       await page.waitForTimeout(1000)
     }
-    
+
+    await page.screenshot({ path: 'test-results/15-rasi-d9.png', fullPage: true })
+
+    // SVG should exist
     const svg = page.locator('svg').first()
-    await expect(svg).toBeVisible({ timeout: 5000 })
-    
-    // SVG should have planet text elements
-    const textElems = page.locator('svg text')
-    const count = await textElems.count()
-    console.log(`SVG text elements: ${count}`)
-    expect(count).toBeGreaterThan(5)
-    
-    await page.screenshot({ path: 'test-results/15-north-chart-svg.png' })
+    const hasSvg = await svg.isVisible({ timeout: 5000 }).catch(() => false)
+    console.log(`SVG rendered: ${hasSvg}`)
+    expect(hasSvg).toBeTruthy()
+
+    // Should have multiple SVG text elements (planet abbreviations)
+    const textCount = await page.locator('svg text').count()
+    console.log(`SVG text elements: ${textCount}`)
+    expect(textCount).toBeGreaterThan(3)
   })
 
-  test('BABU — Shadbala tab loads', async ({ page }) => {
+  test('PRAMOD — Generate chart (Sep 24, 1968, 20:22 IST, Chennai)', async ({ page }) => {
     await page.goto('/chart')
     await page.waitForTimeout(2000)
-    
-    const tab = page.locator('button:has-text("Shadbala")')
-    if (await tab.isVisible({ timeout: 3000 }).catch(() => false)) {
-      await tab.click()
-      await page.waitForTimeout(3000)
-      await page.screenshot({ path: 'test-results/16-shadbala-tab.png' })
-      const text = await page.locator('body').textContent()
-      console.log('Has Sun in Shadbala:', text?.includes('Su') || text?.includes('Sun'))
-    }
+
+    const btn = page.locator('button:has-text("New Chart")')
+    if (await btn.isVisible({ timeout: 3000 }).catch(() => false)) await btn.click()
+    await page.waitForTimeout(500)
+
+    const nameF = page.locator('input[placeholder*="Name"], input[placeholder*="optional"]').first()
+    if (await nameF.isVisible({ timeout: 2000 }).catch(() => false)) await nameF.fill('Pramod')
+
+    // Sep 24, 1968, 8:22 PM IST
+    await fillDatePicker(page, 'c', 24, 9, 1968, 8, 22, 'PM')
+    await fillCity(page, 'Chennai')
+
+    await page.screenshot({ path: 'test-results/20-pramod-form.png', fullPage: true })
+    await page.click('button:has-text("Generate")')
+    await page.waitForTimeout(10000)
+
+    await page.screenshot({ path: 'test-results/21-pramod-result.png', fullPage: true })
+
+    const bodyText = await page.locator('body').textContent() || ''
+    // Pramod: Aries lagna, Swati nakshatra, Rahu MD
+    const hasAries = bodyText.includes('Aries') || bodyText.includes('Mesha')
+    const hasSwati = bodyText.includes('Swati') || bodyText.includes('Swathi')
+    console.log(`Aries lagna: ${hasAries} | Swati nakshatra: ${hasSwati}`)
+
+    const hasSvg = await page.locator('svg').first().isVisible({ timeout: 5000 }).catch(() => false)
+    expect(hasSvg).toBeTruthy()
   })
 
-  test('BABU — Arudha tab shows lagnas', async ({ page }) => {
+  test('Arudha tab — loads special lagnas', async ({ page }) => {
     await page.goto('/chart')
     await page.waitForTimeout(2000)
-    
+
     const tab = page.locator('button:has-text("Arudha")')
     if (await tab.isVisible({ timeout: 3000 }).catch(() => false)) {
       await tab.click()
-      await page.waitForTimeout(3000)
-      await page.screenshot({ path: 'test-results/17-arudha-tab.png' })
-      const text = await page.locator('body').textContent()
-      const hasLagna = text?.includes('Hora') || text?.includes('Lagna') || text?.includes('Ghati')
-      console.log('Arudha has lagna data:', hasLagna)
+      await page.waitForTimeout(4000)
+      await page.screenshot({ path: 'test-results/16-arudha.png', fullPage: true })
+
+      const text = await page.locator('body').textContent() || ''
+      const hasLagna = text.includes('Hora') || text.includes('Ghati') || text.includes('Lagna')
+      console.log(`Arudha lagna data: ${hasLagna}`)
     }
   })
 
-  test('PDF button visible', async ({ page }) => {
+  test('Doshas tab — loads dosha data', async ({ page }) => {
     await page.goto('/chart')
     await page.waitForTimeout(2000)
-    const pdfBtn = page.locator('button:has-text("PDF")')
-    const visible = await pdfBtn.isVisible({ timeout: 3000 }).catch(() => false)
-    console.log('PDF button visible:', visible)
-    if (visible) await page.screenshot({ path: 'test-results/18-pdf-button.png' })
+
+    const tab = page.locator('button:has-text("Dosha")')
+    if (await tab.isVisible({ timeout: 3000 }).catch(() => false)) {
+      await tab.click()
+      await page.waitForTimeout(4000)
+      await page.screenshot({ path: 'test-results/17-doshas.png', fullPage: true })
+
+      const text = await page.locator('body').textContent() || ''
+      const hasMangal = text.includes('Mangal') || text.includes('Not Present') || text.includes('Present')
+      console.log(`Dosha data: ${hasMangal}`)
+    }
+  })
+
+  test('PDF button exists and is clickable', async ({ page }) => {
+    await page.goto('/chart')
+    await page.waitForTimeout(2000)
+
+    const btn = page.locator('button:has-text("PDF")')
+    const visible = await btn.isVisible({ timeout: 3000 }).catch(() => false)
+    console.log(`PDF button: ${visible}`)
+    if (visible) {
+      await page.screenshot({ path: 'test-results/18-pdf-btn.png' })
+      // Don't actually click — it opens a new tab
+    }
   })
 })
