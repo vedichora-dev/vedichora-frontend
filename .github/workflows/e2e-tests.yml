@@ -1,0 +1,50 @@
+name: VedicHora E2E Tests (Playwright)
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 */6 * * *'   # every 6 hours
+
+jobs:
+  e2e:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      BASE_URL: https://vedichora-frontend-orcin.vercel.app
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm install --legacy-peer-deps
+
+      - name: Install Playwright browsers
+        run: npx playwright install chromium --with-deps
+
+      - name: Create results dir
+        run: mkdir -p test-results
+
+      - name: Run Playwright E2E tests
+        run: npx playwright test --reporter=html,list
+        continue-on-error: true
+
+      - name: Upload screenshots & report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: playwright-report-${{ github.run_id }}
+          path: |
+            playwright-report/
+            test-results/
+          retention-days: 14
+
+      - name: Show test summary
+        if: always()
+        run: |
+          echo "=== TEST RESULTS ==="
+          npx playwright test --reporter=list 2>&1 | tail -40 || true
+          echo ""
+          echo "Screenshots uploaded as artifacts"
+          echo "View report: download artifact 'playwright-report-${{ github.run_id }}'"
