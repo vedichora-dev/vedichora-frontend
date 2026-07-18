@@ -12,7 +12,7 @@ export default function HomePage() {
   const [sel, setSel] = useState(0)
   const [horoscope, setHoroscope] = useState<any>(null)
   const [loading, setLoading] = useState(false)
-  const [period, setPeriod] = useState<'Daily'|'Weekly'|'Monthly'>('Daily')
+  const [period, setPeriod] = useState<t('home.daily')|t('home.weekly')|t('home.monthly')>(t('home.daily'))
   const { language } = useStore()
   const getSign = useSignName()
   const t = useT()
@@ -111,7 +111,7 @@ export default function HomePage() {
             <div className="card-hd">
               <span className="card-title">Daily Horoscope · {signName}</span>
               <div style={{display:'flex', gap:'4px', marginLeft:'auto'}}>
-                {(['Daily','Weekly','Monthly'] as const).map(p => (
+                {([t('home.daily'),t('home.weekly'),t('home.monthly')] as const).map(p => (
                   <button key={p} onClick={() => setPeriod(p)} style={{
                     padding:'4px 10px', borderRadius:'6px', fontSize:'11px',
                     border: period===p ? '1px solid var(--gold)' : '1px solid var(--bd)',
