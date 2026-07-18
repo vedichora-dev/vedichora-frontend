@@ -1,95 +1,46 @@
 name: E2E Tests (Playwright)
 on:
-  push:
-    branches: [main]
   workflow_dispatch:
     inputs:
       base_url:
-        description: 'Frontend URL to test'
+        description: 'Frontend URL'
         default: 'https://vedichora-frontend-orcin.vercel.app'
         required: false
+  push:
+    branches: [main]
+    paths: ['src/**', 'e2e/**']
 
 jobs:
   e2e:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
-
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
-          cache: 'npm'
-
-      - name: Install dependencies
-        run: npm install --legacy-peer-deps
-
-      - name: Install Playwright browsers
-        run: npx playwright install chromium --with-deps
-
-      - name: Wait for Vercel deployment
-        run: |
-          BASE_URL="${{ github.event.inputs.base_url || 'https://vedichora-frontend-orcin.vercel.app' }}"
-          echo "Testing: $BASE_URL"
-          for i in $(seq 1 12); do
-            CODE=$(curl -s -o /dev/null -w "%{http_code}" "$BASE_URL")
-            echo "  Attempt $i: HTTP $CODE"
-            [ "$CODE" = "200" ] && break
-            sleep 10
-          done
-
-      - name: Run Playwright E2E tests
+      - run: npm install --legacy-peer-deps
+      - run: npx playwright install chromium --with-deps
+      - name: Run E2E tests
         env:
           BASE_URL: ${{ github.event.inputs.base_url || 'https://vedichora-frontend-orcin.vercel.app' }}
           TEST_EMAIL: admin@vedichora.com
           TEST_PASSWORD: Admin@123
-        run: npx playwright test --reporter=list,json
+        run: |
+          npx playwright test --reporter=list 2>&1 | tee e2e-output.txt
+          exit ${PIPESTATUS[0]}
         continue-on-error: true
-
-      - name: Upload test results
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: e2e-results
-          path: |
-            e2e-results.json
-            e2e-report/
-            e2e-screenshots/
-            test-results/
-          retention-days: 7
-
-      - name: Show test summary
+      - name: Print summary
         if: always()
         run: |
-          echo "═══════════════════════════════════════"
-          echo "  E2E TEST RESULTS"
-          echo "═══════════════════════════════════════"
-          if [ -f e2e-results.json ]; then
-            python3 -c "
-import json, sys
-with open('e2e-results.json') as f:
-    d = json.load(f)
-suites = d.get('suites', [])
-passed = failed = skipped = 0
-failures = []
-for suite in suites:
-    for spec in suite.get('specs', []):
-        for test in spec.get('tests', []):
-            status = test.get('status', 'skipped')
-            if status == 'passed':   passed += 1
-            elif status == 'failed': failed += 1; failures.append(spec.get('title','?'))
-            else:                    skipped += 1
-total = passed + failed + skipped
-print(f'  PASSED:  {passed}/{total}')
-print(f'  FAILED:  {failed}')
-print(f'  SKIPPED: {skipped}')
-if failures:
-    print()
-    print('  FAILED TESTS:')
-    for f in failures:
-        print(f'    ✗ {f}')
-"
-          else
-            echo "  No results file found"
-          fi
-          echo "═══════════════════════════════════════"
+          echo "=== E2E RESULTS ==="
+          grep -E "passed|failed|error|✓|✗|PASS|FAIL" e2e-output.txt || cat e2e-output.txt | tail -30
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: e2e-results-${{ github.run_id }}
+          path: |
+            e2e-output.txt
+            test-results/
+            e2e-screenshots/
+          retention-days: 7
