@@ -31,6 +31,9 @@ export interface ChartRequest {
   AyanamsaType?: string
   Language?: string
 }
+export const calculateChartGuest = (body: ChartRequest) =>
+  chartApi.post('/api/chart/guest', body)
+
 export const calculateChart = (body: ChartRequest) =>
   chartApi.post('/api/chart/calculate', body)
 
