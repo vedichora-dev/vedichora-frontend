@@ -14,206 +14,25 @@ Running 10 tests using 2 workers
 [mobile] › e2e/functional-test.spec.js:31:3 › GUEST CHART › Guest chart — no redirect, city dropdown closes, chart generates [chromium]
 ✓ City selected, dropdown closed
 
-[3/10] (retries) [chromium] › e2e/functional-test.spec.js:31:3 › GUEST CHART › Guest chart — no redirect, city dropdown closes, chart generates [chromium] (retry #1)
 [chromium] › e2e/functional-test.spec.js:31:3 › GUEST CHART › Guest chart — no redirect, city dropdown closes, chart generates [chromium]
-✓ No redirect to signin
+Chart appeared: true | Error shown: true
 
-[4/10] (retries) [mobile] › e2e/functional-test.spec.js:31:3 › GUEST CHART › Guest chart — no redirect, city dropdown closes, chart generates [chromium] (retry #1)
-✓ City selected, dropdown closed
-
+[3/10] [chromium] › e2e/functional-test.spec.js:77:3 › CITY DROPDOWN › City dropdown closes after selection
 [mobile] › e2e/functional-test.spec.js:31:3 › GUEST CHART › Guest chart — no redirect, city dropdown closes, chart generates [chromium]
-✓ No redirect to signin
+Chart appeared: true | Error shown: true
 
-✓ City selected, dropdown closed
-
-  1) [chromium] › e2e/functional-test.spec.js:31:3 › GUEST CHART › Guest chart — no redirect, city dropdown closes, chart generates [chromium] 
-
-    Error: expect(page).not.toHaveURL(expected) failed
-
-    Expected pattern: not /signin|login/
-    Received string: "https://vedichora-frontend-orcin.vercel.app/signin"
-    Timeout: 5000ms
-
-    Call log:
-      - Expect "not toHaveURL" with timeout 5000ms
-        14 × unexpected value "https://vedichora-frontend-orcin.vercel.app/signin"
-
-
-      58 |
-      59 |     // Must NOT redirect to signin
-    > 60 |     await expect(page).not.toHaveURL(/signin|login/)
-         |                            ^
-      61 |
-      62 |     const body = await page.locator('body').textContent()
-      63 |     const hasChart = /Cancer|Aries|Taurus|Gemini|Leo|Virgo|Libra|Scorpio|Sagittarius|Capricorn|Aquarius|Pisces/.test(body)
-        at /home/runner/work/vedichora-frontend/vedichora-frontend/e2e/functional-test.spec.js:60:28
-
-    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
-    test-results/functional-test-GUEST-CHAR-79537-s-chart-generates-chromium--chromium/test-failed-1.png
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
-    test-results/functional-test-GUEST-CHAR-79537-s-chart-generates-chromium--chromium/video.webm
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    Error Context: test-results/functional-test-GUEST-CHAR-79537-s-chart-generates-chromium--chromium/error-context.md
-
-    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
-
-    Error: expect(page).not.toHaveURL(expected) failed
-
-    Expected pattern: not /signin|login/
-    Received string: "https://vedichora-frontend-orcin.vercel.app/signin"
-    Timeout: 5000ms
-
-    Call log:
-      - Expect "not toHaveURL" with timeout 5000ms
-        14 × unexpected value "https://vedichora-frontend-orcin.vercel.app/signin"
-
-
-      58 |
-      59 |     // Must NOT redirect to signin
-    > 60 |     await expect(page).not.toHaveURL(/signin|login/)
-         |                            ^
-      61 |
-      62 |     const body = await page.locator('body').textContent()
-      63 |     const hasChart = /Cancer|Aries|Taurus|Gemini|Leo|Virgo|Libra|Scorpio|Sagittarius|Capricorn|Aquarius|Pisces/.test(body)
-        at /home/runner/work/vedichora-frontend/vedichora-frontend/e2e/functional-test.spec.js:60:28
-
-    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
-    test-results/functional-test-GUEST-CHAR-79537-s-chart-generates-chromium--chromium-retry1/test-failed-1.png
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
-    test-results/functional-test-GUEST-CHAR-79537-s-chart-generates-chromium--chromium-retry1/video.webm
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    Error Context: test-results/functional-test-GUEST-CHAR-79537-s-chart-generates-chromium--chromium-retry1/error-context.md
-
-    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
-    test-results/functional-test-GUEST-CHAR-79537-s-chart-generates-chromium--chromium-retry1/trace.zip
-    Usage:
-
-        npx playwright show-trace test-results/functional-test-GUEST-CHAR-79537-s-chart-generates-chromium--chromium-retry1/trace.zip
-
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-
-[5/10] [chromium] › e2e/functional-test.spec.js:77:3 › CITY DROPDOWN › City dropdown closes after selection
+[4/10] [mobile] › e2e/functional-test.spec.js:77:3 › CITY DROPDOWN › City dropdown closes after selection
 [chromium] › e2e/functional-test.spec.js:77:3 › CITY DROPDOWN › City dropdown closes after selection
-Dropdown still open after click: true
-
-[6/10] (retries) [chromium] › e2e/functional-test.spec.js:77:3 › CITY DROPDOWN › City dropdown closes after selection (retry #1)
-  2) [mobile] › e2e/functional-test.spec.js:31:3 › GUEST CHART › Guest chart — no redirect, city dropdown closes, chart generates [chromium] 
-
-    Error: expect(page).not.toHaveURL(expected) failed
-
-    Expected pattern: not /signin|login/
-    Received string: "https://vedichora-frontend-orcin.vercel.app/signin"
-    Timeout: 5000ms
-
-    Call log:
-      - Expect "not toHaveURL" with timeout 5000ms
-        14 × unexpected value "https://vedichora-frontend-orcin.vercel.app/signin"
-
-
-      58 |
-      59 |     // Must NOT redirect to signin
-    > 60 |     await expect(page).not.toHaveURL(/signin|login/)
-         |                            ^
-      61 |
-      62 |     const body = await page.locator('body').textContent()
-      63 |     const hasChart = /Cancer|Aries|Taurus|Gemini|Leo|Virgo|Libra|Scorpio|Sagittarius|Capricorn|Aquarius|Pisces/.test(body)
-        at /home/runner/work/vedichora-frontend/vedichora-frontend/e2e/functional-test.spec.js:60:28
-
-    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
-    test-results/functional-test-GUEST-CHAR-79537-s-chart-generates-chromium--mobile/test-failed-1.png
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
-    test-results/functional-test-GUEST-CHAR-79537-s-chart-generates-chromium--mobile/video.webm
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    Error Context: test-results/functional-test-GUEST-CHAR-79537-s-chart-generates-chromium--mobile/error-context.md
-
-    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
-
-    Error: expect(page).not.toHaveURL(expected) failed
-
-    Expected pattern: not /signin|login/
-    Received string: "https://vedichora-frontend-orcin.vercel.app/signin"
-    Timeout: 5000ms
-
-    Call log:
-      - Expect "not toHaveURL" with timeout 5000ms
-        14 × unexpected value "https://vedichora-frontend-orcin.vercel.app/signin"
-
-
-      58 |
-      59 |     // Must NOT redirect to signin
-    > 60 |     await expect(page).not.toHaveURL(/signin|login/)
-         |                            ^
-      61 |
-      62 |     const body = await page.locator('body').textContent()
-      63 |     const hasChart = /Cancer|Aries|Taurus|Gemini|Leo|Virgo|Libra|Scorpio|Sagittarius|Capricorn|Aquarius|Pisces/.test(body)
-        at /home/runner/work/vedichora-frontend/vedichora-frontend/e2e/functional-test.spec.js:60:28
-
-    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
-    test-results/functional-test-GUEST-CHAR-79537-s-chart-generates-chromium--mobile-retry1/test-failed-1.png
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
-    test-results/functional-test-GUEST-CHAR-79537-s-chart-generates-chromium--mobile-retry1/video.webm
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    Error Context: test-results/functional-test-GUEST-CHAR-79537-s-chart-generates-chromium--mobile-retry1/error-context.md
-
-    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
-    test-results/functional-test-GUEST-CHAR-79537-s-chart-generates-chromium--mobile-retry1/trace.zip
-    Usage:
-
-        npx playwright show-trace test-results/functional-test-GUEST-CHAR-79537-s-chart-generates-chromium--mobile-retry1/trace.zip
-
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-
-[7/10] [mobile] › e2e/functional-test.spec.js:77:3 › CITY DROPDOWN › City dropdown closes after selection
 Dropdown still open after click: false
 
-  3) [chromium] › e2e/functional-test.spec.js:77:3 › CITY DROPDOWN › City dropdown closes after selection 
-
-    Error: expect(received).toBeFalsy()
-
-    Received: true
-
-      92 |       const stillVisible = await anyResult.isVisible({ timeout: 500 }).catch(() => false)
-      93 |       console.log('Dropdown still open after click:', stillVisible)
-    > 94 |       expect(stillVisible).toBeFalsy()
-         |                            ^
-      95 |     } else {
-      96 |       console.log('No dropdown appeared (API may be slow)')
-      97 |     }
-        at /home/runner/work/vedichora-frontend/vedichora-frontend/e2e/functional-test.spec.js:94:28
-
-    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
-    test-results/functional-test-CITY-DROPD-19588-down-closes-after-selection-chromium/test-failed-1.png
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
-    test-results/functional-test-CITY-DROPD-19588-down-closes-after-selection-chromium/video.webm
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    Error Context: test-results/functional-test-CITY-DROPD-19588-down-closes-after-selection-chromium/error-context.md
-
-
-[8/10] [chromium] › e2e/functional-test.spec.js:104:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login
+[5/10] [chromium] › e2e/functional-test.spec.js:104:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login
 [mobile] › e2e/functional-test.spec.js:77:3 › CITY DROPDOWN › City dropdown closes after selection
 Dropdown still open after click: true
 
-[9/10] (retries) [mobile] › e2e/functional-test.spec.js:77:3 › CITY DROPDOWN › City dropdown closes after selection (retry #1)
+[6/10] (retries) [mobile] › e2e/functional-test.spec.js:77:3 › CITY DROPDOWN › City dropdown closes after selection (retry #1)
 Dropdown still open after click: false
 
-  4) [mobile] › e2e/functional-test.spec.js:77:3 › CITY DROPDOWN › City dropdown closes after selection 
+  1) [mobile] › e2e/functional-test.spec.js:77:3 › CITY DROPDOWN › City dropdown closes after selection 
 
     Error: expect(received).toBeFalsy()
 
@@ -239,10 +58,10 @@ Dropdown still open after click: false
     Error Context: test-results/functional-test-CITY-DROPD-19588-down-closes-after-selection-mobile/error-context.md
 
 
-[10/10] [mobile] › e2e/functional-test.spec.js:104:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login
-[11/10] (retries) [chromium] › e2e/functional-test.spec.js:104:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login (retry #1)
-[12/10] (retries) [mobile] › e2e/functional-test.spec.js:104:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login (retry #1)
-  5) [chromium] › e2e/functional-test.spec.js:104:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login 
+[7/10] [mobile] › e2e/functional-test.spec.js:104:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login
+[8/10] (retries) [chromium] › e2e/functional-test.spec.js:104:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login (retry #1)
+[9/10] (retries) [mobile] › e2e/functional-test.spec.js:104:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login (retry #1)
+  2) [chromium] › e2e/functional-test.spec.js:104:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login 
 
     Test timeout of 60000ms exceeded.
 
@@ -301,11 +120,11 @@ Dropdown still open after click: false
     ────────────────────────────────────────────────────────────────────────────────────────────────
 
 
-[13/10] [chromium] › e2e/functional-test.spec.js:148:3 › LOGGED IN CHART › Logged in user can generate chart
+[10/10] [chromium] › e2e/functional-test.spec.js:148:3 › LOGGED IN CHART › Logged in user can generate chart
 [chromium] › e2e/functional-test.spec.js:148:3 › LOGGED IN CHART › Logged in user can generate chart
 Login success: false
 
-  6) [mobile] › e2e/functional-test.spec.js:104:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login 
+  3) [mobile] › e2e/functional-test.spec.js:104:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login 
 
     Test timeout of 60000ms exceeded.
 
@@ -364,19 +183,19 @@ Login success: false
     ────────────────────────────────────────────────────────────────────────────────────────────────
 
 
-[14/10] [mobile] › e2e/functional-test.spec.js:148:3 › LOGGED IN CHART › Logged in user can generate chart
+[11/10] [mobile] › e2e/functional-test.spec.js:148:3 › LOGGED IN CHART › Logged in user can generate chart
 [mobile] › e2e/functional-test.spec.js:148:3 › LOGGED IN CHART › Logged in user can generate chart
 Login success: false
 
-[15/10] (retries) [chromium] › e2e/functional-test.spec.js:148:3 › LOGGED IN CHART › Logged in user can generate chart (retry #1)
+[12/10] (retries) [chromium] › e2e/functional-test.spec.js:148:3 › LOGGED IN CHART › Logged in user can generate chart (retry #1)
 [chromium] › e2e/functional-test.spec.js:148:3 › LOGGED IN CHART › Logged in user can generate chart
 Login success: false
 
-[16/10] (retries) [mobile] › e2e/functional-test.spec.js:148:3 › LOGGED IN CHART › Logged in user can generate chart (retry #1)
+[13/10] (retries) [mobile] › e2e/functional-test.spec.js:148:3 › LOGGED IN CHART › Logged in user can generate chart (retry #1)
 [mobile] › e2e/functional-test.spec.js:148:3 › LOGGED IN CHART › Logged in user can generate chart
 Login success: false
 
-  7) [chromium] › e2e/functional-test.spec.js:148:3 › LOGGED IN CHART › Logged in user can generate chart 
+  4) [chromium] › e2e/functional-test.spec.js:148:3 › LOGGED IN CHART › Logged in user can generate chart 
 
     Test timeout of 60000ms exceeded.
 
@@ -437,8 +256,8 @@ Login success: false
     ────────────────────────────────────────────────────────────────────────────────────────────────
 
 
-[17/10] [chromium] › e2e/functional-test.spec.js:184:3 › NUMEROLOGY › Numerology page calculates numbers
-  8) [mobile] › e2e/functional-test.spec.js:148:3 › LOGGED IN CHART › Logged in user can generate chart 
+[14/10] [chromium] › e2e/functional-test.spec.js:184:3 › NUMEROLOGY › Numerology page calculates numbers
+  5) [mobile] › e2e/functional-test.spec.js:148:3 › LOGGED IN CHART › Logged in user can generate chart 
 
     Test timeout of 60000ms exceeded.
 
@@ -499,10 +318,10 @@ Login success: false
     ────────────────────────────────────────────────────────────────────────────────────────────────
 
 
-[18/10] [mobile] › e2e/functional-test.spec.js:184:3 › NUMEROLOGY › Numerology page calculates numbers
-[19/10] (retries) [chromium] › e2e/functional-test.spec.js:184:3 › NUMEROLOGY › Numerology page calculates numbers (retry #1)
-[20/10] (retries) [mobile] › e2e/functional-test.spec.js:184:3 › NUMEROLOGY › Numerology page calculates numbers (retry #1)
-  9) [chromium] › e2e/functional-test.spec.js:184:3 › NUMEROLOGY › Numerology page calculates numbers 
+[15/10] [mobile] › e2e/functional-test.spec.js:184:3 › NUMEROLOGY › Numerology page calculates numbers
+[16/10] (retries) [chromium] › e2e/functional-test.spec.js:184:3 › NUMEROLOGY › Numerology page calculates numbers (retry #1)
+[17/10] (retries) [mobile] › e2e/functional-test.spec.js:184:3 › NUMEROLOGY › Numerology page calculates numbers (retry #1)
+  6) [chromium] › e2e/functional-test.spec.js:184:3 › NUMEROLOGY › Numerology page calculates numbers 
 
     Test timeout of 60000ms exceeded.
 
@@ -567,7 +386,7 @@ Login success: false
     ────────────────────────────────────────────────────────────────────────────────────────────────
 
 
-  10) [mobile] › e2e/functional-test.spec.js:184:3 › NUMEROLOGY › Numerology page calculates numbers 
+  7) [mobile] › e2e/functional-test.spec.js:184:3 › NUMEROLOGY › Numerology page calculates numbers 
 
     Test timeout of 60000ms exceeded.
 
@@ -632,15 +451,13 @@ Login success: false
     ────────────────────────────────────────────────────────────────────────────────────────────────
 
 
-  8 failed
-    [chromium] › e2e/functional-test.spec.js:31:3 › GUEST CHART › Guest chart — no redirect, city dropdown closes, chart generates [chromium] 
+  6 failed
     [chromium] › e2e/functional-test.spec.js:104:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login 
     [chromium] › e2e/functional-test.spec.js:148:3 › LOGGED IN CHART › Logged in user can generate chart 
     [chromium] › e2e/functional-test.spec.js:184:3 › NUMEROLOGY › Numerology page calculates numbers 
-    [mobile] › e2e/functional-test.spec.js:31:3 › GUEST CHART › Guest chart — no redirect, city dropdown closes, chart generates [chromium] 
     [mobile] › e2e/functional-test.spec.js:104:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login 
     [mobile] › e2e/functional-test.spec.js:148:3 › LOGGED IN CHART › Logged in user can generate chart 
     [mobile] › e2e/functional-test.spec.js:184:3 › NUMEROLOGY › Numerology page calculates numbers ─
-  2 flaky
-    [chromium] › e2e/functional-test.spec.js:77:3 › CITY DROPDOWN › City dropdown closes after selection 
+  1 flaky
     [mobile] › e2e/functional-test.spec.js:77:3 › CITY DROPDOWN › City dropdown closes after selection 
+  3 passed (6.7m)
