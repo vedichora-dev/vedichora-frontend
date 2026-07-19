@@ -49,8 +49,15 @@ export default function CityAutocomplete({ value, onChange, placeholder='City, C
             lng: f.geometry.coordinates[0],
             tz: '',
           }))
-        setResults(cities)
-        setOpen(cities.length > 0)
+        // Deduplicate by name+country
+        const seen = new Set<string>()
+        const unique = cities.filter(c => {
+          const key = c.name + '|' + c.country
+          if (seen.has(key)) return false
+          seen.add(key); return true
+        })
+        setResults(unique)
+        setOpen(unique.length > 0)
       } catch {
         setResults([])
       }
@@ -62,6 +69,7 @@ export default function CityAutocomplete({ value, onChange, placeholder='City, C
     const label = `${city.name}${city.country ? ', ' + city.country : ''}`
     setQuery(label)
     setOpen(false)
+    setResults([])  // Clear results so onFocus can't reopen
     onChange(label, city.lat, city.lng, city.tz)
   }
 
