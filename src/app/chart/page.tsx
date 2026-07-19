@@ -142,14 +142,15 @@ export default function ChartPage() {
     try {
       const {hour,minute} = dob.unknownTime
         ? {hour:12,minute:0} : to24Hour(dob.hr||12, dob.mi||0, dob.ap||'AM')
-      const payload = {
+      const payload: any = {
         PersonName: name.trim()||'My Chart',
         Year:dob.yyyy, Month:dob.mm, Day:dob.dd,
         Hour:hour, Minute:minute, Second:0,
-        PlaceName:place||'Chennai, India',
+        PlaceName: place||'Chennai, India',
         UtcOffsetHours:5.5, AyanamsaType:'Lahiri',
         Language:language,
       }
+      if (lat) { payload.Latitude = lat; payload.Longitude = lng }
       console.log('Chart payload:', JSON.stringify(payload))
       if (!payload.PlaceName) payload.PlaceName = 'Chennai, India'
       const res = token
@@ -228,14 +229,20 @@ export default function ChartPage() {
       {/* ── SAVED CHARTS STRIP (TOP) ─────────────────────────── */}
       {token && (
         <div style={{marginBottom:'14px'}}>
-          <div style={{display:'flex',alignItems:'center',gap:'10px',marginBottom:'8px'}}>
-            <Star style={{width:'13px',height:'13px',color:'var(--gold)'}}/>
+          <div style={{display:'flex',alignItems:'center',gap:'8px',marginBottom:'8px',flexWrap:'wrap'}}>
+            <Star style={{width:'13px',height:'13px',color:'var(--gold)',flexShrink:0}}/>
             <span style={{fontSize:'11px',fontWeight:700,color:'var(--txm)',
-              textTransform:'uppercase',letterSpacing:'.06em'}}>
-              Saved Charts ({saved.length})
+              textTransform:'uppercase',letterSpacing:'.06em',flexShrink:0}}>
+              Saved ({saved.length})
             </span>
+            {/* Filter */}
+            <input value={stripFilter} onChange={e=>setStripFilter(e.target.value)}
+              placeholder="Filter charts..."
+              style={{flex:1,minWidth:'100px',maxWidth:'180px',padding:'3px 8px',
+                borderRadius:'6px',border:'1px solid var(--bd)',background:'var(--bg2)',
+                color:'var(--tx)',fontSize:'11px',fontFamily:'inherit'}}/>
             <button onClick={()=>setShowForm(f=>!f)}
-              style={{marginLeft:'auto',display:'flex',alignItems:'center',gap:'5px',
+              style={{marginLeft:'auto',flexShrink:0,display:'flex',alignItems:'center',gap:'5px',
                 padding:'5px 12px',borderRadius:'8px',border:'2px dashed var(--gold)',
                 background:'rgba(196,146,42,.06)',color:'var(--gold)',cursor:'pointer',
                 fontFamily:'Cinzel,serif',fontSize:'11px',fontWeight:700}}>
@@ -249,7 +256,7 @@ export default function ChartPage() {
             </div>
           ) : (
             <div className='saved-strip' style={{display:'flex',gap:'8px',overflowX:'auto',paddingBottom:'6px'}}>
-              {saved.map((c:any)=>{
+              {(stripFilter ? saved.filter(c=>(c.personName||c.PersonName||'').toLowerCase().includes(stripFilter.toLowerCase())||(c.ascendantName||c.AscendantName||'').toLowerCase().includes(stripFilter.toLowerCase())) : saved).map((c:any)=>{
                 const id  = c.horoscopeId||c.HoroscopeId
                 const nm  = c.personName||c.PersonName||'Chart'
                 const lg  = c.ascendantName||c.AscendantName||''
@@ -312,7 +319,7 @@ export default function ChartPage() {
               <div>
                 <label className="label">{t('chart.place')}</label>
                 <CityAutocomplete value={place}
-                  onChange={(city,la,ln) => { setPlace(city); setLat(la); setLng(ln) }}
+                  onChange={(city:string,la:number,ln:number)=>{ setPlace(city); setLat(la); setLng(ln) }}
                   placeholder="City, Country"/>
               </div>
               <div style={{display:'flex',flexDirection:'column',gap:'4px'}}>
