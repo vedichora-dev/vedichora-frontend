@@ -32,25 +32,30 @@ chartApi.interceptors.request.use(cfg => {
   return cfg
 })
 
-// Auto-refresh on 401
+// Auto-refresh on 401 — only redirect if user WAS logged in (had a token)
 chartApi.interceptors.response.use(
   r => r,
   async err => {
     if (err.response?.status === 401) {
+      const token   = localStorage.getItem('vh_token')
       const refresh = localStorage.getItem('vh_refresh')
-      if (refresh) {
-        try {
-          const res = await authApi.post('/api/auth/refresh', { refreshToken: refresh })
-          const newToken = res.data?.data?.accessToken
-          if (newToken) {
-            localStorage.setItem('vh_token', newToken)
-            err.config.headers['Authorization'] = `Bearer ${newToken}`
-            return chartApi.request(err.config)
-          }
-        } catch {}
+      // Only attempt refresh/redirect if user had a session
+      if (token || refresh) {
+        if (refresh) {
+          try {
+            const res = await authApi.post('/api/auth/refresh', { refreshToken: refresh })
+            const newToken = res.data?.data?.accessToken
+            if (newToken) {
+              localStorage.setItem('vh_token', newToken)
+              err.config.headers['Authorization'] = `Bearer ${newToken}`
+              return chartApi.request(err.config)
+            }
+          } catch {}
+        }
+        localStorage.clear()
+        window.location.href = '/signin'
       }
-      localStorage.clear()
-      window.location.href = '/signin'
+      // Guest user (no token) — just reject, don't redirect
     }
     return Promise.reject(err)
   }
