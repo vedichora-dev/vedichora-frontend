@@ -25,7 +25,7 @@ async function fillDatePicker(page, prefix, day, month, year, hour, minute, ap) 
   } catch {
     // Fall back: fill selects sequentially
     const sels = page.locator('select')
-    const n = await sels.count()
+    const n = await sels.count().catch(() => 0)
     if (n >= 3) {
       await sels.nth(0).selectOption(String(day))
       await sels.nth(1).selectOption({ index: month })
@@ -65,9 +65,11 @@ test.describe('CHART — Babu & Pramod Validation', () => {
   })
 
   test('BABU — Generate chart (Mar 1, 1959, 14:30 IST, Chennai)', async ({ page }) => {
-    // Navigate fresh to ensure clean state
-    await page.goto(SITE)
+    // Navigate to chart page as guest (guest form is always visible)
+    page.on('crash', () => console.log('Page crashed!'))
+    await page.goto(SITE + '/chart')
     await page.waitForLoadState('networkidle')
+    await page.waitForTimeout(1000)
     await page.goto('/chart')
     await page.waitForTimeout(2000)
 
@@ -200,9 +202,11 @@ test.describe('CHART — Babu & Pramod Validation', () => {
   })
 
   test('PRAMOD — Generate chart (Sep 24, 1968, 20:22 IST, Chennai)', async ({ page }) => {
-    // Navigate fresh to ensure clean state
-    await page.goto(SITE)
+    // Navigate to chart page as guest (guest form is always visible)
+    page.on('crash', () => console.log('Page crashed!'))
+    await page.goto(SITE + '/chart')
     await page.waitForLoadState('networkidle')
+    await page.waitForTimeout(1000)
     await page.goto('/chart')
     await page.waitForTimeout(2000)
 
