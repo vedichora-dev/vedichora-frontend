@@ -1,5 +1,5 @@
 'use client'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { calculateChart, matchCharts, listCharts } from '@/api'
 import { useT } from '@/lib/i18n'
 import { to24Hour } from '@/lib/utils'
