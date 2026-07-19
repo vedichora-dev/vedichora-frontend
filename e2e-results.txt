@@ -1,131 +1,345 @@
 
 Running 8 tests using 2 workers
 
-[1/8] [chromium] › e2e/functional-test.spec.js:40:3 › GUEST CHART › Guest chart — no redirect, city dropdown closes, chart generates
-[2/8] [mobile] › e2e/functional-test.spec.js:40:3 › GUEST CHART › Guest chart — no redirect, city dropdown closes, chart generates
-[mobile] › e2e/functional-test.spec.js:40:3 › GUEST CHART › Guest chart — no redirect, city dropdown closes, chart generates
+[1/8] [mobile] › e2e/functional-test.spec.js:35:3 › GUEST CHART › Guest chart — no redirect, city dropdown closes, chart generates
+[2/8] [chromium] › e2e/functional-test.spec.js:35:3 › GUEST CHART › Guest chart — no redirect, city dropdown closes, chart generates
+[mobile] › e2e/functional-test.spec.js:35:3 › GUEST CHART › Guest chart — no redirect, city dropdown closes, chart generates
 ✓ No redirect to signin
 
-[chromium] › e2e/functional-test.spec.js:40:3 › GUEST CHART › Guest chart — no redirect, city dropdown closes, chart generates
+[chromium] › e2e/functional-test.spec.js:35:3 › GUEST CHART › Guest chart — no redirect, city dropdown closes, chart generates
 ✓ No redirect to signin
 
 City input value after selection: Chennai, India
 
 ✓ City selected, dropdown closed
 
-Dropdown still open after selection: false
+Dropdown still open after selection: true
 
-[mobile] › e2e/functional-test.spec.js:40:3 › GUEST CHART › Guest chart — no redirect, city dropdown closes, chart generates
+[mobile] › e2e/functional-test.spec.js:35:3 › GUEST CHART › Guest chart — no redirect, city dropdown closes, chart generates
 City input value after selection: Chennai
 
 ✓ City selected, dropdown closed
 
 Dropdown still open after selection: false
 
-[chromium] › e2e/functional-test.spec.js:40:3 › GUEST CHART › Guest chart — no redirect, city dropdown closes, chart generates
-Chart appeared: true
+[3/8] (retries) [chromium] › e2e/functional-test.spec.js:35:3 › GUEST CHART › Guest chart — no redirect, city dropdown closes, chart generates (retry #1)
+[chromium] › e2e/functional-test.spec.js:35:3 › GUEST CHART › Guest chart — no redirect, city dropdown closes, chart generates
+✓ No redirect to signin
 
-[3/8] [chromium] › e2e/functional-test.spec.js:81:3 › CITY DROPDOWN › City dropdown closes after selection
-[mobile] › e2e/functional-test.spec.js:40:3 › GUEST CHART › Guest chart — no redirect, city dropdown closes, chart generates
-Chart appeared: true
+City input value after selection: Chennai, India
 
-[4/8] [mobile] › e2e/functional-test.spec.js:81:3 › CITY DROPDOWN › City dropdown closes after selection
-[chromium] › e2e/functional-test.spec.js:81:3 › CITY DROPDOWN › City dropdown closes after selection
-Dropdown appeared: true
+✓ City selected, dropdown closed
 
-Dropdown still open after click: false
+Dropdown still open after selection: true
 
-City input value: Mumbai, India
+  1) [chromium] › e2e/functional-test.spec.js:35:3 › GUEST CHART › Guest chart — no redirect, city dropdown closes, chart generates 
 
-[5/8] [chromium] › e2e/functional-test.spec.js:122:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login
-[chromium] › e2e/functional-test.spec.js:122:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login
-Match selects count: 12
+    Error: expect(received).toBeFalsy()
 
-[mobile] › e2e/functional-test.spec.js:81:3 › CITY DROPDOWN › City dropdown closes after selection
-Dropdown appeared: true
+    Received: true
 
-Dropdown still open after click: false
-
-City input value: Mumbai, India
-
-[6/8] [mobile] › e2e/functional-test.spec.js:122:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login
-[mobile] › e2e/functional-test.spec.js:122:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login
-Match selects count: 12
-
-[7/8] (retries) [chromium] › e2e/functional-test.spec.js:122:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login (retry #1)
-[chromium] › e2e/functional-test.spec.js:122:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login
-Match selects count: 12
-
-[8/8] (retries) [mobile] › e2e/functional-test.spec.js:122:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login (retry #1)
-[mobile] › e2e/functional-test.spec.js:122:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login
-Match selects count: 12
-
-  1) [chromium] › e2e/functional-test.spec.js:122:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login 
-
-    Test timeout of 60000ms exceeded.
-
-    Error: page.waitForTimeout: Target page, context or browser has been closed
-
-      26 |       { timeout: 3000 }
-      27 |     ).catch(() => {})
-    > 28 |     await page.waitForTimeout(300)
-         |                ^
-      29 |   } else {
-      30 |     const fb = page.locator(`button:has-text("${cityName}")`).first()
-      31 |     if (await fb.isVisible({ timeout: 2000 }).catch(() => false)) {
-        at fillCity (/home/runner/work/vedichora-frontend/vedichora-frontend/e2e/functional-test.spec.js:28:16)
-        at /home/runner/work/vedichora-frontend/vedichora-frontend/e2e/functional-test.spec.js:145:5
+      57 |       .first().isVisible({ timeout: 300 }).catch(() => false)
+      58 |     console.log('Dropdown still open after selection:', dropdownOpen)
+    > 59 |     expect(dropdownOpen).toBeFalsy()
+         |                          ^
+      60 |
+      61 |     const genBtn = page.locator('button').filter({ hasText: /Generate/ }).last()
+      62 |     await genBtn.click()
+        at /home/runner/work/vedichora-frontend/vedichora-frontend/e2e/functional-test.spec.js:59:26
 
     attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
-    test-results/functional-test-GUEST-MATC-b4d71-compatibility-without-login-chromium/test-failed-1.png
+    test-results/functional-test-GUEST-CHAR-f4c3f-down-closes-chart-generates-chromium/test-failed-1.png
     ────────────────────────────────────────────────────────────────────────────────────────────────
 
     attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
-    test-results/functional-test-GUEST-MATC-b4d71-compatibility-without-login-chromium/video.webm
+    test-results/functional-test-GUEST-CHAR-f4c3f-down-closes-chart-generates-chromium/video.webm
     ────────────────────────────────────────────────────────────────────────────────────────────────
 
-    Error Context: test-results/functional-test-GUEST-MATC-b4d71-compatibility-without-login-chromium/error-context.md
+    Error Context: test-results/functional-test-GUEST-CHAR-f4c3f-down-closes-chart-generates-chromium/error-context.md
 
     Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
 
-    Test timeout of 60000ms exceeded.
+    Error: expect(received).toBeFalsy()
 
-    Error: page.waitForTimeout: Target page, context or browser has been closed
+    Received: true
 
-      26 |       { timeout: 3000 }
-      27 |     ).catch(() => {})
-    > 28 |     await page.waitForTimeout(300)
-         |                ^
-      29 |   } else {
-      30 |     const fb = page.locator(`button:has-text("${cityName}")`).first()
-      31 |     if (await fb.isVisible({ timeout: 2000 }).catch(() => false)) {
-        at fillCity (/home/runner/work/vedichora-frontend/vedichora-frontend/e2e/functional-test.spec.js:28:16)
-        at /home/runner/work/vedichora-frontend/vedichora-frontend/e2e/functional-test.spec.js:145:5
+      57 |       .first().isVisible({ timeout: 300 }).catch(() => false)
+      58 |     console.log('Dropdown still open after selection:', dropdownOpen)
+    > 59 |     expect(dropdownOpen).toBeFalsy()
+         |                          ^
+      60 |
+      61 |     const genBtn = page.locator('button').filter({ hasText: /Generate/ }).last()
+      62 |     await genBtn.click()
+        at /home/runner/work/vedichora-frontend/vedichora-frontend/e2e/functional-test.spec.js:59:26
 
     attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
-    test-results/functional-test-GUEST-MATC-b4d71-compatibility-without-login-chromium-retry1/test-failed-1.png
+    test-results/functional-test-GUEST-CHAR-f4c3f-down-closes-chart-generates-chromium-retry1/test-failed-1.png
     ────────────────────────────────────────────────────────────────────────────────────────────────
 
     attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
-    test-results/functional-test-GUEST-MATC-b4d71-compatibility-without-login-chromium-retry1/video.webm
+    test-results/functional-test-GUEST-CHAR-f4c3f-down-closes-chart-generates-chromium-retry1/video.webm
     ────────────────────────────────────────────────────────────────────────────────────────────────
 
-    Error Context: test-results/functional-test-GUEST-MATC-b4d71-compatibility-without-login-chromium-retry1/error-context.md
+    Error Context: test-results/functional-test-GUEST-CHAR-f4c3f-down-closes-chart-generates-chromium-retry1/error-context.md
 
     attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
-    test-results/functional-test-GUEST-MATC-b4d71-compatibility-without-login-chromium-retry1/trace.zip
+    test-results/functional-test-GUEST-CHAR-f4c3f-down-closes-chart-generates-chromium-retry1/trace.zip
     Usage:
 
-        npx playwright show-trace test-results/functional-test-GUEST-MATC-b4d71-compatibility-without-login-chromium-retry1/trace.zip
+        npx playwright show-trace test-results/functional-test-GUEST-CHAR-f4c3f-down-closes-chart-generates-chromium-retry1/trace.zip
 
     ────────────────────────────────────────────────────────────────────────────────────────────────
 
 
-[9/8] [chromium] › e2e/functional-test.spec.js:169:3 › NUMEROLOGY › Numerology — calculates life path number
-[chromium] › e2e/functional-test.spec.js:169:3 › NUMEROLOGY › Numerology — calculates life path number
+[4/8] [chromium] › e2e/functional-test.spec.js:76:3 › CITY DROPDOWN › City dropdown closes after selection
+[chromium] › e2e/functional-test.spec.js:76:3 › CITY DROPDOWN › City dropdown closes after selection
+Dropdown appeared: true
+
+Dropdown still open after click: true
+
+[mobile] › e2e/functional-test.spec.js:35:3 › GUEST CHART › Guest chart — no redirect, city dropdown closes, chart generates
+Chart appeared: true
+
+[5/8] (retries) [chromium] › e2e/functional-test.spec.js:76:3 › CITY DROPDOWN › City dropdown closes after selection (retry #1)
+[6/8] [mobile] › e2e/functional-test.spec.js:76:3 › CITY DROPDOWN › City dropdown closes after selection
+[mobile] › e2e/functional-test.spec.js:76:3 › CITY DROPDOWN › City dropdown closes after selection
+Dropdown appeared: true
+
+[chromium] › e2e/functional-test.spec.js:76:3 › CITY DROPDOWN › City dropdown closes after selection
+Dropdown appeared: true
+
+[mobile] › e2e/functional-test.spec.js:76:3 › CITY DROPDOWN › City dropdown closes after selection
+Dropdown still open after click: true
+
+[chromium] › e2e/functional-test.spec.js:76:3 › CITY DROPDOWN › City dropdown closes after selection
+Dropdown still open after click: true
+
+[7/8] (retries) [mobile] › e2e/functional-test.spec.js:76:3 › CITY DROPDOWN › City dropdown closes after selection (retry #1)
+  2) [chromium] › e2e/functional-test.spec.js:76:3 › CITY DROPDOWN › City dropdown closes after selection 
+
+    Error: expect(received).toBeFalsy()
+
+    Received: true
+
+      94 |         .isVisible({ timeout: 300 }).catch(() => false)
+      95 |       console.log('Dropdown still open after click:', stillOpen)
+    > 96 |       expect(stillOpen).toBeFalsy()
+         |                         ^
+      97 |
+      98 |       const val = await cityInput.inputValue()
+      99 |       console.log('City input value:', val)
+        at /home/runner/work/vedichora-frontend/vedichora-frontend/e2e/functional-test.spec.js:96:25
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/functional-test-CITY-DROPD-19588-down-closes-after-selection-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/functional-test-CITY-DROPD-19588-down-closes-after-selection-chromium/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/functional-test-CITY-DROPD-19588-down-closes-after-selection-chromium/error-context.md
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: expect(received).toBeFalsy()
+
+    Received: true
+
+      94 |         .isVisible({ timeout: 300 }).catch(() => false)
+      95 |       console.log('Dropdown still open after click:', stillOpen)
+    > 96 |       expect(stillOpen).toBeFalsy()
+         |                         ^
+      97 |
+      98 |       const val = await cityInput.inputValue()
+      99 |       console.log('City input value:', val)
+        at /home/runner/work/vedichora-frontend/vedichora-frontend/e2e/functional-test.spec.js:96:25
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/functional-test-CITY-DROPD-19588-down-closes-after-selection-chromium-retry1/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/functional-test-CITY-DROPD-19588-down-closes-after-selection-chromium-retry1/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/functional-test-CITY-DROPD-19588-down-closes-after-selection-chromium-retry1/error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/functional-test-CITY-DROPD-19588-down-closes-after-selection-chromium-retry1/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/functional-test-CITY-DROPD-19588-down-closes-after-selection-chromium-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+
+[8/8] [chromium] › e2e/functional-test.spec.js:109:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login
+[chromium] › e2e/functional-test.spec.js:109:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login
+Match selects count: 12
+
+[mobile] › e2e/functional-test.spec.js:76:3 › CITY DROPDOWN › City dropdown closes after selection
+Dropdown appeared: true
+
+Dropdown still open after click: true
+
+  3) [mobile] › e2e/functional-test.spec.js:76:3 › CITY DROPDOWN › City dropdown closes after selection 
+
+    Error: expect(received).toBeFalsy()
+
+    Received: true
+
+      94 |         .isVisible({ timeout: 300 }).catch(() => false)
+      95 |       console.log('Dropdown still open after click:', stillOpen)
+    > 96 |       expect(stillOpen).toBeFalsy()
+         |                         ^
+      97 |
+      98 |       const val = await cityInput.inputValue()
+      99 |       console.log('City input value:', val)
+        at /home/runner/work/vedichora-frontend/vedichora-frontend/e2e/functional-test.spec.js:96:25
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/functional-test-CITY-DROPD-19588-down-closes-after-selection-mobile/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/functional-test-CITY-DROPD-19588-down-closes-after-selection-mobile/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/functional-test-CITY-DROPD-19588-down-closes-after-selection-mobile/error-context.md
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: expect(received).toBeFalsy()
+
+    Received: true
+
+      94 |         .isVisible({ timeout: 300 }).catch(() => false)
+      95 |       console.log('Dropdown still open after click:', stillOpen)
+    > 96 |       expect(stillOpen).toBeFalsy()
+         |                         ^
+      97 |
+      98 |       const val = await cityInput.inputValue()
+      99 |       console.log('City input value:', val)
+        at /home/runner/work/vedichora-frontend/vedichora-frontend/e2e/functional-test.spec.js:96:25
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/functional-test-CITY-DROPD-19588-down-closes-after-selection-mobile-retry1/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/functional-test-CITY-DROPD-19588-down-closes-after-selection-mobile-retry1/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/functional-test-CITY-DROPD-19588-down-closes-after-selection-mobile-retry1/error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/functional-test-CITY-DROPD-19588-down-closes-after-selection-mobile-retry1/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/functional-test-CITY-DROPD-19588-down-closes-after-selection-mobile-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+
+[9/8] [mobile] › e2e/functional-test.spec.js:109:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login
+[mobile] › e2e/functional-test.spec.js:109:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login
+Match selects count: 12
+
+[chromium] › e2e/functional-test.spec.js:109:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login
+Match result visible: true
+
+[10/8] [chromium] › e2e/functional-test.spec.js:154:3 › NUMEROLOGY › Numerology — calculates life path number
+[chromium] › e2e/functional-test.spec.js:154:3 › NUMEROLOGY › Numerology — calculates life path number
 Name input visible: false
 
-  2) [mobile] › e2e/functional-test.spec.js:122:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login 
+Numerology result visible: true
+
+[11/8] (retries) [mobile] › e2e/functional-test.spec.js:109:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login (retry #1)
+[mobile] › e2e/functional-test.spec.js:109:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login
+Match selects count: 12
+
+  4) [mobile] › e2e/functional-test.spec.js:109:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login 
+
+    Test timeout of 60000ms exceeded.
+
+    Error: locator.click: Test timeout of 60000ms exceeded.
+    Call log:
+      - waiting for locator('input[placeholder*="City"], input[placeholder*="city"]').nth(1)
+        - locator resolved to <input value="" class="input" autocomplete="off" placeholder="City, Country"/>
+      - attempting click action
+        2 × waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <div class="card">…</div> intercepts pointer events
+        - retrying click action
+        - waiting 20ms
+        - waiting for element to be visible, enabled and stable
+        - element is visible, enabled and stable
+        - scrolling into view if needed
+        - done scrolling
+        - <div class="match-grid">…</div> intercepts pointer events
+      2 × retrying click action
+          - waiting 100ms
+          - waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <div class="card">…</div> intercepts pointer events
+      26 × retrying click action
+           - waiting 500ms
+           - waiting for element to be visible, enabled and stable
+           - element is visible, enabled and stable
+           - scrolling into view if needed
+           - done scrolling
+           - <div class="card">…</div> intercepts pointer events
+         - retrying click action
+           - waiting 500ms
+           - waiting for element to be visible, enabled and stable
+           - element is visible, enabled and stable
+           - scrolling into view if needed
+           - done scrolling
+           - <input value="" class="input" placeholder="Female name"/> from <div>…</div> subtree intercepts pointer events
+         - retrying click action
+           - waiting 500ms
+           - waiting for element to be visible, enabled and stable
+           - element is visible, enabled and stable
+           - scrolling into view if needed
+           - done scrolling
+           - <div class="card">…</div> intercepts pointer events
+         - retrying click action
+           - waiting 500ms
+           - waiting for element to be visible, enabled and stable
+           - element is visible, enabled and stable
+           - scrolling into view if needed
+           - done scrolling
+           - <div class="card">…</div> intercepts pointer events
+      - retrying click action
+        - waiting 500ms
+
+
+      11 |   const input  = inputs.nth(inputNth)
+      12 |   await input.scrollIntoViewIfNeeded()
+    > 13 |   await input.click()
+         |               ^
+      14 |   await input.fill(cityName)
+      15 |   await page.waitForTimeout(2000)
+      16 |
+        at fillCity (/home/runner/work/vedichora-frontend/vedichora-frontend/e2e/functional-test.spec.js:13:15)
+        at /home/runner/work/vedichora-frontend/vedichora-frontend/e2e/functional-test.spec.js:134:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/functional-test-GUEST-MATC-b4d71-compatibility-without-login-mobile/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/functional-test-GUEST-MATC-b4d71-compatibility-without-login-mobile/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/functional-test-GUEST-MATC-b4d71-compatibility-without-login-mobile/error-context.md
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
 
     Test timeout of 60000ms exceeded.
 
@@ -190,84 +404,18 @@ Name input visible: false
         - <div class="card">…</div> intercepts pointer events
       - retrying click action
         - waiting 500ms
-
-
-      11 |   const input  = inputs.nth(inputNth)
-      12 |   await input.scrollIntoViewIfNeeded()
-    > 13 |   await input.click()
-         |               ^
-      14 |   await input.fill(cityName)
-      15 |   await page.waitForTimeout(2000)
-      16 |
-        at fillCity (/home/runner/work/vedichora-frontend/vedichora-frontend/e2e/functional-test.spec.js:13:15)
-        at /home/runner/work/vedichora-frontend/vedichora-frontend/e2e/functional-test.spec.js:145:5
-
-    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
-    test-results/functional-test-GUEST-MATC-b4d71-compatibility-without-login-mobile/test-failed-1.png
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
-    test-results/functional-test-GUEST-MATC-b4d71-compatibility-without-login-mobile/video.webm
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    Error Context: test-results/functional-test-GUEST-MATC-b4d71-compatibility-without-login-mobile/error-context.md
-
-    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
-
-    Test timeout of 60000ms exceeded.
-
-    Error: locator.click: Test timeout of 60000ms exceeded.
-    Call log:
-      - waiting for locator('input[placeholder*="City"], input[placeholder*="city"]').nth(1)
-        - locator resolved to <input value="" class="input" autocomplete="off" placeholder="City, Country"/>
-      - attempting click action
-        2 × waiting for element to be visible, enabled and stable
-          - element is visible, enabled and stable
-          - scrolling into view if needed
-          - done scrolling
-          - <div class="card">…</div> intercepts pointer events
-        - retrying click action
-        - waiting 20ms
         - waiting for element to be visible, enabled and stable
         - element is visible, enabled and stable
         - scrolling into view if needed
         - done scrolling
-        - <div class="match-grid">…</div> intercepts pointer events
-      2 × retrying click action
-          - waiting 100ms
-          - waiting for element to be visible, enabled and stable
-          - element is visible, enabled and stable
-          - scrolling into view if needed
-          - done scrolling
-          - <div class="card">…</div> intercepts pointer events
-      27 × retrying click action
-           - waiting 500ms
-           - waiting for element to be visible, enabled and stable
-           - element is visible, enabled and stable
-           - scrolling into view if needed
-           - done scrolling
-           - <div class="card">…</div> intercepts pointer events
-         - retrying click action
-           - waiting 500ms
-           - waiting for element to be visible, enabled and stable
-           - element is visible, enabled and stable
-           - scrolling into view if needed
-           - done scrolling
-           - <input value="" class="input" placeholder="Female name"/> from <div>…</div> subtree intercepts pointer events
-         - retrying click action
-           - waiting 500ms
-           - waiting for element to be visible, enabled and stable
-           - element is visible, enabled and stable
-           - scrolling into view if needed
-           - done scrolling
-           - <div class="card">…</div> intercepts pointer events
-         - retrying click action
-           - waiting 500ms
-           - waiting for element to be visible, enabled and stable
-           - element is visible, enabled and stable
-           - scrolling into view if needed
-           - done scrolling
-           - <div class="card">…</div> intercepts pointer events
+        - <input value="" class="input" placeholder="Female name"/> from <div>…</div> subtree intercepts pointer events
+      - retrying click action
+        - waiting 500ms
+        - waiting for element to be visible, enabled and stable
+        - element is visible, enabled and stable
+        - scrolling into view if needed
+        - done scrolling
+        - <div class="card">…</div> intercepts pointer events
       - retrying click action
         - waiting 500ms
 
@@ -280,7 +428,7 @@ Name input visible: false
       15 |   await page.waitForTimeout(2000)
       16 |
         at fillCity (/home/runner/work/vedichora-frontend/vedichora-frontend/e2e/functional-test.spec.js:13:15)
-        at /home/runner/work/vedichora-frontend/vedichora-frontend/e2e/functional-test.spec.js:145:5
+        at /home/runner/work/vedichora-frontend/vedichora-frontend/e2e/functional-test.spec.js:134:5
 
     attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
     test-results/functional-test-GUEST-MATC-b4d71-compatibility-without-login-mobile-retry1/test-failed-1.png
@@ -301,17 +449,15 @@ Name input visible: false
     ────────────────────────────────────────────────────────────────────────────────────────────────
 
 
-[10/8] [mobile] › e2e/functional-test.spec.js:169:3 › NUMEROLOGY › Numerology — calculates life path number
-[mobile] › e2e/functional-test.spec.js:169:3 › NUMEROLOGY › Numerology — calculates life path number
+[12/8] [mobile] › e2e/functional-test.spec.js:154:3 › NUMEROLOGY › Numerology — calculates life path number
+[mobile] › e2e/functional-test.spec.js:154:3 › NUMEROLOGY › Numerology — calculates life path number
 Name input visible: false
 
-[chromium] › e2e/functional-test.spec.js:169:3 › NUMEROLOGY › Numerology — calculates life path number
 Numerology result visible: true
 
-[mobile] › e2e/functional-test.spec.js:169:3 › NUMEROLOGY › Numerology — calculates life path number
-Numerology result visible: true
-
-  2 failed
-    [chromium] › e2e/functional-test.spec.js:122:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login 
-    [mobile] › e2e/functional-test.spec.js:122:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login 
-  6 passed (2.6m)
+  4 failed
+    [chromium] › e2e/functional-test.spec.js:35:3 › GUEST CHART › Guest chart — no redirect, city dropdown closes, chart generates 
+    [chromium] › e2e/functional-test.spec.js:76:3 › CITY DROPDOWN › City dropdown closes after selection 
+    [mobile] › e2e/functional-test.spec.js:76:3 › CITY DROPDOWN › City dropdown closes after selection 
+    [mobile] › e2e/functional-test.spec.js:109:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login 
+  4 passed (2.7m)
