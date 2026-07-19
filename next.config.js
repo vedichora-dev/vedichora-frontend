@@ -1,6 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  typescript: { ignoreBuildErrors: true },
+  typescript: { ignoreBuildErrors: true, tsconfigPath: "./tsconfig.json" },
   reactStrictMode: true,
   async headers() {
     return [
