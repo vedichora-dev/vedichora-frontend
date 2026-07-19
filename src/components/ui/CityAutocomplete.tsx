@@ -16,9 +16,19 @@ export default function CityAutocomplete({ value, onChange, placeholder = 'City,
   const [open,    setOpen]    = useState(false)
   const [loading, setLoading] = useState(false)
   const [dropPos, setDropPos] = useState<DropPos | null>(null)
-  const inputRef    = useRef<HTMLInputElement>(null)
-  const timer       = useRef<NodeJS.Timeout>()
-  const selecting   = useRef(false)   // guard against onFocus reopening during selection
+  const inputRef   = useRef<HTMLInputElement>(null)
+  const dropRef    = useRef<HTMLDivElement>(null)   // direct DOM ref for instant hide
+  const timer      = useRef<NodeJS.Timeout>()
+  const selecting  = useRef(false)
+
+  const hideDropdown = useCallback(() => {
+    // Hide DOM node instantly — don't wait for React re-render
+    if (dropRef.current) dropRef.current.style.display = 'none'
+    selecting.current = true
+    setOpen(false)
+    setResults([])
+    setTimeout(() => { selecting.current = false }, 400)
+  }, [])
 
   const updatePos = useCallback(() => {
     if (!inputRef.current) return
@@ -26,13 +36,14 @@ export default function CityAutocomplete({ value, onChange, placeholder = 'City,
     setDropPos({ top: rect.bottom + window.scrollY + 4, left: rect.left + window.scrollX, width: rect.width })
   }, [])
 
+  useEffect(() => { if (open && dropRef.current) dropRef.current.style.display = '' }, [open])
   useEffect(() => { if (open) updatePos() }, [open, updatePos])
 
   useEffect(() => {
     const close = (e: Event) => {
-      if (e.type === 'scroll') { setOpen(false); return }
+      if (e.type === 'scroll') { hideDropdown(); return }
       const t = e.target as Node
-      if (inputRef.current && !inputRef.current.contains(t)) setOpen(false)
+      if (inputRef.current && !inputRef.current.contains(t)) hideDropdown()
     }
     document.addEventListener('mousedown', close)
     window.addEventListener('scroll', close, true)
@@ -42,11 +53,11 @@ export default function CityAutocomplete({ value, onChange, placeholder = 'City,
       window.removeEventListener('scroll', close, true)
       window.removeEventListener('resize', updatePos)
     }
-  }, [updatePos])
+  }, [hideDropdown, updatePos])
 
   useEffect(() => {
     clearTimeout(timer.current)
-    if (query.length < 2) { setResults([]); setOpen(false); return }
+    if (query.length < 2) { hideDropdown(); return }
     timer.current = setTimeout(async () => {
       setLoading(true)
       try {
@@ -60,23 +71,28 @@ export default function CityAutocomplete({ value, onChange, placeholder = 'City,
             lat: f.geometry.coordinates[1], lng: f.geometry.coordinates[0], tz: '',
           }))
         const seen = new Set<string>()
-        const unique = cities.filter(c => { const k = c.name+'|'+c.country; if (seen.has(k)) return false; seen.add(k); return true })
+        const unique = cities.filter(c => {
+          const k = c.name + '|' + c.country
+          if (seen.has(k)) return false
+          seen.add(k); return true
+        })
         setResults(unique)
         if (unique.length > 0 && !selecting.current) { setOpen(true); updatePos() }
       } catch { setResults([]) }
       setLoading(false)
     }, 350)
-  }, [query, updatePos])
+  }, [query, updatePos, hideDropdown])
 
   const select = (city: City) => {
-    selecting.current = true           // block onFocus from reopening
     const label = `${city.name}${city.country ? ', ' + city.country : ''}`
-    setResults([])                     // clear FIRST — onFocus checks results.length
+    // Hide immediately in DOM before state update
+    if (dropRef.current) dropRef.current.style.display = 'none'
+    selecting.current = true
+    setResults([])
     setOpen(false)
     setQuery(label)
     onChange(label, city.lat, city.lng, city.tz)
-    // reset guard after a tick
-    setTimeout(() => { selecting.current = false }, 300)
+    setTimeout(() => { selecting.current = false }, 400)
   }
 
   return (
@@ -93,7 +109,6 @@ export default function CityAutocomplete({ value, onChange, placeholder = 'City,
           value={query}
           onChange={e => { setQuery(e.target.value); onChange(e.target.value) }}
           onFocus={() => {
-            // Only reopen if not in the middle of a selection and results exist
             if (!selecting.current && results.length > 0) { setOpen(true); updatePos() }
           }}
           placeholder={placeholder}
@@ -105,12 +120,15 @@ export default function CityAutocomplete({ value, onChange, placeholder = 'City,
       </div>
 
       {open && results.length > 0 && dropPos && (
-        <div style={{
-          position: 'fixed',
-          top: dropPos.top, left: dropPos.left, width: dropPos.width,
-          background: 'var(--surf)', border: '1px solid var(--bd)', borderRadius: '10px',
-          boxShadow: '0 8px 24px rgba(0,0,0,.18)', zIndex: 99999, overflow: 'hidden',
-        }}>
+        <div
+          ref={dropRef}
+          style={{
+            position: 'fixed',
+            top: dropPos.top, left: dropPos.left, width: dropPos.width,
+            background: 'var(--surf)', border: '1px solid var(--bd)', borderRadius: '10px',
+            boxShadow: '0 8px 24px rgba(0,0,0,.18)', zIndex: 99999, overflow: 'hidden',
+          }}
+        >
           {results.map((city, i) => (
             <button
               key={i}
