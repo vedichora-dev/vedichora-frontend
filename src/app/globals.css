@@ -420,3 +420,11 @@ body {
 
 /* ── Spin animation ── */
 @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+/* ── Checkout plan grid ── */
+.plan-grid { grid-template-columns: repeat(4, 1fr) !important; }
+@media (max-width: 900px) { .plan-grid { grid-template-columns: repeat(2, 1fr) !important; } }
+@media (max-width: 500px) { .plan-grid { grid-template-columns: 1fr 1fr !important; } }
+
+/* ── Astrologer grid ── */
+.astro-grid { grid-template-columns: repeat(2, 1fr) !important; }
+@media (max-width: 700px) { .astro-grid { grid-template-columns: 1fr !important; } }
