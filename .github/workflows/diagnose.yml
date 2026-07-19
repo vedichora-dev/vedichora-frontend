@@ -1,6 +1,8 @@
 name: Diagnose Build Errors
 on:
   workflow_dispatch:
+  push:
+    branches: [main]
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -13,7 +15,12 @@ jobs:
           node-version: '20'
       - run: npm install --legacy-peer-deps
       - name: Build
-        run: npm run build 2>&1 | tail -60 > build-errors.txt || true
+        run: |
+          echo "=== CURRENT e2e FILES ===" > build-errors.txt
+          ls -la e2e/ >> build-errors.txt 2>&1 || echo "no e2e/" >> build-errors.txt
+          echo "" >> build-errors.txt
+          echo "=== BUILD OUTPUT ===" >> build-errors.txt
+          npm run build 2>&1 | tail -60 >> build-errors.txt || true
       - name: Commit
         run: |
           git config user.email "ci@vedichora.com"
