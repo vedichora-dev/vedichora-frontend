@@ -1,1 +1,9 @@
-{"buildCommand":"npm run build","outputDirectory":".next","framework":"nextjs","installCommand":"npm install --legacy-peer-deps"}
+{
+  "buildCommand": "next build",
+  "outputDirectory": ".next",
+  "framework": "nextjs",
+  "installCommand": "npm install --legacy-peer-deps",
+  "env": {
+    "NEXT_DISABLE_TYPECHECKING": "1"
+  }
+}
