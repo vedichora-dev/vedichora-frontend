@@ -1,29 +1,20 @@
-// @ts-nocheck
-import { Page } from '@playwright/test'
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import type { Page } from '@playwright/test'
 
-export const SITE = process.env.BASE_URL || 'https://vedichora-frontend-orcin.vercel.app'
+export const SITE          = process.env.BASE_URL || 'https://vedichora-frontend-orcin.vercel.app'
 export const ADMIN_EMAIL   = 'admin@vedichora.com'
 export const ADMIN_PASS    = 'Admin@123'
 export const TEST_PASSWORD = 'TestPass@123'
 
-// Known validation charts
 export const BABU = {
-  name: 'Babu',
-  day: 1, month: 3, year: 1959, hour: 2, minute: 30, ap: 'PM' as const,
-  place: 'Chennai',
-  expectedLagna:     'Cancer',
-  expectedMoon:      'Scorpio',
-  expectedNakshatra: 'Anuradha',
-  expectedDasha:     'Moon',
+  name:'Babu', day:1, month:3, year:1959, hour:2, minute:30, ap:'PM' as const,
+  place:'Chennai',
+  expectedLagna:'Cancer', expectedMoon:'Scorpio', expectedNakshatra:'Anuradha',
 }
-
 export const PRAMOD = {
-  name: 'Pramod',
-  day: 24, month: 9, year: 1968, hour: 8, minute: 22, ap: 'PM' as const,
-  place: 'Chennai',
-  expectedLagna:     'Aries',
-  expectedNakshatra: 'Swati',
-  expectedDasha:     'Rahu',
+  name:'Pramod', day:24, month:9, year:1968, hour:8, minute:22, ap:'PM' as const,
+  place:'Chennai',
+  expectedLagna:'Aries', expectedNakshatra:'Swati', expectedDasha:'Rahu',
 }
 
 /** Login via UI */
@@ -35,31 +26,52 @@ export async function loginUI(page: Page, email = ADMIN_EMAIL, pass = ADMIN_PASS
   await page.waitForTimeout(5000)
 }
 
-/** Fill DatePicker — uses custom <select> elements prefixed by `prefix` */
-export async function fillDate(
+/** Fill date picker selects using prefix-based approach */
+export async function fillDatePicker(
   page: Page,
   prefix: string,
   day: number, month: number, year: number,
   hour: number, minute: number, ap: 'AM'|'PM'
 ) {
-  // Try by index (most reliable across environments)
-  const sels = page.locator('select')
-  const n    = await sels.count()
-  if (n >= 3) {
-    await sels.nth(0).selectOption(String(day))
-    await sels.nth(1).selectOption({ index: month })
-    await sels.nth(2).selectOption(String(year))
-    if (n > 3) await sels.nth(3).selectOption(String(hour)).catch(() => {})
-    if (n > 4) await sels.nth(4).selectOption(String(minute < 10 ? `0${minute}` : minute)).catch(() => {})
-    if (n > 5) await sels.nth(5).selectOption(ap).catch(() => {})
+  // DatePicker renders <select> elements
+  // Try by ID first, then fall back to position
+  const tryById = async (id: string, val: string | number) => {
+    const el = page.locator(`#${id}`)
+    if (await el.count() > 0) {
+      await el.selectOption(String(val))
+      return true
+    }
+    return false
   }
+
+  const dayOk = await tryById(`${prefix}-dd`, day)
+  if (!dayOk) {
+    // Fallback: sequential selects
+    const selects = page.locator('select')
+    const n = await selects.count()
+    if (n >= 1) await selects.nth(0).selectOption(String(day))
+    if (n >= 2) await selects.nth(1).selectOption({ index: month })
+    if (n >= 3) await selects.nth(2).selectOption(String(year))
+    if (n >= 4) await selects.nth(3).selectOption(String(hour))
+    if (n >= 5) await selects.nth(4).selectOption(String(minute < 10 ? `0${minute}` : minute))
+    if (n >= 6) await selects.nth(5).selectOption(ap)
+    return
+  }
+
+  await tryById(`${prefix}-mm`, month)
+  await tryById(`${prefix}-yyyy`, year)
+  await tryById(`${prefix}-hr`,  hour)
+  await tryById(`${prefix}-mi`,  minute)
+  await tryById(`${prefix}-ap`,  ap)
 }
 
-/** Fill city with autocomplete */
+/** Fill city autocomplete */
 export async function fillCity(page: Page, city: string) {
   const field = page.locator('input[placeholder*="City"], input[placeholder*="city"]').first()
   await field.fill(city)
-  await page.waitForTimeout(700)
-  const drop = page.locator(`button:has-text("${city}")`).first()
-  if (await drop.isVisible({ timeout: 2000 }).catch(() => false)) await drop.click()
+  await page.waitForTimeout(800)
+  const drop = page.locator(`div button:has-text("${city}")`).first()
+  if (await drop.isVisible({ timeout: 2000 }).catch(() => false)) {
+    await drop.click()
+  }
 }
