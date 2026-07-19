@@ -17,32 +17,35 @@ jobs:
       - run: npm install --legacy-peer-deps
       - run: npx playwright install chromium --with-deps
 
-      - name: Run functional tests
+      - name: Run tests and capture output
         env:
           BASE_URL: https://vedichora-frontend-orcin.vercel.app
         run: |
-          npx playwright test e2e/functional-test.spec.js --reporter=list 2>&1 | tee /tmp/test-output.txt || true
+          # Run tests, capture ALL output including console.log
+          npx playwright test e2e/functional-test.spec.js \
+            --reporter=line \
+            2>&1 | tee /tmp/test-raw.txt || true
+          
+          echo "## Functional Test Results" >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          cat /tmp/test-raw.txt >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
 
-      - name: Save results
+      - name: Write results file
         run: |
-          echo "=== FUNCTIONAL TEST RESULTS ===" > e2e-test-results.txt
-          echo "Timestamp: $(date)" >> e2e-test-results.txt
-          echo "" >> e2e-test-results.txt
-          cat /tmp/test-output.txt >> e2e-test-results.txt
+          cp /tmp/test-raw.txt e2e-results.txt
 
-      - name: Commit results
+      - name: Commit results file
         run: |
           git config user.email "ci@vedichora.com"
           git config user.name "CI Bot"
-          git add e2e-test-results.txt
-          git diff --staged --quiet || git commit -m "test: functional test results $(date +%H:%M) [skip ci]"
+          git add e2e-results.txt
+          git commit -m "test: functional results $(date +%Y%m%d-%H%M) [skip ci]" || echo "Nothing to commit"
           git push || true
 
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: functional-test-results-${{ github.run_id }}
-          path: |
-            test-results/
-            e2e-test-results.txt
+          name: functional-screenshots-${{ github.run_id }}
+          path: test-results/
           retention-days: 7
