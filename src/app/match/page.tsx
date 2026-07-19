@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react'
 import { calculateChart, matchCharts, listCharts } from '@/api'
 import { useT } from '@/lib/i18n'
+import { useStore } from '@/store'
 import { to24Hour } from '@/lib/utils'
 import DatePicker, { DateValue } from '@/components/ui/DatePicker'
 import CityAutocomplete from '@/components/ui/CityAutocomplete'
@@ -43,6 +44,7 @@ function PersonForm({
 
 export default function MatchPage() {
   const t = useT()
+  const { token } = useStore()
 
 
   // Saved charts for selection
