@@ -1,16 +1,15 @@
 === CURRENT e2e FILES ===
 total 40
-drwxr-xr-x 2 runner runner  4096 Jul 19 03:07 .
-drwxr-xr-x 7 runner runner  4096 Jul 19 03:07 ..
--rw-r--r-- 1 runner runner  3976 Jul 19 03:07 01-auth.spec.js
--rw-r--r-- 1 runner runner 11246 Jul 19 03:07 02-chart.spec.js
--rw-r--r-- 1 runner runner  2718 Jul 19 03:07 03-match.spec.js
--rw-r--r-- 1 runner runner  2685 Jul 19 03:07 04-horoscope.spec.js
--rw-r--r-- 1 runner runner  3658 Jul 19 03:07 05-deployment.spec.js
--rw-r--r-- 1 runner runner  2694 Jul 19 03:07 helpers.js
+drwxr-xr-x 2 runner runner  4096 Jul 19 11:27 .
+drwxr-xr-x 7 runner runner  4096 Jul 19 11:28 ..
+-rw-r--r-- 1 runner runner  3976 Jul 19 11:27 01-auth.spec.js
+-rw-r--r-- 1 runner runner 11246 Jul 19 11:27 02-chart.spec.js
+-rw-r--r-- 1 runner runner  2718 Jul 19 11:27 03-match.spec.js
+-rw-r--r-- 1 runner runner  2685 Jul 19 11:27 04-horoscope.spec.js
+-rw-r--r-- 1 runner runner  3658 Jul 19 11:27 05-deployment.spec.js
+-rw-r--r-- 1 runner runner  2694 Jul 19 11:27 helpers.js
 
 === BUILD OUTPUT ===
-
 
 > vedichora@1.0.0 build
 > next build
@@ -22,6 +21,7 @@ You can learn more, including how to opt-out if you'd not like to participate in
 https://nextjs.org/telemetry
 
    ▲ Next.js 14.0.4
+   - Environments: .env.local
 
    Creating an optimized production build ...
    Using tsconfig file: ./tsconfig.json
