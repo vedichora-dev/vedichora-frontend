@@ -1,13 +1,13 @@
 === CURRENT e2e FILES ===
 total 40
-drwxr-xr-x 2 runner runner  4096 Jul 19 00:41 .
-drwxr-xr-x 7 runner runner  4096 Jul 19 00:41 ..
--rw-r--r-- 1 runner runner  3976 Jul 19 00:41 01-auth.spec.js
--rw-r--r-- 1 runner runner 11246 Jul 19 00:41 02-chart.spec.js
--rw-r--r-- 1 runner runner  2718 Jul 19 00:41 03-match.spec.js
--rw-r--r-- 1 runner runner  2685 Jul 19 00:41 04-horoscope.spec.js
--rw-r--r-- 1 runner runner  3658 Jul 19 00:41 05-deployment.spec.js
--rw-r--r-- 1 runner runner  2694 Jul 19 00:41 helpers.js
+drwxr-xr-x 2 runner runner  4096 Jul 19 00:48 .
+drwxr-xr-x 7 runner runner  4096 Jul 19 00:49 ..
+-rw-r--r-- 1 runner runner  3976 Jul 19 00:48 01-auth.spec.js
+-rw-r--r-- 1 runner runner 11246 Jul 19 00:48 02-chart.spec.js
+-rw-r--r-- 1 runner runner  2718 Jul 19 00:48 03-match.spec.js
+-rw-r--r-- 1 runner runner  2685 Jul 19 00:48 04-horoscope.spec.js
+-rw-r--r-- 1 runner runner  3658 Jul 19 00:48 05-deployment.spec.js
+-rw-r--r-- 1 runner runner  2694 Jul 19 00:48 helpers.js
 
 === BUILD OUTPUT ===
 
@@ -33,11 +33,11 @@ https://nextjs.org/telemetry
    Linting ...
    Collecting page data ...
    Generating static pages (0/24) ...
- ⚠ Entire page /checkout deopted into client-side rendering. https://nextjs.org/docs/messages/deopted-into-client-rendering /checkout
    Generating static pages (6/24) 
+ ⚠ Entire page /checkout deopted into client-side rendering. https://nextjs.org/docs/messages/deopted-into-client-rendering /checkout
    Generating static pages (12/24) 
-ReferenceError: useEffect is not defined
-    at m (/home/runner/work/vedichora-frontend/vedichora-frontend/.next/server/app/match/page.js:16:1397)
+ReferenceError: token is not defined
+    at m (/home/runner/work/vedichora-frontend/vedichora-frontend/.next/server/app/match/page.js:16:1497)
     at nP (/home/runner/work/vedichora-frontend/vedichora-frontend/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:45321)
     at n$ (/home/runner/work/vedichora-frontend/vedichora-frontend/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:61978)
     at nE (/home/runner/work/vedichora-frontend/vedichora-frontend/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:44877)
@@ -49,8 +49,8 @@ ReferenceError: useEffect is not defined
     at n$ (/home/runner/work/vedichora-frontend/vedichora-frontend/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:62224)
 
 Error occurred prerendering page "/match". Read more: https://nextjs.org/docs/messages/prerender-error
-ReferenceError: useEffect is not defined
-    at m (/home/runner/work/vedichora-frontend/vedichora-frontend/.next/server/app/match/page.js:16:1397)
+ReferenceError: token is not defined
+    at m (/home/runner/work/vedichora-frontend/vedichora-frontend/.next/server/app/match/page.js:16:1497)
     at nP (/home/runner/work/vedichora-frontend/vedichora-frontend/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:45321)
     at n$ (/home/runner/work/vedichora-frontend/vedichora-frontend/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:61978)
     at nE (/home/runner/work/vedichora-frontend/vedichora-frontend/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:44877)
