@@ -1,0 +1,500 @@
+
+Running 10 tests using 2 workers
+
+[1/10] [mobile] › e2e/functional-test.spec.js:10:3 › GUEST CHART - no login › Guest can generate chart without login
+[2/10] [chromium] › e2e/functional-test.spec.js:10:3 › GUEST CHART - no login › Guest can generate chart without login
+[mobile] › e2e/functional-test.spec.js:10:3 › GUEST CHART - no login › Guest can generate chart without login
+✓ No redirect to login
+
+[chromium] › e2e/functional-test.spec.js:10:3 › GUEST CHART - no login › Guest can generate chart without login
+✓ No redirect to login
+
+✓ City dropdown closed after selection
+
+[mobile] › e2e/functional-test.spec.js:10:3 › GUEST CHART - no login › Guest can generate chart without login
+✓ City dropdown closed after selection
+
+[chromium] › e2e/functional-test.spec.js:10:3 › GUEST CHART - no login › Guest can generate chart without login
+Chart result appeared: true
+
+[3/10] [chromium] › e2e/functional-test.spec.js:69:3 › GUEST CHART - no login › Guest city dropdown closes on selection
+[mobile] › e2e/functional-test.spec.js:10:3 › GUEST CHART - no login › Guest can generate chart without login
+Chart result appeared: false
+
+ERROR: No chart generated. Page says: Skip to main contentVedicHoraSign in to your accountDemo: admin@vedichora.com / Admin@123Email addressPasswordSign in →New here? Create free account(self.__next_f=self.__next_f||[]).push([0]);self.__next_f.push([2,null])self.__next_f.push([1,"1:HL[\"/_next/static/css/5ac2512369262f44.css\",\"style\",{\"crossOrigin\":\"\"}]\n0:\"$L2\"\n"])self.__next_f.push([1,"3:I[7690,[],\"\"]\n5:I[7831,[],\"\"]\n6:I[3247,[\"175\",\"static/chunks/175-77bb4895936e8e3c.js\",\"379\",\"static/chunks/379-a488de6fddf
+
+[chromium] › e2e/functional-test.spec.js:69:3 › GUEST CHART - no login › Guest city dropdown closes on selection
+Dropdown still open after click: false
+
+[4/10] [chromium] › e2e/functional-test.spec.js:90:3 › GUEST MATCHMAKING - no login › Guest can do matchmaking without login
+[5/10] (retries) [mobile] › e2e/functional-test.spec.js:10:3 › GUEST CHART - no login › Guest can generate chart without login (retry #1)
+[mobile] › e2e/functional-test.spec.js:10:3 › GUEST CHART - no login › Guest can generate chart without login
+✓ No redirect to login
+
+✓ City dropdown closed after selection
+
+Chart result appeared: false
+
+ERROR: No chart generated. Page says: Skip to main contentVedicHoranorthsouthHoroscopeKundaliMatchingShopLearnAPIAboutMore 🇮🇳 EN₹ INRSign inGet started💑Kundali Matching · Ashta Koota + Pathu PoruthamMangal Dosha · Nadi Dosha · Best muhurta datesCheck MatchingFull Report ₹399ShopCredit packs and premium reports💰 Credit Packs📋 Reports⭐StarterPerfect for exploring100 credits₹199One-time purchase · No subscriptionBuy now →Most Popular🔮PopularMost chosen plan300 credits₹499One-time purchase · No subscriptionBuy now →👑ProFor seriou
+
+  1) [mobile] › e2e/functional-test.spec.js:10:3 › GUEST CHART - no login › Guest can generate chart without login 
+
+    Error: expect(received).toBeTruthy()
+
+    Received: false
+
+      63 |       console.log('ERROR: No chart generated. Page says:', body.slice(0, 500))
+      64 |     }
+    > 65 |     expect(hasChart).toBeTruthy()
+         |                      ^
+      66 |     await page.screenshot({ path: 'test-results/guest-chart.png' })
+      67 |   })
+      68 |
+        at /home/runner/work/vedichora-frontend/vedichora-frontend/e2e/functional-test.spec.js:65:22
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/functional-test-GUEST-CHAR-301cb-enerate-chart-without-login-mobile/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/functional-test-GUEST-CHAR-301cb-enerate-chart-without-login-mobile/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/functional-test-GUEST-CHAR-301cb-enerate-chart-without-login-mobile/error-context.md
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: expect(received).toBeTruthy()
+
+    Received: false
+
+      63 |       console.log('ERROR: No chart generated. Page says:', body.slice(0, 500))
+      64 |     }
+    > 65 |     expect(hasChart).toBeTruthy()
+         |                      ^
+      66 |     await page.screenshot({ path: 'test-results/guest-chart.png' })
+      67 |   })
+      68 |
+        at /home/runner/work/vedichora-frontend/vedichora-frontend/e2e/functional-test.spec.js:65:22
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/functional-test-GUEST-CHAR-301cb-enerate-chart-without-login-mobile-retry1/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/functional-test-GUEST-CHAR-301cb-enerate-chart-without-login-mobile-retry1/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/functional-test-GUEST-CHAR-301cb-enerate-chart-without-login-mobile-retry1/error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/functional-test-GUEST-CHAR-301cb-enerate-chart-without-login-mobile-retry1/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/functional-test-GUEST-CHAR-301cb-enerate-chart-without-login-mobile-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+
+[6/10] [mobile] › e2e/functional-test.spec.js:69:3 › GUEST CHART - no login › Guest city dropdown closes on selection
+[mobile] › e2e/functional-test.spec.js:69:3 › GUEST CHART - no login › Guest city dropdown closes on selection
+Dropdown still open after click: false
+
+[7/10] [mobile] › e2e/functional-test.spec.js:90:3 › GUEST MATCHMAKING - no login › Guest can do matchmaking without login
+[8/10] (retries) [chromium] › e2e/functional-test.spec.js:90:3 › GUEST MATCHMAKING - no login › Guest can do matchmaking without login (retry #1)
+[9/10] (retries) [mobile] › e2e/functional-test.spec.js:90:3 › GUEST MATCHMAKING - no login › Guest can do matchmaking without login (retry #1)
+  2) [chromium] › e2e/functional-test.spec.js:90:3 › GUEST MATCHMAKING - no login › Guest can do matchmaking without login 
+
+    Test timeout of 60000ms exceeded.
+
+    Error: locator.fill: Target page, context or browser has been closed
+
+      113 |     await selects.nth(8).selectOption({ index: 6 }).catch(()=>{}) // Month
+      114 |     await selects.nth(9).selectOption('1990').catch(()=>{}) // Year
+    > 115 |     await cities.nth(1).fill('Bangalore')
+          |                         ^
+      116 |     await page.waitForTimeout(1000)
+      117 |     const city2btn = page.locator('button:has-text("Bangalore"), button:has-text("Bengaluru")').first()
+      118 |     if (await city2btn.isVisible({ timeout: 2000 })) await city2btn.click()
+        at /home/runner/work/vedichora-frontend/vedichora-frontend/e2e/functional-test.spec.js:115:25
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/functional-test-GUEST-MATC-a3d09-o-matchmaking-without-login-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/functional-test-GUEST-MATC-a3d09-o-matchmaking-without-login-chromium/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/functional-test-GUEST-MATC-a3d09-o-matchmaking-without-login-chromium/error-context.md
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Test timeout of 60000ms exceeded.
+
+    Error: locator.fill: Target page, context or browser has been closed
+
+      113 |     await selects.nth(8).selectOption({ index: 6 }).catch(()=>{}) // Month
+      114 |     await selects.nth(9).selectOption('1990').catch(()=>{}) // Year
+    > 115 |     await cities.nth(1).fill('Bangalore')
+          |                         ^
+      116 |     await page.waitForTimeout(1000)
+      117 |     const city2btn = page.locator('button:has-text("Bangalore"), button:has-text("Bengaluru")').first()
+      118 |     if (await city2btn.isVisible({ timeout: 2000 })) await city2btn.click()
+        at /home/runner/work/vedichora-frontend/vedichora-frontend/e2e/functional-test.spec.js:115:25
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/functional-test-GUEST-MATC-a3d09-o-matchmaking-without-login-chromium-retry1/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/functional-test-GUEST-MATC-a3d09-o-matchmaking-without-login-chromium-retry1/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/functional-test-GUEST-MATC-a3d09-o-matchmaking-without-login-chromium-retry1/error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/functional-test-GUEST-MATC-a3d09-o-matchmaking-without-login-chromium-retry1/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/functional-test-GUEST-MATC-a3d09-o-matchmaking-without-login-chromium-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+
+[10/10] [chromium] › e2e/functional-test.spec.js:138:3 › LOGGED IN CHART › Logged in user generates chart
+[chromium] › e2e/functional-test.spec.js:138:3 › LOGGED IN CHART › Logged in user generates chart
+✓ Logged in, on chart page
+
+  3) [mobile] › e2e/functional-test.spec.js:90:3 › GUEST MATCHMAKING - no login › Guest can do matchmaking without login 
+
+    Test timeout of 60000ms exceeded.
+
+    Error: locator.fill: Target page, context or browser has been closed
+
+      113 |     await selects.nth(8).selectOption({ index: 6 }).catch(()=>{}) // Month
+      114 |     await selects.nth(9).selectOption('1990').catch(()=>{}) // Year
+    > 115 |     await cities.nth(1).fill('Bangalore')
+          |                         ^
+      116 |     await page.waitForTimeout(1000)
+      117 |     const city2btn = page.locator('button:has-text("Bangalore"), button:has-text("Bengaluru")').first()
+      118 |     if (await city2btn.isVisible({ timeout: 2000 })) await city2btn.click()
+        at /home/runner/work/vedichora-frontend/vedichora-frontend/e2e/functional-test.spec.js:115:25
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/functional-test-GUEST-MATC-a3d09-o-matchmaking-without-login-mobile/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/functional-test-GUEST-MATC-a3d09-o-matchmaking-without-login-mobile/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/functional-test-GUEST-MATC-a3d09-o-matchmaking-without-login-mobile/error-context.md
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Test timeout of 60000ms exceeded.
+
+    Error: locator.fill: Target page, context or browser has been closed
+
+      113 |     await selects.nth(8).selectOption({ index: 6 }).catch(()=>{}) // Month
+      114 |     await selects.nth(9).selectOption('1990').catch(()=>{}) // Year
+    > 115 |     await cities.nth(1).fill('Bangalore')
+          |                         ^
+      116 |     await page.waitForTimeout(1000)
+      117 |     const city2btn = page.locator('button:has-text("Bangalore"), button:has-text("Bengaluru")').first()
+      118 |     if (await city2btn.isVisible({ timeout: 2000 })) await city2btn.click()
+        at /home/runner/work/vedichora-frontend/vedichora-frontend/e2e/functional-test.spec.js:115:25
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/functional-test-GUEST-MATC-a3d09-o-matchmaking-without-login-mobile-retry1/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/functional-test-GUEST-MATC-a3d09-o-matchmaking-without-login-mobile-retry1/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/functional-test-GUEST-MATC-a3d09-o-matchmaking-without-login-mobile-retry1/error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/functional-test-GUEST-MATC-a3d09-o-matchmaking-without-login-mobile-retry1/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/functional-test-GUEST-MATC-a3d09-o-matchmaking-without-login-mobile-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+
+[11/10] [mobile] › e2e/functional-test.spec.js:138:3 › LOGGED IN CHART › Logged in user generates chart
+[mobile] › e2e/functional-test.spec.js:138:3 › LOGGED IN CHART › Logged in user generates chart
+✓ Logged in, on chart page
+
+[12/10] (retries) [chromium] › e2e/functional-test.spec.js:138:3 › LOGGED IN CHART › Logged in user generates chart (retry #1)
+[chromium] › e2e/functional-test.spec.js:138:3 › LOGGED IN CHART › Logged in user generates chart
+✓ Logged in, on chart page
+
+[13/10] (retries) [mobile] › e2e/functional-test.spec.js:138:3 › LOGGED IN CHART › Logged in user generates chart (retry #1)
+[mobile] › e2e/functional-test.spec.js:138:3 › LOGGED IN CHART › Logged in user generates chart
+✓ Logged in, on chart page
+
+  4) [chromium] › e2e/functional-test.spec.js:138:3 › LOGGED IN CHART › Logged in user generates chart 
+
+    Test timeout of 60000ms exceeded.
+
+    Error: locator.fill: Target page, context or browser has been closed
+
+      158 |
+      159 |     const cityInput = page.locator('input[placeholder*="City"], input[placeholder*="city"]').first()
+    > 160 |     await cityInput.fill('Chennai')
+          |                     ^
+      161 |     await page.waitForTimeout(1000)
+      162 |     const cityBtn = page.locator('button:has-text("Chennai")').first()
+      163 |     if (await cityBtn.isVisible({ timeout: 2000 })) await cityBtn.click()
+        at /home/runner/work/vedichora-frontend/vedichora-frontend/e2e/functional-test.spec.js:160:21
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/functional-test-LOGGED-IN--f54c5-ged-in-user-generates-chart-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/functional-test-LOGGED-IN--f54c5-ged-in-user-generates-chart-chromium/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/functional-test-LOGGED-IN--f54c5-ged-in-user-generates-chart-chromium/error-context.md
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Test timeout of 60000ms exceeded.
+
+    Error: locator.fill: Target page, context or browser has been closed
+
+      158 |
+      159 |     const cityInput = page.locator('input[placeholder*="City"], input[placeholder*="city"]').first()
+    > 160 |     await cityInput.fill('Chennai')
+          |                     ^
+      161 |     await page.waitForTimeout(1000)
+      162 |     const cityBtn = page.locator('button:has-text("Chennai")').first()
+      163 |     if (await cityBtn.isVisible({ timeout: 2000 })) await cityBtn.click()
+        at /home/runner/work/vedichora-frontend/vedichora-frontend/e2e/functional-test.spec.js:160:21
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/functional-test-LOGGED-IN--f54c5-ged-in-user-generates-chart-chromium-retry1/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/functional-test-LOGGED-IN--f54c5-ged-in-user-generates-chart-chromium-retry1/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/functional-test-LOGGED-IN--f54c5-ged-in-user-generates-chart-chromium-retry1/error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/functional-test-LOGGED-IN--f54c5-ged-in-user-generates-chart-chromium-retry1/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/functional-test-LOGGED-IN--f54c5-ged-in-user-generates-chart-chromium-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+
+[14/10] [chromium] › e2e/functional-test.spec.js:177:3 › NUMEROLOGY › Numerology calculates correctly
+  5) [mobile] › e2e/functional-test.spec.js:138:3 › LOGGED IN CHART › Logged in user generates chart 
+
+    Test timeout of 60000ms exceeded.
+
+    Error: locator.fill: Target page, context or browser has been closed
+
+      158 |
+      159 |     const cityInput = page.locator('input[placeholder*="City"], input[placeholder*="city"]').first()
+    > 160 |     await cityInput.fill('Chennai')
+          |                     ^
+      161 |     await page.waitForTimeout(1000)
+      162 |     const cityBtn = page.locator('button:has-text("Chennai")').first()
+      163 |     if (await cityBtn.isVisible({ timeout: 2000 })) await cityBtn.click()
+        at /home/runner/work/vedichora-frontend/vedichora-frontend/e2e/functional-test.spec.js:160:21
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/functional-test-LOGGED-IN--f54c5-ged-in-user-generates-chart-mobile/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/functional-test-LOGGED-IN--f54c5-ged-in-user-generates-chart-mobile/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/functional-test-LOGGED-IN--f54c5-ged-in-user-generates-chart-mobile/error-context.md
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Test timeout of 60000ms exceeded.
+
+    Error: locator.fill: Target page, context or browser has been closed
+
+      158 |
+      159 |     const cityInput = page.locator('input[placeholder*="City"], input[placeholder*="city"]').first()
+    > 160 |     await cityInput.fill('Chennai')
+          |                     ^
+      161 |     await page.waitForTimeout(1000)
+      162 |     const cityBtn = page.locator('button:has-text("Chennai")').first()
+      163 |     if (await cityBtn.isVisible({ timeout: 2000 })) await cityBtn.click()
+        at /home/runner/work/vedichora-frontend/vedichora-frontend/e2e/functional-test.spec.js:160:21
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/functional-test-LOGGED-IN--f54c5-ged-in-user-generates-chart-mobile-retry1/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/functional-test-LOGGED-IN--f54c5-ged-in-user-generates-chart-mobile-retry1/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/functional-test-LOGGED-IN--f54c5-ged-in-user-generates-chart-mobile-retry1/error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/functional-test-LOGGED-IN--f54c5-ged-in-user-generates-chart-mobile-retry1/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/functional-test-LOGGED-IN--f54c5-ged-in-user-generates-chart-mobile-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+
+[15/10] [mobile] › e2e/functional-test.spec.js:177:3 › NUMEROLOGY › Numerology calculates correctly
+[16/10] (retries) [chromium] › e2e/functional-test.spec.js:177:3 › NUMEROLOGY › Numerology calculates correctly (retry #1)
+[17/10] (retries) [mobile] › e2e/functional-test.spec.js:177:3 › NUMEROLOGY › Numerology calculates correctly (retry #1)
+  6) [chromium] › e2e/functional-test.spec.js:177:3 › NUMEROLOGY › Numerology calculates correctly ─
+
+    Test timeout of 60000ms exceeded.
+
+    Error: page.fill: Test timeout of 60000ms exceeded.
+    Call log:
+      - waiting for locator('input[placeholder*="name"], input[placeholder*="Name"]')
+
+
+      179 |     await page.waitForLoadState('networkidle')
+      180 |
+    > 181 |     await page.fill('input[placeholder*="name"], input[placeholder*="Name"]', 'Venkat')
+          |                ^
+      182 |     const selects = page.locator('select')
+      183 |     await selects.nth(0).selectOption('11').catch(()=>{})  // Day
+      184 |     await selects.nth(1).selectOption({ index: 3 }).catch(()=>{}) // March
+        at /home/runner/work/vedichora-frontend/vedichora-frontend/e2e/functional-test.spec.js:181:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/functional-test-NUMEROLOGY-Numerology-calculates-correctly-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/functional-test-NUMEROLOGY-Numerology-calculates-correctly-chromium/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/functional-test-NUMEROLOGY-Numerology-calculates-correctly-chromium/error-context.md
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Test timeout of 60000ms exceeded.
+
+    Error: page.fill: Test timeout of 60000ms exceeded.
+    Call log:
+      - waiting for locator('input[placeholder*="name"], input[placeholder*="Name"]')
+
+
+      179 |     await page.waitForLoadState('networkidle')
+      180 |
+    > 181 |     await page.fill('input[placeholder*="name"], input[placeholder*="Name"]', 'Venkat')
+          |                ^
+      182 |     const selects = page.locator('select')
+      183 |     await selects.nth(0).selectOption('11').catch(()=>{})  // Day
+      184 |     await selects.nth(1).selectOption({ index: 3 }).catch(()=>{}) // March
+        at /home/runner/work/vedichora-frontend/vedichora-frontend/e2e/functional-test.spec.js:181:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/functional-test-NUMEROLOGY-Numerology-calculates-correctly-chromium-retry1/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/functional-test-NUMEROLOGY-Numerology-calculates-correctly-chromium-retry1/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/functional-test-NUMEROLOGY-Numerology-calculates-correctly-chromium-retry1/error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/functional-test-NUMEROLOGY-Numerology-calculates-correctly-chromium-retry1/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/functional-test-NUMEROLOGY-Numerology-calculates-correctly-chromium-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+
+  7) [mobile] › e2e/functional-test.spec.js:177:3 › NUMEROLOGY › Numerology calculates correctly ───
+
+    Test timeout of 60000ms exceeded.
+
+    Error: page.fill: Test timeout of 60000ms exceeded.
+    Call log:
+      - waiting for locator('input[placeholder*="name"], input[placeholder*="Name"]')
+
+
+      179 |     await page.waitForLoadState('networkidle')
+      180 |
+    > 181 |     await page.fill('input[placeholder*="name"], input[placeholder*="Name"]', 'Venkat')
+          |                ^
+      182 |     const selects = page.locator('select')
+      183 |     await selects.nth(0).selectOption('11').catch(()=>{})  // Day
+      184 |     await selects.nth(1).selectOption({ index: 3 }).catch(()=>{}) // March
+        at /home/runner/work/vedichora-frontend/vedichora-frontend/e2e/functional-test.spec.js:181:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/functional-test-NUMEROLOGY-Numerology-calculates-correctly-mobile/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/functional-test-NUMEROLOGY-Numerology-calculates-correctly-mobile/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/functional-test-NUMEROLOGY-Numerology-calculates-correctly-mobile/error-context.md
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Test timeout of 60000ms exceeded.
+
+    Error: page.fill: Test timeout of 60000ms exceeded.
+    Call log:
+      - waiting for locator('input[placeholder*="name"], input[placeholder*="Name"]')
+
+
+      179 |     await page.waitForLoadState('networkidle')
+      180 |
+    > 181 |     await page.fill('input[placeholder*="name"], input[placeholder*="Name"]', 'Venkat')
+          |                ^
+      182 |     const selects = page.locator('select')
+      183 |     await selects.nth(0).selectOption('11').catch(()=>{})  // Day
+      184 |     await selects.nth(1).selectOption({ index: 3 }).catch(()=>{}) // March
+        at /home/runner/work/vedichora-frontend/vedichora-frontend/e2e/functional-test.spec.js:181:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/functional-test-NUMEROLOGY-Numerology-calculates-correctly-mobile-retry1/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/functional-test-NUMEROLOGY-Numerology-calculates-correctly-mobile-retry1/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/functional-test-NUMEROLOGY-Numerology-calculates-correctly-mobile-retry1/error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/functional-test-NUMEROLOGY-Numerology-calculates-correctly-mobile-retry1/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/functional-test-NUMEROLOGY-Numerology-calculates-correctly-mobile-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+
+  7 failed
+    [chromium] › e2e/functional-test.spec.js:90:3 › GUEST MATCHMAKING - no login › Guest can do matchmaking without login 
+    [chromium] › e2e/functional-test.spec.js:138:3 › LOGGED IN CHART › Logged in user generates chart 
+    [chromium] › e2e/functional-test.spec.js:177:3 › NUMEROLOGY › Numerology calculates correctly ──
+    [mobile] › e2e/functional-test.spec.js:10:3 › GUEST CHART - no login › Guest can generate chart without login 
+    [mobile] › e2e/functional-test.spec.js:90:3 › GUEST MATCHMAKING - no login › Guest can do matchmaking without login 
+    [mobile] › e2e/functional-test.spec.js:138:3 › LOGGED IN CHART › Logged in user generates chart 
+    [mobile] › e2e/functional-test.spec.js:177:3 › NUMEROLOGY › Numerology calculates correctly ────
+  3 passed (6.8m)
