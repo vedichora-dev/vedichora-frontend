@@ -70,7 +70,7 @@ export default function HomePage() {
                 <div style={{fontSize:'12px', color:'var(--txm)'}}>{rasi.dates}</div>
                 <div style={{fontSize:'12px', color:'var(--txm)', marginTop:'2px'}}>
                   {rasi.element === 'Fire' ? '🔥' : rasi.element === 'Earth' ? '🌿' : rasi.element === 'Air' ? '💨' : '💧'}{' '}
-                  {{t(`home.${rasi.element?.toLowerCase()}_sign`) || rasi.element} · Ruled by {rasi.lord}
+                  {rasi.element === 'Fire' ? '🔥 ' + t('home.fire_sign') : rasi.element === 'Earth' ? '🌿 ' + t('home.earth_sign') : rasi.element === 'Water' ? '💧 ' + t('home.water_sign') : '💨 ' + t('home.air_sign')} · {t('home.ruled_by')} {rasi.lord}
                 </div>
               </div>
               <div style={{textAlign:'center'}}>
