@@ -75,7 +75,29 @@
     "lucky_number": "எண்",
     "favorable": "சாதகமானது",
     "avoid": "தவிர்க்க வேண்டியவை",
-    "moon_note": "சந்திரன்"
+    "moon_note": "சந்திரன்",
+    "today": "இன்று",
+    "fire_sign": "அக்னி",
+    "earth_sign": "பூமி",
+    "water_sign": "நீர்",
+    "air_sign": "காற்று",
+    "ruled_by": "அதிபதி",
+    "daily_horoscope": "தினசரி ஜோதிடம்",
+    "element": "தத்துவம்",
+    "north_chart": "வட இந்திய",
+    "south_chart": "தென் இந்திய",
+    "generate": "ஜாதகம் கணக்கிடு",
+    "calculating": "கணக்கிடுகிறது...",
+    "sign_in_to_save": "சேமிக்க உள்நுழையவும்",
+    "tab_rasi": "ராசி + நவாம்சம்",
+    "tab_planets": "கிரகங்கள்",
+    "tab_dasha": "தசை",
+    "tab_shadbala": "ஷட்பல",
+    "tab_ashtakavarga": "அஷ்டகவர்க்கம்",
+    "tab_arudha": "ஆரூடம்",
+    "tab_dosha": "தோஷங்கள்",
+    "tab_analysis": "ஆய்வு",
+    "tab_report": "முழு அறிக்கை"
   },
   "auth": {
     "signin_title": "மீண்டும் வரவேற்கிறோம்",
@@ -127,5 +149,11 @@
     "Makara": "மகரம்",
     "Kumbha": "கும்பம்",
     "Meena": "மீனம்"
+  },
+  "elements": {
+    "Fire": "அக்னி",
+    "Earth": "பூமி",
+    "Water": "நீர்",
+    "Air": "காற்று"
   }
 }
