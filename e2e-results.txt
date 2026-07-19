@@ -9,14 +9,14 @@ Running 8 tests using 2 workers
 [chromium] › e2e/functional-test.spec.js:32:3 › GUEST CHART › Guest chart — no redirect, city dropdown closes, chart generates
 ✓ No redirect to signin
 
-City input value after selection: Chennai, India
+City input value after selection: Chennai
 
 ✓ City selected, dropdown closed
 
 Dropdown still open after selection: false
 
 [mobile] › e2e/functional-test.spec.js:32:3 › GUEST CHART › Guest chart — no redirect, city dropdown closes, chart generates
-City input value after selection: Chennai, India
+City input value after selection: Chennai
 
 ✓ City selected, dropdown closed
 
@@ -26,110 +26,97 @@ Dropdown still open after selection: false
 Chart appeared: true | Error shown: false
 
 [3/8] [chromium] › e2e/functional-test.spec.js:84:3 › CITY DROPDOWN › City dropdown closes after selection
-[chromium] › e2e/functional-test.spec.js:84:3 › CITY DROPDOWN › City dropdown closes after selection
-Dropdown appeared: true
-
-Dropdown still open after click: true
-
 [mobile] › e2e/functional-test.spec.js:32:3 › GUEST CHART › Guest chart — no redirect, city dropdown closes, chart generates
 Chart appeared: true | Error shown: false
 
 [4/8] [mobile] › e2e/functional-test.spec.js:84:3 › CITY DROPDOWN › City dropdown closes after selection
-[5/8] (retries) [chromium] › e2e/functional-test.spec.js:84:3 › CITY DROPDOWN › City dropdown closes after selection (retry #1)
-[mobile] › e2e/functional-test.spec.js:84:3 › CITY DROPDOWN › City dropdown closes after selection
-Dropdown appeared: true
-
 [chromium] › e2e/functional-test.spec.js:84:3 › CITY DROPDOWN › City dropdown closes after selection
 Dropdown appeared: true
 
-Dropdown still open after click: true
+Dropdown still open after click: false
 
-[mobile] › e2e/functional-test.spec.js:84:3 › CITY DROPDOWN › City dropdown closes after selection
-Dropdown still open after click: true
+City input value: Mumbai
 
-  1) [chromium] › e2e/functional-test.spec.js:84:3 › CITY DROPDOWN › City dropdown closes after selection 
-
-    Error: expect(received).toBeFalsy()
-
-    Received: true
-
-      103 |         .isVisible({ timeout: 500 }).catch(() => false)
-      104 |       console.log('Dropdown still open after click:', stillOpen)
-    > 105 |       expect(stillOpen).toBeFalsy()
-          |                         ^
-      106 |
-      107 |       // Input must have a value
-      108 |       const val = await cityInput.inputValue()
-        at /home/runner/work/vedichora-frontend/vedichora-frontend/e2e/functional-test.spec.js:105:25
-
-    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
-    test-results/functional-test-CITY-DROPD-19588-down-closes-after-selection-chromium/test-failed-1.png
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
-    test-results/functional-test-CITY-DROPD-19588-down-closes-after-selection-chromium/video.webm
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    Error Context: test-results/functional-test-CITY-DROPD-19588-down-closes-after-selection-chromium/error-context.md
-
-    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
-
-    Error: expect(received).toBeFalsy()
-
-    Received: true
-
-      103 |         .isVisible({ timeout: 500 }).catch(() => false)
-      104 |       console.log('Dropdown still open after click:', stillOpen)
-    > 105 |       expect(stillOpen).toBeFalsy()
-          |                         ^
-      106 |
-      107 |       // Input must have a value
-      108 |       const val = await cityInput.inputValue()
-        at /home/runner/work/vedichora-frontend/vedichora-frontend/e2e/functional-test.spec.js:105:25
-
-    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
-    test-results/functional-test-CITY-DROPD-19588-down-closes-after-selection-chromium-retry1/test-failed-1.png
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
-    test-results/functional-test-CITY-DROPD-19588-down-closes-after-selection-chromium-retry1/video.webm
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    Error Context: test-results/functional-test-CITY-DROPD-19588-down-closes-after-selection-chromium-retry1/error-context.md
-
-    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
-    test-results/functional-test-CITY-DROPD-19588-down-closes-after-selection-chromium-retry1/trace.zip
-    Usage:
-
-        npx playwright show-trace test-results/functional-test-CITY-DROPD-19588-down-closes-after-selection-chromium-retry1/trace.zip
-
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-
-[6/8] (retries) [mobile] › e2e/functional-test.spec.js:84:3 › CITY DROPDOWN › City dropdown closes after selection (retry #1)
-[7/8] [chromium] › e2e/functional-test.spec.js:119:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login
+[5/8] [chromium] › e2e/functional-test.spec.js:119:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login
 [chromium] › e2e/functional-test.spec.js:119:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login
 Match selects count: 12
 
 [mobile] › e2e/functional-test.spec.js:84:3 › CITY DROPDOWN › City dropdown closes after selection
 Dropdown appeared: true
 
-Dropdown still open after click: true
+[chromium] › e2e/functional-test.spec.js:119:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login
+Match result visible: true
 
-  2) [mobile] › e2e/functional-test.spec.js:84:3 › CITY DROPDOWN › City dropdown closes after selection 
+[6/8] [chromium] › e2e/functional-test.spec.js:159:3 › NUMEROLOGY › Numerology — calculates life path number
+[chromium] › e2e/functional-test.spec.js:159:3 › NUMEROLOGY › Numerology — calculates life path number
+Name input visible: false
 
-    Error: expect(received).toBeFalsy()
+Total inputs on page: 1
 
-    Received: true
+Numerology selects: 3
 
-      103 |         .isVisible({ timeout: 500 }).catch(() => false)
-      104 |       console.log('Dropdown still open after click:', stillOpen)
-    > 105 |       expect(stillOpen).toBeFalsy()
-          |                         ^
-      106 |
-      107 |       // Input must have a value
-      108 |       const val = await cityInput.inputValue()
-        at /home/runner/work/vedichora-frontend/vedichora-frontend/e2e/functional-test.spec.js:105:25
+Numerology result visible: true
+
+[7/8] (retries) [mobile] › e2e/functional-test.spec.js:84:3 › CITY DROPDOWN › City dropdown closes after selection (retry #1)
+[mobile] › e2e/functional-test.spec.js:84:3 › CITY DROPDOWN › City dropdown closes after selection
+Dropdown appeared: true
+
+  1) [mobile] › e2e/functional-test.spec.js:84:3 › CITY DROPDOWN › City dropdown closes after selection 
+
+    Test timeout of 60000ms exceeded.
+
+    Error: locator.click: Test timeout of 60000ms exceeded.
+    Call log:
+      - waiting for locator('button[data-city-option="true"]').first()
+        - locator resolved to <button type="button" data-city-option="true">…</button>
+      - attempting click action
+        2 × waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <div class="form-grid">…</div> intercepts pointer events
+        - retrying click action
+        - waiting 20ms
+        - waiting for element to be visible, enabled and stable
+        - element is visible, enabled and stable
+        - scrolling into view if needed
+        - done scrolling
+        - <div class="label">Month</div> from <div>…</div> subtree intercepts pointer events
+      2 × retrying click action
+          - waiting 100ms
+          - waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <div class="card-bd">…</div> intercepts pointer events
+      - retrying click action
+        - waiting 500ms
+        - waiting for element to be visible, enabled and stable
+        - element is visible, enabled and stable
+        - scrolling into view if needed
+        - done scrolling
+        - <div class="form-grid">…</div> intercepts pointer events
+      - retrying click action
+        - waiting 500ms
+        - waiting for element to be visible, enabled and stable
+        - element is visible, enabled and stable
+        - scrolling into view if needed
+        - done scrolling
+        - <div class="label">Month</div> from <div>…</div> subtree intercepts pointer events
+      - retrying click action
+        - waiting 500ms
+        - waiting for element to be visible, enabled and stable
+      - element was detached from the DOM, retrying
+
+
+       96 |
+       97 |     if (appeared) {
+    >  98 |       await firstOpt.click()
+          |                      ^
+       99 |       await page.waitForTimeout(600)
+      100 |
+      101 |       // Dropdown must be gone
+        at /home/runner/work/vedichora-frontend/vedichora-frontend/e2e/functional-test.spec.js:98:22
 
     attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
     test-results/functional-test-CITY-DROPD-19588-down-closes-after-selection-mobile/test-failed-1.png
@@ -143,18 +130,60 @@ Dropdown still open after click: true
 
     Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
 
-    Error: expect(received).toBeFalsy()
+    Test timeout of 60000ms exceeded.
 
-    Received: true
+    Error: locator.click: Test timeout of 60000ms exceeded.
+    Call log:
+      - waiting for locator('button[data-city-option="true"]').first()
+        - locator resolved to <button type="button" data-city-option="true">…</button>
+      - attempting click action
+        2 × waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <div class="form-grid">…</div> intercepts pointer events
+        - retrying click action
+        - waiting 20ms
+        - waiting for element to be visible, enabled and stable
+        - element is visible, enabled and stable
+        - scrolling into view if needed
+        - done scrolling
+        - <div class="label">Month</div> from <div>…</div> subtree intercepts pointer events
+      2 × retrying click action
+          - waiting 100ms
+          - waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <div class="card-bd">…</div> intercepts pointer events
+      - retrying click action
+        - waiting 500ms
+        - waiting for element to be visible, enabled and stable
+        - element is visible, enabled and stable
+        - scrolling into view if needed
+        - done scrolling
+        - <div class="form-grid">…</div> intercepts pointer events
+      - retrying click action
+        - waiting 500ms
+        - waiting for element to be visible, enabled and stable
+        - element is visible, enabled and stable
+        - scrolling into view if needed
+        - done scrolling
+        - <div class="label">Month</div> from <div>…</div> subtree intercepts pointer events
+      - retrying click action
+        - waiting 500ms
+        - waiting for element to be visible, enabled and stable
+      - element was detached from the DOM, retrying
 
-      103 |         .isVisible({ timeout: 500 }).catch(() => false)
-      104 |       console.log('Dropdown still open after click:', stillOpen)
-    > 105 |       expect(stillOpen).toBeFalsy()
-          |                         ^
-      106 |
-      107 |       // Input must have a value
-      108 |       const val = await cityInput.inputValue()
-        at /home/runner/work/vedichora-frontend/vedichora-frontend/e2e/functional-test.spec.js:105:25
+
+       96 |
+       97 |     if (appeared) {
+    >  98 |       await firstOpt.click()
+          |                      ^
+       99 |       await page.waitForTimeout(600)
+      100 |
+      101 |       // Dropdown must be gone
+        at /home/runner/work/vedichora-frontend/vedichora-frontend/e2e/functional-test.spec.js:98:22
 
     attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
     test-results/functional-test-CITY-DROPD-19588-down-closes-after-selection-mobile-retry1/test-failed-1.png
@@ -179,124 +208,33 @@ Dropdown still open after click: true
 [mobile] › e2e/functional-test.spec.js:119:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login
 Match selects count: 12
 
-[chromium] › e2e/functional-test.spec.js:119:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login
-Match result visible: true
-
-[9/8] [chromium] › e2e/functional-test.spec.js:159:3 › NUMEROLOGY › Numerology — calculates life path number
-[chromium] › e2e/functional-test.spec.js:159:3 › NUMEROLOGY › Numerology — calculates life path number
-Name input visible: false
-
-Total inputs on page: 1
-
-Numerology selects: 3
-
-Numerology result visible: true
-
-[10/8] (retries) [mobile] › e2e/functional-test.spec.js:119:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login (retry #1)
-[mobile] › e2e/functional-test.spec.js:119:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login
+[9/8] (retries) [mobile] › e2e/functional-test.spec.js:119:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login (retry #1)
 Match selects count: 12
 
-  3) [mobile] › e2e/functional-test.spec.js:119:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login 
+  2) [mobile] › e2e/functional-test.spec.js:119:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login 
 
     Test timeout of 60000ms exceeded.
 
     Error: locator.click: Test timeout of 60000ms exceeded.
     Call log:
-      - waiting for locator('input[placeholder*="City"], input[placeholder*="city"]').nth(1)
-        - locator resolved to <input value="" class="input" autocomplete="off" placeholder="City, Country"/>
+      - waiting for locator('button[data-city-option="true"]:has-text("Chennai")').first()
+        - locator resolved to <button type="button" data-city-option="true">…</button>
       - attempting click action
-        2 × waiting for element to be visible, enabled and stable
-          - element is visible, enabled and stable
-          - scrolling into view if needed
-          - done scrolling
-          - <div class="card">…</div> intercepts pointer events
-        - retrying click action
-        - waiting 20ms
         - waiting for element to be visible, enabled and stable
         - element is visible, enabled and stable
         - scrolling into view if needed
-        - done scrolling
-        - <div class="match-grid">…</div> intercepts pointer events
-      - retrying click action
-        - waiting 100ms
-        - waiting for element to be visible, enabled and stable
-        - element is visible, enabled and stable
-        - scrolling into view if needed
-        - done scrolling
-        - <div class="card">…</div> intercepts pointer events
-      - retrying click action
-        - waiting 100ms
-        34 × waiting for element to be visible, enabled and stable
-           - element is visible, enabled and stable
-           - scrolling into view if needed
-           - done scrolling
-           - <button type="button" data-city-option="true">…</button> from <div class="card">…</div> subtree intercepts pointer events
-         - retrying click action
-           - waiting 500ms
-        - waiting for element to be visible, enabled and stable
-        - element is visible, enabled and stable
-        - scrolling into view if needed
-        - done scrolling
-        - <div>…</div> from <div class="card">…</div> subtree intercepts pointer events
-      23 × retrying click action
-           - waiting 500ms
-           - waiting for element to be visible, enabled and stable
-           - element is visible, enabled and stable
-           - scrolling into view if needed
-           - done scrolling
-           - <button type="button" data-city-option="true">…</button> from <div class="card">…</div> subtree intercepts pointer events
-      - retrying click action
-        - waiting 500ms
-        - waiting for element to be visible, enabled and stable
-        - element is visible, enabled and stable
-        - scrolling into view if needed
-        - done scrolling
-        - <div>…</div> from <div class="card">…</div> subtree intercepts pointer events
-      21 × retrying click action
-           - waiting 500ms
-           - waiting for element to be visible, enabled and stable
-           - element is visible, enabled and stable
-           - scrolling into view if needed
-           - done scrolling
-           - <button type="button" data-city-option="true">…</button> from <div class="card">…</div> subtree intercepts pointer events
-      - retrying click action
-        - waiting 500ms
-        - waiting for element to be visible, enabled and stable
-        - element is not stable
-      9 × retrying click action
-          - waiting 500ms
-          - waiting for element to be visible, enabled and stable
-          - element is visible, enabled and stable
-          - scrolling into view if needed
-          - done scrolling
-          - <button type="button" data-city-option="true">…</button> from <div class="card">…</div> subtree intercepts pointer events
-      - retrying click action
-        - waiting 500ms
-        - waiting for element to be visible, enabled and stable
-        - element is visible, enabled and stable
-        - scrolling into view if needed
-        - done scrolling
-        - <div>…</div> from <div class="card">…</div> subtree intercepts pointer events
-      12 × retrying click action
-           - waiting 500ms
-           - waiting for element to be visible, enabled and stable
-           - element is visible, enabled and stable
-           - scrolling into view if needed
-           - done scrolling
-           - <button type="button" data-city-option="true">…</button> from <div class="card">…</div> subtree intercepts pointer events
-      - retrying click action
-        - waiting 500ms
+      - element was detached from the DOM, retrying
 
 
-       8 | async function fillCity(page, inputNth, cityName) {
-       9 |   const inputs = page.locator('input[placeholder*="City"], input[placeholder*="city"]')
-    > 10 |   await inputs.nth(inputNth).click()
-         |                              ^
-      11 |   await inputs.nth(inputNth).fill(cityName)
-      12 |   await page.waitForTimeout(1800)  // wait for debounce + API
-      13 |   // City option buttons are marked with data-city-option="true"
-        at fillCity (/home/runner/work/vedichora-frontend/vedichora-frontend/e2e/functional-test.spec.js:10:30)
-        at /home/runner/work/vedichora-frontend/vedichora-frontend/e2e/functional-test.spec.js:142:11
+      15 |   const optVisible = await opt.isVisible({ timeout: 4000 }).catch(() => false)
+      16 |   if (optVisible) {
+    > 17 |     await opt.click()
+         |               ^
+      18 |     await page.waitForTimeout(400)
+      19 |   } else {
+      20 |     // Fallback: any button containing the city name in the dropdown
+        at fillCity (/home/runner/work/vedichora-frontend/vedichora-frontend/e2e/functional-test.spec.js:17:15)
+        at /home/runner/work/vedichora-frontend/vedichora-frontend/e2e/functional-test.spec.js:134:5
 
     attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
     test-results/functional-test-GUEST-MATC-b4d71-compatibility-without-login-mobile/test-failed-1.png
@@ -329,274 +267,96 @@ Match selects count: 12
         - scrolling into view if needed
         - done scrolling
         - <div class="match-grid">…</div> intercepts pointer events
+      2 × retrying click action
+          - waiting 100ms
+          - waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <div class="card">…</div> intercepts pointer events
+      22 × retrying click action
+           - waiting 500ms
+           - waiting for element to be visible, enabled and stable
+           - element is visible, enabled and stable
+           - scrolling into view if needed
+           - done scrolling
+           - <div class="card">…</div> intercepts pointer events
+         - retrying click action
+           - waiting 500ms
+           - waiting for element to be visible, enabled and stable
+           - element is visible, enabled and stable
+           - scrolling into view if needed
+           - done scrolling
+           - <input value="" class="input" placeholder="Female name"/> from <div>…</div> subtree intercepts pointer events
+         - retrying click action
+           - waiting 500ms
+           - waiting for element to be visible, enabled and stable
+           - element is visible, enabled and stable
+           - scrolling into view if needed
+           - done scrolling
+           - <div class="card">…</div> intercepts pointer events
+         - retrying click action
+           - waiting 500ms
+           - waiting for element to be visible, enabled and stable
+           - element is visible, enabled and stable
+           - scrolling into view if needed
+           - done scrolling
+           - <div class="card">…</div> intercepts pointer events
       - retrying click action
-        - waiting 100ms
+        - waiting 500ms
         - waiting for element to be visible, enabled and stable
         - element is visible, enabled and stable
         - scrolling into view if needed
         - done scrolling
         - <div class="card">…</div> intercepts pointer events
       - retrying click action
-        - waiting 100ms
-        34 × waiting for element to be visible, enabled and stable
-           - element is visible, enabled and stable
-           - scrolling into view if needed
-           - done scrolling
-           - <button type="button" data-city-option="true">…</button> from <div class="card">…</div> subtree intercepts pointer events
-         - retrying click action
-           - waiting 500ms
-        2 × waiting for element to be visible, enabled and stable
+        - waiting 500ms
+        - waiting for element to be visible, enabled and stable
+        - element is visible, enabled and stable
+        - scrolling into view if needed
+        - done scrolling
+        - <input value="" class="input" placeholder="Female name"/> from <div>…</div> subtree intercepts pointer events
+      - retrying click action
+        - waiting 500ms
+        - waiting for element to be visible, enabled and stable
+        - element is not stable
+      4 × retrying click action
+          - waiting 500ms
+          - waiting for element to be visible, enabled and stable
           - element is visible, enabled and stable
           - scrolling into view if needed
           - done scrolling
-          - <div>…</div> from <div class="card">…</div> subtree intercepts pointer events
+          - <div class="card">…</div> intercepts pointer events
         - retrying click action
           - waiting 500ms
           - waiting for element to be visible, enabled and stable
           - element is visible, enabled and stable
           - scrolling into view if needed
           - done scrolling
-          - <button type="button" data-city-option="true">…</button> from <div class="card">…</div> subtree intercepts pointer events
+          - <div class="card">…</div> intercepts pointer events
         - retrying click action
           - waiting 500ms
           - waiting for element to be visible, enabled and stable
           - element is visible, enabled and stable
           - scrolling into view if needed
           - done scrolling
-          - <button type="button" data-city-option="true">…</button> from <div class="card">…</div> subtree intercepts pointer events
+          - <input value="" class="input" placeholder="Female name"/> from <div>…</div> subtree intercepts pointer events
         - retrying click action
           - waiting 500ms
           - waiting for element to be visible, enabled and stable
           - element is visible, enabled and stable
           - scrolling into view if needed
           - done scrolling
-          - <button type="button" data-city-option="true">…</button> from <div class="card">…</div> subtree intercepts pointer events
-        - retrying click action
-          - waiting 500ms
-          - waiting for element to be visible, enabled and stable
-          - element is visible, enabled and stable
-          - scrolling into view if needed
-          - done scrolling
-          - <button type="button" data-city-option="true">…</button> from <div class="card">…</div> subtree intercepts pointer events
-        - retrying click action
-          - waiting 500ms
-          - waiting for element to be visible, enabled and stable
-          - element is visible, enabled and stable
-          - scrolling into view if needed
-          - done scrolling
-          - <button type="button" data-city-option="true">…</button> from <div class="card">…</div> subtree intercepts pointer events
-        - retrying click action
-          - waiting 500ms
-          - waiting for element to be visible, enabled and stable
-          - element is visible, enabled and stable
-          - scrolling into view if needed
-          - done scrolling
-          - <button type="button" data-city-option="true">…</button> from <div class="card">…</div> subtree intercepts pointer events
-        - retrying click action
-          - waiting 500ms
-          - waiting for element to be visible, enabled and stable
-          - element is visible, enabled and stable
-          - scrolling into view if needed
-          - done scrolling
-          - <button type="button" data-city-option="true">…</button> from <div class="card">…</div> subtree intercepts pointer events
-        - retrying click action
-          - waiting 500ms
-          - waiting for element to be visible, enabled and stable
-          - element is visible, enabled and stable
-          - scrolling into view if needed
-          - done scrolling
-          - <button type="button" data-city-option="true">…</button> from <div class="card">…</div> subtree intercepts pointer events
-        - retrying click action
-          - waiting 500ms
-          - waiting for element to be visible, enabled and stable
-          - element is visible, enabled and stable
-          - scrolling into view if needed
-          - done scrolling
-          - <button type="button" data-city-option="true">…</button> from <div class="card">…</div> subtree intercepts pointer events
-        - retrying click action
-          - waiting 500ms
-          - waiting for element to be visible, enabled and stable
-          - element is visible, enabled and stable
-          - scrolling into view if needed
-          - done scrolling
-          - <button type="button" data-city-option="true">…</button> from <div class="card">…</div> subtree intercepts pointer events
-        - retrying click action
-          - waiting 500ms
-          - waiting for element to be visible, enabled and stable
-          - element is visible, enabled and stable
-          - scrolling into view if needed
-          - done scrolling
-          - <button type="button" data-city-option="true">…</button> from <div class="card">…</div> subtree intercepts pointer events
-        - retrying click action
-          - waiting 500ms
-          - waiting for element to be visible, enabled and stable
-          - element is visible, enabled and stable
-          - scrolling into view if needed
-          - done scrolling
-          - <button type="button" data-city-option="true">…</button> from <div class="card">…</div> subtree intercepts pointer events
-        - retrying click action
-          - waiting 500ms
-          - waiting for element to be visible, enabled and stable
-          - element is visible, enabled and stable
-          - scrolling into view if needed
-          - done scrolling
-          - <button type="button" data-city-option="true">…</button> from <div class="card">…</div> subtree intercepts pointer events
-        - retrying click action
-          - waiting 500ms
-          - waiting for element to be visible, enabled and stable
-          - element is visible, enabled and stable
-          - scrolling into view if needed
-          - done scrolling
-          - <button type="button" data-city-option="true">…</button> from <div class="card">…</div> subtree intercepts pointer events
-        - retrying click action
-          - waiting 500ms
-          - waiting for element to be visible, enabled and stable
-          - element is visible, enabled and stable
-          - scrolling into view if needed
-          - done scrolling
-          - <button type="button" data-city-option="true">…</button> from <div class="card">…</div> subtree intercepts pointer events
-        - retrying click action
-          - waiting 500ms
-          - waiting for element to be visible, enabled and stable
-          - element is visible, enabled and stable
-          - scrolling into view if needed
-          - done scrolling
-          - <button type="button" data-city-option="true">…</button> from <div class="card">…</div> subtree intercepts pointer events
-        - retrying click action
-          - waiting 500ms
-          - waiting for element to be visible, enabled and stable
-          - element is visible, enabled and stable
-          - scrolling into view if needed
-          - done scrolling
-          - <button type="button" data-city-option="true">…</button> from <div class="card">…</div> subtree intercepts pointer events
-        - retrying click action
-          - waiting 500ms
-          - waiting for element to be visible, enabled and stable
-          - element is visible, enabled and stable
-          - scrolling into view if needed
-          - done scrolling
-          - <button type="button" data-city-option="true">…</button> from <div class="card">…</div> subtree intercepts pointer events
-        - retrying click action
-          - waiting 500ms
-          - waiting for element to be visible, enabled and stable
-          - element is visible, enabled and stable
-          - scrolling into view if needed
-          - done scrolling
-          - <button type="button" data-city-option="true">…</button> from <div class="card">…</div> subtree intercepts pointer events
-        - retrying click action
-          - waiting 500ms
-          - waiting for element to be visible, enabled and stable
-          - element is visible, enabled and stable
-          - scrolling into view if needed
-          - done scrolling
-          - <button type="button" data-city-option="true">…</button> from <div class="card">…</div> subtree intercepts pointer events
-        - retrying click action
-          - waiting 500ms
-          - waiting for element to be visible, enabled and stable
-          - element is visible, enabled and stable
-          - scrolling into view if needed
-          - done scrolling
-          - <button type="button" data-city-option="true">…</button> from <div class="card">…</div> subtree intercepts pointer events
-        - retrying click action
-          - waiting 500ms
-          - waiting for element to be visible, enabled and stable
-          - element is visible, enabled and stable
-          - scrolling into view if needed
-          - done scrolling
-          - <button type="button" data-city-option="true">…</button> from <div class="card">…</div> subtree intercepts pointer events
-        - retrying click action
-          - waiting 500ms
-          - waiting for element to be visible, enabled and stable
-          - element is visible, enabled and stable
-          - scrolling into view if needed
-          - done scrolling
-          - <button type="button" data-city-option="true">…</button> from <div class="card">…</div> subtree intercepts pointer events
-        - retrying click action
-          - waiting 500ms
-        2 × waiting for element to be visible, enabled and stable
-          - element is visible, enabled and stable
-          - scrolling into view if needed
-          - done scrolling
-          - <button type="button" data-city-option="true">…</button> from <div class="card">…</div> subtree intercepts pointer events
-        - retrying click action
-          - waiting 500ms
-          - waiting for element to be visible, enabled and stable
-          - element is visible, enabled and stable
-          - scrolling into view if needed
-          - done scrolling
-          - <button type="button" data-city-option="true">…</button> from <div class="card">…</div> subtree intercepts pointer events
-        - retrying click action
-          - waiting 500ms
-          - waiting for element to be visible, enabled and stable
-          - element is visible, enabled and stable
-          - scrolling into view if needed
-          - done scrolling
-          - <button type="button" data-city-option="true">…</button> from <div class="card">…</div> subtree intercepts pointer events
-        - retrying click action
-          - waiting 500ms
-          - waiting for element to be visible, enabled and stable
-          - element is visible, enabled and stable
-          - scrolling into view if needed
-          - done scrolling
-          - <button type="button" data-city-option="true">…</button> from <div class="card">…</div> subtree intercepts pointer events
-        - retrying click action
-          - waiting 500ms
-          - waiting for element to be visible, enabled and stable
-          - element is visible, enabled and stable
-          - scrolling into view if needed
-          - done scrolling
-          - <button type="button" data-city-option="true">…</button> from <div class="card">…</div> subtree intercepts pointer events
-        - retrying click action
-          - waiting 500ms
-          - waiting for element to be visible, enabled and stable
-          - element is visible, enabled and stable
-          - scrolling into view if needed
-          - done scrolling
-          - <button type="button" data-city-option="true">…</button> from <div class="card">…</div> subtree intercepts pointer events
-        - retrying click action
-          - waiting 500ms
-          - waiting for element to be visible, enabled and stable
-          - element is visible, enabled and stable
-          - scrolling into view if needed
-          - done scrolling
-          - <button type="button" data-city-option="true">…</button> from <div class="card">…</div> subtree intercepts pointer events
-        - retrying click action
-          - waiting 500ms
-          - waiting for element to be visible, enabled and stable
-          - element is visible, enabled and stable
-          - scrolling into view if needed
-          - done scrolling
-          - <button type="button" data-city-option="true">…</button> from <div class="card">…</div> subtree intercepts pointer events
-        - retrying click action
-          - waiting 500ms
-          - waiting for element to be visible, enabled and stable
-          - element is visible, enabled and stable
-          - scrolling into view if needed
-          - done scrolling
-          - <div>…</div> from <div class="card">…</div> subtree intercepts pointer events
-        - retrying click action
-          - waiting 500ms
-          - waiting for element to be visible, enabled and stable
-          - element is visible, enabled and stable
-          - scrolling into view if needed
-          - done scrolling
-          - <button type="button" data-city-option="true">…</button> from <div class="card">…</div> subtree intercepts pointer events
-        - retrying click action
-          - waiting 500ms
-          - waiting for element to be visible, enabled and stable
-          - element is visible, enabled and stable
-          - scrolling into view if needed
-          - done scrolling
-          - <button type="button" data-city-option="true">…</button> from <div class="card">…</div> subtree intercepts pointer events
-        - retrying click action
-          - waiting 500ms
-          - waiting for element to be visible, enabled and stable
-          - element is visible, enabled and stable
-          - scrolling into view if needed
-          - done scrolling
-          - <button type="button" data-city-option="true">…</button> from <div class="card">…</div> subtree intercepts pointer events
-        - retrying click action
-          - waiting 500ms
+          - <div class="card">…</div> intercepts pointer events
+      - retrying click action
+        - waiting 500ms
+        - waiting for element to be visible, enabled and stable
+        - element is visible, enabled and stable
+        - scrolling into view if needed
+        - done scrolling
+        - <div class="card">…</div> intercepts pointer events
+      - retrying click action
+        - waiting 500ms
 
 
        8 | async function fillCity(page, inputNth, cityName) {
@@ -628,7 +388,7 @@ Match selects count: 12
     ────────────────────────────────────────────────────────────────────────────────────────────────
 
 
-[11/8] [mobile] › e2e/functional-test.spec.js:159:3 › NUMEROLOGY › Numerology — calculates life path number
+[10/8] [mobile] › e2e/functional-test.spec.js:159:3 › NUMEROLOGY › Numerology — calculates life path number
 [mobile] › e2e/functional-test.spec.js:159:3 › NUMEROLOGY › Numerology — calculates life path number
 Name input visible: false
 
@@ -638,8 +398,7 @@ Numerology selects: 3
 
 Numerology result visible: true
 
-  3 failed
-    [chromium] › e2e/functional-test.spec.js:84:3 › CITY DROPDOWN › City dropdown closes after selection 
+  2 failed
     [mobile] › e2e/functional-test.spec.js:84:3 › CITY DROPDOWN › City dropdown closes after selection 
     [mobile] › e2e/functional-test.spec.js:119:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login 
-  5 passed (2.8m)
+  6 passed (4.6m)
