@@ -94,7 +94,6 @@ test.describe('CHART — Babu & Pramod Validation', () => {
     // Check for error
     const bodyText = await page.locator('body').textContent() || ''
     const errText = bodyText.match(/Error:[^.]{0,200}/)?.[0] || ''
-]{0,200}/)?.[0] || ''
     if (errText) console.warn('Chart error found:', errText)
 
     // Validate: should show chart data
