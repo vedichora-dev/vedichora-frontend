@@ -1,0 +1,32 @@
+name: Functional Test Results
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: ['e2e/functional-test.spec.js']
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: '20' }
+      - run: npm install --legacy-peer-deps
+      - run: npx playwright install chromium --with-deps
+
+      - name: Run functional tests
+        run: |
+          npx playwright test e2e/functional-test.spec.js --reporter=list 2>&1 | tee /tmp/test-output.txt || true
+          echo "=== TEST OUTPUT ===" > e2e-test-results.txt
+          cat /tmp/test-output.txt >> e2e-test-results.txt
+
+      - name: Commit results
+        run: |
+          git config user.email "ci@vedichora.com"
+          git config user.name "CI Bot"
+          git add e2e-test-results.txt
+          git diff --staged --quiet || git commit -m "test: e2e functional results [skip ci]"
+          git push || true
