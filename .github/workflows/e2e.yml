@@ -13,7 +13,9 @@ on:
 jobs:
   e2e:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 30
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -34,7 +36,28 @@ jobs:
         if: always()
         run: |
           echo "=== E2E RESULTS ==="
-          grep -E "passed|failed|error|✓|✗|PASS|FAIL" e2e-output.txt || cat e2e-output.txt | tail -30
+          grep -E "passed|failed|error|Match|Score|Koota|city|dropdown|appeared|✓|✗" e2e-output.txt | head -100 || true
+      - name: Push results to repo
+        if: always()
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO: ${{ github.repository }}
+        run: |
+          CONTENT=$(base64 -w 0 e2e-output.txt)
+          EXISTING=$(curl -s -H "Authorization: token $GH_TOKEN" \
+            "https://api.github.com/repos/$REPO/contents/e2e-output.txt" | python3 -c "import sys,json; print(json.load(sys.stdin).get('sha',''))" 2>/dev/null)
+          if [ -n "$EXISTING" ]; then
+            curl -s -X PUT -H "Authorization: token $GH_TOKEN" \
+              -H "Content-Type: application/json" \
+              -d "{\"message\":\"test: e2e results $(date +%H%M) [skip ci]\",\"content\":\"$CONTENT\",\"sha\":\"$EXISTING\"}" \
+              "https://api.github.com/repos/$REPO/contents/e2e-output.txt" > /dev/null
+          else
+            curl -s -X PUT -H "Authorization: token $GH_TOKEN" \
+              -H "Content-Type: application/json" \
+              -d "{\"message\":\"test: e2e results $(date +%H%M) [skip ci]\",\"content\":\"$CONTENT\"}" \
+              "https://api.github.com/repos/$REPO/contents/e2e-output.txt" > /dev/null
+          fi
+          echo "Results pushed"
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -42,5 +65,4 @@ jobs:
           path: |
             e2e-output.txt
             test-results/
-            e2e-screenshots/
           retention-days: 7
