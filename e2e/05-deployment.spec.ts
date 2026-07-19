@@ -20,7 +20,29 @@ test.describe('DEPLOYMENT — All pages return 200', () => {
       expect(response?.status()).toBe(200)
       
       await page.waitForTimeout(1500)
-      await page.screenshot({ path: `test-results/deploy-${name.toLowerCase().replace(/\//, '-')}.png` })
+      await page.screenshot({ path: `test-results/deploy-${name.toLowerCase().replace(/\//, '-')}.png` 
+  test('Checkout page loads', async ({ page }) => {
+    const response = await page.goto('/checkout')
+    expect(response?.status()).toBe(200)
+    await page.waitForTimeout(1500)
+    await page.screenshot({ path: 'test-results/deploy-checkout.png' })
+    const text = await page.locator('body').textContent() || ''
+    const hasPlans = text.includes('Starter') || text.includes('minutes') || text.includes('₹')
+    console.log('Checkout has plans:', hasPlans)
+    expect(hasPlans).toBeTruthy()
+  })
+
+  test('Consult page loads with astrologers', async ({ page }) => {
+    const response = await page.goto('/consult')
+    expect(response?.status()).toBe(200)
+    await page.waitForTimeout(2000)
+    await page.screenshot({ path: 'test-results/deploy-consult.png' })
+    const text = await page.locator('body').textContent() || ''
+    const hasAstros = text.includes('Astrologer') || text.includes('min') || text.includes('Call Now')
+    console.log('Consult has astrologers:', hasAstros)
+    expect(hasAstros).toBeTruthy()
+  })
+})
       
       // Check expected content
       if (expected.length > 0) {
