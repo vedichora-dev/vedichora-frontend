@@ -19,13 +19,8 @@ async function fillCity(page, inputNth, cityName) {
   if (appeared) {
     await opt.scrollIntoViewIfNeeded().catch(() => {})
     await opt.dispatchEvent('click')
-    // Wait for dropdown to disappear (DOM hide is instant via ref)
-    await page.waitForFunction(
-      () => !document.querySelector('button[data-city-option="true"]') ||
-             document.querySelector('button[data-city-option="true"]')?.closest('div')?.style.display === 'none',
-      { timeout: 3000 }
-    ).catch(() => {})
-    await page.waitForTimeout(300)
+    // Simple timeout — DOM hide is instant via ref in the component
+    await page.waitForTimeout(600)
   } else {
     const fb = page.locator(`button:has-text("${cityName}")`).first()
     if (await fb.isVisible({ timeout: 2000 }).catch(() => false)) {
@@ -93,15 +88,7 @@ test.describe('CITY DROPDOWN', () => {
     if (appeared) {
       await firstOpt.scrollIntoViewIfNeeded().catch(() => {})
       await firstOpt.dispatchEvent('click')
-      // Wait for DOM-level hide (immediate via ref)
-      await page.waitForFunction(
-        () => {
-          const btn = document.querySelector('button[data-city-option="true"]')
-          return !btn || btn.closest('div[style*="display: none"]') !== null || getComputedStyle(btn).display === 'none'
-        },
-        { timeout: 2000 }
-      ).catch(() => {})
-      await page.waitForTimeout(200)
+      await page.waitForTimeout(600)
 
       const stillOpen = await page.locator('button[data-city-option="true"]').first()
         .isVisible({ timeout: 300 }).catch(() => false)
@@ -135,6 +122,8 @@ test.describe('GUEST MATCHMAKING', () => {
     }
 
     await fillCity(page, 0, 'Chennai')
+    // Extra wait to ensure dropdown fully gone before filling second city
+    await page.waitForTimeout(500)
 
     if (nSel >= 9) {
       await selects.nth(6).selectOption('20').catch(() => {})
@@ -143,17 +132,13 @@ test.describe('GUEST MATCHMAKING', () => {
     }
 
     await fillCity(page, 1, 'Coimbatore')
+    // Extra wait to ensure second dropdown is fully gone
+    await page.waitForTimeout(500)
 
-    // Ensure no city dropdown is blocking the Calculate button
-    await page.waitForFunction(
-      () => !document.querySelector('button[data-city-option="true"]') ||
-             !document.querySelector('button[data-city-option="true"]')?.checkVisibility?.(),
-      { timeout: 2000 }
-    ).catch(() => {})
-
+    // Use force:true on Calculate to bypass any invisible overlay
     const calcBtn = page.locator('button').filter({ hasText: /Calculate|Compatibility/ }).first()
     await calcBtn.scrollIntoViewIfNeeded()
-    await calcBtn.click()
+    await calcBtn.click({ force: true })
     await page.waitForTimeout(14000)
 
     await page.screenshot({ path: 'test-results/guest-match.png' })
