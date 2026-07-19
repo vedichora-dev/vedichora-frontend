@@ -61,6 +61,14 @@ export default function MatchPage() {
   })
 
   // Build payload for a new chart
+  const geocode = async (place: string): Promise<{lat:number,lng:number}|null> => {
+    try {
+      const r = await fetch('https://photon.komoot.io/api/?q=' + encodeURIComponent(place) + '&limit=1&lang=en').then(r=>r.json())
+      const f = r?.features?.[0]
+      return f ? {lat:f.geometry.coordinates[1],lng:f.geometry.coordinates[0]} : null
+    } catch { return null }
+  }
+
   const buildPayload = (n: string, d: DateValue, p: string, lat?: number, lng?: number, g?: string) => {
     const tm = d.unknownTime ? {hour:12,minute:0} : to24Hour(d.hr||12, d.mi||0, d.ap||'AM')
     return {
@@ -85,8 +93,10 @@ export default function MatchPage() {
       if (!useSaved1 || !id1) {
         if (!d1.dd||!d1.mm||!d1.yyyy) { setErr('Enter Person 1 date of birth'); setLoading(false); return }
         if (!p1.trim()) { setErr('Enter Person 1 place of birth'); setLoading(false); return }
-        const fn = token ? calculateChart : calculateChartGuest
-        const r1 = await fn(buildPayload(n1,d1,p1,lat1,lng1,g1))
+        let rlat1 = lat1, rlng1 = lng1
+      if (!rlat1 && p1) { const gc = await geocode(p1); if (gc) { rlat1=gc.lat; rlng1=gc.lng } }
+      const fn = token ? calculateChart : calculateChartGuest
+        const r1 = await fn(buildPayload(n1,d1,p1,rlat1,rlng1,g1))
         chart1 = r1?.data?.data ?? r1?.data
         if (!chart1) { setErr('Could not calculate Person 1 chart'); setLoading(false); return }
         id1 = chart1.horoscopeId || chart1.id || ''
@@ -98,8 +108,10 @@ export default function MatchPage() {
       if (!useSaved2 || !id2) {
         if (!d2.dd||!d2.mm||!d2.yyyy) { setErr('Enter Person 2 date of birth'); setLoading(false); return }
         if (!p2.trim()) { setErr('Enter Person 2 place of birth'); setLoading(false); return }
-        const fn = token ? calculateChart : calculateChartGuest
-        const r2 = await fn(buildPayload(n2,d2,p2,lat2,lng2,g2))
+        let rlat2 = lat2, rlng2 = lng2
+      if (!rlat2 && p2) { const gc = await geocode(p2); if (gc) { rlat2=gc.lat; rlng2=gc.lng } }
+      const fn = token ? calculateChart : calculateChartGuest
+        const r2 = await fn(buildPayload(n2,d2,p2,rlat2,rlng2,g2))
         chart2 = r2?.data?.data ?? r2?.data
         if (!chart2) { setErr('Could not calculate Person 2 chart'); setLoading(false); return }
         id2 = chart2.horoscopeId || chart2.id || ''
