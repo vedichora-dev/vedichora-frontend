@@ -35,7 +35,7 @@ async function fillDatePicker(
 ) {
   // DatePicker renders <select> elements
   // Try by ID first, then fall back to position
-  const tryById = async (id, val | number) => {
+  const tryById = async (id, val) => {
     const el = page.locator(`#${id}`)
     if (await el.count() > 0) {
       await el.selectOption(String(val))
