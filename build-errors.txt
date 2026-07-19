@@ -1,14 +1,14 @@
 === CURRENT e2e FILES ===
 total 56
-drwxr-xr-x 2 runner runner  4096 Jul 19 15:27 .
-drwxr-xr-x 7 runner runner  4096 Jul 19 15:28 ..
--rw-r--r-- 1 runner runner  4428 Jul 19 15:27 01-auth.spec.js
--rw-r--r-- 1 runner runner 11246 Jul 19 15:27 02-chart.spec.js
--rw-r--r-- 1 runner runner  2718 Jul 19 15:27 03-match.spec.js
--rw-r--r-- 1 runner runner  2685 Jul 19 15:27 04-horoscope.spec.js
--rw-r--r-- 1 runner runner  3485 Jul 19 15:27 05-deployment.spec.js
--rw-r--r-- 1 runner runner  8897 Jul 19 15:27 functional-test.spec.js
--rw-r--r-- 1 runner runner  2694 Jul 19 15:27 helpers.js
+drwxr-xr-x 2 runner runner  4096 Jul 19 15:34 .
+drwxr-xr-x 7 runner runner  4096 Jul 19 15:34 ..
+-rw-r--r-- 1 runner runner  4428 Jul 19 15:34 01-auth.spec.js
+-rw-r--r-- 1 runner runner 11246 Jul 19 15:34 02-chart.spec.js
+-rw-r--r-- 1 runner runner  2718 Jul 19 15:34 03-match.spec.js
+-rw-r--r-- 1 runner runner  2685 Jul 19 15:34 04-horoscope.spec.js
+-rw-r--r-- 1 runner runner  3485 Jul 19 15:34 05-deployment.spec.js
+-rw-r--r-- 1 runner runner  8243 Jul 19 15:34 functional-test.spec.js
+-rw-r--r-- 1 runner runner  2694 Jul 19 15:34 helpers.js
 
 === BUILD OUTPUT ===
 
@@ -31,8 +31,8 @@ https://nextjs.org/telemetry
    Linting ...
    Collecting page data ...
    Generating static pages (0/24) ...
- ⚠ Entire page /checkout deopted into client-side rendering. https://nextjs.org/docs/messages/deopted-into-client-rendering /checkout
    Generating static pages (6/24) 
+ ⚠ Entire page /checkout deopted into client-side rendering. https://nextjs.org/docs/messages/deopted-into-client-rendering /checkout
    Generating static pages (12/24) 
    Generating static pages (18/24) 
  ✓ Generating static pages (24/24) 
