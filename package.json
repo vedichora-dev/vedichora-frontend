@@ -8,7 +8,8 @@
     "start": "next start",
     "test:e2e": "playwright test",
     "test:e2e:ui": "playwright test --ui",
-    "test:e2e:report": "playwright show-report"
+    "test:e2e:report": "playwright show-report",
+    "prebuild": "node -e \"const fs=require('fs');const t=JSON.parse(fs.readFileSync('tsconfig.json','utf8'));t.exclude=['node_modules','e2e','e2e/**','playwright.config.ts','**/*.spec.ts','**/*.spec.js'];t.include=['next-env.d.ts','src/**/*.ts','src/**/*.tsx','.next/types/**/*.ts'];fs.writeFileSync('tsconfig.json',JSON.stringify(t,null,2))\""
   },
   "dependencies": {
     "next": "14.0.4",
