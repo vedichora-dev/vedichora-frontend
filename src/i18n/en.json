@@ -75,7 +75,29 @@
     "lucky_number": "Number",
     "favorable": "Favorable",
     "avoid": "Avoid",
-    "moon_note": "Moon"
+    "moon_note": "Moon",
+    "today": "TODAY",
+    "fire_sign": "Fire",
+    "earth_sign": "Earth",
+    "water_sign": "Water",
+    "air_sign": "Air",
+    "ruled_by": "Ruled by",
+    "daily_horoscope": "Daily Horoscope",
+    "element": "Element",
+    "north_chart": "North Indian",
+    "south_chart": "South Indian",
+    "generate": "Generate Chart",
+    "calculating": "Calculating...",
+    "sign_in_to_save": "Sign in to save charts",
+    "tab_rasi": "Rasi + D9",
+    "tab_planets": "Planets",
+    "tab_dasha": "Dasha",
+    "tab_shadbala": "Shadbala",
+    "tab_ashtakavarga": "Ashtakavarga",
+    "tab_arudha": "Arudha",
+    "tab_dosha": "Doshas",
+    "tab_analysis": "Analysis",
+    "tab_report": "Full Report"
   },
   "auth": {
     "signin_title": "Welcome back",
@@ -127,5 +149,11 @@
     "Makara": "Makara (Capricorn)",
     "Kumbha": "Kumbha (Aquarius)",
     "Meena": "Meena (Pisces)"
+  },
+  "elements": {
+    "Fire": "அக்னி",
+    "Earth": "பூமி",
+    "Water": "நீர்",
+    "Air": "காற்று"
   }
 }
