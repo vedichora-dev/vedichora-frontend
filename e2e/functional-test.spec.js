@@ -5,7 +5,7 @@ const SITE  = process.env.BASE_URL || 'https://vedichora-frontend-orcin.vercel.a
 const ADMIN = 'admin@vedichora.com'
 const PASS  = 'Admin@123'
 
-/** Fill city autocomplete — uses force:true click since dropdown is position:fixed */
+/** Fill city autocomplete — force:true since dropdown is position:fixed */
 async function fillCity(page, inputNth, cityName) {
   const inputs = page.locator('input[placeholder*="City"], input[placeholder*="city"]')
   const input  = inputs.nth(inputNth)
@@ -17,10 +17,8 @@ async function fillCity(page, inputNth, cityName) {
   const opt = page.locator('button[data-city-option="true"]').first()
   const appeared = await opt.isVisible({ timeout: 5000 }).catch(() => false)
   if (appeared) {
-    // force:true bypasses interception checks — works for both chromium and mobile
-    // The dropdown is now position:fixed so no stacking context issue
     await opt.click({ force: true })
-    await page.waitForTimeout(700)  // wait for React state update + DOM ref hide
+    await page.waitForTimeout(700)
   } else {
     const fb = page.locator(`button:has-text("${cityName}")`).first()
     if (await fb.isVisible({ timeout: 2000 }).catch(() => false)) {
@@ -28,6 +26,9 @@ async function fillCity(page, inputNth, cityName) {
       await page.waitForTimeout(500)
     }
   }
+  // Dismiss any lingering dropdown by pressing Escape
+  await page.keyboard.press('Escape')
+  await page.waitForTimeout(200)
 }
 
 // ══════════════════════════════════════════════════════════════════════════════
@@ -59,7 +60,7 @@ test.describe('GUEST CHART', () => {
     expect(dropdownOpen).toBeFalsy()
 
     const genBtn = page.locator('button').filter({ hasText: /Generate/ }).last()
-    await genBtn.click()
+    await genBtn.click({ force: true })
     await page.waitForTimeout(9000)
 
     await expect(page).not.toHaveURL(/signin|login/)
@@ -132,8 +133,13 @@ test.describe('GUEST MATCHMAKING', () => {
     await fillCity(page, 1, 'Coimbatore')
     await page.waitForTimeout(500)
 
+    // Click page body to ensure no dropdown overlay remains
+    await page.locator('h1, h2').first().click({ force: true }).catch(() => {})
+    await page.waitForTimeout(300)
+
     const calcBtn = page.locator('button').filter({ hasText: /Calculate|Compatibility/ }).first()
     await calcBtn.scrollIntoViewIfNeeded()
+    console.log('Clicking Calculate button...')
     await calcBtn.click({ force: true })
     await page.waitForTimeout(14000)
 
