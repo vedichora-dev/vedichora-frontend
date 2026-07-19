@@ -2,6 +2,7 @@
 import { useState, useEffect, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import { useStore } from '@/store'
+import { chartApi } from '@/api/client'
 import {
   calculateChart, calculateChartGuest, listCharts, getChart,
   getShadbala, getAshtakavarga, getVargaChart,
@@ -793,7 +794,7 @@ export default function ChartPage() {
                 <div style={{display:'flex',flexDirection:'column',gap:'14px'}}>
                   {!data('report') ? <div style={{padding:'20px',color:'var(--txm)'}}>
                     Full report not available</div> : (() => {
-                    const rpt  = data('report')?.data || data('report')
+                    const rpt  = data('report')
                     const basic= rpt?.basic
                     const pls  = rpt?.planets||[]
                     return (
@@ -850,7 +851,34 @@ export default function ChartPage() {
                             </div>
                           </div>
                         )}
-                        {rpt?.interpretation && (
+                        {/* Yogas section */}
+                        {(()=>{
+                          const yogas = rpt?.yogas || []
+                          const activeYogas = Array.isArray(yogas) ? yogas.filter((y:any)=>y.isActive||y.IsActive||y.active) : []
+                          if (activeYogas.length === 0) return null
+                          return (
+                            <div className="card">
+                              <div className="card-hd"><span className="card-title">Yogas Present</span></div>
+                              <div className="card-bd">
+                                <div style={{display:'flex',flexDirection:'column',gap:'10px'}}>
+                                  {activeYogas.map((y:any,i:number)=>(
+                                    <div key={i} style={{borderLeft:'3px solid var(--gold)',
+                                      paddingLeft:'12px'}}>
+                                      <div style={{fontWeight:700,color:'var(--acc)',
+                                        fontFamily:'Cinzel,serif',fontSize:'13px',marginBottom:'2px'}}>
+                                        {y.yogaName||y.YogaName||y.name||`Yoga ${i+1}`}
+                                      </div>
+                                      <div style={{fontSize:'12px',color:'var(--tx2)',lineHeight:1.6}}>
+                                        {y.description||y.Description||y.effect||y.Effect||'Active in chart'}
+                                      </div>
+                                    </div>
+                                  ))}
+                                </div>
+                              </div>
+                            </div>
+                          )
+                        })()}
+                        {rpt?.interpretation && !rpt.interpretation.includes('unavailable') && (
                           <div className="card">
                             <div className="card-hd"><span className="card-title">AI Interpretation</span></div>
                             <div className="card-bd" style={{fontSize:'13px',lineHeight:1.8,
