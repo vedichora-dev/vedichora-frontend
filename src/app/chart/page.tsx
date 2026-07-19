@@ -681,40 +681,112 @@ export default function ChartPage() {
               )}
 
               {/* ── ANALYSIS ── */}
-              {tab==='interpret' && !isLoading('interpret') && (
-                <div style={{display:'flex',flexDirection:'column',gap:'14px'}}>
-                  {!data('interpret') ? <div style={{padding:'20px',color:'var(--txm)'}}>
-                    Analysis not available</div> :
-                  [
-                    {key:'personality',label:'Personality & Character'},
-                    {key:'career',     label:'Career & Profession'},
-                    {key:'marriage',   label:'Marriage & Relationships'},
-                    {key:'currentPeriod',label:'Current Period Analysis'},
-                  ].map(({key,label})=>{
-                    const raw = (data('interpret') as any)?.[key]
-                    if (!raw) return null
-                    const text = raw?.data?.interpretation || raw?.interpretation ||
-                      raw?.data?.text || raw?.text ||
-                      (typeof raw==='string'?raw:null)
-                    return (
-                      <div key={key} className="card">
-                        <div className="card-hd">
-                          <span className="card-title">{label}</span>
-                          {raw?.data?.currentDasa && (
-                            <span style={{marginLeft:'auto',fontSize:'11px',color:'var(--gold)'}}>
-                              {raw.data.currentDasa}
-                            </span>
-                          )}
+              {tab==='interpret' && !isLoading('interpret') && (() => {
+                // Build basic predictions from chart data (no AI needed)
+                const lagna    = result?.ascendantName||result?.AscendantName||''
+                const moonSign = (planets.find((p:any)=>(p.planet||p.Planet)==='Moon')?.rasiName)||''
+                const curMD    = dashas[0]?.planet||dashas[0]?.Planet||''
+                const curAD    = dashas[0]?.antaraDasas?.[0]?.planet || ''
+                const mdEnd    = dashas[0]?.endAt||dashas[0]?.EndAt||''
+                const mdEndYr  = mdEnd ? new Date(mdEnd).getFullYear() : ''
+                const exalted  = planets.filter((p:any)=>(p.dignity||p.Dignity)==='Exalted').map((p:any)=>gPlanet(p.planet||p.Planet))
+                const debil    = planets.filter((p:any)=>(p.dignity||p.Dignity)==='Debilitated').map((p:any)=>gPlanet(p.planet||p.Planet))
+                const retroPl  = planets.filter((p:any)=>p.isRetrograde||p.IsRetrograde).map((p:any)=>gPlanet(p.planet||p.Planet))
+
+                // Lagna-based personality keywords
+                const LAGNA_TRAITS: Record<string,string> = {
+                  'Aries':'dynamic, pioneering, and energetic. Natural leadership qualities with a drive to initiate',
+                  'Taurus':'stable, patient, and determined. Strong affinity for beauty, comfort, and material security',
+                  'Gemini':'versatile, communicative, and intellectually curious. Quick-witted and adaptable',
+                  'Cancer':'intuitive, nurturing, and emotionally sensitive. Deep attachment to home and family',
+                  'Leo':'confident, generous, and creative. Natural charisma and desire for recognition',
+                  'Virgo':'analytical, methodical, and service-oriented. Attention to detail and perfectionist streak',
+                  'Libra':'diplomatic, harmonious, and relationship-focused. Strong sense of justice and aesthetics',
+                  'Scorpio':'intense, perceptive, and transformative. Deep emotional reserves and investigative nature',
+                  'Sagittarius':'optimistic, philosophical, and freedom-loving. Expansive vision and love of learning',
+                  'Capricorn':'disciplined, ambitious, and responsible. Patient builder of long-term success',
+                  'Aquarius':'innovative, humanitarian, and independent. Visionary thinking and unconventional approach',
+                  'Pisces':'compassionate, intuitive, and spiritual. Deep empathy and artistic sensitivity',
+                }
+                const MOON_TRAITS: Record<string,string> = {
+                  'Aries':'Emotionally assertive and quick to act on feelings. Needs independence in relationships.',
+                  'Taurus':'Emotionally stable and comfort-seeking. Finds security through material and sensory pleasures.',
+                  'Gemini':'Emotionally curious and changeable. Needs mental stimulation and variety.',
+                  'Cancer':'Deeply emotional and intuitive. Strongly connected to mother, home, and the past.',
+                  'Leo':'Emotionally proud and warm-hearted. Needs appreciation and creative expression.',
+                  'Virgo':'Emotionally practical and analytical. Expresses care through service and attention to detail.',
+                  'Libra':'Emotionally balanced and relationship-oriented. Seeks harmony and avoids conflict.',
+                  'Scorpio':'Emotionally intense and private. Transforms through emotional crises.',
+                  'Sagittarius':'Emotionally optimistic and freedom-loving. Needs space and philosophical meaning.',
+                  'Capricorn':'Emotionally controlled and achievement-focused. Expresses love through responsibility.',
+                  'Aquarius':'Emotionally detached but humanitarian. Connects through ideas and causes.',
+                  'Pisces':'Emotionally sensitive and empathetic. Highly spiritual and intuitive.',
+                }
+                const DASHA_THEMES: Record<string,string> = {
+                  'Sun':'themes of authority, recognition, career advancement, and self-expression. Government and father-related matters come into focus.',
+                  'Moon':'themes of emotions, mind, home, mother, and public life. Travel and fluctuating fortunes are common.',
+                  'Mars':'themes of energy, property, siblings, and ambition. Conflicts may arise but goals are pursued with drive.',
+                  'Mercury':'themes of communication, business, education, and intellect. Multiple activities and short travels marked.',
+                  'Jupiter':'themes of wisdom, expansion, children, dharma, and prosperity. Generally auspicious period for growth.',
+                  'Venus':'themes of relationships, luxury, arts, marriage, and comforts. Financial gains and pleasure are highlighted.',
+                  'Saturn':'themes of discipline, karma, delays, and hard work. Foundation-building period with long-term rewards.',
+                  'Rahu':'themes of ambition, worldly desires, foreign connections, and unconventional paths. Unexpected changes.',
+                  'Ketu':'themes of spirituality, detachment, past karma, and liberation. Mystical experiences and introspection.',
+                }
+
+                const aiData = data('interpret') as any
+                const getAI = (key: string) => {
+                  const raw = aiData?.[key]
+                  const text = raw?.data?.interpretation || raw?.interpretation || raw?.data?.text
+                  return text && !text.includes('temporarily unavailable') && !text.includes('key was not') ? text : null
+                }
+
+                const sections = [
+                  {
+                    key: 'personality',
+                    label: 'Personality & Character',
+                    basic: lagna ? `With ${gSign(lagna)} as your Ascendant (Lagna), you are ${LAGNA_TRAITS[lagna] || 'endowed with unique qualities'}. Your Moon in ${gSign(moonSign)} indicates: ${MOON_TRAITS[moonSign] || 'a balanced emotional nature'}.${exalted.length ? ` Exalted planets (${exalted.join(', ')}) bestow exceptional strength in their significations.` : ''}${debil.length ? ` Debilitated planets (${debil.join(', ')}) indicate areas requiring extra effort and remedies.` : ''}` : '',
+                  },
+                  {
+                    key: 'career',
+                    label: 'Career & Profession',
+                    basic: curMD ? `Currently running ${gPlanet(curMD)} Mahadasha${curAD ? ` / ${gPlanet(curAD)} Antardasha` : ''}${mdEndYr ? ` until ${mdEndYr}` : ''}. This period brings ${DASHA_THEMES[curMD] || 'significant life themes'}. ${lagna === 'Cancer' ? 'Moon rules your chart — career in public life, hospitality, or water-related fields suits you.' : lagna === 'Aries' || lagna === 'Scorpio' ? 'Mars rules your chart — leadership, defense, engineering, or surgery are natural fits.' : lagna === 'Gemini' || lagna === 'Virgo' ? 'Mercury rules your chart — communication, writing, trade, or IT fields are favourable.' : lagna === 'Taurus' || lagna === 'Libra' ? 'Venus rules your chart — arts, beauty, luxury goods, or finance are favourable areas.' : lagna === 'Leo' ? 'Sun rules your chart — government, management, politics, or medicine suit you.' : lagna === 'Sagittarius' || lagna === 'Pisces' ? 'Jupiter rules your chart — teaching, consulting, law, or spiritual fields are indicated.' : 'Saturn-ruled charts favour engineering, real estate, mining, or social service.'}` : '',
+                  },
+                  {
+                    key: 'marriage',
+                    label: 'Marriage & Relationships',
+                    basic: moonSign ? `Moon in ${gSign(moonSign)} shapes your emotional approach to relationships. ${MOON_TRAITS[moonSign] || ''} The 7th house from your ${gSign(lagna)} Lagna indicates the nature of your partner and marriage.${retroPl.length ? ` Note: ${retroPl.join(', ')} ${retroPl.length > 1 ? 'are' : 'is'} retrograde — karmic lessons are associated with these planets' significations in relationships.` : ''}` : '',
+                  },
+                  {
+                    key: 'currentPeriod',
+                    label: 'Current Period Analysis',
+                    basic: curMD ? `${gPlanet(curMD)} Mahadasha (${curAD ? gPlanet(curAD) + ' Antardasha' : 'major period'}) is active${mdEndYr ? ` until ${mdEndYr}` : ''}. This dasha brings ${DASHA_THEMES[curMD] || 'important life themes and transformations'}. Focus on the areas signified by ${gPlanet(curMD)} and its house placement in your chart.` : '',
+                  },
+                ]
+
+                return (
+                  <div style={{display:'flex',flexDirection:'column',gap:'14px'}}>
+                    {sections.map(({key,label,basic})=>{
+                      const aiText = getAI(key)
+                      const displayText = aiText || basic
+                      if (!displayText) return null
+                      return (
+                        <div key={key} className="card">
+                          <div className="card-hd">
+                            <span className="card-title">{label}</span>
+                            {aiText && <span style={{marginLeft:'auto',fontSize:'10px',
+                              color:'#16A34A',padding:'1px 6px',borderRadius:'10px',
+                              background:'rgba(22,163,74,.1)'}}>AI</span>}
+                          </div>
+                          <div className="card-bd" style={{fontSize:'13px',lineHeight:1.9,color:'var(--tx2)'}}>
+                            {displayText}
+                          </div>
                         </div>
-                        <div className="card-bd" style={{fontSize:'13px',lineHeight:1.8,color:'var(--tx2)'}}>
-                          {text||<span style={{color:'var(--txm)'}}>
-                            AI interpretation temporarily unavailable</span>}
-                        </div>
-                      </div>
-                    )
-                  })}
-                </div>
-              )}
+                      )
+                    })}
+                  </div>
+                )
+              })()}
 
               {/* ── FULL REPORT ── */}
               {tab==='report' && !isLoading('report') && (
