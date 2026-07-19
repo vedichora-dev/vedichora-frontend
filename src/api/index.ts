@@ -1,4 +1,4 @@
-import { authApi, chartApi, apiGet, apiPost } from './client'
+import { authApi, chartApi, guestApi, apiGet, apiPost } from './client'
 
 // ── AUTH ──────────────────────────────────────────────────────
 export const authLogin = (email: string, password: string) =>
@@ -32,7 +32,7 @@ export interface ChartRequest {
   Language?: string
 }
 export const calculateChartGuest = (body: ChartRequest) =>
-  chartApi.post('/api/chart/guest', body)
+  guestApi.post('/api/chart/guest', body)
 
 export const calculateChart = (body: ChartRequest) =>
   chartApi.post('/api/chart/calculate', body)
