@@ -5,7 +5,7 @@ const SITE  = process.env.BASE_URL || 'https://vedichora-frontend-orcin.vercel.a
 const ADMIN = 'admin@vedichora.com'
 const PASS  = 'Admin@123'
 
-/** Fill city autocomplete and wait for dropdown to fully close */
+/** Fill city autocomplete — uses force:true click since dropdown is position:fixed */
 async function fillCity(page, inputNth, cityName) {
   const inputs = page.locator('input[placeholder*="City"], input[placeholder*="city"]')
   const input  = inputs.nth(inputNth)
@@ -17,14 +17,14 @@ async function fillCity(page, inputNth, cityName) {
   const opt = page.locator('button[data-city-option="true"]').first()
   const appeared = await opt.isVisible({ timeout: 5000 }).catch(() => false)
   if (appeared) {
-    await opt.scrollIntoViewIfNeeded().catch(() => {})
-    await opt.dispatchEvent('click')
-    // Simple timeout — DOM hide is instant via ref in the component
-    await page.waitForTimeout(600)
+    // force:true bypasses interception checks — works for both chromium and mobile
+    // The dropdown is now position:fixed so no stacking context issue
+    await opt.click({ force: true })
+    await page.waitForTimeout(700)  // wait for React state update + DOM ref hide
   } else {
     const fb = page.locator(`button:has-text("${cityName}")`).first()
     if (await fb.isVisible({ timeout: 2000 }).catch(() => false)) {
-      await fb.dispatchEvent('click')
+      await fb.click({ force: true })
       await page.waitForTimeout(500)
     }
   }
@@ -86,9 +86,8 @@ test.describe('CITY DROPDOWN', () => {
     console.log('Dropdown appeared:', appeared)
 
     if (appeared) {
-      await firstOpt.scrollIntoViewIfNeeded().catch(() => {})
-      await firstOpt.dispatchEvent('click')
-      await page.waitForTimeout(600)
+      await firstOpt.click({ force: true })
+      await page.waitForTimeout(700)
 
       const stillOpen = await page.locator('button[data-city-option="true"]').first()
         .isVisible({ timeout: 300 }).catch(() => false)
@@ -122,7 +121,6 @@ test.describe('GUEST MATCHMAKING', () => {
     }
 
     await fillCity(page, 0, 'Chennai')
-    // Extra wait to ensure dropdown fully gone before filling second city
     await page.waitForTimeout(500)
 
     if (nSel >= 9) {
@@ -132,10 +130,8 @@ test.describe('GUEST MATCHMAKING', () => {
     }
 
     await fillCity(page, 1, 'Coimbatore')
-    // Extra wait to ensure second dropdown is fully gone
     await page.waitForTimeout(500)
 
-    // Use force:true on Calculate to bypass any invisible overlay
     const calcBtn = page.locator('button').filter({ hasText: /Calculate|Compatibility/ }).first()
     await calcBtn.scrollIntoViewIfNeeded()
     await calcBtn.click({ force: true })
