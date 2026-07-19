@@ -1,13 +1,13 @@
 === CURRENT e2e FILES ===
 total 40
-drwxr-xr-x 2 runner runner  4096 Jul 19 02:37 .
-drwxr-xr-x 7 runner runner  4096 Jul 19 02:38 ..
--rw-r--r-- 1 runner runner  3976 Jul 19 02:37 01-auth.spec.js
--rw-r--r-- 1 runner runner 11246 Jul 19 02:37 02-chart.spec.js
--rw-r--r-- 1 runner runner  2718 Jul 19 02:37 03-match.spec.js
--rw-r--r-- 1 runner runner  2685 Jul 19 02:37 04-horoscope.spec.js
--rw-r--r-- 1 runner runner  3658 Jul 19 02:37 05-deployment.spec.js
--rw-r--r-- 1 runner runner  2694 Jul 19 02:37 helpers.js
+drwxr-xr-x 2 runner runner  4096 Jul 19 03:07 .
+drwxr-xr-x 7 runner runner  4096 Jul 19 03:07 ..
+-rw-r--r-- 1 runner runner  3976 Jul 19 03:07 01-auth.spec.js
+-rw-r--r-- 1 runner runner 11246 Jul 19 03:07 02-chart.spec.js
+-rw-r--r-- 1 runner runner  2718 Jul 19 03:07 03-match.spec.js
+-rw-r--r-- 1 runner runner  2685 Jul 19 03:07 04-horoscope.spec.js
+-rw-r--r-- 1 runner runner  3658 Jul 19 03:07 05-deployment.spec.js
+-rw-r--r-- 1 runner runner  2694 Jul 19 03:07 helpers.js
 
 === BUILD OUTPUT ===
 
@@ -45,7 +45,7 @@ Route (app)                              Size     First Load JS
 ├ ○ /admin                               4.84 kB        89.7 kB
 ├ ○ /api-docs                            1.87 kB        86.8 kB
 ├ ○ /chart                               13.4 kB         132 kB
-├ ○ /checkout                            4.96 kB        89.9 kB
+├ ○ /checkout                            5.07 kB          90 kB
 ├ ○ /consult                             5.5 kB         90.4 kB
 ├ ○ /dashboard                           1.45 kB         113 kB
 ├ ○ /learn                               2.52 kB        84.4 kB
