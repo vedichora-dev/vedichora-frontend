@@ -17,8 +17,8 @@ test.describe('MATCH — Compatibility', () => {
     await page.waitForTimeout(1500)
     await page.screenshot({ path: 'test-results/30-match-page.png' })
     
-    await expect(page.locator('text=Person 1, text=person 1').first()).toBeVisible()
-    await expect(page.locator('text=Person 2, text=person 2').first()).toBeVisible()
+    await expect(page.locator('text=Person 1').or(page.locator('text=person 1')).first()).toBeVisible()
+    await expect(page.locator('text=Person 2').or(page.locator('text=person 2')).first()).toBeVisible()
     await expect(page.locator('button:has-text("Calculate"), button:has-text("Compatibility")'
       ).first()).toBeVisible()
   })
@@ -56,7 +56,9 @@ test.describe('MATCH — Compatibility', () => {
     await page.screenshot({ path: 'test-results/31-match-filled.png' })
     
     // Calculate
-    await page.click('button:has-text("Calculate"), button:has-text("Compatibility")')
+    const calcBtn = page.locator('button').filter({ hasText: /Calculate|Compatibility/ }).first()
+    await calcBtn.scrollIntoViewIfNeeded()
+    await calcBtn.click({ force: true })
     await page.waitForTimeout(12000) // Two chart calcs + match
     
     await page.screenshot({ path: 'test-results/32-match-result.png' })
