@@ -188,7 +188,7 @@ export default function ChartPage() {
         setTab('rasi'); setShowForm(false)
         if (token) await loadSaved()
         // Load navamsha
-        if (id) getVargaChart(id, 9).then(nr => setNavData(nr?.data)).catch(()=>{})
+        if (id && token) getVargaChart(id, 9).then(nr => setNavData(nr?.data)).catch(()=>{})
       } else {
         const errMsg = (res as any)?.data?.message || (res as any)?.message || 'Calculation failed'
         const errDetails = (res as any)?.data?.errors || []
