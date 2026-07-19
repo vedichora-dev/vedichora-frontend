@@ -1,13 +1,13 @@
 === CURRENT e2e FILES ===
 total 40
-drwxr-xr-x 2 runner runner  4096 Jul 19 12:02 .
-drwxr-xr-x 7 runner runner  4096 Jul 19 12:02 ..
--rw-r--r-- 1 runner runner  3976 Jul 19 12:02 01-auth.spec.js
--rw-r--r-- 1 runner runner 11246 Jul 19 12:02 02-chart.spec.js
--rw-r--r-- 1 runner runner  2718 Jul 19 12:02 03-match.spec.js
--rw-r--r-- 1 runner runner  2685 Jul 19 12:02 04-horoscope.spec.js
--rw-r--r-- 1 runner runner  3658 Jul 19 12:02 05-deployment.spec.js
--rw-r--r-- 1 runner runner  2694 Jul 19 12:02 helpers.js
+drwxr-xr-x 2 runner runner  4096 Jul 19 12:05 .
+drwxr-xr-x 7 runner runner  4096 Jul 19 12:05 ..
+-rw-r--r-- 1 runner runner  3976 Jul 19 12:05 01-auth.spec.js
+-rw-r--r-- 1 runner runner 11246 Jul 19 12:05 02-chart.spec.js
+-rw-r--r-- 1 runner runner  2718 Jul 19 12:05 03-match.spec.js
+-rw-r--r-- 1 runner runner  2685 Jul 19 12:05 04-horoscope.spec.js
+-rw-r--r-- 1 runner runner  3658 Jul 19 12:05 05-deployment.spec.js
+-rw-r--r-- 1 runner runner  2694 Jul 19 12:05 helpers.js
 
 === BUILD OUTPUT ===
 
