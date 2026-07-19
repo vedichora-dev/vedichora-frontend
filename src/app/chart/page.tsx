@@ -552,8 +552,15 @@ export default function ChartPage() {
                           fontWeight:700,textTransform:'uppercase',color:'var(--txm)',whiteSpace:'nowrap'}}>{h}</th>
                       ))}
                     </tr></thead>
-                    <tbody>{(data('shadbala')?.planets||Object.entries(data('shadbala')||{})).map((p:any,i:number)=>{
-                      const planet = p.planet||p.Planet||p[0]||''
+                    <tbody>{(()=>{
+                        const raw = data('shadbala')
+                        const planets = Array.isArray(raw) ? raw
+                          : Array.isArray(raw?.planets) ? raw.planets
+                          : Array.isArray(raw?.data?.planets) ? raw.data.planets
+                          : []
+                        return planets
+                      })().map((p:any,i:number)=>{
+                      const planet = p.planet||p.Planet||''
                       const bala   = p.totalBala||p.TotalBala||(p[1] as any)?.totalBala||'—'
                       const vals   = [p.sthanaBala||p.SthanaBala, p.digBala||p.DigBala,
                                       p.kaalaBala||p.KaalaBala, p.chestaBala||p.ChestaBala,
