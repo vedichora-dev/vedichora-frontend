@@ -1,8 +1,8 @@
 
 Running 8 tests using 2 workers
 
-[1/8] [chromium] › e2e/functional-test.spec.js:38:3 › GUEST CHART › Guest chart — no redirect, city dropdown closes, chart generates
-[2/8] [mobile] › e2e/functional-test.spec.js:38:3 › GUEST CHART › Guest chart — no redirect, city dropdown closes, chart generates
+[1/8] [mobile] › e2e/functional-test.spec.js:38:3 › GUEST CHART › Guest chart — no redirect, city dropdown closes, chart generates
+[2/8] [chromium] › e2e/functional-test.spec.js:38:3 › GUEST CHART › Guest chart — no redirect, city dropdown closes, chart generates
 [mobile] › e2e/functional-test.spec.js:38:3 › GUEST CHART › Guest chart — no redirect, city dropdown closes, chart generates
 ✓ No redirect to signin
 
@@ -13,7 +13,7 @@ City input value after selection: Chennai, India
 
 ✓ City selected, dropdown closed
 
-Dropdown still open after selection: true
+Dropdown still open after selection: false
 
 [mobile] › e2e/functional-test.spec.js:38:3 › GUEST CHART › Guest chart — no redirect, city dropdown closes, chart generates
 City input value after selection: Chennai
@@ -22,99 +22,32 @@ City input value after selection: Chennai
 
 Dropdown still open after selection: false
 
-[3/8] (retries) [chromium] › e2e/functional-test.spec.js:38:3 › GUEST CHART › Guest chart — no redirect, city dropdown closes, chart generates (retry #1)
 [chromium] › e2e/functional-test.spec.js:38:3 › GUEST CHART › Guest chart — no redirect, city dropdown closes, chart generates
-✓ No redirect to signin
+Chart appeared: true | Error shown: false
 
-City input value after selection: Chennai, India
+[3/8] [chromium] › e2e/functional-test.spec.js:81:3 › CITY DROPDOWN › City dropdown closes after selection
+[mobile] › e2e/functional-test.spec.js:38:3 › GUEST CHART › Guest chart — no redirect, city dropdown closes, chart generates
+Chart appeared: true | Error shown: false
 
-✓ City selected, dropdown closed
-
-Dropdown still open after selection: true
-
-  1) [chromium] › e2e/functional-test.spec.js:38:3 › GUEST CHART › Guest chart — no redirect, city dropdown closes, chart generates 
-
-    Error: expect(received).toBeFalsy()
-
-    Received: true
-
-      60 |       .first().isVisible({ timeout: 500 }).catch(() => false)
-      61 |     console.log('Dropdown still open after selection:', dropdownOpen)
-    > 62 |     expect(dropdownOpen).toBeFalsy()
-         |                          ^
-      63 |
-      64 |     const genBtn = page.locator('button').filter({ hasText: /Generate/ }).last()
-      65 |     await genBtn.click()
-        at /home/runner/work/vedichora-frontend/vedichora-frontend/e2e/functional-test.spec.js:62:26
-
-    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
-    test-results/functional-test-GUEST-CHAR-f4c3f-down-closes-chart-generates-chromium/test-failed-1.png
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
-    test-results/functional-test-GUEST-CHAR-f4c3f-down-closes-chart-generates-chromium/video.webm
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    Error Context: test-results/functional-test-GUEST-CHAR-f4c3f-down-closes-chart-generates-chromium/error-context.md
-
-    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
-
-    Error: expect(received).toBeFalsy()
-
-    Received: true
-
-      60 |       .first().isVisible({ timeout: 500 }).catch(() => false)
-      61 |     console.log('Dropdown still open after selection:', dropdownOpen)
-    > 62 |     expect(dropdownOpen).toBeFalsy()
-         |                          ^
-      63 |
-      64 |     const genBtn = page.locator('button').filter({ hasText: /Generate/ }).last()
-      65 |     await genBtn.click()
-        at /home/runner/work/vedichora-frontend/vedichora-frontend/e2e/functional-test.spec.js:62:26
-
-    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
-    test-results/functional-test-GUEST-CHAR-f4c3f-down-closes-chart-generates-chromium-retry1/test-failed-1.png
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
-    test-results/functional-test-GUEST-CHAR-f4c3f-down-closes-chart-generates-chromium-retry1/video.webm
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    Error Context: test-results/functional-test-GUEST-CHAR-f4c3f-down-closes-chart-generates-chromium-retry1/error-context.md
-
-    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
-    test-results/functional-test-GUEST-CHAR-f4c3f-down-closes-chart-generates-chromium-retry1/trace.zip
-    Usage:
-
-        npx playwright show-trace test-results/functional-test-GUEST-CHAR-f4c3f-down-closes-chart-generates-chromium-retry1/trace.zip
-
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-
-[4/8] [chromium] › e2e/functional-test.spec.js:81:3 › CITY DROPDOWN › City dropdown closes after selection
+[4/8] [mobile] › e2e/functional-test.spec.js:81:3 › CITY DROPDOWN › City dropdown closes after selection
 [chromium] › e2e/functional-test.spec.js:81:3 › CITY DROPDOWN › City dropdown closes after selection
 Dropdown appeared: true
 
 Dropdown still open after click: true
 
 [5/8] (retries) [chromium] › e2e/functional-test.spec.js:81:3 › CITY DROPDOWN › City dropdown closes after selection (retry #1)
-[mobile] › e2e/functional-test.spec.js:38:3 › GUEST CHART › Guest chart — no redirect, city dropdown closes, chart generates
-Chart appeared: true | Error shown: false
-
-[6/8] [mobile] › e2e/functional-test.spec.js:81:3 › CITY DROPDOWN › City dropdown closes after selection
-[chromium] › e2e/functional-test.spec.js:81:3 › CITY DROPDOWN › City dropdown closes after selection
-Dropdown appeared: true
-
 [mobile] › e2e/functional-test.spec.js:81:3 › CITY DROPDOWN › City dropdown closes after selection
 Dropdown appeared: true
 
+Dropdown still open after click: true
+
+[6/8] (retries) [mobile] › e2e/functional-test.spec.js:81:3 › CITY DROPDOWN › City dropdown closes after selection (retry #1)
 [chromium] › e2e/functional-test.spec.js:81:3 › CITY DROPDOWN › City dropdown closes after selection
+Dropdown appeared: true
+
 Dropdown still open after click: true
 
-[mobile] › e2e/functional-test.spec.js:81:3 › CITY DROPDOWN › City dropdown closes after selection
-Dropdown still open after click: true
-
-  2) [chromium] › e2e/functional-test.spec.js:81:3 › CITY DROPDOWN › City dropdown closes after selection 
+  1) [chromium] › e2e/functional-test.spec.js:81:3 › CITY DROPDOWN › City dropdown closes after selection 
 
     Error: expect(received).toBeFalsy()
 
@@ -173,17 +106,16 @@ Dropdown still open after click: true
     ────────────────────────────────────────────────────────────────────────────────────────────────
 
 
-[7/8] (retries) [mobile] › e2e/functional-test.spec.js:81:3 › CITY DROPDOWN › City dropdown closes after selection (retry #1)
-[8/8] [chromium] › e2e/functional-test.spec.js:114:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login
-[chromium] › e2e/functional-test.spec.js:114:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login
-Match selects count: 12
-
 [mobile] › e2e/functional-test.spec.js:81:3 › CITY DROPDOWN › City dropdown closes after selection
 Dropdown appeared: true
 
+[7/8] [chromium] › e2e/functional-test.spec.js:114:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login
 Dropdown still open after click: true
 
-  3) [mobile] › e2e/functional-test.spec.js:81:3 › CITY DROPDOWN › City dropdown closes after selection 
+[chromium] › e2e/functional-test.spec.js:114:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login
+Match selects count: 12
+
+  2) [mobile] › e2e/functional-test.spec.js:81:3 › CITY DROPDOWN › City dropdown closes after selection 
 
     Error: expect(received).toBeFalsy()
 
@@ -242,14 +174,14 @@ Dropdown still open after click: true
     ────────────────────────────────────────────────────────────────────────────────────────────────
 
 
-[9/8] [mobile] › e2e/functional-test.spec.js:114:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login
+[8/8] [mobile] › e2e/functional-test.spec.js:114:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login
 [mobile] › e2e/functional-test.spec.js:114:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login
 Match selects count: 12
 
 [chromium] › e2e/functional-test.spec.js:114:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login
 Match result visible: true
 
-[10/8] [chromium] › e2e/functional-test.spec.js:154:3 › NUMEROLOGY › Numerology — calculates life path number
+[9/8] [chromium] › e2e/functional-test.spec.js:154:3 › NUMEROLOGY › Numerology — calculates life path number
 [chromium] › e2e/functional-test.spec.js:154:3 › NUMEROLOGY › Numerology — calculates life path number
 Name input visible: false
 
@@ -257,11 +189,11 @@ Total inputs: 1
 
 Numerology result visible: true
 
-[11/8] (retries) [mobile] › e2e/functional-test.spec.js:114:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login (retry #1)
+[10/8] (retries) [mobile] › e2e/functional-test.spec.js:114:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login (retry #1)
 [mobile] › e2e/functional-test.spec.js:114:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login
 Match selects count: 12
 
-  4) [mobile] › e2e/functional-test.spec.js:114:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login 
+  3) [mobile] › e2e/functional-test.spec.js:114:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login 
 
     Test timeout of 60000ms exceeded.
 
@@ -319,13 +251,6 @@ Match selects count: 12
            - <div class="card">…</div> intercepts pointer events
       - retrying click action
         - waiting 500ms
-        - waiting for element to be visible, enabled and stable
-        - element is visible, enabled and stable
-        - scrolling into view if needed
-        - done scrolling
-        - <div class="card">…</div> intercepts pointer events
-      - retrying click action
-        - waiting 500ms
 
 
       11 |   const input  = inputs.nth(inputNth)
@@ -376,7 +301,7 @@ Match selects count: 12
           - scrolling into view if needed
           - done scrolling
           - <div class="card">…</div> intercepts pointer events
-      24 × retrying click action
+      27 × retrying click action
            - waiting 500ms
            - waiting for element to be visible, enabled and stable
            - element is visible, enabled and stable
@@ -404,59 +329,6 @@ Match selects count: 12
            - scrolling into view if needed
            - done scrolling
            - <div class="card">…</div> intercepts pointer events
-      - retrying click action
-        - waiting 500ms
-        - waiting for element to be visible, enabled and stable
-        - element is visible, enabled and stable
-        - scrolling into view if needed
-        - done scrolling
-        - <div class="card">…</div> intercepts pointer events
-      - retrying click action
-        - waiting 500ms
-        - waiting for element to be visible, enabled and stable
-        - element is not stable
-      2 × retrying click action
-          - waiting 500ms
-          - waiting for element to be visible, enabled and stable
-          - element is visible, enabled and stable
-          - scrolling into view if needed
-          - done scrolling
-          - <input value="" class="input" placeholder="Female name"/> from <div>…</div> subtree intercepts pointer events
-        - retrying click action
-          - waiting 500ms
-          - waiting for element to be visible, enabled and stable
-          - element is visible, enabled and stable
-          - scrolling into view if needed
-          - done scrolling
-          - <div class="card">…</div> intercepts pointer events
-        - retrying click action
-          - waiting 500ms
-          - waiting for element to be visible, enabled and stable
-          - element is visible, enabled and stable
-          - scrolling into view if needed
-          - done scrolling
-          - <div class="card">…</div> intercepts pointer events
-      - retrying click action
-        - waiting 500ms
-        - waiting for element to be visible, enabled and stable
-        - element is visible, enabled and stable
-        - scrolling into view if needed
-        - done scrolling
-        - <div class="card">…</div> intercepts pointer events
-      - retrying click action
-        - waiting 500ms
-        - waiting for element to be visible, enabled and stable
-        - element is visible, enabled and stable
-        - scrolling into view if needed
-        - done scrolling
-        - <input value="" class="input" placeholder="Female name"/> from <div>…</div> subtree intercepts pointer events
-      - retrying click action
-        - waiting 500ms
-        - waiting for element to be visible, enabled and stable
-        - element is visible, enabled and stable
-        - scrolling into view if needed
-        - done scrolling
-        - <div class="card">…</div> intercepts pointer events
       - retrying click action
         - waiting 500ms
 
@@ -490,7 +362,7 @@ Match selects count: 12
     ────────────────────────────────────────────────────────────────────────────────────────────────
 
 
-[12/8] [mobile] › e2e/functional-test.spec.js:154:3 › NUMEROLOGY › Numerology — calculates life path number
+[11/8] [mobile] › e2e/functional-test.spec.js:154:3 › NUMEROLOGY › Numerology — calculates life path number
 [mobile] › e2e/functional-test.spec.js:154:3 › NUMEROLOGY › Numerology — calculates life path number
 Name input visible: false
 
@@ -498,9 +370,8 @@ Total inputs: 1
 
 Numerology result visible: true
 
-  4 failed
-    [chromium] › e2e/functional-test.spec.js:38:3 › GUEST CHART › Guest chart — no redirect, city dropdown closes, chart generates 
+  3 failed
     [chromium] › e2e/functional-test.spec.js:81:3 › CITY DROPDOWN › City dropdown closes after selection 
     [mobile] › e2e/functional-test.spec.js:81:3 › CITY DROPDOWN › City dropdown closes after selection 
     [mobile] › e2e/functional-test.spec.js:114:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login 
-  4 passed (2.7m)
+  5 passed (2.7m)
