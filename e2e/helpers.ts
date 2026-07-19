@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { Page } from '@playwright/test'
 
 export const SITE = process.env.BASE_URL || 'https://vedichora-frontend-orcin.vercel.app'
