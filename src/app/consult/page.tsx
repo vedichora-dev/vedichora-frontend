@@ -67,8 +67,9 @@ export default function ConsultPage() {
       }).then(r=>r.json()).catch(()=>null)
 
       // Check if Agora is configured
+      const agoraAppId = process.env.NEXT_PUBLIC_AGORA_APP_ID || 'd0c0957f325c4b13a9c926f92f5be02c'
       const agoraToken = res?.data?.agoraToken || res?.agoraToken
-      if (agoraToken && agoraToken !== 'DUMMY') {
+      if (agoraToken && agoraToken.length > 10) {
         // Real Agora call
         setCallState('active')
       } else {
