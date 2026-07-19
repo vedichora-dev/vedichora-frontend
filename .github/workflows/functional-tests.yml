@@ -12,6 +12,8 @@ jobs:
       contents: write
     steps:
       - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
       - uses: actions/setup-node@v4
         with: { node-version: '20' }
       - run: npm install --legacy-peer-deps
@@ -21,31 +23,36 @@ jobs:
         env:
           BASE_URL: https://vedichora-frontend-orcin.vercel.app
         run: |
-          # Run tests, capture ALL output including console.log
-          npx playwright test e2e/functional-test.spec.js \
-            --reporter=line \
-            2>&1 | tee /tmp/test-raw.txt || true
-          
+          npx playwright test e2e/functional-test.spec.js --reporter=line 2>&1 | tee test-output.txt || true
           echo "## Functional Test Results" >> $GITHUB_STEP_SUMMARY
           echo '```' >> $GITHUB_STEP_SUMMARY
-          cat /tmp/test-raw.txt >> $GITHUB_STEP_SUMMARY
+          cat test-output.txt >> $GITHUB_STEP_SUMMARY
           echo '```' >> $GITHUB_STEP_SUMMARY
 
-      - name: Write results file
+      - name: Push results via API
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO: ${{ github.repository }}
         run: |
-          cp /tmp/test-raw.txt e2e-results.txt
-
-      - name: Commit results file
-        run: |
-          git config user.email "ci@vedichora.com"
-          git config user.name "CI Bot"
-          git add e2e-results.txt
-          git commit -m "test: functional results $(date +%Y%m%d-%H%M) [skip ci]" || echo "Nothing to commit"
-          git push || true
+          CONTENT=$(base64 -w 0 test-output.txt)
+          EXISTING=$(curl -s -H "Authorization: token $GH_TOKEN" \
+            "https://api.github.com/repos/$REPO/contents/e2e-results.txt" | python3 -c "import sys,json; print(json.load(sys.stdin).get('sha',''))" 2>/dev/null)
+          if [ -n "$EXISTING" ]; then
+            curl -s -X PUT -H "Authorization: token $GH_TOKEN" \
+              -H "Content-Type: application/json" \
+              -d "{\"message\":\"test: functional results $(date +%H%M) [skip ci]\",\"content\":\"$CONTENT\",\"sha\":\"$EXISTING\"}" \
+              "https://api.github.com/repos/$REPO/contents/e2e-results.txt" > /dev/null
+          else
+            curl -s -X PUT -H "Authorization: token $GH_TOKEN" \
+              -H "Content-Type: application/json" \
+              -d "{\"message\":\"test: functional results $(date +%H%M) [skip ci]\",\"content\":\"$CONTENT\"}" \
+              "https://api.github.com/repos/$REPO/contents/e2e-results.txt" > /dev/null
+          fi
+          echo "Results pushed"
 
       - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: functional-screenshots-${{ github.run_id }}
           path: test-results/
-          retention-days: 7
+          retention-days: 3
