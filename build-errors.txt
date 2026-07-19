@@ -1,14 +1,14 @@
 === CURRENT e2e FILES ===
 total 56
-drwxr-xr-x 2 runner runner  4096 Jul 19 16:25 .
-drwxr-xr-x 7 runner runner  4096 Jul 19 16:26 ..
--rw-r--r-- 1 runner runner  4428 Jul 19 16:25 01-auth.spec.js
--rw-r--r-- 1 runner runner 11246 Jul 19 16:25 02-chart.spec.js
--rw-r--r-- 1 runner runner  2718 Jul 19 16:25 03-match.spec.js
--rw-r--r-- 1 runner runner  2685 Jul 19 16:25 04-horoscope.spec.js
--rw-r--r-- 1 runner runner  3485 Jul 19 16:25 05-deployment.spec.js
--rw-r--r-- 1 runner runner  8626 Jul 19 16:25 functional-test.spec.js
--rw-r--r-- 1 runner runner  2694 Jul 19 16:25 helpers.js
+drwxr-xr-x 2 runner runner  4096 Jul 19 16:26 .
+drwxr-xr-x 7 runner runner  4096 Jul 19 16:27 ..
+-rw-r--r-- 1 runner runner  4428 Jul 19 16:26 01-auth.spec.js
+-rw-r--r-- 1 runner runner 11246 Jul 19 16:26 02-chart.spec.js
+-rw-r--r-- 1 runner runner  2718 Jul 19 16:26 03-match.spec.js
+-rw-r--r-- 1 runner runner  2685 Jul 19 16:26 04-horoscope.spec.js
+-rw-r--r-- 1 runner runner  3485 Jul 19 16:26 05-deployment.spec.js
+-rw-r--r-- 1 runner runner  8626 Jul 19 16:26 functional-test.spec.js
+-rw-r--r-- 1 runner runner  2694 Jul 19 16:26 helpers.js
 
 === BUILD OUTPUT ===
 
@@ -60,7 +60,7 @@ Route (app)                              Size     First Load JS
 ├ ○ /signup                              2.68 kB         121 kB
 ├ ○ /transits                            1.83 kB         114 kB
 ├ ○ /varshaphal                          1.89 kB         114 kB
-├ ○ /western                             10 kB          98.7 kB
+├ ○ /western                             10.8 kB        99.5 kB
 └ ○ /yogas                               1.78 kB        86.7 kB
 + First Load JS shared by all            81.9 kB
   ├ chunks/938-cac2006256170abd.js       26.7 kB
