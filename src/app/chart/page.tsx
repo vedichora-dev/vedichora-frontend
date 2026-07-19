@@ -99,8 +99,8 @@ export default function ChartPage() {
       report: async () => {
         const [rep, yogas] = await Promise.all([
           getChartReportStage1(horoId).catch(()=>null),
-          fetch(\`\${process.env.NEXT_PUBLIC_CHART_URL||'https://enchanting-dedication-production.up.railway.app'}/api/chart/\${horoId}/yogas\`,
-            {headers:{Authorization:\`Bearer \${token}\`}}).then(r=>r.json()).catch(()=>null),
+          fetch(process.env.NEXT_PUBLIC_CHART_URL ? process.env.NEXT_PUBLIC_CHART_URL + '/api/chart/' + horoId + '/yogas' : 'https://enchanting-dedication-production.up.railway.app/api/chart/' + horoId + '/yogas',
+            {headers: token ? {Authorization: 'Bearer ' + token} : {}}).then(r=>r.json()).catch(()=>null),
         ])
         const repData = rep?.data?.data ?? rep?.data ?? {}
         return { ...repData, yogas: yogas?.data?.data ?? yogas?.data ?? [] }
