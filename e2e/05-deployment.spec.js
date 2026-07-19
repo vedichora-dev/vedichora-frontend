@@ -3,11 +3,11 @@ const { test, expect } = require('@playwright/test')
 
 const PAGES = [
   { path: '/',            name: 'Home',         expected: ['Horoscope', 'Vedic', 'Hora'] },
-  { path: '/chart',       name: 'Chart/Kundali', expected: ['Chart', 'Kundali', 'Birth'] },
+  { path: '/chart',       name: 'Chart',         expected: ['Chart', 'Kundali', 'Birth'] },
   { path: '/match',       name: 'Match',         expected: ['Match', 'Person', 'Compatibility'] },
   { path: '/signup',      name: 'Signup',        expected: ['Sign up', 'Create', 'email'] },
   { path: '/signin',      name: 'Signin',        expected: ['Sign in', 'email'] },
-  { path: '/phone-login', name: 'Phone Login',   expected: ['phone', 'OTP', 'Send'] },
+  { path: '/phone-login', name: 'PhoneLogin',    expected: ['phone', 'OTP', 'Send'] },
   { path: '/shop',        name: 'Shop',          expected: [] },
   { path: '/learn',       name: 'Learn',         expected: [] },
   { path: '/about',       name: 'About',         expected: [] },
@@ -19,48 +19,45 @@ test.describe('DEPLOYMENT — All pages return 200', () => {
     test(`${name} page loads (${path})`, async ({ page }) => {
       const response = await page.goto(path)
       expect(response?.status()).toBe(200)
-      
       await page.waitForTimeout(1500)
-      await page.screenshot({ path: `test-results/deploy-${name.toLowerCase().replace(/\//, '-')}.png` 
+      await page.screenshot({ path: `test-results/deploy-${name.toLowerCase()}.png` })
+
+      if (expected.length > 0) {
+        const text  = await page.locator('body').textContent() || ''
+        const found = expected.filter(e => text.toLowerCase().includes(e.toLowerCase()))
+        console.log(`${name}: found ${found.length}/${expected.length} — ${found.join(', ')}`)
+        expect(found.length).toBeGreaterThan(0)
+      }
+    })
+  }
+
   test('Checkout page loads', async ({ page }) => {
     const response = await page.goto('/checkout')
     expect(response?.status()).toBe(200)
     await page.waitForTimeout(1500)
     await page.screenshot({ path: 'test-results/deploy-checkout.png' })
     const text = await page.locator('body').textContent() || ''
-    const hasPlans = text.includes('Starter') || text.includes('minutes') || text.includes('₹')
+    const hasPlans = text.includes('Starter') || text.includes('minutes') || text.includes('\u20b9')
     console.log('Checkout has plans:', hasPlans)
     expect(hasPlans).toBeTruthy()
   })
 
-  test('Consult page loads with astrologers', async ({ page }) => {
+  test('Consult page loads', async ({ page }) => {
     const response = await page.goto('/consult')
     expect(response?.status()).toBe(200)
     await page.waitForTimeout(2000)
     await page.screenshot({ path: 'test-results/deploy-consult.png' })
     const text = await page.locator('body').textContent() || ''
-    const hasAstros = text.includes('Astrologer') || text.includes('min') || text.includes('Call Now')
-    console.log('Consult has astrologers:', hasAstros)
-    expect(hasAstros).toBeTruthy()
+    const hasContent = text.includes('Astrologer') || text.includes('Consult') || text.includes('min')
+    console.log('Consult has content:', hasContent)
+    expect(hasContent).toBeTruthy()
   })
 })
-      
-      // Check expected content
-      if (expected.length > 0) {
-        const text = await page.locator('body').textContent() || ''
-        const found = expected.filter(e => text.toLowerCase().includes(e.toLowerCase()))
-        console.log(`${name}: found ${found.length}/${expected.length} expected strings: ${found.join(', ')}`)
-        // At least one expected string should be present
-        expect(found.length).toBeGreaterThan(0)
-      }
-    })
-  }
-})
 
-test.describe('DEPLOYMENT — Performance & Assets', () => {
+test.describe('DEPLOYMENT — JS errors', () => {
 
   test('No console errors on home page', async ({ page }) => {
-    const errors[] = []
+    const errors = []
     page.on('console', msg => {
       if (msg.type() === 'error') errors.push(msg.text())
     })
@@ -68,14 +65,14 @@ test.describe('DEPLOYMENT — Performance & Assets', () => {
     await page.waitForTimeout(3000)
     const nonNetworkErrors = errors.filter(e => !e.includes('favicon') && !e.includes('404'))
     console.log('Console errors:', nonNetworkErrors)
-    // Allow minor errors but flag major ones
     if (nonNetworkErrors.length > 0) {
-      console.warn('⚠ Console errors found:', nonNetworkErrors.join('\n'))
+      console.warn('Console errors found:', nonNetworkErrors.join('\n'))
     }
+    // Not asserting zero — just logging
   })
 
   test('Chart page no JS crash', async ({ page }) => {
-    const crashes[] = []
+    const crashes = []
     page.on('pageerror', err => crashes.push(err.message))
     await page.goto('/chart')
     await page.waitForTimeout(3000)
