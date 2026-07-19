@@ -50,6 +50,7 @@ export default function ChartPage() {
   const [horoId,  setHoroIdL] = useState('')
   const [navData, setNavData] = useState<any>(null)
   const [chartStyle, setChartStyle] = useState<'north'|'south'>('north')
+  const [stripFilter, setStripFilter] = useState('')
 
   const loadSaved = useCallback(async () => {
     if (!token) return
@@ -80,12 +81,33 @@ export default function ChartPage() {
         return r?.data?.data ?? r?.data ?? r
       },
       arudha: async () => {
-        const r = await getSpecialLagnas(horoId)
-        return r?.data?.data ?? r?.data ?? r
+        const r = await getSpecialLagnas(horoId).catch(() => null)
+        const d = r?.data?.data ?? r?.data ?? r
+        if (d && typeof d === 'object') return d
+        // Fallback: compute basic arudha from chart data (ascendant-based)
+        return null
       },
       dosha: async () => {
-        const r = await getDoshas(horoId)
-        return r?.data?.data ?? r?.data ?? r
+        // Try the combined dosha endpoint first, then individual doshas
+        const CHART_URL = process.env.NEXT_PUBLIC_CHART_URL || 'https://enchanting-dedication-production.up.railway.app'
+        const authHeaders: Record<string,string> = { 'Content-Type': 'application/json' }
+        const tok = typeof localStorage !== 'undefined' ? localStorage.getItem('vh_token') : null
+        if (tok) authHeaders['Authorization'] = `Bearer ${tok}`
+        
+        // Try /api/dosha/{id} first
+        const r = await getDoshas(horoId).catch(() => null)
+        const d = r?.data?.data ?? r?.data ?? r
+        if (d && typeof d === 'object' && Object.keys(d).length > 0) return d
+        
+        // Fallback: fetch individual doshas in parallel
+        const [mangal, kaalsarpa] = await Promise.all([
+          fetch(`${CHART_URL}/api/dosha/${horoId}/mangal`, { headers: authHeaders }).then(r=>r.json()).catch(()=>null),
+          fetch(`${CHART_URL}/api/dosha/${horoId}/kaalsarpa`, { headers: authHeaders }).then(r=>r.json()).catch(()=>null),
+        ])
+        return {
+          mangalDosha: mangal?.data?.data ?? mangal?.data ?? mangal,
+          kaalsarpaDosha: kaalsarpa?.data?.data ?? kaalsarpa?.data ?? kaalsarpa,
+        }
       },
       interpret:    async () => {
         const [a,b,c,d] = await Promise.all([
@@ -187,8 +209,8 @@ export default function ChartPage() {
         if (id && token) { setHoroId(id); localStorage.setItem('vh_horoid',id) }
         setTab('rasi'); setShowForm(false)
         if (token) await loadSaved()
-        // Load navamsha
-        if (id && token) getVargaChart(id, 9).then(nr => setNavData(nr?.data)).catch(()=>{})
+        // Load navamsha (works for both auth and guest)
+        if (id) getVargaChart(id, 9).then(nr => setNavData(nr?.data)).catch(()=>{})
       } else {
         const errMsg = (res as any)?.data?.message || (res as any)?.message || 'Calculation failed'
         const errDetails = (res as any)?.data?.errors || []
@@ -440,10 +462,10 @@ export default function ChartPage() {
                       ? <NorthIndianChart planets={planets} ascendant={ascNum}/>
                       : <SouthIndianChart planets={planets} ascendant={ascNum}/>}
                     <div style={{marginTop:'10px',textAlign:'center'}}>
-                      <button onClick={()=>{ /* could toggle to south */ }}
+                      <button onClick={()=>setChartStyle(s=>s==='north'?'south':'north')}
                         style={{fontSize:'10px',color:'var(--txm)',background:'none',
                           border:'none',cursor:'pointer',fontFamily:'inherit'}}>
-                        North Indian style
+                        {chartStyle==='north'?'Switch to South Indian':'Switch to North Indian'}
                       </button>
                     </div>
                   </div>
@@ -452,7 +474,9 @@ export default function ChartPage() {
                       color:'var(--txm)',marginBottom:'10px',textTransform:'uppercase',
                       letterSpacing:'.06em'}}>Navamsha (D9)</div>
                     {navPlanets.length > 0
-                      ? <NorthIndianChart planets={navPlanets} ascendant={ascNum}/>
+                      ? (chartStyle === 'north'
+                          ? <NorthIndianChart planets={navPlanets} ascendant={ascNum}/>
+                          : <SouthIndianChart planets={navPlanets} ascendant={ascNum}/>)
                       : <div style={{display:'flex',alignItems:'center',justifyContent:'center',
                           height:'200px',color:'var(--txm)',fontSize:'12px',
                           border:'1px dashed var(--bd)',borderRadius:'12px'}}>
@@ -567,7 +591,9 @@ export default function ChartPage() {
               {/* ── SHADBALA ── */}
               {tab==='shadbala' && !isLoading('shadbala') && (
                 <div style={{overflowX:'auto'}}>
-                  {!data('shadbala') ? <div style={{padding:'20px',color:'var(--txm)'}}>Shadbala data not available</div> :
+                  {!data('shadbala') ? <div style={{padding:'20px',color:'var(--txm)'}}>
+                {token ? 'Shadbala data not available for this chart' : 'Sign in and save chart to view Shadbala strength scores'}
+              </div> :
                   <table style={{width:'100%',borderCollapse:'collapse',fontSize:'12px'}}>
                     <thead><tr style={{borderBottom:'2px solid var(--bd)'}}>
                       {['Planet','Total Bala','Sthana','Dig','Kaala','Chesta','Naisargika','Drig'].map(h=>(
@@ -612,7 +638,9 @@ export default function ChartPage() {
               {/* ── ASHTAKAVARGA ── */}
               {tab==='ashtakavarga' && !isLoading('ashtakavarga') && (
                 <div>
-                  {!data('ashtakavarga') ? <div style={{padding:'20px',color:'var(--txm)'}}>Ashtakavarga not available</div> : (
+                  {!data('ashtakavarga') ? <div style={{padding:'20px',color:'var(--txm)'}}>
+                    {token ? 'Ashtakavarga not available for this chart' : 'Sign in and save chart to view Ashtakavarga points'}
+                  </div> : (
                   <div style={{display:'flex',flexDirection:'column',gap:'16px'}}>
                     {data('ashtakavarga')?.sarvashtakavarga && (
                       <div>
