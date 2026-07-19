@@ -156,7 +156,15 @@ export default function ChartPage() {
       const res = token
         ? await calculateChart(payload)
         : await calculateChartGuest(payload)
-      const data = (res as any)?.data?.data||(res as any)?.data
+      const resObj = (res as any)
+      // Check for backend error
+      if (resObj?.data?.success === false || resObj?.success === false) {
+        const msg = resObj?.data?.message || resObj?.message || 'Calculation failed'
+        setErr(msg)
+        setLoading(false)
+        return
+      }
+      const data = resObj?.data?.data||resObj?.data
       if (data) {
         const id = data.horoscopeId||data.id||''
         setResult(data); setHoroIdL(id)
