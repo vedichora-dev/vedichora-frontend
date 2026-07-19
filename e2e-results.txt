@@ -1,52 +1,66 @@
 
-Running 10 tests using 2 workers
+Running 8 tests using 2 workers
 
-[1/10] [chromium] › e2e/functional-test.spec.js:31:3 › GUEST CHART › Guest chart — no redirect, city dropdown closes, chart generates [chromium]
-[2/10] [mobile] › e2e/functional-test.spec.js:31:3 › GUEST CHART › Guest chart — no redirect, city dropdown closes, chart generates [chromium]
-[mobile] › e2e/functional-test.spec.js:31:3 › GUEST CHART › Guest chart — no redirect, city dropdown closes, chart generates [chromium]
+[1/8] [chromium] › e2e/functional-test.spec.js:32:3 › GUEST CHART › Guest chart — no redirect, city dropdown closes, chart generates
+[2/8] [mobile] › e2e/functional-test.spec.js:32:3 › GUEST CHART › Guest chart — no redirect, city dropdown closes, chart generates
+[mobile] › e2e/functional-test.spec.js:32:3 › GUEST CHART › Guest chart — no redirect, city dropdown closes, chart generates
 ✓ No redirect to signin
 
-[chromium] › e2e/functional-test.spec.js:31:3 › GUEST CHART › Guest chart — no redirect, city dropdown closes, chart generates [chromium]
+[chromium] › e2e/functional-test.spec.js:32:3 › GUEST CHART › Guest chart — no redirect, city dropdown closes, chart generates
 ✓ No redirect to signin
+
+City input value after selection: Chennai, India
 
 ✓ City selected, dropdown closed
 
-[mobile] › e2e/functional-test.spec.js:31:3 › GUEST CHART › Guest chart — no redirect, city dropdown closes, chart generates [chromium]
+Dropdown still open after selection: false
+
+[mobile] › e2e/functional-test.spec.js:32:3 › GUEST CHART › Guest chart — no redirect, city dropdown closes, chart generates
+City input value after selection: Chennai, India
+
 ✓ City selected, dropdown closed
 
-[chromium] › e2e/functional-test.spec.js:31:3 › GUEST CHART › Guest chart — no redirect, city dropdown closes, chart generates [chromium]
-Chart appeared: true | Error shown: true
+Dropdown still open after selection: false
 
-[3/10] [chromium] › e2e/functional-test.spec.js:77:3 › CITY DROPDOWN › City dropdown closes after selection
-[mobile] › e2e/functional-test.spec.js:31:3 › GUEST CHART › Guest chart — no redirect, city dropdown closes, chart generates [chromium]
-Chart appeared: true | Error shown: true
+[chromium] › e2e/functional-test.spec.js:32:3 › GUEST CHART › Guest chart — no redirect, city dropdown closes, chart generates
+Chart appeared: true | Error shown: false
 
-[4/10] [mobile] › e2e/functional-test.spec.js:77:3 › CITY DROPDOWN › City dropdown closes after selection
-[chromium] › e2e/functional-test.spec.js:77:3 › CITY DROPDOWN › City dropdown closes after selection
+[3/8] [chromium] › e2e/functional-test.spec.js:84:3 › CITY DROPDOWN › City dropdown closes after selection
+[chromium] › e2e/functional-test.spec.js:84:3 › CITY DROPDOWN › City dropdown closes after selection
+Dropdown appeared: true
+
 Dropdown still open after click: true
 
-[5/10] (retries) [chromium] › e2e/functional-test.spec.js:77:3 › CITY DROPDOWN › City dropdown closes after selection (retry #1)
-[mobile] › e2e/functional-test.spec.js:77:3 › CITY DROPDOWN › City dropdown closes after selection
+[mobile] › e2e/functional-test.spec.js:32:3 › GUEST CHART › Guest chart — no redirect, city dropdown closes, chart generates
+Chart appeared: true | Error shown: false
+
+[4/8] [mobile] › e2e/functional-test.spec.js:84:3 › CITY DROPDOWN › City dropdown closes after selection
+[5/8] (retries) [chromium] › e2e/functional-test.spec.js:84:3 › CITY DROPDOWN › City dropdown closes after selection (retry #1)
+[mobile] › e2e/functional-test.spec.js:84:3 › CITY DROPDOWN › City dropdown closes after selection
+Dropdown appeared: true
+
+[chromium] › e2e/functional-test.spec.js:84:3 › CITY DROPDOWN › City dropdown closes after selection
+Dropdown appeared: true
+
 Dropdown still open after click: true
 
-[6/10] (retries) [mobile] › e2e/functional-test.spec.js:77:3 › CITY DROPDOWN › City dropdown closes after selection (retry #1)
-[chromium] › e2e/functional-test.spec.js:77:3 › CITY DROPDOWN › City dropdown closes after selection
+[mobile] › e2e/functional-test.spec.js:84:3 › CITY DROPDOWN › City dropdown closes after selection
 Dropdown still open after click: true
 
-  1) [chromium] › e2e/functional-test.spec.js:77:3 › CITY DROPDOWN › City dropdown closes after selection 
+  1) [chromium] › e2e/functional-test.spec.js:84:3 › CITY DROPDOWN › City dropdown closes after selection 
 
     Error: expect(received).toBeFalsy()
 
     Received: true
 
-      92 |       const stillVisible = await anyResult.isVisible({ timeout: 500 }).catch(() => false)
-      93 |       console.log('Dropdown still open after click:', stillVisible)
-    > 94 |       expect(stillVisible).toBeFalsy()
-         |                            ^
-      95 |     } else {
-      96 |       console.log('No dropdown appeared (API may be slow)')
-      97 |     }
-        at /home/runner/work/vedichora-frontend/vedichora-frontend/e2e/functional-test.spec.js:94:28
+      103 |         .isVisible({ timeout: 500 }).catch(() => false)
+      104 |       console.log('Dropdown still open after click:', stillOpen)
+    > 105 |       expect(stillOpen).toBeFalsy()
+          |                         ^
+      106 |
+      107 |       // Input must have a value
+      108 |       const val = await cityInput.inputValue()
+        at /home/runner/work/vedichora-frontend/vedichora-frontend/e2e/functional-test.spec.js:105:25
 
     attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
     test-results/functional-test-CITY-DROPD-19588-down-closes-after-selection-chromium/test-failed-1.png
@@ -64,14 +78,14 @@ Dropdown still open after click: true
 
     Received: true
 
-      92 |       const stillVisible = await anyResult.isVisible({ timeout: 500 }).catch(() => false)
-      93 |       console.log('Dropdown still open after click:', stillVisible)
-    > 94 |       expect(stillVisible).toBeFalsy()
-         |                            ^
-      95 |     } else {
-      96 |       console.log('No dropdown appeared (API may be slow)')
-      97 |     }
-        at /home/runner/work/vedichora-frontend/vedichora-frontend/e2e/functional-test.spec.js:94:28
+      103 |         .isVisible({ timeout: 500 }).catch(() => false)
+      104 |       console.log('Dropdown still open after click:', stillOpen)
+    > 105 |       expect(stillOpen).toBeFalsy()
+          |                         ^
+      106 |
+      107 |       // Input must have a value
+      108 |       const val = await cityInput.inputValue()
+        at /home/runner/work/vedichora-frontend/vedichora-frontend/e2e/functional-test.spec.js:105:25
 
     attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
     test-results/functional-test-CITY-DROPD-19588-down-closes-after-selection-chromium-retry1/test-failed-1.png
@@ -92,24 +106,30 @@ Dropdown still open after click: true
     ────────────────────────────────────────────────────────────────────────────────────────────────
 
 
-[7/10] [chromium] › e2e/functional-test.spec.js:104:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login
-[mobile] › e2e/functional-test.spec.js:77:3 › CITY DROPDOWN › City dropdown closes after selection
+[6/8] (retries) [mobile] › e2e/functional-test.spec.js:84:3 › CITY DROPDOWN › City dropdown closes after selection (retry #1)
+[7/8] [chromium] › e2e/functional-test.spec.js:119:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login
+[chromium] › e2e/functional-test.spec.js:119:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login
+Match selects count: 12
+
+[mobile] › e2e/functional-test.spec.js:84:3 › CITY DROPDOWN › City dropdown closes after selection
+Dropdown appeared: true
+
 Dropdown still open after click: true
 
-  2) [mobile] › e2e/functional-test.spec.js:77:3 › CITY DROPDOWN › City dropdown closes after selection 
+  2) [mobile] › e2e/functional-test.spec.js:84:3 › CITY DROPDOWN › City dropdown closes after selection 
 
     Error: expect(received).toBeFalsy()
 
     Received: true
 
-      92 |       const stillVisible = await anyResult.isVisible({ timeout: 500 }).catch(() => false)
-      93 |       console.log('Dropdown still open after click:', stillVisible)
-    > 94 |       expect(stillVisible).toBeFalsy()
-         |                            ^
-      95 |     } else {
-      96 |       console.log('No dropdown appeared (API may be slow)')
-      97 |     }
-        at /home/runner/work/vedichora-frontend/vedichora-frontend/e2e/functional-test.spec.js:94:28
+      103 |         .isVisible({ timeout: 500 }).catch(() => false)
+      104 |       console.log('Dropdown still open after click:', stillOpen)
+    > 105 |       expect(stillOpen).toBeFalsy()
+          |                         ^
+      106 |
+      107 |       // Input must have a value
+      108 |       const val = await cityInput.inputValue()
+        at /home/runner/work/vedichora-frontend/vedichora-frontend/e2e/functional-test.spec.js:105:25
 
     attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
     test-results/functional-test-CITY-DROPD-19588-down-closes-after-selection-mobile/test-failed-1.png
@@ -127,14 +147,14 @@ Dropdown still open after click: true
 
     Received: true
 
-      92 |       const stillVisible = await anyResult.isVisible({ timeout: 500 }).catch(() => false)
-      93 |       console.log('Dropdown still open after click:', stillVisible)
-    > 94 |       expect(stillVisible).toBeFalsy()
-         |                            ^
-      95 |     } else {
-      96 |       console.log('No dropdown appeared (API may be slow)')
-      97 |     }
-        at /home/runner/work/vedichora-frontend/vedichora-frontend/e2e/functional-test.spec.js:94:28
+      103 |         .isVisible({ timeout: 500 }).catch(() => false)
+      104 |       console.log('Dropdown still open after click:', stillOpen)
+    > 105 |       expect(stillOpen).toBeFalsy()
+          |                         ^
+      106 |
+      107 |       // Input must have a value
+      108 |       const val = await cityInput.inputValue()
+        at /home/runner/work/vedichora-frontend/vedichora-frontend/e2e/functional-test.spec.js:105:25
 
     attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
     test-results/functional-test-CITY-DROPD-19588-down-closes-after-selection-mobile-retry1/test-failed-1.png
@@ -155,83 +175,128 @@ Dropdown still open after click: true
     ────────────────────────────────────────────────────────────────────────────────────────────────
 
 
-[8/10] [mobile] › e2e/functional-test.spec.js:104:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login
-[9/10] (retries) [chromium] › e2e/functional-test.spec.js:104:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login (retry #1)
-[10/10] (retries) [mobile] › e2e/functional-test.spec.js:104:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login (retry #1)
-  3) [chromium] › e2e/functional-test.spec.js:104:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login 
+[8/8] [mobile] › e2e/functional-test.spec.js:119:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login
+[mobile] › e2e/functional-test.spec.js:119:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login
+Match selects count: 12
+
+[chromium] › e2e/functional-test.spec.js:119:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login
+Match result visible: true
+
+[9/8] [chromium] › e2e/functional-test.spec.js:159:3 › NUMEROLOGY › Numerology — calculates life path number
+[chromium] › e2e/functional-test.spec.js:159:3 › NUMEROLOGY › Numerology — calculates life path number
+Name input visible: false
+
+Total inputs on page: 1
+
+Numerology selects: 3
+
+Numerology result visible: true
+
+[10/8] (retries) [mobile] › e2e/functional-test.spec.js:119:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login (retry #1)
+[mobile] › e2e/functional-test.spec.js:119:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login
+Match selects count: 12
+
+  3) [mobile] › e2e/functional-test.spec.js:119:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login 
 
     Test timeout of 60000ms exceeded.
 
-    Error: locator.count: Target page, context or browser has been closed
+    Error: locator.click: Test timeout of 60000ms exceeded.
+    Call log:
+      - waiting for locator('input[placeholder*="City"], input[placeholder*="city"]').nth(1)
+        - locator resolved to <input value="" class="input" autocomplete="off" placeholder="City, Country"/>
+      - attempting click action
+        2 × waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <div class="card">…</div> intercepts pointer events
+        - retrying click action
+        - waiting 20ms
+        - waiting for element to be visible, enabled and stable
+        - element is visible, enabled and stable
+        - scrolling into view if needed
+        - done scrolling
+        - <div class="match-grid">…</div> intercepts pointer events
+      - retrying click action
+        - waiting 100ms
+        - waiting for element to be visible, enabled and stable
+        - element is visible, enabled and stable
+        - scrolling into view if needed
+        - done scrolling
+        - <div class="card">…</div> intercepts pointer events
+      - retrying click action
+        - waiting 100ms
+        34 × waiting for element to be visible, enabled and stable
+           - element is visible, enabled and stable
+           - scrolling into view if needed
+           - done scrolling
+           - <button type="button" data-city-option="true">…</button> from <div class="card">…</div> subtree intercepts pointer events
+         - retrying click action
+           - waiting 500ms
+        - waiting for element to be visible, enabled and stable
+        - element is visible, enabled and stable
+        - scrolling into view if needed
+        - done scrolling
+        - <div>…</div> from <div class="card">…</div> subtree intercepts pointer events
+      23 × retrying click action
+           - waiting 500ms
+           - waiting for element to be visible, enabled and stable
+           - element is visible, enabled and stable
+           - scrolling into view if needed
+           - done scrolling
+           - <button type="button" data-city-option="true">…</button> from <div class="card">…</div> subtree intercepts pointer events
+      - retrying click action
+        - waiting 500ms
+        - waiting for element to be visible, enabled and stable
+        - element is visible, enabled and stable
+        - scrolling into view if needed
+        - done scrolling
+        - <div>…</div> from <div class="card">…</div> subtree intercepts pointer events
+      21 × retrying click action
+           - waiting 500ms
+           - waiting for element to be visible, enabled and stable
+           - element is visible, enabled and stable
+           - scrolling into view if needed
+           - done scrolling
+           - <button type="button" data-city-option="true">…</button> from <div class="card">…</div> subtree intercepts pointer events
+      - retrying click action
+        - waiting 500ms
+        - waiting for element to be visible, enabled and stable
+        - element is not stable
+      9 × retrying click action
+          - waiting 500ms
+          - waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <button type="button" data-city-option="true">…</button> from <div class="card">…</div> subtree intercepts pointer events
+      - retrying click action
+        - waiting 500ms
+        - waiting for element to be visible, enabled and stable
+        - element is visible, enabled and stable
+        - scrolling into view if needed
+        - done scrolling
+        - <div>…</div> from <div class="card">…</div> subtree intercepts pointer events
+      12 × retrying click action
+           - waiting 500ms
+           - waiting for element to be visible, enabled and stable
+           - element is visible, enabled and stable
+           - scrolling into view if needed
+           - done scrolling
+           - <button type="button" data-city-option="true">…</button> from <div class="card">…</div> subtree intercepts pointer events
+      - retrying click action
+        - waiting 500ms
 
-      120 |     // Try: day is select index 5 or 7 depending on showTime
-      121 |     for (let i = 5; i <= 9; i++) {
-    > 122 |       const cnt = await allSelects.count()
-          |                                    ^
-      123 |       if (i < cnt) await allSelects.nth(i).selectOption('15').catch(()=>{})
-      124 |     }
-      125 |     await fillCity(page, 1, 'Bangalore')
-        at /home/runner/work/vedichora-frontend/vedichora-frontend/e2e/functional-test.spec.js:122:36
 
-    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
-    test-results/functional-test-GUEST-MATC-b4d71-compatibility-without-login-chromium/test-failed-1.png
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
-    test-results/functional-test-GUEST-MATC-b4d71-compatibility-without-login-chromium/video.webm
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    Error Context: test-results/functional-test-GUEST-MATC-b4d71-compatibility-without-login-chromium/error-context.md
-
-    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
-
-    Test timeout of 60000ms exceeded.
-
-    Error: locator.count: Target page, context or browser has been closed
-
-      120 |     // Try: day is select index 5 or 7 depending on showTime
-      121 |     for (let i = 5; i <= 9; i++) {
-    > 122 |       const cnt = await allSelects.count()
-          |                                    ^
-      123 |       if (i < cnt) await allSelects.nth(i).selectOption('15').catch(()=>{})
-      124 |     }
-      125 |     await fillCity(page, 1, 'Bangalore')
-        at /home/runner/work/vedichora-frontend/vedichora-frontend/e2e/functional-test.spec.js:122:36
-
-    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
-    test-results/functional-test-GUEST-MATC-b4d71-compatibility-without-login-chromium-retry1/test-failed-1.png
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
-    test-results/functional-test-GUEST-MATC-b4d71-compatibility-without-login-chromium-retry1/video.webm
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    Error Context: test-results/functional-test-GUEST-MATC-b4d71-compatibility-without-login-chromium-retry1/error-context.md
-
-    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
-    test-results/functional-test-GUEST-MATC-b4d71-compatibility-without-login-chromium-retry1/trace.zip
-    Usage:
-
-        npx playwright show-trace test-results/functional-test-GUEST-MATC-b4d71-compatibility-without-login-chromium-retry1/trace.zip
-
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-
-[11/10] [chromium] › e2e/functional-test.spec.js:148:3 › LOGGED IN CHART › Logged in user can generate chart
-  4) [mobile] › e2e/functional-test.spec.js:104:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login 
-
-    Test timeout of 60000ms exceeded.
-
-    Error: locator.count: Target page, context or browser has been closed
-
-      120 |     // Try: day is select index 5 or 7 depending on showTime
-      121 |     for (let i = 5; i <= 9; i++) {
-    > 122 |       const cnt = await allSelects.count()
-          |                                    ^
-      123 |       if (i < cnt) await allSelects.nth(i).selectOption('15').catch(()=>{})
-      124 |     }
-      125 |     await fillCity(page, 1, 'Bangalore')
-        at /home/runner/work/vedichora-frontend/vedichora-frontend/e2e/functional-test.spec.js:122:36
+       8 | async function fillCity(page, inputNth, cityName) {
+       9 |   const inputs = page.locator('input[placeholder*="City"], input[placeholder*="city"]')
+    > 10 |   await inputs.nth(inputNth).click()
+         |                              ^
+      11 |   await inputs.nth(inputNth).fill(cityName)
+      12 |   await page.waitForTimeout(1800)  // wait for debounce + API
+      13 |   // City option buttons are marked with data-city-option="true"
+        at fillCity (/home/runner/work/vedichora-frontend/vedichora-frontend/e2e/functional-test.spec.js:10:30)
+        at /home/runner/work/vedichora-frontend/vedichora-frontend/e2e/functional-test.spec.js:142:11
 
     attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
     test-results/functional-test-GUEST-MATC-b4d71-compatibility-without-login-mobile/test-failed-1.png
@@ -247,16 +312,302 @@ Dropdown still open after click: true
 
     Test timeout of 60000ms exceeded.
 
-    Error: locator.count: Target page, context or browser has been closed
+    Error: locator.click: Test timeout of 60000ms exceeded.
+    Call log:
+      - waiting for locator('input[placeholder*="City"], input[placeholder*="city"]').nth(1)
+        - locator resolved to <input value="" class="input" autocomplete="off" placeholder="City, Country"/>
+      - attempting click action
+        2 × waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <div class="card">…</div> intercepts pointer events
+        - retrying click action
+        - waiting 20ms
+        - waiting for element to be visible, enabled and stable
+        - element is visible, enabled and stable
+        - scrolling into view if needed
+        - done scrolling
+        - <div class="match-grid">…</div> intercepts pointer events
+      - retrying click action
+        - waiting 100ms
+        - waiting for element to be visible, enabled and stable
+        - element is visible, enabled and stable
+        - scrolling into view if needed
+        - done scrolling
+        - <div class="card">…</div> intercepts pointer events
+      - retrying click action
+        - waiting 100ms
+        34 × waiting for element to be visible, enabled and stable
+           - element is visible, enabled and stable
+           - scrolling into view if needed
+           - done scrolling
+           - <button type="button" data-city-option="true">…</button> from <div class="card">…</div> subtree intercepts pointer events
+         - retrying click action
+           - waiting 500ms
+        2 × waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <div>…</div> from <div class="card">…</div> subtree intercepts pointer events
+        - retrying click action
+          - waiting 500ms
+          - waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <button type="button" data-city-option="true">…</button> from <div class="card">…</div> subtree intercepts pointer events
+        - retrying click action
+          - waiting 500ms
+          - waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <button type="button" data-city-option="true">…</button> from <div class="card">…</div> subtree intercepts pointer events
+        - retrying click action
+          - waiting 500ms
+          - waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <button type="button" data-city-option="true">…</button> from <div class="card">…</div> subtree intercepts pointer events
+        - retrying click action
+          - waiting 500ms
+          - waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <button type="button" data-city-option="true">…</button> from <div class="card">…</div> subtree intercepts pointer events
+        - retrying click action
+          - waiting 500ms
+          - waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <button type="button" data-city-option="true">…</button> from <div class="card">…</div> subtree intercepts pointer events
+        - retrying click action
+          - waiting 500ms
+          - waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <button type="button" data-city-option="true">…</button> from <div class="card">…</div> subtree intercepts pointer events
+        - retrying click action
+          - waiting 500ms
+          - waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <button type="button" data-city-option="true">…</button> from <div class="card">…</div> subtree intercepts pointer events
+        - retrying click action
+          - waiting 500ms
+          - waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <button type="button" data-city-option="true">…</button> from <div class="card">…</div> subtree intercepts pointer events
+        - retrying click action
+          - waiting 500ms
+          - waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <button type="button" data-city-option="true">…</button> from <div class="card">…</div> subtree intercepts pointer events
+        - retrying click action
+          - waiting 500ms
+          - waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <button type="button" data-city-option="true">…</button> from <div class="card">…</div> subtree intercepts pointer events
+        - retrying click action
+          - waiting 500ms
+          - waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <button type="button" data-city-option="true">…</button> from <div class="card">…</div> subtree intercepts pointer events
+        - retrying click action
+          - waiting 500ms
+          - waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <button type="button" data-city-option="true">…</button> from <div class="card">…</div> subtree intercepts pointer events
+        - retrying click action
+          - waiting 500ms
+          - waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <button type="button" data-city-option="true">…</button> from <div class="card">…</div> subtree intercepts pointer events
+        - retrying click action
+          - waiting 500ms
+          - waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <button type="button" data-city-option="true">…</button> from <div class="card">…</div> subtree intercepts pointer events
+        - retrying click action
+          - waiting 500ms
+          - waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <button type="button" data-city-option="true">…</button> from <div class="card">…</div> subtree intercepts pointer events
+        - retrying click action
+          - waiting 500ms
+          - waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <button type="button" data-city-option="true">…</button> from <div class="card">…</div> subtree intercepts pointer events
+        - retrying click action
+          - waiting 500ms
+          - waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <button type="button" data-city-option="true">…</button> from <div class="card">…</div> subtree intercepts pointer events
+        - retrying click action
+          - waiting 500ms
+          - waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <button type="button" data-city-option="true">…</button> from <div class="card">…</div> subtree intercepts pointer events
+        - retrying click action
+          - waiting 500ms
+          - waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <button type="button" data-city-option="true">…</button> from <div class="card">…</div> subtree intercepts pointer events
+        - retrying click action
+          - waiting 500ms
+          - waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <button type="button" data-city-option="true">…</button> from <div class="card">…</div> subtree intercepts pointer events
+        - retrying click action
+          - waiting 500ms
+          - waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <button type="button" data-city-option="true">…</button> from <div class="card">…</div> subtree intercepts pointer events
+        - retrying click action
+          - waiting 500ms
+          - waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <button type="button" data-city-option="true">…</button> from <div class="card">…</div> subtree intercepts pointer events
+        - retrying click action
+          - waiting 500ms
+          - waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <button type="button" data-city-option="true">…</button> from <div class="card">…</div> subtree intercepts pointer events
+        - retrying click action
+          - waiting 500ms
+        2 × waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <button type="button" data-city-option="true">…</button> from <div class="card">…</div> subtree intercepts pointer events
+        - retrying click action
+          - waiting 500ms
+          - waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <button type="button" data-city-option="true">…</button> from <div class="card">…</div> subtree intercepts pointer events
+        - retrying click action
+          - waiting 500ms
+          - waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <button type="button" data-city-option="true">…</button> from <div class="card">…</div> subtree intercepts pointer events
+        - retrying click action
+          - waiting 500ms
+          - waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <button type="button" data-city-option="true">…</button> from <div class="card">…</div> subtree intercepts pointer events
+        - retrying click action
+          - waiting 500ms
+          - waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <button type="button" data-city-option="true">…</button> from <div class="card">…</div> subtree intercepts pointer events
+        - retrying click action
+          - waiting 500ms
+          - waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <button type="button" data-city-option="true">…</button> from <div class="card">…</div> subtree intercepts pointer events
+        - retrying click action
+          - waiting 500ms
+          - waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <button type="button" data-city-option="true">…</button> from <div class="card">…</div> subtree intercepts pointer events
+        - retrying click action
+          - waiting 500ms
+          - waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <button type="button" data-city-option="true">…</button> from <div class="card">…</div> subtree intercepts pointer events
+        - retrying click action
+          - waiting 500ms
+          - waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <div>…</div> from <div class="card">…</div> subtree intercepts pointer events
+        - retrying click action
+          - waiting 500ms
+          - waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <button type="button" data-city-option="true">…</button> from <div class="card">…</div> subtree intercepts pointer events
+        - retrying click action
+          - waiting 500ms
+          - waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <button type="button" data-city-option="true">…</button> from <div class="card">…</div> subtree intercepts pointer events
+        - retrying click action
+          - waiting 500ms
+          - waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <button type="button" data-city-option="true">…</button> from <div class="card">…</div> subtree intercepts pointer events
+        - retrying click action
+          - waiting 500ms
 
-      120 |     // Try: day is select index 5 or 7 depending on showTime
-      121 |     for (let i = 5; i <= 9; i++) {
-    > 122 |       const cnt = await allSelects.count()
-          |                                    ^
-      123 |       if (i < cnt) await allSelects.nth(i).selectOption('15').catch(()=>{})
-      124 |     }
-      125 |     await fillCity(page, 1, 'Bangalore')
-        at /home/runner/work/vedichora-frontend/vedichora-frontend/e2e/functional-test.spec.js:122:36
+
+       8 | async function fillCity(page, inputNth, cityName) {
+       9 |   const inputs = page.locator('input[placeholder*="City"], input[placeholder*="city"]')
+    > 10 |   await inputs.nth(inputNth).click()
+         |                              ^
+      11 |   await inputs.nth(inputNth).fill(cityName)
+      12 |   await page.waitForTimeout(1800)  // wait for debounce + API
+      13 |   // City option buttons are marked with data-city-option="true"
+        at fillCity (/home/runner/work/vedichora-frontend/vedichora-frontend/e2e/functional-test.spec.js:10:30)
+        at /home/runner/work/vedichora-frontend/vedichora-frontend/e2e/functional-test.spec.js:142:11
 
     attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
     test-results/functional-test-GUEST-MATC-b4d71-compatibility-without-login-mobile-retry1/test-failed-1.png
@@ -277,284 +628,18 @@ Dropdown still open after click: true
     ────────────────────────────────────────────────────────────────────────────────────────────────
 
 
-[12/10] [mobile] › e2e/functional-test.spec.js:148:3 › LOGGED IN CHART › Logged in user can generate chart
-[chromium] › e2e/functional-test.spec.js:148:3 › LOGGED IN CHART › Logged in user can generate chart
-Login success: false
+[11/8] [mobile] › e2e/functional-test.spec.js:159:3 › NUMEROLOGY › Numerology — calculates life path number
+[mobile] › e2e/functional-test.spec.js:159:3 › NUMEROLOGY › Numerology — calculates life path number
+Name input visible: false
 
-[mobile] › e2e/functional-test.spec.js:148:3 › LOGGED IN CHART › Logged in user can generate chart
-Login success: false
+Total inputs on page: 1
 
-[13/10] (retries) [chromium] › e2e/functional-test.spec.js:148:3 › LOGGED IN CHART › Logged in user can generate chart (retry #1)
-[14/10] (retries) [mobile] › e2e/functional-test.spec.js:148:3 › LOGGED IN CHART › Logged in user can generate chart (retry #1)
-[chromium] › e2e/functional-test.spec.js:148:3 › LOGGED IN CHART › Logged in user can generate chart
-Login success: false
+Numerology selects: 3
 
-[mobile] › e2e/functional-test.spec.js:148:3 › LOGGED IN CHART › Logged in user can generate chart
-Login success: false
+Numerology result visible: true
 
-  5) [chromium] › e2e/functional-test.spec.js:148:3 › LOGGED IN CHART › Logged in user can generate chart 
-
-    Test timeout of 60000ms exceeded.
-
-    Error: locator.fill: Target page, context or browser has been closed
-
-      17 | async function fillCity(page, inputNth, cityName) {
-      18 |   const inputs = page.locator('input[placeholder*="City"], input[placeholder*="city"]')
-    > 19 |   await inputs.nth(inputNth).fill(cityName)
-         |                              ^
-      20 |   await page.waitForTimeout(1500)
-      21 |   const btn = page.locator('button').filter({ hasText: cityName }).first()
-      22 |   if (await btn.isVisible({ timeout: 3000 })) {
-        at fillCity (/home/runner/work/vedichora-frontend/vedichora-frontend/e2e/functional-test.spec.js:19:30)
-        at /home/runner/work/vedichora-frontend/vedichora-frontend/e2e/functional-test.spec.js:167:11
-
-    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
-    test-results/functional-test-LOGGED-IN--933f5--in-user-can-generate-chart-chromium/test-failed-1.png
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
-    test-results/functional-test-LOGGED-IN--933f5--in-user-can-generate-chart-chromium/video.webm
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    Error Context: test-results/functional-test-LOGGED-IN--933f5--in-user-can-generate-chart-chromium/error-context.md
-
-    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
-
-    Test timeout of 60000ms exceeded.
-
-    Error: locator.fill: Target page, context or browser has been closed
-
-      17 | async function fillCity(page, inputNth, cityName) {
-      18 |   const inputs = page.locator('input[placeholder*="City"], input[placeholder*="city"]')
-    > 19 |   await inputs.nth(inputNth).fill(cityName)
-         |                              ^
-      20 |   await page.waitForTimeout(1500)
-      21 |   const btn = page.locator('button').filter({ hasText: cityName }).first()
-      22 |   if (await btn.isVisible({ timeout: 3000 })) {
-        at fillCity (/home/runner/work/vedichora-frontend/vedichora-frontend/e2e/functional-test.spec.js:19:30)
-        at /home/runner/work/vedichora-frontend/vedichora-frontend/e2e/functional-test.spec.js:167:11
-
-    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
-    test-results/functional-test-LOGGED-IN--933f5--in-user-can-generate-chart-chromium-retry1/test-failed-1.png
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
-    test-results/functional-test-LOGGED-IN--933f5--in-user-can-generate-chart-chromium-retry1/video.webm
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    Error Context: test-results/functional-test-LOGGED-IN--933f5--in-user-can-generate-chart-chromium-retry1/error-context.md
-
-    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
-    test-results/functional-test-LOGGED-IN--933f5--in-user-can-generate-chart-chromium-retry1/trace.zip
-    Usage:
-
-        npx playwright show-trace test-results/functional-test-LOGGED-IN--933f5--in-user-can-generate-chart-chromium-retry1/trace.zip
-
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-
-[15/10] [chromium] › e2e/functional-test.spec.js:184:3 › NUMEROLOGY › Numerology page calculates numbers
-  6) [mobile] › e2e/functional-test.spec.js:148:3 › LOGGED IN CHART › Logged in user can generate chart 
-
-    Test timeout of 60000ms exceeded.
-
-    Error: locator.fill: Target page, context or browser has been closed
-
-      17 | async function fillCity(page, inputNth, cityName) {
-      18 |   const inputs = page.locator('input[placeholder*="City"], input[placeholder*="city"]')
-    > 19 |   await inputs.nth(inputNth).fill(cityName)
-         |                              ^
-      20 |   await page.waitForTimeout(1500)
-      21 |   const btn = page.locator('button').filter({ hasText: cityName }).first()
-      22 |   if (await btn.isVisible({ timeout: 3000 })) {
-        at fillCity (/home/runner/work/vedichora-frontend/vedichora-frontend/e2e/functional-test.spec.js:19:30)
-        at /home/runner/work/vedichora-frontend/vedichora-frontend/e2e/functional-test.spec.js:167:11
-
-    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
-    test-results/functional-test-LOGGED-IN--933f5--in-user-can-generate-chart-mobile/test-failed-1.png
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
-    test-results/functional-test-LOGGED-IN--933f5--in-user-can-generate-chart-mobile/video.webm
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    Error Context: test-results/functional-test-LOGGED-IN--933f5--in-user-can-generate-chart-mobile/error-context.md
-
-    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
-
-    Test timeout of 60000ms exceeded.
-
-    Error: locator.fill: Target page, context or browser has been closed
-
-      17 | async function fillCity(page, inputNth, cityName) {
-      18 |   const inputs = page.locator('input[placeholder*="City"], input[placeholder*="city"]')
-    > 19 |   await inputs.nth(inputNth).fill(cityName)
-         |                              ^
-      20 |   await page.waitForTimeout(1500)
-      21 |   const btn = page.locator('button').filter({ hasText: cityName }).first()
-      22 |   if (await btn.isVisible({ timeout: 3000 })) {
-        at fillCity (/home/runner/work/vedichora-frontend/vedichora-frontend/e2e/functional-test.spec.js:19:30)
-        at /home/runner/work/vedichora-frontend/vedichora-frontend/e2e/functional-test.spec.js:167:11
-
-    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
-    test-results/functional-test-LOGGED-IN--933f5--in-user-can-generate-chart-mobile-retry1/test-failed-1.png
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
-    test-results/functional-test-LOGGED-IN--933f5--in-user-can-generate-chart-mobile-retry1/video.webm
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    Error Context: test-results/functional-test-LOGGED-IN--933f5--in-user-can-generate-chart-mobile-retry1/error-context.md
-
-    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
-    test-results/functional-test-LOGGED-IN--933f5--in-user-can-generate-chart-mobile-retry1/trace.zip
-    Usage:
-
-        npx playwright show-trace test-results/functional-test-LOGGED-IN--933f5--in-user-can-generate-chart-mobile-retry1/trace.zip
-
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-
-[16/10] [mobile] › e2e/functional-test.spec.js:184:3 › NUMEROLOGY › Numerology page calculates numbers
-[17/10] (retries) [chromium] › e2e/functional-test.spec.js:184:3 › NUMEROLOGY › Numerology page calculates numbers (retry #1)
-[18/10] (retries) [mobile] › e2e/functional-test.spec.js:184:3 › NUMEROLOGY › Numerology page calculates numbers (retry #1)
-  7) [chromium] › e2e/functional-test.spec.js:184:3 › NUMEROLOGY › Numerology page calculates numbers 
-
-    Test timeout of 60000ms exceeded.
-
-    Error: locator.fill: Test timeout of 60000ms exceeded.
-    Call log:
-      - waiting for locator('input[type="text"]').first()
-
-
-      188 |     // The placeholder is "Your full birth name" — use a broader selector
-      189 |     const nameInput = page.locator('input[type="text"]').first()
-    > 190 |     await nameInput.fill('Venkat')
-          |                     ^
-      191 |
-      192 |     const selects = page.locator('select')
-      193 |     await selects.nth(0).selectOption('11').catch(()=>{})   // Day 11
-        at /home/runner/work/vedichora-frontend/vedichora-frontend/e2e/functional-test.spec.js:190:21
-
-    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
-    test-results/functional-test-NUMEROLOGY-0958f-ogy-page-calculates-numbers-chromium/test-failed-1.png
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
-    test-results/functional-test-NUMEROLOGY-0958f-ogy-page-calculates-numbers-chromium/video.webm
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    Error Context: test-results/functional-test-NUMEROLOGY-0958f-ogy-page-calculates-numbers-chromium/error-context.md
-
-    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
-
-    Test timeout of 60000ms exceeded.
-
-    Error: locator.fill: Test timeout of 60000ms exceeded.
-    Call log:
-      - waiting for locator('input[type="text"]').first()
-
-
-      188 |     // The placeholder is "Your full birth name" — use a broader selector
-      189 |     const nameInput = page.locator('input[type="text"]').first()
-    > 190 |     await nameInput.fill('Venkat')
-          |                     ^
-      191 |
-      192 |     const selects = page.locator('select')
-      193 |     await selects.nth(0).selectOption('11').catch(()=>{})   // Day 11
-        at /home/runner/work/vedichora-frontend/vedichora-frontend/e2e/functional-test.spec.js:190:21
-
-    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
-    test-results/functional-test-NUMEROLOGY-0958f-ogy-page-calculates-numbers-chromium-retry1/test-failed-1.png
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
-    test-results/functional-test-NUMEROLOGY-0958f-ogy-page-calculates-numbers-chromium-retry1/video.webm
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    Error Context: test-results/functional-test-NUMEROLOGY-0958f-ogy-page-calculates-numbers-chromium-retry1/error-context.md
-
-    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
-    test-results/functional-test-NUMEROLOGY-0958f-ogy-page-calculates-numbers-chromium-retry1/trace.zip
-    Usage:
-
-        npx playwright show-trace test-results/functional-test-NUMEROLOGY-0958f-ogy-page-calculates-numbers-chromium-retry1/trace.zip
-
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-
-  8) [mobile] › e2e/functional-test.spec.js:184:3 › NUMEROLOGY › Numerology page calculates numbers 
-
-    Test timeout of 60000ms exceeded.
-
-    Error: locator.fill: Test timeout of 60000ms exceeded.
-    Call log:
-      - waiting for locator('input[type="text"]').first()
-
-
-      188 |     // The placeholder is "Your full birth name" — use a broader selector
-      189 |     const nameInput = page.locator('input[type="text"]').first()
-    > 190 |     await nameInput.fill('Venkat')
-          |                     ^
-      191 |
-      192 |     const selects = page.locator('select')
-      193 |     await selects.nth(0).selectOption('11').catch(()=>{})   // Day 11
-        at /home/runner/work/vedichora-frontend/vedichora-frontend/e2e/functional-test.spec.js:190:21
-
-    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
-    test-results/functional-test-NUMEROLOGY-0958f-ogy-page-calculates-numbers-mobile/test-failed-1.png
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
-    test-results/functional-test-NUMEROLOGY-0958f-ogy-page-calculates-numbers-mobile/video.webm
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    Error Context: test-results/functional-test-NUMEROLOGY-0958f-ogy-page-calculates-numbers-mobile/error-context.md
-
-    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
-
-    Test timeout of 60000ms exceeded.
-
-    Error: locator.fill: Test timeout of 60000ms exceeded.
-    Call log:
-      - waiting for locator('input[type="text"]').first()
-
-
-      188 |     // The placeholder is "Your full birth name" — use a broader selector
-      189 |     const nameInput = page.locator('input[type="text"]').first()
-    > 190 |     await nameInput.fill('Venkat')
-          |                     ^
-      191 |
-      192 |     const selects = page.locator('select')
-      193 |     await selects.nth(0).selectOption('11').catch(()=>{})   // Day 11
-        at /home/runner/work/vedichora-frontend/vedichora-frontend/e2e/functional-test.spec.js:190:21
-
-    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
-    test-results/functional-test-NUMEROLOGY-0958f-ogy-page-calculates-numbers-mobile-retry1/test-failed-1.png
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
-    test-results/functional-test-NUMEROLOGY-0958f-ogy-page-calculates-numbers-mobile-retry1/video.webm
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    Error Context: test-results/functional-test-NUMEROLOGY-0958f-ogy-page-calculates-numbers-mobile-retry1/error-context.md
-
-    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
-    test-results/functional-test-NUMEROLOGY-0958f-ogy-page-calculates-numbers-mobile-retry1/trace.zip
-    Usage:
-
-        npx playwright show-trace test-results/functional-test-NUMEROLOGY-0958f-ogy-page-calculates-numbers-mobile-retry1/trace.zip
-
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-
-  8 failed
-    [chromium] › e2e/functional-test.spec.js:77:3 › CITY DROPDOWN › City dropdown closes after selection 
-    [chromium] › e2e/functional-test.spec.js:104:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login 
-    [chromium] › e2e/functional-test.spec.js:148:3 › LOGGED IN CHART › Logged in user can generate chart 
-    [chromium] › e2e/functional-test.spec.js:184:3 › NUMEROLOGY › Numerology page calculates numbers 
-    [mobile] › e2e/functional-test.spec.js:77:3 › CITY DROPDOWN › City dropdown closes after selection 
-    [mobile] › e2e/functional-test.spec.js:104:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login 
-    [mobile] › e2e/functional-test.spec.js:148:3 › LOGGED IN CHART › Logged in user can generate chart 
-    [mobile] › e2e/functional-test.spec.js:184:3 › NUMEROLOGY › Numerology page calculates numbers ─
-  2 passed (6.8m)
+  3 failed
+    [chromium] › e2e/functional-test.spec.js:84:3 › CITY DROPDOWN › City dropdown closes after selection 
+    [mobile] › e2e/functional-test.spec.js:84:3 › CITY DROPDOWN › City dropdown closes after selection 
+    [mobile] › e2e/functional-test.spec.js:119:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login 
+  5 passed (2.8m)
