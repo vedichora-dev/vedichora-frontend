@@ -5,25 +5,28 @@ const SITE  = process.env.BASE_URL || 'https://vedichora-frontend-orcin.vercel.a
 const ADMIN = 'admin@vedichora.com'
 const PASS  = 'Admin@123'
 
-/** Fill city autocomplete — scrolls into view + force-clicks to handle mobile viewports */
+/** Fill city autocomplete and wait for dropdown to fully close */
 async function fillCity(page, inputNth, cityName) {
   const inputs = page.locator('input[placeholder*="City"], input[placeholder*="city"]')
   const input  = inputs.nth(inputNth)
   await input.scrollIntoViewIfNeeded()
   await input.click()
   await input.fill(cityName)
-  await page.waitForTimeout(2000)  // debounce + API
+  await page.waitForTimeout(2000)
 
-  // City options are marked data-city-option="true"
-  const opt = page.locator(`button[data-city-option="true"]`).first()
+  const opt = page.locator('button[data-city-option="true"]').first()
   const appeared = await opt.isVisible({ timeout: 5000 }).catch(() => false)
   if (appeared) {
-    // Use dispatchEvent to bypass any viewport/scroll interception on mobile
     await opt.scrollIntoViewIfNeeded().catch(() => {})
     await opt.dispatchEvent('click')
-    await page.waitForTimeout(500)
+    // Wait for dropdown to disappear (DOM hide is instant via ref)
+    await page.waitForFunction(
+      () => !document.querySelector('button[data-city-option="true"]') ||
+             document.querySelector('button[data-city-option="true"]')?.closest('div')?.style.display === 'none',
+      { timeout: 3000 }
+    ).catch(() => {})
+    await page.waitForTimeout(300)
   } else {
-    // Fallback: any button with city name text
     const fb = page.locator(`button:has-text("${cityName}")`).first()
     if (await fb.isVisible({ timeout: 2000 }).catch(() => false)) {
       await fb.dispatchEvent('click')
@@ -34,7 +37,6 @@ async function fillCity(page, inputNth, cityName) {
 
 // ══════════════════════════════════════════════════════════════════════════════
 test.describe('GUEST CHART', () => {
-
   test('Guest chart — no redirect, city dropdown closes, chart generates', async ({ page }) => {
     await page.goto(SITE + '/chart')
     await page.waitForLoadState('networkidle')
@@ -57,7 +59,7 @@ test.describe('GUEST CHART', () => {
     console.log('✓ City selected, dropdown closed')
 
     const dropdownOpen = await page.locator('button[data-city-option="true"]')
-      .first().isVisible({ timeout: 500 }).catch(() => false)
+      .first().isVisible({ timeout: 300 }).catch(() => false)
     console.log('Dropdown still open after selection:', dropdownOpen)
     expect(dropdownOpen).toBeFalsy()
 
@@ -66,11 +68,9 @@ test.describe('GUEST CHART', () => {
     await page.waitForTimeout(9000)
 
     await expect(page).not.toHaveURL(/signin|login/)
-
     const body = await page.locator('body').textContent()
     const hasChart = /Cancer|Aries|Taurus|Gemini|Leo|Virgo|Libra|Scorpio|Sagittarius|Capricorn|Aquarius|Pisces/.test(body)
-    const hasError = body.includes('Validation') || body.includes('Error:')
-    console.log('Chart appeared:', hasChart, '| Error shown:', hasError)
+    console.log('Chart appeared:', hasChart)
     await page.screenshot({ path: 'test-results/guest-chart.png' })
     expect(hasChart).toBeTruthy()
   })
@@ -93,10 +93,18 @@ test.describe('CITY DROPDOWN', () => {
     if (appeared) {
       await firstOpt.scrollIntoViewIfNeeded().catch(() => {})
       await firstOpt.dispatchEvent('click')
-      await page.waitForTimeout(600)
+      // Wait for DOM-level hide (immediate via ref)
+      await page.waitForFunction(
+        () => {
+          const btn = document.querySelector('button[data-city-option="true"]')
+          return !btn || btn.closest('div[style*="display: none"]') !== null || getComputedStyle(btn).display === 'none'
+        },
+        { timeout: 2000 }
+      ).catch(() => {})
+      await page.waitForTimeout(200)
 
       const stillOpen = await page.locator('button[data-city-option="true"]').first()
-        .isVisible({ timeout: 500 }).catch(() => false)
+        .isVisible({ timeout: 300 }).catch(() => false)
       console.log('Dropdown still open after click:', stillOpen)
       expect(stillOpen).toBeFalsy()
 
@@ -104,7 +112,7 @@ test.describe('CITY DROPDOWN', () => {
       console.log('City input value:', val)
       expect(val.length).toBeGreaterThan(0)
     } else {
-      console.log('No dropdown appeared (API slow) — skip')
+      console.log('No dropdown appeared (API slow) — skip assertion')
     }
   })
 })
@@ -136,12 +144,19 @@ test.describe('GUEST MATCHMAKING', () => {
 
     await fillCity(page, 1, 'Coimbatore')
 
+    // Ensure no city dropdown is blocking the Calculate button
+    await page.waitForFunction(
+      () => !document.querySelector('button[data-city-option="true"]') ||
+             !document.querySelector('button[data-city-option="true"]')?.checkVisibility?.(),
+      { timeout: 2000 }
+    ).catch(() => {})
+
     const calcBtn = page.locator('button').filter({ hasText: /Calculate|Compatibility/ }).first()
+    await calcBtn.scrollIntoViewIfNeeded()
     await calcBtn.click()
     await page.waitForTimeout(14000)
 
     await page.screenshot({ path: 'test-results/guest-match.png' })
-
     const text = await page.locator('body').textContent()
     const hasResult = /Ashta|Koota|Porutham|\/36|score|compatible/i.test(text)
     console.log('Match result visible:', hasResult)
@@ -155,25 +170,20 @@ test.describe('NUMEROLOGY', () => {
     await page.goto(SITE + '/numerology')
     await page.waitForLoadState('networkidle')
 
-    // Name input — use broad selector
     const nameInput = page.locator(
       'input[placeholder*="name" i], input[placeholder*="Name"], input[type="text"]'
     ).first()
-
     const nameVisible = await nameInput.isVisible({ timeout: 4000 }).catch(() => false)
     console.log('Name input visible:', nameVisible)
     if (nameVisible) {
       await nameInput.fill('Venkat Kumar')
     } else {
-      const allInputs = page.locator('input:not([type="hidden"]):not([type="select"])')
-      const n = await allInputs.count()
-      console.log('Total inputs:', n)
-      if (n > 0) await allInputs.first().fill('Venkat Kumar').catch(() => {})
+      const all = page.locator('input:not([type="hidden"])')
+      if (await all.count() > 0) await all.first().fill('Venkat Kumar').catch(() => {})
     }
 
     const selects = page.locator('select')
-    const nSel = await selects.count()
-    if (nSel >= 3) {
+    if (await selects.count() >= 3) {
       await selects.nth(0).selectOption('15')
       await selects.nth(1).selectOption({ index: 8 })
       await selects.nth(2).selectOption('1985')
