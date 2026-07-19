@@ -150,8 +150,23 @@ export default function ChartPage() {
         UtcOffsetHours:5.5, AyanamsaType:'Lahiri',
         Language:language,
       }
-      if (lat) { payload.Latitude = lat; payload.Longitude = lng }
-      console.log('Chart payload:', JSON.stringify(payload))
+      // If no lat/lng from city autocomplete selection, try to geocode first
+      if (lat) {
+        payload.Latitude  = lat
+        payload.Longitude = lng
+      } else if (place.trim()) {
+        // Try to geocode via Photon so backend gets exact coordinates
+        try {
+          const geoRes = await fetch(
+            'https://photon.komoot.io/api/?q=' + encodeURIComponent(place) + '&limit=1&lang=en'
+          ).then(r => r.json())
+          const feat = geoRes?.features?.[0]
+          if (feat?.geometry?.coordinates) {
+            payload.Latitude  = feat.geometry.coordinates[1]
+            payload.Longitude = feat.geometry.coordinates[0]
+          }
+        } catch {}
+      }
       if (!payload.PlaceName) payload.PlaceName = 'Chennai, India'
       const res = token
         ? await calculateChart(payload)
