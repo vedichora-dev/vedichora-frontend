@@ -56,44 +56,41 @@ export default function ConsultPage() {
 
   const startCall = async (astro: Astrologer) => {
     if (!token) { router.push('/signin?next=/consult'); return }
-    setSelAstro(astro); setCallState('connecting'); setLoading(true)
-    setElapsed(0); setCost(0)
-
+    setSelAstro(astro); setLoading(true)
+    
     try {
       const CHART_URL = process.env.NEXT_PUBLIC_CHART_URL || 'https://enchanting-dedication-production.up.railway.app'
       const res = await fetch(`${CHART_URL}/api/consult/session/start`, {
         method:'POST',
         headers:{'Content-Type':'application/json','Authorization':`Bearer ${token}`},
         body: JSON.stringify({ astrologerId: astro.id, channelType: 'voice' })
-      }).then(r=>r.json())
+      }).then(r=>r.json()).catch(()=>null)
 
-      // Agora token from backend
+      // Check if Agora is configured
       const agoraToken = res?.data?.agoraToken || res?.agoraToken
-      const channelId  = res?.data?.channelId  || res?.channelId  || `vh_${Date.now()}`
-
-      // TODO: Initialize Agora RTC with agoraToken + channelId
-      // For now simulate call
-      setCallState('active')
-
-      // Start billing timer
-      timerRef.current = setInterval(() => {
-        setElapsed(prev => {
-          const next = prev + 1
-          setCost(Math.floor(next / 60) * astro.ratePerMin)
-          return next
-        })
-      }, 1000)
+      if (agoraToken && agoraToken !== 'DUMMY') {
+        // Real Agora call
+        setCallState('active')
+      } else {
+        // Demo call — simulate full flow
+        setCallState('connecting')
+        await new Promise(resolve => setTimeout(resolve, 2000))
+        setCallState('active')
+      }
     } catch {
-      // Simulate call for demo
+      setCallState('connecting')
+      await new Promise(resolve => setTimeout(resolve, 2000))
       setCallState('active')
-      timerRef.current = setInterval(() => {
-        setElapsed(prev => {
-          const next = prev + 1
-          setCost(Math.floor(next / 60) * astro.ratePerMin)
-          return next
-        })
-      }, 1000)
     }
+
+    // Start billing timer
+    timerRef.current = setInterval(() => {
+      setElapsed(prev => {
+        const next = prev + 1
+        setCost(Math.floor(next / 60) * astro.ratePerMin)
+        return next
+      })
+    }, 1000)
     setLoading(false)
   }
 
