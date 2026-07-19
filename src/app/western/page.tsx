@@ -175,6 +175,18 @@ export default function WesternPage(){
   const [n2,setN2]=useState('')
   const [m1,setM1]=useState<number|null>(null)
   const [m2,setM2]=useState<number|null>(null)
+  // Chart tab state
+  const [chartName,setChartName]=useState('')
+  const [chartDay,setChartDay]=useState(0)
+  const [chartMon,setChartMon]=useState(0)
+  const [chartYr,setChartYr]=useState(0)
+  const [chartHr,setChartHr]=useState(0)
+  const [chartMi,setChartMi]=useState(0)
+  const [chartAp,setChartAp]=useState('AM')
+  const [chartPlace,setChartPlace]=useState('')
+  const [chartLoading,setChartLoading]=useState(false)
+  const [chartResult,setChartResult]=useState<any>(null)
+  const [chartErr,setChartErr]=useState('')
 
   const theme=THEMES.find(t=>t.key===themeKey)||THEMES[0]
   const isDark=themeKey==='midnight'||themeKey==='forest'
@@ -188,6 +200,44 @@ export default function WesternPage(){
   const compat=m1!==null&&m2!==null?getCompat(m1,m2):null
   const ms1=m1!==null?MOON_SIGNS[m1]:null
   const ms2=m2!==null?MOON_SIGNS[m2]:null
+
+  const generateChart=async()=>{
+    if(!chartDay||!chartMon||!chartYr){setChartErr('Enter date of birth');return}
+    setChartLoading(true);setChartErr('');setChartResult(null)
+    try{
+      const CHART_URL='https://enchanting-dedication-production.up.railway.app'
+      // Convert 12hr to 24hr
+      let hr24=chartHr||12
+      if(chartAp==='PM'&&hr24!==12) hr24+=12
+      if(chartAp==='AM'&&hr24===12) hr24=0
+      const payload={
+        PersonName:chartName||'Guest',
+        Year:chartYr,Month:chartMon,Day:chartDay,
+        Hour:hr24,Minute:chartMi,Second:0,
+        PlaceName:chartPlace||'Chennai, India',
+        UtcOffsetHours:5.5,AyanamsaType:'Lahiri',
+      }
+      // Geocode if place entered
+      if(chartPlace){
+        try{
+          const geo=await fetch(`https://photon.komoot.io/api/?q=${encodeURIComponent(chartPlace)}&limit=1&lang=en`).then(r=>r.json())
+          const f=geo?.features?.[0]
+          if(f){(payload as any).Latitude=f.geometry.coordinates[1];(payload as any).Longitude=f.geometry.coordinates[0]}
+        }catch{}
+      }
+      const res=await fetch(`${CHART_URL}/api/chart/guest`,{
+        method:'POST',headers:{'Content-Type':'application/json'},
+        body:JSON.stringify(payload)
+      }).then(r=>r.json())
+      const data=res?.data?.data??res?.data??res
+      if(data?.ascendantName||data?.AscendantName){
+        setChartResult(data)
+      }else{
+        setChartErr(res?.message||res?.data?.message||'Chart calculation failed')
+      }
+    }catch(e:any){setChartErr(e?.message||'Connection failed')}
+    setChartLoading(false)
+  }
 
   const scoreColor=(s:number)=>s>=80?'#22C55E':s>=65?'#D4A52B':'#EF4444'
 
@@ -465,30 +515,31 @@ export default function WesternPage(){
               <div style={{display:'flex',flexDirection:'column',gap:'16px'}}>
                 <div>
                   <div style={{fontSize:'10px',color:'var(--w-tx2)',fontWeight:700,textTransform:'uppercase',letterSpacing:'.06em',marginBottom:'6px'}}>Full name</div>
-                  <input placeholder="Your full name" style={{width:'100%',padding:'10px 12px',borderRadius:'10px',border:'1.5px solid var(--w-bd)',background:'var(--w-bg)',color:'var(--w-tx)',fontSize:'14px',boxSizing:'border-box',fontFamily:'inherit',outline:'none'}} />
+                  <input value={chartName} onChange={e=>setChartName(e.target.value)} placeholder="Your full name" style={{width:'100%',padding:'10px 12px',borderRadius:'10px',border:'1.5px solid var(--w-bd)',background:'var(--w-bg)',color:'var(--w-tx)',fontSize:'14px',boxSizing:'border-box',fontFamily:'inherit',outline:'none'}} />
                 </div>
                 <div>
                   <div style={{fontSize:'10px',color:'var(--w-tx2)',fontWeight:700,textTransform:'uppercase',letterSpacing:'.06em',marginBottom:'6px'}}>Date of birth</div>
                   <div style={{display:'flex',gap:'8px'}}>
-                    <Sel value="" onChange={()=>{}} placeholder="Day" w="80px" opts={DAYS.map(d=>({v:d,l:String(d)}))} />
-                    <Sel value="" onChange={()=>{}} placeholder="Month" w="140px" opts={MONTHS.map((m,i)=>({v:i+1,l:m}))} />
-                    <Sel value="" onChange={()=>{}} placeholder="Year" w="96px" opts={YEARS_100.map(y=>({v:y,l:String(y)}))} />
+                    <Sel value={chartDay} onChange={v=>setChartDay(+v)} placeholder="Day" w="80px" opts={DAYS.map(d=>({v:d,l:String(d)}))} />
+                    <Sel value={chartMon} onChange={v=>setChartMon(+v)} placeholder="Month" w="140px" opts={MONTHS.map((m,i)=>({v:i+1,l:m}))} />
+                    <Sel value={chartYr} onChange={v=>setChartYr(+v)} placeholder="Year" w="96px" opts={YEARS_100.map(y=>({v:y,l:String(y)}))} />
                   </div>
                 </div>
                 <div>
                   <div style={{fontSize:'10px',color:'var(--w-tx2)',fontWeight:700,textTransform:'uppercase',letterSpacing:'.06em',marginBottom:'6px'}}>Time of birth <span style={{fontSize:'9px',opacity:.6}}>(improves accuracy)</span></div>
                   <div style={{display:'flex',gap:'8px',alignItems:'center'}}>
-                    <Sel value="" onChange={()=>{}} placeholder="Hr" w="80px" opts={Array.from({length:12},(_,i)=>({v:i+1,l:String(i+1)}))} />
+                    <Sel value={chartHr} onChange={v=>setChartHr(+v)} placeholder="Hr" w="80px" opts={Array.from({length:12},(_,i)=>({v:i+1,l:String(i+1)}))} />
                     <span style={{color:'var(--w-tx2)',fontWeight:300,fontSize:'18px'}}>:</span>
-                    <Sel value="" onChange={()=>{}} placeholder="Min" w="80px" opts={Array.from({length:60},(_,i)=>({v:i,l:String(i).padStart(2,'0')}))} />
-                    <Sel value="" onChange={()=>{}} placeholder="AM/PM" w="90px" opts={[{v:'AM',l:'AM'},{v:'PM',l:'PM'}]} />
+                    <Sel value={chartMi} onChange={v=>setChartMi(+v)} placeholder="Min" w="80px" opts={Array.from({length:60},(_,i)=>({v:i,l:String(i).padStart(2,'0')}))} />
+                    <Sel value={chartAp} onChange={v=>setChartAp(v)} placeholder="AM/PM" w="90px" opts={[{v:'AM',l:'AM'},{v:'PM',l:'PM'}]} />
                   </div>
                 </div>
                 <div>
                   <div style={{fontSize:'10px',color:'var(--w-tx2)',fontWeight:700,textTransform:'uppercase',letterSpacing:'.06em',marginBottom:'6px'}}>Place of birth</div>
-                  <input placeholder="City, Country" style={{width:'100%',padding:'10px 12px',borderRadius:'10px',border:'1.5px solid var(--w-bd)',background:'var(--w-bg)',color:'var(--w-tx)',fontSize:'14px',boxSizing:'border-box',fontFamily:'inherit',outline:'none'}} />
+                  <input value={chartPlace} onChange={e=>setChartPlace(e.target.value)} placeholder="City, Country" style={{width:'100%',padding:'10px 12px',borderRadius:'10px',border:'1.5px solid var(--w-bd)',background:'var(--w-bg)',color:'var(--w-tx)',fontSize:'14px',boxSizing:'border-box',fontFamily:'inherit',outline:'none'}} />
                 </div>
-                <div style={{textAlign:'center'}}>{btn('Generate My Chart -- Free ✦',()=>alert('Chart generation -- connect to API'))}</div>
+                <div style={{textAlign:'center'}}>{btn(chartLoading?'Generating...':'Generate My Chart -- Free ✦',generateChart,chartLoading)}</div>
+                {chartErr&&<div style={{color:'#DC2626',fontSize:'12px',textAlign:'center',marginTop:'8px'}}>{chartErr}</div>}
                 <p style={{textAlign:'center',fontSize:'11px',color:'var(--w-tx2)',margin:0,opacity:.6}}>Premium reports from {curr.sym}19 · No subscription</p>
               </div>
             </div>
