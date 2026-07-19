@@ -69,10 +69,24 @@ export default function ChartPage() {
     if (tabData[tab] !== undefined) return
 
     const loaders: Record<string, ()=>Promise<any>> = {
-      shadbala:     async () => (await getShadbala(horoId))?.data,
-      ashtakavarga: async () => (await getAshtakavarga(horoId))?.data,
-      arudha:       async () => (await getSpecialLagnas(horoId))?.data,
-      dosha:        async () => (await getDoshas(horoId))?.data,
+      shadbala: async () => {
+        const r = await getShadbala(horoId)
+        const d = r?.data?.data ?? r?.data ?? r
+        // d should be { planets: [...] } or [...] directly
+        return Array.isArray(d) ? { planets: d } : d
+      },
+      ashtakavarga: async () => {
+        const r = await getAshtakavarga(horoId)
+        return r?.data?.data ?? r?.data ?? r
+      },
+      arudha: async () => {
+        const r = await getSpecialLagnas(horoId)
+        return r?.data?.data ?? r?.data ?? r
+      },
+      dosha: async () => {
+        const r = await getDoshas(horoId)
+        return r?.data?.data ?? r?.data ?? r
+      },
       interpret:    async () => {
         const [a,b,c,d] = await Promise.all([
           getInterpretPersonality(horoId).catch(()=>null),
@@ -82,7 +96,15 @@ export default function ChartPage() {
         ])
         return { personality:a?.data, career:b?.data, marriage:c?.data, currentPeriod:d?.data }
       },
-      report:       async () => (await getChartReportStage1(horoId))?.data,
+      report: async () => {
+        const [rep, yogas] = await Promise.all([
+          getChartReportStage1(horoId).catch(()=>null),
+          fetch(\`\${process.env.NEXT_PUBLIC_CHART_URL||'https://enchanting-dedication-production.up.railway.app'}/api/chart/\${horoId}/yogas\`,
+            {headers:{Authorization:\`Bearer \${token}\`}}).then(r=>r.json()).catch(()=>null),
+        ])
+        const repData = rep?.data?.data ?? rep?.data ?? {}
+        return { ...repData, yogas: yogas?.data?.data ?? yogas?.data ?? [] }
+      },
     }
 
     if (!loaders[tab]) return
@@ -137,6 +159,7 @@ export default function ChartPage() {
       if (data) {
         const id = data.horoscopeId||data.id||''
         setResult(data); setHoroIdL(id)
+        setHoroIdL(id)  // Always set local horoId for tab loading
         if (id && token) { setHoroId(id); localStorage.setItem('vh_horoid',id) }
         setTab('rasi'); setShowForm(false)
         if (token) await loadSaved()
