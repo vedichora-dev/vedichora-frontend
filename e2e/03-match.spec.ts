@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { test, expect } from '@playwright/test'
 import { ADMIN_EMAIL, ADMIN_PASS } from './helpers'
 
