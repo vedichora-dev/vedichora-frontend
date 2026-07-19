@@ -2,6 +2,7 @@ import { defineConfig, devices } from '@playwright/test'
 
 export default defineConfig({
   testDir: './e2e',
+  testMatch: '**/*.spec.js',
   timeout: 60_000,
   retries: 1,
   reporter: [['html', { open: 'never' }], ['list']],
