@@ -18,39 +18,38 @@ export default function CityAutocomplete({ value, onChange, placeholder='City, C
   const timer = useRef<NodeJS.Timeout>()
   const ref   = useRef<HTMLDivElement>(null)
 
-  // Close on outside click
+  // Close on outside click — uses mousedown so it fires before any click inside
   useEffect(() => {
     const h = (e: MouseEvent) => {
       if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false)
     }
-    document.addEventListener('click', h)
-    return () => document.removeEventListener('click', h)
+    document.addEventListener('mousedown', h)
+    return () => document.removeEventListener('mousedown', h)
   }, [])
 
-  // Debounced search via Geonames (free, no key needed for basic)
+  // Debounced search via photon (OpenStreetMap, free, no key)
   useEffect(() => {
     clearTimeout(timer.current)
     if (query.length < 2) { setResults([]); return }
     timer.current = setTimeout(async () => {
       setLoading(true)
       try {
-        // Use photon API (OpenStreetMap powered, free, no key)
-        const res = await fetch(
+        const res  = await fetch(
           `https://photon.komoot.io/api/?q=${encodeURIComponent(query)}&limit=6&lang=en`
         )
         const data = await res.json()
         const cities: City[] = (data.features || [])
-          .filter((f: any) => f.properties?.type === 'city' || f.properties?.type === 'town' || f.properties?.type === 'village' || f.properties?.name)
+          .filter((f: any) => f.properties?.type === 'city' || f.properties?.type === 'town'
+            || f.properties?.type === 'village' || f.properties?.name)
           .slice(0, 6)
           .map((f: any) => ({
-            name: f.properties.name || '',
+            name:    f.properties.name || '',
             country: f.properties.country || '',
-            lat: f.geometry.coordinates[1],
-            lng: f.geometry.coordinates[0],
-            tz: '',
+            lat:     f.geometry.coordinates[1],
+            lng:     f.geometry.coordinates[0],
+            tz:      '',
           }))
-        // Deduplicate by name+country
-        const seen = new Set<string>()
+        const seen   = new Set<string>()
         const unique = cities.filter(c => {
           const key = c.name + '|' + c.country
           if (seen.has(key)) return false
@@ -65,11 +64,13 @@ export default function CityAutocomplete({ value, onChange, placeholder='City, C
     }, 350)
   }, [query])
 
-  const select = (city: City) => {
+  const select = (e: React.MouseEvent, city: City) => {
+    e.preventDefault()
+    e.stopPropagation()          // prevent outside-click handler from also firing
     const label = `${city.name}${city.country ? ', ' + city.country : ''}`
     setQuery(label)
     setOpen(false)
-    setResults([])  // Clear results so onFocus can't reopen
+    setResults([])
     onChange(label, city.lat, city.lng, city.tz)
   }
 
@@ -85,6 +86,7 @@ export default function CityAutocomplete({ value, onChange, placeholder='City, C
           onChange={e => { setQuery(e.target.value); onChange(e.target.value) }}
           onFocus={() => results.length > 0 && setOpen(true)}
           placeholder={placeholder}
+          autoComplete="off"
         />
         {loading && (
           <div style={{position:'absolute',right:'8px',top:'50%',transform:'translateY(-50%)',
@@ -96,7 +98,11 @@ export default function CityAutocomplete({ value, onChange, placeholder='City, C
           background:'var(--surf)',border:'1px solid var(--bd)',borderRadius:'10px',
           boxShadow:'0 8px 24px rgba(0,0,0,.12)',zIndex:9999,overflow:'hidden'}}>
           {results.map((city, i) => (
-            <button key={i} onMouseDown={() => select(city)}
+            <button
+              key={i}
+              type="button"
+              onClick={e => select(e, city)}
+              data-city-option="true"
               style={{display:'flex',alignItems:'center',gap:'8px',width:'100%',
                 padding:'9px 12px',border:'none',background:'none',cursor:'pointer',
                 textAlign:'left',fontSize:'13px'}}
