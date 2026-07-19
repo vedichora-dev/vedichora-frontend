@@ -1,14 +1,14 @@
 === CURRENT e2e FILES ===
-total 52
-drwxr-xr-x 2 runner runner  4096 Jul 19 15:41 .
-drwxr-xr-x 7 runner runner  4096 Jul 19 15:42 ..
--rw-r--r-- 1 runner runner  4428 Jul 19 15:41 01-auth.spec.js
--rw-r--r-- 1 runner runner 11246 Jul 19 15:41 02-chart.spec.js
--rw-r--r-- 1 runner runner  2718 Jul 19 15:41 03-match.spec.js
--rw-r--r-- 1 runner runner  2685 Jul 19 15:41 04-horoscope.spec.js
--rw-r--r-- 1 runner runner  3485 Jul 19 15:41 05-deployment.spec.js
--rw-r--r-- 1 runner runner  8081 Jul 19 15:41 functional-test.spec.js
--rw-r--r-- 1 runner runner  2694 Jul 19 15:41 helpers.js
+total 56
+drwxr-xr-x 2 runner runner  4096 Jul 19 15:49 .
+drwxr-xr-x 7 runner runner  4096 Jul 19 15:49 ..
+-rw-r--r-- 1 runner runner  4428 Jul 19 15:49 01-auth.spec.js
+-rw-r--r-- 1 runner runner 11246 Jul 19 15:49 02-chart.spec.js
+-rw-r--r-- 1 runner runner  2718 Jul 19 15:49 03-match.spec.js
+-rw-r--r-- 1 runner runner  2685 Jul 19 15:49 04-horoscope.spec.js
+-rw-r--r-- 1 runner runner  3485 Jul 19 15:49 05-deployment.spec.js
+-rw-r--r-- 1 runner runner  8232 Jul 19 15:49 functional-test.spec.js
+-rw-r--r-- 1 runner runner  2694 Jul 19 15:49 helpers.js
 
 === BUILD OUTPUT ===
 
