@@ -1,14 +1,14 @@
 === CURRENT e2e FILES ===
 total 56
-drwxr-xr-x 2 runner runner  4096 Jul 19 16:02 .
-drwxr-xr-x 7 runner runner  4096 Jul 19 16:02 ..
--rw-r--r-- 1 runner runner  4428 Jul 19 16:02 01-auth.spec.js
--rw-r--r-- 1 runner runner 11246 Jul 19 16:02 02-chart.spec.js
--rw-r--r-- 1 runner runner  2718 Jul 19 16:02 03-match.spec.js
--rw-r--r-- 1 runner runner  2685 Jul 19 16:02 04-horoscope.spec.js
--rw-r--r-- 1 runner runner  3485 Jul 19 16:02 05-deployment.spec.js
--rw-r--r-- 1 runner runner  8626 Jul 19 16:02 functional-test.spec.js
--rw-r--r-- 1 runner runner  2694 Jul 19 16:02 helpers.js
+drwxr-xr-x 2 runner runner  4096 Jul 19 16:25 .
+drwxr-xr-x 7 runner runner  4096 Jul 19 16:26 ..
+-rw-r--r-- 1 runner runner  4428 Jul 19 16:25 01-auth.spec.js
+-rw-r--r-- 1 runner runner 11246 Jul 19 16:25 02-chart.spec.js
+-rw-r--r-- 1 runner runner  2718 Jul 19 16:25 03-match.spec.js
+-rw-r--r-- 1 runner runner  2685 Jul 19 16:25 04-horoscope.spec.js
+-rw-r--r-- 1 runner runner  3485 Jul 19 16:25 05-deployment.spec.js
+-rw-r--r-- 1 runner runner  8626 Jul 19 16:25 functional-test.spec.js
+-rw-r--r-- 1 runner runner  2694 Jul 19 16:25 helpers.js
 
 === BUILD OUTPUT ===
 
@@ -40,17 +40,17 @@ https://nextjs.org/telemetry
    Collecting build traces ...
 
 Route (app)                              Size     First Load JS
-┌ ○ /                                    5.01 kB         124 kB
+┌ ○ /                                    11.6 kB         123 kB
 ├ ○ /_not-found                          869 B          82.8 kB
 ├ ○ /about                               2.46 kB        84.4 kB
 ├ ○ /admin                               4.84 kB        89.7 kB
 ├ ○ /api-docs                            1.87 kB        86.8 kB
-├ ○ /chart                               12 kB           134 kB
+├ ○ /chart                               19.2 kB         134 kB
 ├ ○ /checkout                            5.07 kB          90 kB
 ├ ○ /consult                             5.5 kB         90.4 kB
 ├ ○ /dashboard                           1.45 kB         113 kB
 ├ ○ /learn                               2.52 kB        84.4 kB
-├ ○ /match                               4.82 kB         127 kB
+├ ○ /match                               4.92 kB         120 kB
 ├ ○ /muhurta                             2.63 kB         114 kB
 ├ ○ /numerology                          3.76 kB         113 kB
 ├ ○ /phone-login                         2 kB            121 kB
@@ -66,7 +66,7 @@ Route (app)                              Size     First Load JS
   ├ chunks/938-cac2006256170abd.js       26.7 kB
   ├ chunks/fd9d1056-591193791e59a9f8.js  53.3 kB
   ├ chunks/main-app-b4533ec2e702cf2a.js  220 B
-  └ chunks/webpack-099ebf46b15083a8.js   1.74 kB
+  └ chunks/webpack-4e952c5bbff5da20.js   1.74 kB
 
 
 ○  (Static)  prerendered as static content
