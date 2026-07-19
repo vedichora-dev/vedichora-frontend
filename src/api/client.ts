@@ -11,6 +11,12 @@ export const chartApi = axios.create({
   headers: { 'Content-Type': 'application/json' },
 })
 
+// Guest API — no auth, no redirect on 401 (for AllowAnonymous endpoints)
+export const guestApi = axios.create({
+  baseURL: CHART_URL,
+  headers: { 'Content-Type': 'application/json' },
+})
+
 // Attach token + language to every chart request
 chartApi.interceptors.request.use(cfg => {
   const token = localStorage.getItem('vh_token')
