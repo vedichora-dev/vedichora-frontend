@@ -1,0 +1,60 @@
+SyntaxError: /home/runner/work/vedichora-frontend/vedichora-frontend/e2e/helpers.js: Binding invalid left-hand side in function parameter list. (38:29)
+
+  36 |   // DatePicker renders <select> elements
+  37 |   // Try by ID first, then fall back to position
+> 38 |   const tryById = async (id, val | number) => {
+     |                              ^
+  39 |     const el = page.locator(`#${id}`)
+  40 |     if (await el.count() > 0) {
+  41 |       await el.selectOption(String(val))
+
+   at 01-auth.spec.js:38
+
+  36 |     await page.waitForTimeout(5000)
+  37 |     await page.screenshot({ path: 'test-results/03-after-login.png' })
+> 38 |
+     | ^
+  39 |     // Should redirect away from /signin
+  40 |     const url = page.url()
+  41 |     console.log('After login URL:', url)
+    at Object.<anonymous> (/home/runner/work/vedichora-frontend/vedichora-frontend/e2e/01-auth.spec.js:3:37)
+SyntaxError: /home/runner/work/vedichora-frontend/vedichora-frontend/e2e/02-chart.spec.js: Unterminated regular expression. (96:37)
+
+  94 |     // Check for error
+  95 |     const bodyText = await page.locator('body').textContent() || ''
+> 96 |     const errText  = bodyText.match(/Error:\s*[^
+     |                                      ^
+  97 | ]{0,200}/)?.[0] || ''
+  98 |     if (errText) console.warn('Chart error found:', errText)
+  99 |
+
+   at 02-chart.spec.js:96
+
+  94 |     // Check for error
+  95 |     const bodyText = await page.locator('body').textContent() || ''
+> 96 |     const errText  = bodyText.match(/Error:\s*[^
+     |                                     ^
+  97 | ]{0,200}/)?.[0] || ''
+  98 |     if (errText) console.warn('Chart error found:', errText)
+  99 |
+SyntaxError: /home/runner/work/vedichora-frontend/vedichora-frontend/e2e/helpers.js: Binding invalid left-hand side in function parameter list. (38:29)
+
+  36 |   // DatePicker renders <select> elements
+  37 |   // Try by ID first, then fall back to position
+> 38 |   const tryById = async (id, val | number) => {
+     |                              ^
+  39 |     const el = page.locator(`#${id}`)
+  40 |     if (await el.count() > 0) {
+  41 |       await el.selectOption(String(val))
+
+   at 03-match.spec.js:38
+
+  36 |     // Fill Person 1
+  37 |     if (count >= 6) {
+> 38 |       // Day, Month, Year for Person 1
+     |                             ^
+  39 |       await selects.nth(0).selectOption('15')   // day
+  40 |       await selects.nth(1).selectOption({ index: 8 })  // August
+  41 |       await selects.nth(2).selectOption('1990') // year
+    at Object.<anonymous> (/home/runner/work/vedichora-frontend/vedichora-frontend/e2e/03-match.spec.js:3:37)
+
