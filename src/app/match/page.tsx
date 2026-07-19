@@ -195,22 +195,26 @@ export default function MatchPage() {
       const mHeaders: Record<string,string> = { 'Content-Type': 'application/json' }
       if (token) mHeaders['Authorization'] = `Bearer ${token}`
 
-      // Try /api/chart/match with horoscopeId pair first
       let mdata: any = null
-      const mres = await fetch(`${CHART_URL}/api/chart/match`, {
-        method: 'POST', headers: mHeaders,
-        body: JSON.stringify({ Person1: id1, Person2: id2 })
-      }).then(r => r.json()).catch(() => null)
 
-      mdata = mres?.data?.data ?? mres?.data ?? mres
-
-      // Fallback: /api/compat/score
-      if (!mdata || mdata?.status === 400 || mdata?.statusCode === 400) {
-        const mres2 = await fetch(`${CHART_URL}/api/compat/score`, {
+      if (token && id1 && id2) {
+        // Auth: use saved IDs
+        const mres = await fetch(`${CHART_URL}/api/chart/match`, {
           method: 'POST', headers: mHeaders,
-          body: JSON.stringify({ Person1: id1, Person2: id2 })
+          body: JSON.stringify({ HoroscopeId1: id1, HoroscopeId2: id2 })
         }).then(r => r.json()).catch(() => null)
-        mdata = mres2?.data?.data ?? mres2?.data ?? mres2
+        mdata = mres?.data?.data ?? mres?.data ?? mres
+      }
+
+      if (!mdata || mdata?.ashtaKootaScore === undefined) {
+        // Guest or fallback: send full payloads to guest-match
+        const gp1 = buildPayload(n1, d1, p1, lat1, lng1, g1)
+        const gp2 = buildPayload(n2, d2, p2, lat2, lng2, g2)
+        const gres = await fetch(`${CHART_URL}/api/chart/guest-match`, {
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ Person1: gp1, Person2: gp2 })
+        }).then(r => r.json()).catch(() => null)
+        mdata = gres?.data?.data ?? gres?.data ?? gres
       }
 
       if (!mdata) throw new Error('Compatibility calculation failed')
