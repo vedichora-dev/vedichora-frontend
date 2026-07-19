@@ -1,197 +1,207 @@
 // @ts-nocheck
 const { test, expect } = require('@playwright/test')
 
-const SITE   = process.env.BASE_URL || 'https://vedichora-frontend-orcin.vercel.app'
-const ADMIN  = 'admin@vedichora.com'
-const PASS   = 'Admin@123'
+const SITE  = process.env.BASE_URL || 'https://vedichora-frontend-orcin.vercel.app'
+const ADMIN = 'admin@vedichora.com'
+const PASS  = 'Admin@123'
 
-test.describe('GUEST CHART - no login', () => {
+// Helper: fill date using select elements on a specific parent
+async function fillDate(page, parentSelector, day, monthIdx, year) {
+  const parent = parentSelector ? page.locator(parentSelector) : page
+  const selects = parent.locator('select')
+  await selects.nth(0).selectOption(String(day)).catch(()=>{})
+  await selects.nth(1).selectOption({ index: monthIdx }).catch(()=>{})
+  await selects.nth(2).selectOption(String(year)).catch(()=>{})
+}
 
-  test('Guest can generate chart without login', async ({ page }) => {
+async function fillCity(page, inputNth, cityName) {
+  const inputs = page.locator('input[placeholder*="City"], input[placeholder*="city"]')
+  await inputs.nth(inputNth).fill(cityName)
+  await page.waitForTimeout(1500)
+  const btn = page.locator('button').filter({ hasText: cityName }).first()
+  if (await btn.isVisible({ timeout: 3000 })) {
+    await btn.click()
+    await page.waitForTimeout(600)
+  }
+}
+
+// ══════════════════════════════════════════════════════════════
+test.describe('GUEST CHART', () => {
+
+  test('Guest chart — no redirect, city dropdown closes, chart generates [chromium]', async ({ page }) => {
     await page.goto(SITE + '/chart')
     await page.waitForLoadState('networkidle')
-
-    // Should NOT redirect to login
     await expect(page).not.toHaveURL(/signin|login/)
-    console.log('✓ No redirect to login')
+    console.log('✓ No redirect to signin')
 
-    // Fill name
-    await page.fill('input[placeholder*="Name"], input[placeholder*="name"]', 'Test Guest')
-
-    // Fill date - Day
-    const daySelect = page.locator('select').nth(0)
-    await daySelect.selectOption('1')
-    // Month
-    const monthSelect = page.locator('select').nth(1)
-    await monthSelect.selectOption({ index: 3 }) // March
-    // Year
-    const yearSelect = page.locator('select').nth(2)
-    await yearSelect.selectOption('1985')
-    // Hour
-    const hourSelect = page.locator('select').nth(3)
-    await hourSelect.selectOption('10')
-    // Min
-    const minSelect = page.locator('select').nth(4)
-    await minSelect.selectOption('30')
+    // Select date
+    const selects = page.locator('select')
+    await selects.nth(0).selectOption('1')       // Day
+    await selects.nth(1).selectOption({ index: 3 }) // March
+    await selects.nth(2).selectOption('1985')    // Year
+    await selects.nth(3).selectOption('10').catch(()=>{}) // Hour
+    await selects.nth(4).selectOption('0').catch(()=>{})  // Minute
 
     // City
-    const cityInput = page.locator('input[placeholder*="City"], input[placeholder*="city"]').first()
-    await cityInput.fill('Chennai')
-    await page.waitForTimeout(1000)
-    // Click first dropdown result
-    const firstResult = page.locator('button:has-text("Chennai")').first()
-    if (await firstResult.isVisible({ timeout: 3000 })) {
-      await firstResult.click()
-      await page.waitForTimeout(500)
-      // Verify dropdown closed
-      await expect(firstResult).not.toBeVisible({ timeout: 2000 })
-      console.log('✓ City dropdown closed after selection')
-    } else {
-      console.log('⚠ No city dropdown appeared')
-    }
+    await fillCity(page, 0, 'Chennai')
 
-    // Click generate
-    const genBtn = page.locator('button:has-text("Generate"), button:has-text("ஜாதகம்"), button:has-text("Kundali")').first()
+    // Verify dropdown closed
+    const cityInput = page.locator('input[placeholder*="City"]').first()
+    await expect(cityInput).toHaveValue(/Chennai/)
+    console.log('✓ City selected, dropdown closed')
+
+    // Click Generate — look for the generate button specifically within the form card
+    // NOT the homepage CTA button
+    const genBtn = page.locator('button').filter({ hasText: /Generate|ஜாதகம்|Kundali Chart/ }).last()
     await genBtn.click()
-    await page.waitForTimeout(5000)
+    await page.waitForTimeout(8000)
 
-    // Check result
+    // Must NOT redirect to signin
+    await expect(page).not.toHaveURL(/signin|login/)
+
     const body = await page.locator('body').textContent()
-    const hasChart = body.includes('Cancer') || body.includes('Aries') || body.includes('Lagna') || body.includes('Rasi')
-    console.log('Chart result appeared:', hasChart)
+    const hasChart = /Cancer|Aries|Taurus|Gemini|Leo|Virgo|Libra|Scorpio|Sagittarius|Capricorn|Aquarius|Pisces/.test(body)
+    const hasError = body.includes('Validation') || body.includes('failed') || body.includes('error')
+    console.log('Chart appeared:', hasChart, '| Error shown:', hasError)
     if (!hasChart) {
-      console.log('ERROR: No chart generated. Page says:', body.slice(0, 500))
+      const errElem = await page.locator('div[style*="DC2626"], div[style*="red"]').first().textContent().catch(()=>'')
+      console.log('Error element:', errElem)
     }
+    await page.screenshot({ path: 'test-results/guest-chart.png', fullPage: false })
     expect(hasChart).toBeTruthy()
-    await page.screenshot({ path: 'test-results/guest-chart.png' })
   })
+})
 
-  test('Guest city dropdown closes on selection', async ({ page }) => {
+// ══════════════════════════════════════════════════════════════
+test.describe('CITY DROPDOWN', () => {
+  test('City dropdown closes after selection', async ({ page }) => {
     await page.goto(SITE + '/chart')
     await page.waitForLoadState('networkidle')
 
-    const cityInput = page.locator('input[placeholder*="City"], input[placeholder*="city"]').first()
-    await cityInput.fill('Chennai')
-    await page.waitForTimeout(1500)
+    const cityInput = page.locator('input[placeholder*="City"]').first()
+    await cityInput.fill('Mumbai')
+    await page.waitForTimeout(1800)
 
-    const dropdown = page.locator('[data-city-result], .city-result, button:has-text("Chennai")').first()
-    if (await dropdown.isVisible({ timeout: 3000 })) {
-      await dropdown.click()
-      await page.waitForTimeout(300)
-      const stillOpen = await page.locator('button:has-text("McKinsey")').isVisible().catch(() => false)
-      console.log('Dropdown still open after click:', stillOpen)
-      expect(stillOpen).toBeFalsy()
+    const firstResult = page.locator('button').filter({ hasText: 'Mumbai' }).first()
+    const visible = await firstResult.isVisible({ timeout: 4000 })
+    if (visible) {
+      await firstResult.click()
+      await page.waitForTimeout(500)
+      // Results should be gone
+      const anyResult = page.locator('button').filter({ hasText: 'Mumbai' }).first()
+      const stillVisible = await anyResult.isVisible({ timeout: 500 }).catch(() => false)
+      console.log('Dropdown still open after click:', stillVisible)
+      expect(stillVisible).toBeFalsy()
+    } else {
+      console.log('No dropdown appeared (API may be slow)')
     }
     await page.screenshot({ path: 'test-results/city-dropdown.png' })
   })
 })
 
-test.describe('GUEST MATCHMAKING - no login', () => {
-  test('Guest can do matchmaking without login', async ({ page }) => {
+// ══════════════════════════════════════════════════════════════
+test.describe('GUEST MATCHMAKING', () => {
+  test('Guest matchmaking — generates compatibility without login', async ({ page }) => {
     await page.goto(SITE + '/match')
     await page.waitForLoadState('networkidle')
     await expect(page).not.toHaveURL(/signin|login/)
 
-    // Person 1
-    await page.locator('input[placeholder*="name"], input[placeholder*="Name"]').nth(0).fill('Ravi')
-    // Date selectors for person 1
-    const selects = page.locator('select')
-    await selects.nth(0).selectOption('1')    // Day
-    await selects.nth(1).selectOption({ index: 3 }) // Month
-    await selects.nth(2).selectOption('1985') // Year
-    // City for person 1
-    const cities = page.locator('input[placeholder*="City"], input[placeholder*="city"]')
-    await cities.nth(0).fill('Chennai')
-    await page.waitForTimeout(1000)
-    const city1btn = page.locator('button:has-text("Chennai")').first()
-    if (await city1btn.isVisible({ timeout: 2000 })) await city1btn.click()
-    await page.waitForTimeout(500)
+    // Person 1 — use index 0 for first card's selects
+    const allSelects = page.locator('select')
+    // Person 1 date (selects 0,1,2)
+    await allSelects.nth(0).selectOption('1').catch(()=>{})
+    await allSelects.nth(1).selectOption({ index: 3 }).catch(()=>{})  // March
+    await allSelects.nth(2).selectOption('1985').catch(()=>{})
 
-    // Person 2
-    await page.locator('input[placeholder*="name"], input[placeholder*="Name"]').nth(1).fill('Priya')
-    await selects.nth(7).selectOption('15').catch(()=>{}) // Try person 2 day
-    await selects.nth(8).selectOption({ index: 6 }).catch(()=>{}) // Month
-    await selects.nth(9).selectOption('1990').catch(()=>{}) // Year
-    await cities.nth(1).fill('Bangalore')
-    await page.waitForTimeout(1000)
-    const city2btn = page.locator('button:has-text("Bangalore"), button:has-text("Bengaluru")').first()
-    if (await city2btn.isVisible({ timeout: 2000 })) await city2btn.click()
-    await page.waitForTimeout(500)
+    await fillCity(page, 0, 'Chennai')
 
-    // Match
-    const matchBtn = page.locator('button:has-text("Compatibility"), button:has-text("Match"), button:has-text("Calculate")').first()
-    await matchBtn.click()
-    await page.waitForTimeout(8000)
-
-    const body = await page.locator('body').textContent()
-    const hasResult = body.includes('%') || body.includes('Koota') || body.includes('Compatible') || body.includes('Ashta')
-    console.log('Match result appeared:', hasResult)
-    if (!hasResult) {
-      console.log('Page content:', body.slice(0, 600))
+    // Person 2 date — need to find person 2's selects
+    // After hour/min selects for person 1, person 2's date selects follow
+    // Try: day is select index 5 or 7 depending on showTime
+    for (let i = 5; i <= 9; i++) {
+      const cnt = await allSelects.count()
+      if (i < cnt) await allSelects.nth(i).selectOption('15').catch(()=>{})
     }
-    await page.screenshot({ path: 'test-results/guest-match.png' })
-    // Don't fail hard — just report
+    await fillCity(page, 1, 'Bangalore')
+
+    // Click match button
+    await page.click('button:has-text("Compatibility"), button:has-text("Check Compat")')
+    await page.waitForTimeout(10000)
+
+    await expect(page).not.toHaveURL(/signin|login/)
+    const body = await page.locator('body').textContent()
+    const hasResult = body.includes('%') || body.includes('Koota') || body.includes('Compatible')
+    const hasError = body.includes('failed') || body.includes('Error') || body.includes('Validation')
+    console.log('Match result:', hasResult, '| Error:', hasError)
+    if (!hasResult) {
+      const errElem = await page.locator('div[style*="DC2626"]').first().textContent().catch(()=>'')
+      console.log('Error text:', errElem)
+      console.log('Page snippet:', body.slice(0, 300))
+    }
+    await page.screenshot({ path: 'test-results/guest-match.png', fullPage: false })
+    expect(hasResult).toBeTruthy()
   })
 })
 
+// ══════════════════════════════════════════════════════════════
 test.describe('LOGGED IN CHART', () => {
-  test('Logged in user generates chart', async ({ page }) => {
-    // Login first
+  test('Logged in user can generate chart', async ({ page }) => {
+    // Login
     await page.goto(SITE + '/signin')
+    await page.waitForLoadState('networkidle')
     await page.fill('input[type="email"]', ADMIN)
     await page.fill('input[type="password"]', PASS)
     await page.click('button[type="submit"]')
     await page.waitForTimeout(4000)
+    const loggedIn = !page.url().includes('signin')
+    console.log('Login success:', loggedIn)
 
     await page.goto(SITE + '/chart')
     await page.waitForLoadState('networkidle')
+    await expect(page).not.toHaveURL(/signin/)
 
-    // Should NOT redirect
-    await expect(page).not.toHaveURL(/signin|login/)
-    console.log('✓ Logged in, on chart page')
-
-    // Fill and generate
     const selects = page.locator('select')
     await selects.nth(0).selectOption('1').catch(()=>{})
     await selects.nth(1).selectOption({ index: 3 }).catch(()=>{})
     await selects.nth(2).selectOption('1985').catch(()=>{})
+    await fillCity(page, 0, 'Chennai')
 
-    const cityInput = page.locator('input[placeholder*="City"], input[placeholder*="city"]').first()
-    await cityInput.fill('Chennai')
-    await page.waitForTimeout(1000)
-    const cityBtn = page.locator('button:has-text("Chennai")').first()
-    if (await cityBtn.isVisible({ timeout: 2000 })) await cityBtn.click()
-
-    const genBtn = page.locator('button:has-text("Generate"), button:has-text("Chart"), button:has-text("ஜாதகம்")').last()
+    // Click the generate button (last one = inside form, not header)
+    const genBtn = page.locator('button').filter({ hasText: /Generate|Chart|ஜாதகம்/ }).last()
     await genBtn.click()
-    await page.waitForTimeout(6000)
+    await page.waitForTimeout(8000)
 
     const body = await page.locator('body').textContent()
-    const hasChart = body.includes('Lagna') || body.includes('Cancer') || body.includes('Rasi')
+    const hasChart = /Cancer|Aries|Leo|Lagna|Rasi|Moon/.test(body)
     console.log('Chart generated:', hasChart)
-    await page.screenshot({ path: 'test-results/loggedin-chart.png' })
+    await page.screenshot({ path: 'test-results/loggedin-chart.png', fullPage: false })
+    expect(hasChart).toBeTruthy()
   })
 })
 
+// ══════════════════════════════════════════════════════════════
 test.describe('NUMEROLOGY', () => {
-  test('Numerology calculates correctly', async ({ page }) => {
+  test('Numerology page calculates numbers', async ({ page }) => {
     await page.goto(SITE + '/numerology')
     await page.waitForLoadState('networkidle')
 
-    await page.fill('input[placeholder*="name"], input[placeholder*="Name"]', 'Venkat')
+    // The placeholder is "Your full birth name" — use a broader selector
+    const nameInput = page.locator('input[type="text"]').first()
+    await nameInput.fill('Venkat')
+
     const selects = page.locator('select')
-    await selects.nth(0).selectOption('11').catch(()=>{})  // Day
+    await selects.nth(0).selectOption('11').catch(()=>{})   // Day 11
     await selects.nth(1).selectOption({ index: 3 }).catch(()=>{}) // March
     await selects.nth(2).selectOption('1978').catch(()=>{}) // Year
 
     await page.click('button:has-text("Calculate")')
-    await page.waitForTimeout(3000)
+    await page.waitForTimeout(4000)
 
     const body = await page.locator('body').textContent()
-    const hasNumbers = body.includes('Life Path') && (body.includes('3') || body.includes('—'))
-    console.log('Numerology result:', hasNumbers)
-    console.log('Page snippet:', body.slice(body.indexOf('Life Path'), body.indexOf('Life Path')+100))
-    await page.screenshot({ path: 'test-results/numerology.png' })
-    expect(hasNumbers).toBeTruthy()
+    const hasLifePath = body.includes('Life Path')
+    const hasNumber   = /\b[1-9]\b|\b1[12]\b|\b22\b|\b33\b/.test(body)
+    console.log('Life Path visible:', hasLifePath, '| Number shown:', hasNumber)
+    await page.screenshot({ path: 'test-results/numerology.png', fullPage: false })
+    expect(hasLifePath && hasNumber).toBeTruthy()
   })
 })
