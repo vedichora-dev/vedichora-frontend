@@ -1,3 +1,19 @@
+=== CURRENT e2e FILES ===
+total 40
+drwxr-xr-x 2 runner runner  4096 Jul 19 00:41 .
+drwxr-xr-x 7 runner runner  4096 Jul 19 00:41 ..
+-rw-r--r-- 1 runner runner  3976 Jul 19 00:41 01-auth.spec.js
+-rw-r--r-- 1 runner runner 11246 Jul 19 00:41 02-chart.spec.js
+-rw-r--r-- 1 runner runner  2718 Jul 19 00:41 03-match.spec.js
+-rw-r--r-- 1 runner runner  2685 Jul 19 00:41 04-horoscope.spec.js
+-rw-r--r-- 1 runner runner  3658 Jul 19 00:41 05-deployment.spec.js
+-rw-r--r-- 1 runner runner  2694 Jul 19 00:41 helpers.js
+
+=== BUILD OUTPUT ===
+
+> vedichora@1.0.0 prebuild
+> node -e "const fs=require('fs');const t=JSON.parse(fs.readFileSync('tsconfig.json','utf8'));t.exclude=['node_modules','e2e','e2e/**','playwright.config.ts','**/*.spec.ts','**/*.spec.js'];t.include=['next-env.d.ts','src/**/*.ts','src/**/*.tsx','.next/types/**/*.ts'];fs.writeFileSync('tsconfig.json',JSON.stringify(t,null,2))"
+
 
 > vedichora@1.0.0 build
 > next build
@@ -11,17 +27,41 @@ https://nextjs.org/telemetry
    ▲ Next.js 14.0.4
 
    Creating an optimized production build ...
+   Using tsconfig file: ./tsconfig.json
  ✓ Compiled successfully
-   Linting and checking validity of types ...
-Failed to compile.
+   Skipping validation of types
+   Linting ...
+   Collecting page data ...
+   Generating static pages (0/24) ...
+ ⚠ Entire page /checkout deopted into client-side rendering. https://nextjs.org/docs/messages/deopted-into-client-rendering /checkout
+   Generating static pages (6/24) 
+   Generating static pages (12/24) 
+ReferenceError: useEffect is not defined
+    at m (/home/runner/work/vedichora-frontend/vedichora-frontend/.next/server/app/match/page.js:16:1397)
+    at nP (/home/runner/work/vedichora-frontend/vedichora-frontend/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:45321)
+    at n$ (/home/runner/work/vedichora-frontend/vedichora-frontend/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:61978)
+    at nE (/home/runner/work/vedichora-frontend/vedichora-frontend/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:44877)
+    at nP (/home/runner/work/vedichora-frontend/vedichora-frontend/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:45472)
+    at nP (/home/runner/work/vedichora-frontend/vedichora-frontend/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:59120)
+    at n$ (/home/runner/work/vedichora-frontend/vedichora-frontend/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:61978)
+    at nj (/home/runner/work/vedichora-frontend/vedichora-frontend/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:64628)
+    at nO (/home/runner/work/vedichora-frontend/vedichora-frontend/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:64035)
+    at n$ (/home/runner/work/vedichora-frontend/vedichora-frontend/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:62224)
 
-./e2e/helpers.ts:54:14
-Type error: Expected 2-3 arguments, but got 1.
+Error occurred prerendering page "/match". Read more: https://nextjs.org/docs/messages/prerender-error
+ReferenceError: useEffect is not defined
+    at m (/home/runner/work/vedichora-frontend/vedichora-frontend/.next/server/app/match/page.js:16:1397)
+    at nP (/home/runner/work/vedichora-frontend/vedichora-frontend/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:45321)
+    at n$ (/home/runner/work/vedichora-frontend/vedichora-frontend/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:61978)
+    at nE (/home/runner/work/vedichora-frontend/vedichora-frontend/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:44877)
+    at nP (/home/runner/work/vedichora-frontend/vedichora-frontend/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:45472)
+    at nP (/home/runner/work/vedichora-frontend/vedichora-frontend/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:59120)
+    at n$ (/home/runner/work/vedichora-frontend/vedichora-frontend/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:61978)
+    at nj (/home/runner/work/vedichora-frontend/vedichora-frontend/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:64628)
+    at nO (/home/runner/work/vedichora-frontend/vedichora-frontend/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:64035)
+    at n$ (/home/runner/work/vedichora-frontend/vedichora-frontend/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:62224)
+   Generating static pages (18/24) 
+ ✓ Generating static pages (24/24) 
 
-[0m [90m 52 |[39m[0m
-[0m [90m 53 |[39m   [90m// Select Day[39m[0m
-[0m[31m[1m>[22m[39m[90m 54 |[39m   [36mawait[39m page[33m.[39mselectOption([32m'select[id*="c-dd"], select'[39m)[33m.[39mfirst()[33m.[39mselectOption([33mString[39m(opts[33m.[39mday))[0m
-[0m [90m    |[39m              [31m[1m^[22m[39m[0m
-[0m [90m 55 |[39m   [0m
-[0m [90m 56 |[39m   [90m// Select Month[39m[0m
-[0m [90m 57 |[39m   [36mconst[39m months [33m=[39m [[32m''[39m[33m,[39m[32m'January'[39m[33m,[39m[32m'February'[39m[33m,[39m[32m'March'[39m[33m,[39m[32m'April'[39m[33m,[39m[32m'May'[39m[33m,[39m[32m'June'[39m[33m,[39m[0m
+> Export encountered errors on following paths:
+	/match/page: /match
