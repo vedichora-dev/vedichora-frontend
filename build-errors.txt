@@ -1,15 +1,15 @@
 === CURRENT e2e FILES ===
 total 64
-drwxr-xr-x 2 runner runner  4096 Jul 19 22:19 .
-drwxr-xr-x 7 runner runner  4096 Jul 19 22:19 ..
--rw-r--r-- 1 runner runner  4428 Jul 19 22:19 01-auth.spec.js
--rw-r--r-- 1 runner runner 11676 Jul 19 22:19 02-chart.spec.js
--rw-r--r-- 1 runner runner  2851 Jul 19 22:19 03-match.spec.js
--rw-r--r-- 1 runner runner  2685 Jul 19 22:19 04-horoscope.spec.js
--rw-r--r-- 1 runner runner  3485 Jul 19 22:19 05-deployment.spec.js
--rw-r--r-- 1 runner runner  5422 Jul 19 22:19 06-match-10.spec.js
--rw-r--r-- 1 runner runner  8626 Jul 19 22:19 functional-test.spec.js
--rw-r--r-- 1 runner runner  2685 Jul 19 22:19 helpers.js
+drwxr-xr-x 2 runner runner  4096 Jul 19 22:26 .
+drwxr-xr-x 7 runner runner  4096 Jul 19 22:26 ..
+-rw-r--r-- 1 runner runner  4428 Jul 19 22:26 01-auth.spec.js
+-rw-r--r-- 1 runner runner 11676 Jul 19 22:26 02-chart.spec.js
+-rw-r--r-- 1 runner runner  2851 Jul 19 22:26 03-match.spec.js
+-rw-r--r-- 1 runner runner  2685 Jul 19 22:26 04-horoscope.spec.js
+-rw-r--r-- 1 runner runner  3485 Jul 19 22:26 05-deployment.spec.js
+-rw-r--r-- 1 runner runner  5422 Jul 19 22:26 06-match-10.spec.js
+-rw-r--r-- 1 runner runner  8626 Jul 19 22:26 functional-test.spec.js
+-rw-r--r-- 1 runner runner  2685 Jul 19 22:26 helpers.js
 
 === BUILD OUTPUT ===
 
@@ -51,7 +51,7 @@ Route (app)                              Size     First Load JS
 ├ ○ /consult                             5.5 kB         90.4 kB
 ├ ○ /dashboard                           1.45 kB         113 kB
 ├ ○ /learn                               2.52 kB        84.4 kB
-├ ○ /match                               4.92 kB         120 kB
+├ ○ /match                               4.94 kB         120 kB
 ├ ○ /muhurta                             2.63 kB         114 kB
 ├ ○ /numerology                          3.76 kB         113 kB
 ├ ○ /phone-login                         2 kB            121 kB
