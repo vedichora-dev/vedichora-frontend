@@ -70,14 +70,14 @@ export default function HomePage() {
                 <div style={{fontSize:'12px', color:'var(--txm)'}}>{rasi.dates}</div>
                 <div style={{fontSize:'12px', color:'var(--txm)', marginTop:'2px'}}>
                   {rasi.element === 'Fire' ? '🔥' : rasi.element === 'Earth' ? '🌿' : rasi.element === 'Air' ? '💨' : '💧'}{' '}
-                  {rasi.element} · Ruled by {rasi.lord}
+                  {{t(`home.${rasi.element?.toLowerCase()}_sign`) || rasi.element} · Ruled by {rasi.lord}
                 </div>
               </div>
               <div style={{textAlign:'center'}}>
                 <div style={{fontFamily:'Cinzel,serif', fontWeight:900, fontSize:'36px', lineHeight:1,
                   color:scoreColor(score)}}>{score}</div>
                 <div style={{fontSize:'9px', color:'var(--txm)', fontWeight:700,
-                  letterSpacing:'.06em', textTransform:'uppercase', marginTop:'2px'}}>TODAY</div>
+                  letterSpacing:'.06em', textTransform:'uppercase', marginTop:'2px'}}>{t('home.today')}</div>
               </div>
             </div>
 
@@ -101,15 +101,15 @@ export default function HomePage() {
 
             <div style={{marginTop:'16px', paddingTop:'14px', borderTop:'1px solid var(--bd)',
               display:'flex', gap:'16px', fontSize:'11px', color:'var(--txm)', flexWrap:'wrap'}}>
-              <span>Lucky colour: <strong style={{color:'var(--tx)'}}>{rasi.lucky[0]}</strong></span>
-              <span>Number: <strong style={{color:'var(--tx)'}}>{rasi.lucky[1]}</strong></span>
+              <span>{t('home.lucky_colour')}: <strong style={{color:'var(--tx)'}}>{rasi.lucky[0]}</strong></span>
+              <span>{t('home.lucky_number')}: <strong style={{color:'var(--tx)'}}>{rasi.lucky[1]}</strong></span>
             </div>
           </div>
 
           {/* Right — prediction card */}
           <div className="card">
             <div className="card-hd">
-              <span className="card-title">Daily Horoscope · {signName}</span>
+              <span className="card-title">{t('home.daily_horoscope')} · {signName}</span>
               <div style={{display:'flex', gap:'4px', marginLeft:'auto'}}>
                 {(['Daily', 'Weekly', 'Monthly'] as const).map(p => (
                   <button key={p} onClick={() => setPeriod(p)} style={{
