@@ -1,19 +1,20 @@
-SyntaxError: /home/runner/work/vedichora-frontend/vedichora-frontend/e2e/02-chart.spec.js: Unexpected token (97:0)
+SyntaxError: /home/runner/work/vedichora-frontend/vedichora-frontend/e2e/02-chart.spec.js: Unterminated regular expression. (96:37)
 
-   95 |     const bodyText = await page.locator('body').textContent() || ''
-   96 |     const errText = bodyText.match(/Error:[^.]{0,200}/)?.[0] || ''
->  97 | ]{0,200}/)?.[0] || ''
-      | ^
-   98 |     if (errText) console.warn('Chart error found:', errText)
-   99 |
-  100 |     // Validate: should show chart data
+  94 |     // Check for error
+  95 |     const bodyText = await page.locator('body').textContent() || ''
+> 96 |     const errText  = bodyText.match(/Error:\s*[^
+     |                                      ^
+  97 | ]{0,200}/)?.[0] || ''
+  98 |     if (errText) console.warn('Chart error found:', errText)
+  99 |
 
-   at 02-chart.spec.js:97
+   at 02-chart.spec.js:96
 
-   95 |     const bodyText = await page.locator('body').textContent() || ''
-   96 |     const errText = bodyText.match(/Error:[^.]{0,200}/)?.[0] || ''
->  97 | ]{0,200}/)?.[0] || ''
-   98 |     if (errText) console.warn('Chart error found:', errText)
-   99 |
-  100 |     // Validate: should show chart data
+  94 |     // Check for error
+  95 |     const bodyText = await page.locator('body').textContent() || ''
+> 96 |     const errText  = bodyText.match(/Error:\s*[^
+     |                                     ^
+  97 | ]{0,200}/)?.[0] || ''
+  98 |     if (errText) console.warn('Chart error found:', errText)
+  99 |
 
