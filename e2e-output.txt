@@ -2,293 +2,281 @@
 Running 100 tests using 2 workers
 
 Home has VedicHora content: true
-  ✓    1 [chromium] › e2e/01-auth.spec.js:7:3 › AUTH — Login & Signup › Home page loads (2.9s)
+  ✓    1 [chromium] › e2e/01-auth.spec.js:7:3 › AUTH — Login & Signup › Home page loads (3.0s)
 Nav items visible: true
   ✓    3 [chromium] › e2e/01-auth.spec.js:18:3 › AUTH — Login & Signup › Nav renders correctly (2.5s)
 ✓ Chart page loaded
-  ✓    2 [chromium] › e2e/02-chart.spec.js:57:3 › CHART — Babu & Pramod Validation › Chart page loads (8.1s)
+  ✓    2 [chromium] › e2e/02-chart.spec.js:57:3 › CHART — Babu & Pramod Validation › Chart page loads (8.2s)
 After login URL: https://vedichora-frontend-orcin.vercel.app/chart
-  ✓    4 [chromium] › e2e/01-auth.spec.js:27:3 › AUTH — Login & Signup › Admin login succeeds (6.2s)
+  ✓    4 [chromium] › e2e/01-auth.spec.js:27:3 › AUTH — Login & Signup › Admin login succeeds (6.4s)
+  ✘    5 [chromium] › e2e/02-chart.spec.js:67:3 › CHART — Babu & Pramod Validation › BABU — Generate chart (Mar 1, 1959, 14:30 IST, Chennai) (5.6s)
 Error shown: true | stays on signin: true
-  ✓    6 [chromium] › e2e/01-auth.spec.js:45:3 › AUTH — Login & Signup › Wrong password shows error (3.6s)
+  ✓    6 [chromium] › e2e/01-auth.spec.js:45:3 › AUTH — Login & Signup › Wrong password shows error (4.1s)
 Signup page has CTA: true
-  ✓    7 [chromium] › e2e/01-auth.spec.js:58:3 › AUTH — Login & Signup › Signup page renders (2.0s)
+  ✓    8 [chromium] › e2e/01-auth.spec.js:58:3 › AUTH — Login & Signup › Signup page renders (2.1s)
 Phone login page renders: true
-  ✓    8 [chromium] › e2e/01-auth.spec.js:68:3 › AUTH — Login & Signup › Phone login page renders (2.0s)
+  ✓    9 [chromium] › e2e/01-auth.spec.js:68:3 › AUTH — Login & Signup › Phone login page renders (2.1s)
+  ✘    7 [chromium] › e2e/02-chart.spec.js:67:3 › CHART — Babu & Pramod Validation › BABU — Generate chart (Mar 1, 1959, 14:30 IST, Chennai) (retry #1) (6.0s)
 Avatar not visible — user may not be logged in
-  ✓    9 [chromium] › e2e/01-auth.spec.js:78:3 › AUTH — Login & Signup › Logout works (5.5s)
-  ✘   10 [chromium] › e2e/03-match.spec.js:15:3 › MATCH — Compatibility › Match page renders correctly (11.2s)
-  ✘   11 [chromium] › e2e/03-match.spec.js:15:3 › MATCH — Compatibility › Match page renders correctly (retry #1) (11.8s)
+  ✓   10 [chromium] › e2e/01-auth.spec.js:78:3 › AUTH — Login & Signup › Logout works (5.7s)
+Planets tab not visible — generate chart first
+  ✓   11 [chromium] › e2e/02-chart.spec.js:121:3 › CHART — Babu & Pramod Validation › BABU — Planets tab: verify all 9 planets (8.0s)
+  ✓   12 [chromium] › e2e/03-match.spec.js:15:3 › MATCH — Compatibility › Match page renders correctly (6.4s)
+  ✓   13 [chromium] › e2e/02-chart.spec.js:153:3 › CHART — Babu & Pramod Validation › BABU — Dasha: current dasha shows NOW badge (7.7s)
 Match page selects: 12
-  ✘    5 [chromium] › e2e/02-chart.spec.js:67:3 › CHART — Babu & Pramod Validation › BABU — Generate chart (Mar 1, 1959, 14:30 IST, Chennai) (1.0m)
+SVG rendered: true
+SVG text elements: 0 | SVG shapes: 8
+  ✓   15 [chromium] › e2e/02-chart.spec.js:175:3 › CHART — Babu & Pramod Validation › BABU — North Indian chart SVG renders correctly (7.8s)
+  ✘   16 [chromium] › e2e/02-chart.spec.js:202:3 › CHART — Babu & Pramod Validation › PRAMOD — Generate chart (Sep 24, 1968, 20:22 IST, Chennai) (5.5s)
 Match has score data: true
-  ✓   12 [chromium] › e2e/03-match.spec.js:26:3 › MATCH — Compatibility › Match calculation — Ganapathy + Shreya (19.9s)
+  ✓   14 [chromium] › e2e/03-match.spec.js:26:3 › MATCH — Compatibility › Match calculation — Ganapathy + Shreya (19.9s)
 Zodiac strip buttons: 13
-  ✓   14 [chromium] › e2e/04-horoscope.spec.js:6:3 › HOROSCOPE — Home Page › Home page loads zodiac strip (2.6s)
+  ✓   18 [chromium] › e2e/04-horoscope.spec.js:6:3 › HOROSCOPE — Home Page › Home page loads zodiac strip (2.6s)
+  ✘   17 [chromium] › e2e/02-chart.spec.js:202:3 › CHART — Babu & Pramod Validation › PRAMOD — Generate chart (Sep 24, 1968, 20:22 IST, Chennai) (retry #1) (5.9s)
 Has horoscope text: true
-  ✓   15 [chromium] › e2e/04-horoscope.spec.js:17:3 › HOROSCOPE — Home Page › Clicking a rasi loads horoscope (5.7s)
+  ✓   19 [chromium] › e2e/04-horoscope.spec.js:17:3 › HOROSCOPE — Home Page › Clicking a rasi loads horoscope (5.6s)
 Tamil labels visible: true
-  ✓   16 [chromium] › e2e/04-horoscope.spec.js:33:3 › HOROSCOPE — Home Page › Language switch to Tamil changes labels (5.1s)
-  ✓   17 [chromium] › e2e/04-horoscope.spec.js:57:3 › HOROSCOPE — Home Page › Theme switching works (3.0s)
+  ✓   21 [chromium] › e2e/04-horoscope.spec.js:33:3 › HOROSCOPE — Home Page › Language switch to Tamil changes labels (5.2s)
+  ✓   20 [chromium] › e2e/02-chart.spec.js:236:3 › CHART — Babu & Pramod Validation › Arudha tab — loads special lagnas (8.0s)
+  ✓   22 [chromium] › e2e/04-horoscope.spec.js:57:3 › HOROSCOPE — Home Page › Theme switching works (3.1s)
 Home: found 3/3 — Horoscope, Vedic, Hora
-  ✓   18 [chromium] › e2e/05-deployment.spec.js:19:5 › DEPLOYMENT — All pages return 200 › Home page loads (/) (1.9s)
+  ✓   24 [chromium] › e2e/05-deployment.spec.js:19:5 › DEPLOYMENT — All pages return 200 › Home page loads (/) (2.0s)
 Chart: found 3/3 — Chart, Kundali, Birth
-  ✓   19 [chromium] › e2e/05-deployment.spec.js:19:5 › DEPLOYMENT — All pages return 200 › Chart page loads (/chart) (2.0s)
+  ✓   25 [chromium] › e2e/05-deployment.spec.js:19:5 › DEPLOYMENT — All pages return 200 › Chart page loads (/chart) (2.0s)
+  ✓   23 [chromium] › e2e/02-chart.spec.js:252:3 › CHART — Babu & Pramod Validation › Doshas tab — loads dosha data (7.7s)
 Match: found 3/3 — Match, Person, Compatibility
-  ✓   20 [chromium] › e2e/05-deployment.spec.js:19:5 › DEPLOYMENT — All pages return 200 › Match page loads (/match) (2.0s)
+  ✓   26 [chromium] › e2e/05-deployment.spec.js:19:5 › DEPLOYMENT — All pages return 200 › Match page loads (/match) (2.2s)
 Signup: found 2/3 — Create, email
-  ✓   21 [chromium] › e2e/05-deployment.spec.js:19:5 › DEPLOYMENT — All pages return 200 › Signup page loads (/signup) (1.9s)
+  ✓   28 [chromium] › e2e/05-deployment.spec.js:19:5 › DEPLOYMENT — All pages return 200 › Signup page loads (/signup) (2.0s)
 Signin: found 2/2 — Sign in, email
-  ✓   22 [chromium] › e2e/05-deployment.spec.js:19:5 › DEPLOYMENT — All pages return 200 › Signin page loads (/signin) (1.9s)
+  ✓   29 [chromium] › e2e/05-deployment.spec.js:19:5 › DEPLOYMENT — All pages return 200 › Signin page loads (/signin) (2.0s)
 PhoneLogin: found 3/3 — phone, OTP, Send
-  ✓   23 [chromium] › e2e/05-deployment.spec.js:19:5 › DEPLOYMENT — All pages return 200 › PhoneLogin page loads (/phone-login) (1.9s)
-  ✓   24 [chromium] › e2e/05-deployment.spec.js:19:5 › DEPLOYMENT — All pages return 200 › Shop page loads (/shop) (2.0s)
-  ✓   25 [chromium] › e2e/05-deployment.spec.js:19:5 › DEPLOYMENT — All pages return 200 › Learn page loads (/learn) (2.2s)
-  ✓   26 [chromium] › e2e/05-deployment.spec.js:19:5 › DEPLOYMENT — All pages return 200 › About page loads (/about) (2.1s)
-Checkout has plans: true
-  ✓   27 [chromium] › e2e/05-deployment.spec.js:34:3 › DEPLOYMENT — All pages return 200 › Checkout page loads (3.3s)
-Consult has content: true
-  ✓   28 [chromium] › e2e/05-deployment.spec.js:45:3 › DEPLOYMENT — All pages return 200 › Consult page loads (2.7s)
-Console errors: []
-  ✓   29 [chromium] › e2e/05-deployment.spec.js:59:3 › DEPLOYMENT — JS errors › No console errors on home page (3.4s)
-JS crashes: []
-  ✓   30 [chromium] › e2e/05-deployment.spec.js:74:3 › DEPLOYMENT — JS errors › Chart page no JS crash (3.5s)
+  ✓   30 [chromium] › e2e/05-deployment.spec.js:19:5 › DEPLOYMENT — All pages return 200 › PhoneLogin page loads (/phone-login) (2.1s)
+PDF button: false
+  ✓   27 [chromium] › e2e/02-chart.spec.js:268:3 › CHART — Babu & Pramod Validation › PDF button exists and is clickable (7.8s)
 
 Match 1: Arjun x Priya | selects=12
-  ✘   13 [chromium] › e2e/02-chart.spec.js:67:3 › CHART — Babu & Pramod Validation › BABU — Generate chart (Mar 1, 1959, 14:30 IST, Chennai) (retry #1) (1.0m)
-Planets tab not visible — generate chart first
-  ✓   32 [chromium] › e2e/02-chart.spec.js:118:3 › CHART — Babu & Pramod Validation › BABU — Planets tab: verify all 9 planets (7.7s)
-Score: 0% | Koota: 0/36 | Error: false
-  ✓   31 [chromium] › e2e/06-match-10.spec.js:37:3 › Match 1: Arjun + Priya (26.6s)
-
-Match 2: Raj x Meera | selects=12
-  ✓   33 [chromium] › e2e/02-chart.spec.js:150:3 › CHART — Babu & Pramod Validation › BABU — Dasha: current dasha shows NOW badge (7.7s)
-SVG rendered: true
-SVG text elements: 0
-  ✘   35 [chromium] › e2e/02-chart.spec.js:172:3 › CHART — Babu & Pramod Validation › BABU — North Indian chart SVG renders correctly (7.7s)
-SVG rendered: true
-SVG text elements: 0
-  ✘   36 [chromium] › e2e/02-chart.spec.js:172:3 › CHART — Babu & Pramod Validation › BABU — North Indian chart SVG renders correctly (retry #1) (8.5s)
-Score: 0% | Koota: 0/36 | Error: false
-  ✓   34 [chromium] › e2e/06-match-10.spec.js:37:3 › Match 2: Raj + Meera (26.8s)
-
-Match 3: Kiran x Lakshmi | selects=12
-Score: 0% | Koota: 0/36 | Error: false
-  ✓   38 [chromium] › e2e/06-match-10.spec.js:37:3 › Match 3: Kiran + Lakshmi (26.7s)
-
-Match 4: Suresh x Kavitha | selects=12
-Score: 0% | Koota: 0/36 | Error: false
-  ✓   39 [chromium] › e2e/06-match-10.spec.js:37:3 › Match 4: Suresh + Kavitha (26.6s)
-  ✘   37 [chromium] › e2e/02-chart.spec.js:197:3 › CHART — Babu & Pramod Validation › PRAMOD — Generate chart (Sep 24, 1968, 20:22 IST, Chennai) (1.0m)
-
-Match 5: Vinod x Ananya | selects=12
-Score: 0% | Koota: 0/36 | Error: false
-  ✓   40 [chromium] › e2e/06-match-10.spec.js:37:3 › Match 5: Vinod + Ananya (26.7s)
-
-Match 6: Deepak x Sunita | selects=12
-Score: 0% | Koota: 0/36 | Error: false
-  ✓   42 [chromium] › e2e/06-match-10.spec.js:37:3 › Match 6: Deepak + Sunita (26.8s)
-
-Match 7: Manoj x Shilpa | selects=12
-  ✘   41 [chromium] › e2e/02-chart.spec.js:197:3 › CHART — Babu & Pramod Validation › PRAMOD — Generate chart (Sep 24, 1968, 20:22 IST, Chennai) (retry #1) (1.0m)
-  ✓   44 [chromium] › e2e/02-chart.spec.js:228:3 › CHART — Babu & Pramod Validation › Arudha tab — loads special lagnas (7.7s)
-  ✓   45 [chromium] › e2e/02-chart.spec.js:244:3 › CHART — Babu & Pramod Validation › Doshas tab — loads dosha data (7.6s)
-Score: 0% | Koota: 0/36 | Error: false
-  ✓   43 [chromium] › e2e/06-match-10.spec.js:37:3 › Match 7: Manoj + Shilpa (26.7s)
-
-Match 8: Rohit x Pooja | selects=12
-PDF button: false
-  ✓   46 [chromium] › e2e/02-chart.spec.js:260:3 › CHART — Babu & Pramod Validation › PDF button exists and is clickable (7.6s)
+  ✓   31 [chromium] › e2e/05-deployment.spec.js:19:5 › DEPLOYMENT — All pages return 200 › Shop page loads (/shop) (2.1s)
+  ✓   33 [chromium] › e2e/05-deployment.spec.js:19:5 › DEPLOYMENT — All pages return 200 › Learn page loads (/learn) (2.2s)
+  ✓   34 [chromium] › e2e/05-deployment.spec.js:19:5 › DEPLOYMENT — All pages return 200 › About page loads (/about) (2.0s)
+Checkout has plans: true
+  ✓   35 [chromium] › e2e/05-deployment.spec.js:34:3 › DEPLOYMENT — All pages return 200 › Checkout page loads (3.2s)
+Consult has content: true
+  ✓   36 [chromium] › e2e/05-deployment.spec.js:45:3 › DEPLOYMENT — All pages return 200 › Consult page loads (2.6s)
+Console errors: []
+  ✓   37 [chromium] › e2e/05-deployment.spec.js:59:3 › DEPLOYMENT — JS errors › No console errors on home page (3.4s)
+JS crashes: []
+  ✓   38 [chromium] › e2e/05-deployment.spec.js:74:3 › DEPLOYMENT — JS errors › Chart page no JS crash (3.4s)
 ✓ No redirect to signin
 City dropdown for "Chennai" appeared: true
 City 0 final value: "Chennai"
 City input value after selection: Chennai
 ✓ City selected, dropdown closed
 Dropdown still open after selection: false
+Score: 0% | Koota: 0/36 | Error: false
+  ✓   32 [chromium] › e2e/06-match-10.spec.js:37:3 › Match 1: Arjun + Priya (27.0s)
+
+Match 2: Raj x Meera | selects=12
 Chart appeared: true
-  ✓   48 [chromium] › e2e/functional-test.spec.js:45:3 › GUEST CHART › Guest chart — no redirect, city dropdown closes, chart generates (14.1s)
+  ✓   39 [chromium] › e2e/functional-test.spec.js:45:3 › GUEST CHART › Guest chart — no redirect, city dropdown closes, chart generates (14.3s)
 Dropdown appeared: true
 Dropdown still open after click: false
 City input value: Mumbai
-  ✓   49 [chromium] › e2e/functional-test.spec.js:86:3 › CITY DROPDOWN › City dropdown closes after selection (4.0s)
+  ✓   41 [chromium] › e2e/functional-test.spec.js:86:3 › CITY DROPDOWN › City dropdown closes after selection (4.3s)
 Match selects count: 12
-Score: 0% | Koota: 0/36 | Error: false
-  ✓   47 [chromium] › e2e/06-match-10.spec.js:37:3 › Match 8: Rohit + Pooja (27.1s)
-
-Match 9: Srinivas x Padma | selects=12
 City dropdown for "Chennai" appeared: true
 City 0 final value: "Chennai"
 City dropdown for "Coimbatore" appeared: true
 City 1 final value: "Coimbatore"
 Clicking Calculate button...
-Match result visible: true
-  ✓   50 [chromium] › e2e/functional-test.spec.js:120:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login (24.5s)
-Name input visible: false
 Score: 0% | Koota: 0/36 | Error: false
-  ✓   51 [chromium] › e2e/06-match-10.spec.js:37:3 › Match 9: Srinivas + Padma (26.8s)
+  ✓   40 [chromium] › e2e/06-match-10.spec.js:37:3 › Match 2: Raj + Meera (26.7s)
 
-Match 10: Gopal x Radha | selects=12
+Match 3: Kiran x Lakshmi | selects=12
+Match result visible: true
+  ✓   42 [chromium] › e2e/functional-test.spec.js:120:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login (24.5s)
+Name input visible: false
 Numerology result visible: true
-  ✓   52 [chromium] › e2e/functional-test.spec.js:166:3 › NUMEROLOGY › Numerology — calculates life path number (7.3s)
+  ✓   44 [chromium] › e2e/functional-test.spec.js:166:3 › NUMEROLOGY › Numerology — calculates life path number (7.4s)
 Home has VedicHora content: true
-  ✓   54 [mobile] › e2e/01-auth.spec.js:7:3 › AUTH — Login & Signup › Home page loads (2.9s)
+  ✓   45 [mobile] › e2e/01-auth.spec.js:7:3 › AUTH — Login & Signup › Home page loads (2.9s)
 Nav items visible: true
-  ✓   55 [mobile] › e2e/01-auth.spec.js:18:3 › AUTH — Login & Signup › Nav renders correctly (2.6s)
+  ✓   46 [mobile] › e2e/01-auth.spec.js:18:3 › AUTH — Login & Signup › Nav renders correctly (2.6s)
+Score: 0% | Koota: 0/36 | Error: false
+  ✓   43 [chromium] › e2e/06-match-10.spec.js:37:3 › Match 3: Kiran + Lakshmi (26.8s)
 After login URL: https://vedichora-frontend-orcin.vercel.app/chart
-  ✓   56 [mobile] › e2e/01-auth.spec.js:27:3 › AUTH — Login & Signup › Admin login succeeds (7.0s)
-Error shown: true | stays on signin: true
-  ✓   57 [mobile] › e2e/01-auth.spec.js:45:3 › AUTH — Login & Signup › Wrong password shows error (3.9s)
-Signup page has CTA: true
-  ✓   58 [mobile] › e2e/01-auth.spec.js:58:3 › AUTH — Login & Signup › Signup page renders (2.1s)
-Phone login page renders: true
-  ✓   59 [mobile] › e2e/01-auth.spec.js:68:3 › AUTH — Login & Signup › Phone login page renders (2.2s)
-Score: 0% | Koota: 0/36 | Error: false
-  ✓   53 [chromium] › e2e/06-match-10.spec.js:37:3 › Match 10: Gopal + Radha (26.7s)
-Avatar not visible — user may not be logged in
-City dropdown appeared: true
-  ✓   60 [mobile] › e2e/01-auth.spec.js:78:3 › AUTH — Login & Signup › Logout works (6.1s)
-City selected: "Chennai"
-Dropdown closed: true
-  ✓   61 [chromium] › e2e/06-match-10.spec.js:84:1 › Match page — city dropdown works + all UI present (4.3s)
-✓ Chart page loaded
-  ✓   62 [mobile] › e2e/02-chart.spec.js:57:3 › CHART — Babu & Pramod Validation › Chart page loads (8.2s)
-  ✘   63 [mobile] › e2e/03-match.spec.js:15:3 › MATCH — Compatibility › Match page renders correctly (11.9s)
-  ✘   65 [mobile] › e2e/03-match.spec.js:15:3 › MATCH — Compatibility › Match page renders correctly (retry #1) (12.3s)
-Match page selects: 12
-  ✘   64 [mobile] › e2e/02-chart.spec.js:67:3 › CHART — Babu & Pramod Validation › BABU — Generate chart (Mar 1, 1959, 14:30 IST, Chennai) (1.0m)
-  ✘   66 [mobile] › e2e/03-match.spec.js:26:3 › MATCH — Compatibility › Match calculation — Ganapathy + Shreya (1.0m)
-Match page selects: 12
-  ✘   67 [mobile] › e2e/02-chart.spec.js:67:3 › CHART — Babu & Pramod Validation › BABU — Generate chart (Mar 1, 1959, 14:30 IST, Chennai) (retry #1) (1.0m)
-Planets tab not visible — generate chart first
-  ✓   69 [mobile] › e2e/02-chart.spec.js:118:3 › CHART — Babu & Pramod Validation › BABU — Planets tab: verify all 9 planets (7.8s)
-  ✓   70 [mobile] › e2e/02-chart.spec.js:150:3 › CHART — Babu & Pramod Validation › BABU — Dasha: current dasha shows NOW badge (7.7s)
-  ✘   68 [mobile] › e2e/03-match.spec.js:26:3 › MATCH — Compatibility › Match calculation — Ganapathy + Shreya (retry #1) (1.0m)
-SVG rendered: true
-SVG text elements: 0
-Zodiac strip buttons: 13
-  ✘   71 [mobile] › e2e/02-chart.spec.js:172:3 › CHART — Babu & Pramod Validation › BABU — North Indian chart SVG renders correctly (8.1s)
-  ✓   72 [mobile] › e2e/04-horoscope.spec.js:6:3 › HOROSCOPE — Home Page › Home page loads zodiac strip (3.2s)
-Has horoscope text: true
-  ✓   73 [mobile] › e2e/04-horoscope.spec.js:17:3 › HOROSCOPE — Home Page › Clicking a rasi loads horoscope (6.0s)
-SVG rendered: true
-SVG text elements: 0
-  ✘   74 [mobile] › e2e/02-chart.spec.js:172:3 › CHART — Babu & Pramod Validation › BABU — North Indian chart SVG renders correctly (retry #1) (8.9s)
-Tamil labels visible: true
-  ✓   75 [mobile] › e2e/04-horoscope.spec.js:33:3 › HOROSCOPE — Home Page › Language switch to Tamil changes labels (5.9s)
-  ✓   77 [mobile] › e2e/04-horoscope.spec.js:57:3 › HOROSCOPE — Home Page › Theme switching works (3.2s)
-Home: found 3/3 — Horoscope, Vedic, Hora
-  ✓   78 [mobile] › e2e/05-deployment.spec.js:19:5 › DEPLOYMENT — All pages return 200 › Home page loads (/) (2.2s)
-Chart: found 3/3 — Chart, Kundali, Birth
-  ✓   79 [mobile] › e2e/05-deployment.spec.js:19:5 › DEPLOYMENT — All pages return 200 › Chart page loads (/chart) (2.2s)
-Match: found 3/3 — Match, Person, Compatibility
-  ✓   80 [mobile] › e2e/05-deployment.spec.js:19:5 › DEPLOYMENT — All pages return 200 › Match page loads (/match) (2.3s)
-Signup: found 2/3 — Create, email
-  ✓   81 [mobile] › e2e/05-deployment.spec.js:19:5 › DEPLOYMENT — All pages return 200 › Signup page loads (/signup) (2.0s)
-Signin: found 2/2 — Sign in, email
-  ✓   82 [mobile] › e2e/05-deployment.spec.js:19:5 › DEPLOYMENT — All pages return 200 › Signin page loads (/signin) (2.0s)
-PhoneLogin: found 3/3 — phone, OTP, Send
-  ✓   83 [mobile] › e2e/05-deployment.spec.js:19:5 › DEPLOYMENT — All pages return 200 › PhoneLogin page loads (/phone-login) (2.1s)
-  ✓   84 [mobile] › e2e/05-deployment.spec.js:19:5 › DEPLOYMENT — All pages return 200 › Shop page loads (/shop) (2.1s)
-  ✓   85 [mobile] › e2e/05-deployment.spec.js:19:5 › DEPLOYMENT — All pages return 200 › Learn page loads (/learn) (2.4s)
-  ✓   86 [mobile] › e2e/05-deployment.spec.js:19:5 › DEPLOYMENT — All pages return 200 › About page loads (/about) (2.2s)
-Checkout has plans: true
-  ✓   87 [mobile] › e2e/05-deployment.spec.js:34:3 › DEPLOYMENT — All pages return 200 › Checkout page loads (3.1s)
-Consult has content: true
-  ✓   88 [mobile] › e2e/05-deployment.spec.js:45:3 › DEPLOYMENT — All pages return 200 › Consult page loads (3.0s)
-Console errors: []
-  ✓   89 [mobile] › e2e/05-deployment.spec.js:59:3 › DEPLOYMENT — JS errors › No console errors on home page (3.5s)
-JS crashes: []
-  ✓   90 [mobile] › e2e/05-deployment.spec.js:74:3 › DEPLOYMENT — JS errors › Chart page no JS crash (3.5s)
-
-Match 1: Arjun x Priya | selects=12
-  ✘   76 [mobile] › e2e/02-chart.spec.js:197:3 › CHART — Babu & Pramod Validation › PRAMOD — Generate chart (Sep 24, 1968, 20:22 IST, Chennai) (1.0m)
-Score: 0% | Koota: 0/36 | Error: false
-  ✓   91 [mobile] › e2e/06-match-10.spec.js:37:3 › Match 1: Arjun + Priya (26.6s)
-
-Match 2: Raj x Meera | selects=12
-Score: 0% | Koota: 0/36 | Error: false
-  ✓   93 [mobile] › e2e/06-match-10.spec.js:37:3 › Match 2: Raj + Meera (26.7s)
-
-Match 3: Kiran x Lakshmi | selects=12
-Score: 0% | Koota: 0/36 | Error: false
-  ✓   94 [mobile] › e2e/06-match-10.spec.js:37:3 › Match 3: Kiran + Lakshmi (26.7s)
 
 Match 4: Suresh x Kavitha | selects=12
-  ✘   92 [mobile] › e2e/02-chart.spec.js:197:3 › CHART — Babu & Pramod Validation › PRAMOD — Generate chart (Sep 24, 1968, 20:22 IST, Chennai) (retry #1) (1.0m)
-  ✓   96 [mobile] › e2e/02-chart.spec.js:228:3 › CHART — Babu & Pramod Validation › Arudha tab — loads special lagnas (7.9s)
-  ✓   97 [mobile] › e2e/02-chart.spec.js:244:3 › CHART — Babu & Pramod Validation › Doshas tab — loads dosha data (7.7s)
+  ✓   47 [mobile] › e2e/01-auth.spec.js:27:3 › AUTH — Login & Signup › Admin login succeeds (6.8s)
+Error shown: true | stays on signin: true
+  ✓   49 [mobile] › e2e/01-auth.spec.js:45:3 › AUTH — Login & Signup › Wrong password shows error (3.7s)
+Signup page has CTA: true
+  ✓   50 [mobile] › e2e/01-auth.spec.js:58:3 › AUTH — Login & Signup › Signup page renders (2.1s)
+Phone login page renders: true
+  ✓   51 [mobile] › e2e/01-auth.spec.js:68:3 › AUTH — Login & Signup › Phone login page renders (2.3s)
+Avatar not visible — user may not be logged in
+  ✓   52 [mobile] › e2e/01-auth.spec.js:78:3 › AUTH — Login & Signup › Logout works (6.0s)
+✓ Chart page loaded
+  ✓   53 [mobile] › e2e/02-chart.spec.js:57:3 › CHART — Babu & Pramod Validation › Chart page loads (7.9s)
 Score: 0% | Koota: 0/36 | Error: false
-  ✓   95 [mobile] › e2e/06-match-10.spec.js:37:3 › Match 4: Suresh + Kavitha (26.8s)
+  ✓   48 [chromium] › e2e/06-match-10.spec.js:37:3 › Match 4: Suresh + Kavitha (26.7s)
 
 Match 5: Vinod x Ananya | selects=12
+  ✘   54 [mobile] › e2e/02-chart.spec.js:67:3 › CHART — Babu & Pramod Validation › BABU — Generate chart (Mar 1, 1959, 14:30 IST, Chennai) (5.8s)
+  ✘   56 [mobile] › e2e/02-chart.spec.js:67:3 › CHART — Babu & Pramod Validation › BABU — Generate chart (Mar 1, 1959, 14:30 IST, Chennai) (retry #1) (6.2s)
+Planets tab not visible — generate chart first
+  ✓   57 [mobile] › e2e/02-chart.spec.js:121:3 › CHART — Babu & Pramod Validation › BABU — Planets tab: verify all 9 planets (7.8s)
+  ✓   58 [mobile] › e2e/02-chart.spec.js:153:3 › CHART — Babu & Pramod Validation › BABU — Dasha: current dasha shows NOW badge (7.8s)
+Score: 0% | Koota: 0/36 | Error: false
+  ✓   55 [chromium] › e2e/06-match-10.spec.js:37:3 › Match 5: Vinod + Ananya (26.8s)
+
+Match 6: Deepak x Sunita | selects=12
+SVG rendered: true
+SVG text elements: 0 | SVG shapes: 8
+  ✓   59 [mobile] › e2e/02-chart.spec.js:175:3 › CHART — Babu & Pramod Validation › BABU — North Indian chart SVG renders correctly (8.0s)
+  ✘   61 [mobile] › e2e/02-chart.spec.js:202:3 › CHART — Babu & Pramod Validation › PRAMOD — Generate chart (Sep 24, 1968, 20:22 IST, Chennai) (5.9s)
+  ✘   62 [mobile] › e2e/02-chart.spec.js:202:3 › CHART — Babu & Pramod Validation › PRAMOD — Generate chart (Sep 24, 1968, 20:22 IST, Chennai) (retry #1) (6.1s)
+Score: 0% | Koota: 0/36 | Error: false
+  ✓   60 [chromium] › e2e/06-match-10.spec.js:37:3 › Match 6: Deepak + Sunita (26.8s)
+
+Match 7: Manoj x Shilpa | selects=12
+  ✓   63 [mobile] › e2e/02-chart.spec.js:236:3 › CHART — Babu & Pramod Validation › Arudha tab — loads special lagnas (7.9s)
+  ✓   65 [mobile] › e2e/02-chart.spec.js:252:3 › CHART — Babu & Pramod Validation › Doshas tab — loads dosha data (7.8s)
 PDF button: false
-  ✓   98 [mobile] › e2e/02-chart.spec.js:260:3 › CHART — Babu & Pramod Validation › PDF button exists and is clickable (7.7s)
+  ✓   66 [mobile] › e2e/02-chart.spec.js:268:3 › CHART — Babu & Pramod Validation › PDF button exists and is clickable (7.7s)
+  ✓   67 [mobile] › e2e/03-match.spec.js:15:3 › MATCH — Compatibility › Match page renders correctly (6.5s)
+Score: 0% | Koota: 0/36 | Error: false
+  ✓   64 [chromium] › e2e/06-match-10.spec.js:37:3 › Match 7: Manoj + Shilpa (27.0s)
+
+Match 8: Rohit x Pooja | selects=12
+Match page selects: 12
+Match has score data: true
+  ✓   68 [mobile] › e2e/03-match.spec.js:26:3 › MATCH — Compatibility › Match calculation — Ganapathy + Shreya (19.9s)
+Zodiac strip buttons: 13
+  ✓   70 [mobile] › e2e/04-horoscope.spec.js:6:3 › HOROSCOPE — Home Page › Home page loads zodiac strip (2.9s)
+Has horoscope text: true
+  ✓   71 [mobile] › e2e/04-horoscope.spec.js:17:3 › HOROSCOPE — Home Page › Clicking a rasi loads horoscope (6.1s)
+Score: 0% | Koota: 0/36 | Error: false
+  ✓   69 [chromium] › e2e/06-match-10.spec.js:37:3 › Match 8: Rohit + Pooja (27.1s)
+
+Match 9: Srinivas x Padma | selects=12
+Tamil labels visible: true
+  ✓   72 [mobile] › e2e/04-horoscope.spec.js:33:3 › HOROSCOPE — Home Page › Language switch to Tamil changes labels (5.6s)
+  ✓   74 [mobile] › e2e/04-horoscope.spec.js:57:3 › HOROSCOPE — Home Page › Theme switching works (3.3s)
+Home: found 3/3 — Horoscope, Vedic, Hora
+  ✓   75 [mobile] › e2e/05-deployment.spec.js:19:5 › DEPLOYMENT — All pages return 200 › Home page loads (/) (2.3s)
+Chart: found 3/3 — Chart, Kundali, Birth
+  ✓   76 [mobile] › e2e/05-deployment.spec.js:19:5 › DEPLOYMENT — All pages return 200 › Chart page loads (/chart) (2.3s)
+Match: found 3/3 — Match, Person, Compatibility
+  ✓   77 [mobile] › e2e/05-deployment.spec.js:19:5 › DEPLOYMENT — All pages return 200 › Match page loads (/match) (2.3s)
+Signup: found 2/3 — Create, email
+  ✓   78 [mobile] › e2e/05-deployment.spec.js:19:5 › DEPLOYMENT — All pages return 200 › Signup page loads (/signup) (2.1s)
+Signin: found 2/2 — Sign in, email
+  ✓   79 [mobile] › e2e/05-deployment.spec.js:19:5 › DEPLOYMENT — All pages return 200 › Signin page loads (/signin) (2.1s)
+PhoneLogin: found 3/3 — phone, OTP, Send
+  ✓   80 [mobile] › e2e/05-deployment.spec.js:19:5 › DEPLOYMENT — All pages return 200 › PhoneLogin page loads (/phone-login) (2.2s)
+  ✓   81 [mobile] › e2e/05-deployment.spec.js:19:5 › DEPLOYMENT — All pages return 200 › Shop page loads (/shop) (2.2s)
+  ✓   82 [mobile] › e2e/05-deployment.spec.js:19:5 › DEPLOYMENT — All pages return 200 › Learn page loads (/learn) (2.3s)
+Score: 0% | Koota: 0/36 | Error: false
+  ✓   73 [chromium] › e2e/06-match-10.spec.js:37:3 › Match 9: Srinivas + Padma (26.9s)
+
+Match 10: Gopal x Radha | selects=12
+  ✓   83 [mobile] › e2e/05-deployment.spec.js:19:5 › DEPLOYMENT — All pages return 200 › About page loads (/about) (2.3s)
+Checkout has plans: true
+  ✓   85 [mobile] › e2e/05-deployment.spec.js:34:3 › DEPLOYMENT — All pages return 200 › Checkout page loads (3.4s)
+Consult has content: true
+  ✓   86 [mobile] › e2e/05-deployment.spec.js:45:3 › DEPLOYMENT — All pages return 200 › Consult page loads (2.8s)
+Console errors: []
+  ✓   87 [mobile] › e2e/05-deployment.spec.js:59:3 › DEPLOYMENT — JS errors › No console errors on home page (3.5s)
+JS crashes: []
+  ✓   88 [mobile] › e2e/05-deployment.spec.js:74:3 › DEPLOYMENT — JS errors › Chart page no JS crash (3.5s)
+
+Match 1: Arjun x Priya | selects=12
+Score: 0% | Koota: 0/36 | Error: false
+  ✓   84 [chromium] › e2e/06-match-10.spec.js:37:3 › Match 10: Gopal + Radha (27.0s)
+City dropdown appeared: true
+City selected: "Chennai"
+Dropdown closed: true
+  ✓   90 [chromium] › e2e/06-match-10.spec.js:84:1 › Match page — city dropdown works + all UI present (4.3s)
 ✓ No redirect to signin
 City dropdown for "Chennai" appeared: true
 City 0 final value: "Chennai"
 City input value after selection: Chennai
 ✓ City selected, dropdown closed
 Dropdown still open after selection: false
+Score: 0% | Koota: 0/36 | Error: false
+  ✓   89 [mobile] › e2e/06-match-10.spec.js:37:3 › Match 1: Arjun + Priya (26.7s)
+
+Match 2: Raj x Meera | selects=12
 Chart appeared: true
-  ✓  100 [mobile] › e2e/functional-test.spec.js:45:3 › GUEST CHART › Guest chart — no redirect, city dropdown closes, chart generates (14.1s)
+  ✓   91 [mobile] › e2e/functional-test.spec.js:45:3 › GUEST CHART › Guest chart — no redirect, city dropdown closes, chart generates (14.2s)
 Dropdown appeared: true
 Dropdown still open after click: false
 City input value: Mumbai
-  ✓  101 [mobile] › e2e/functional-test.spec.js:86:3 › CITY DROPDOWN › City dropdown closes after selection (4.2s)
+  ✓   93 [mobile] › e2e/functional-test.spec.js:86:3 › CITY DROPDOWN › City dropdown closes after selection (4.0s)
 Match selects count: 12
 City dropdown for "Chennai" appeared: true
 City 0 final value: "Chennai"
-Score: 0% | Koota: 0/36 | Error: false
-  ✓   99 [mobile] › e2e/06-match-10.spec.js:37:3 › Match 5: Vinod + Ananya (26.7s)
-
-Match 6: Deepak x Sunita | selects=12
 City dropdown for "Coimbatore" appeared: true
 City 1 final value: "Coimbatore"
 Clicking Calculate button...
+Score: 0% | Koota: 0/36 | Error: false
+  ✓   92 [mobile] › e2e/06-match-10.spec.js:37:3 › Match 2: Raj + Meera (26.7s)
+
+Match 3: Kiran x Lakshmi | selects=12
 Match result visible: true
-  ✓  102 [mobile] › e2e/functional-test.spec.js:120:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login (24.5s)
+  ✓   94 [mobile] › e2e/functional-test.spec.js:120:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login (24.6s)
 Name input visible: false
 Numerology result visible: true
-Score: 0% | Koota: 0/36 | Error: false
-  ✓  103 [mobile] › e2e/06-match-10.spec.js:37:3 › Match 6: Deepak + Sunita (26.7s)
-  ✓  104 [mobile] › e2e/functional-test.spec.js:166:3 › NUMEROLOGY › Numerology — calculates life path number (7.8s)
+  ✓   96 [mobile] › e2e/functional-test.spec.js:166:3 › NUMEROLOGY › Numerology — calculates life path number (7.7s)
+Score: —% | Koota: —/36 | Error: false
+  ✓   95 [mobile] › e2e/06-match-10.spec.js:37:3 › Match 3: Kiran + Lakshmi (26.8s)
+
+Match 4: Suresh x Kavitha | selects=12
+Score: —% | Koota: —/36 | Error: false
+  ✓   97 [mobile] › e2e/06-match-10.spec.js:37:3 › Match 4: Suresh + Kavitha (26.6s)
+
+Match 5: Vinod x Ananya | selects=12
+Score: —% | Koota: —/36 | Error: false
+  ✓   98 [mobile] › e2e/06-match-10.spec.js:37:3 › Match 5: Vinod + Ananya (26.6s)
+
+Match 6: Deepak x Sunita | selects=12
+Score: —% | Koota: —/36 | Error: false
+  ✓   99 [mobile] › e2e/06-match-10.spec.js:37:3 › Match 6: Deepak + Sunita (26.6s)
 
 Match 7: Manoj x Shilpa | selects=12
-Score: 0% | Koota: 0/36 | Error: false
-  ✓  105 [mobile] › e2e/06-match-10.spec.js:37:3 › Match 7: Manoj + Shilpa (26.6s)
+Score: —% | Koota: —/36 | Error: false
+  ✓  100 [mobile] › e2e/06-match-10.spec.js:37:3 › Match 7: Manoj + Shilpa (26.8s)
 
 Match 8: Rohit x Pooja | selects=12
-Score: 0% | Koota: 0/36 | Error: false
-  ✓  106 [mobile] › e2e/06-match-10.spec.js:37:3 › Match 8: Rohit + Pooja (26.6s)
+Score: —% | Koota: —/36 | Error: false
+  ✓  101 [mobile] › e2e/06-match-10.spec.js:37:3 › Match 8: Rohit + Pooja (26.7s)
 
 Match 9: Srinivas x Padma | selects=12
-Score: 0% | Koota: 0/36 | Error: false
-  ✓  107 [mobile] › e2e/06-match-10.spec.js:37:3 › Match 9: Srinivas + Padma (26.6s)
+Score: —% | Koota: —/36 | Error: false
+  ✓  102 [mobile] › e2e/06-match-10.spec.js:37:3 › Match 9: Srinivas + Padma (26.7s)
 
 Match 10: Gopal x Radha | selects=12
-Score: 0% | Koota: 0/36 | Error: false
-  ✓  108 [mobile] › e2e/06-match-10.spec.js:37:3 › Match 10: Gopal + Radha (26.6s)
+Score: —% | Koota: —/36 | Error: false
+  ✓  103 [mobile] › e2e/06-match-10.spec.js:37:3 › Match 10: Gopal + Radha (26.6s)
 City dropdown appeared: true
 City selected: "Chennai"
 Dropdown closed: true
-  ✓  109 [mobile] › e2e/06-match-10.spec.js:84:1 › Match page — city dropdown works + all UI present (4.4s)
+  ✓  104 [mobile] › e2e/06-match-10.spec.js:84:1 › Match page — city dropdown works + all UI present (4.5s)
 
 
   1) [chromium] › e2e/02-chart.spec.js:67:3 › CHART — Babu & Pramod Validation › BABU — Generate chart (Mar 1, 1959, 14:30 IST, Chennai) 
 
-    Test timeout of 60000ms exceeded.
+    ReferenceError: SITE is not defined
 
-    Error: locator.count: Target page, context or browser has been closed
-
-      26 |     // Fall back: fill selects sequentially
-      27 |     const sels = page.locator('select')
-    > 28 |     const n = await sels.count()
-         |                          ^
-      29 |     if (n >= 3) {
-      30 |       await sels.nth(0).selectOption(String(day))
-      31 |       await sels.nth(1).selectOption({ index: month })
-        at fillDatePicker (/home/runner/work/vedichora-frontend/vedichora-frontend/e2e/02-chart.spec.js:28:26)
-        at /home/runner/work/vedichora-frontend/vedichora-frontend/e2e/02-chart.spec.js:81:5
+      67 |   test('BABU — Generate chart (Mar 1, 1959, 14:30 IST, Chennai)', async ({ page }) => {
+      68 |     // Navigate fresh to ensure clean state
+    > 69 |     await page.goto(SITE)
+         |                     ^
+      70 |     await page.waitForLoadState('networkidle')
+      71 |     await page.goto('/chart')
+      72 |     await page.waitForTimeout(2000)
+        at /home/runner/work/vedichora-frontend/vedichora-frontend/e2e/02-chart.spec.js:69:21
 
     attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
     test-results/02-chart-CHART-—-Babu-Pram-393a7-r-1-1959-14-30-IST-Chennai--chromium/test-failed-1.png
@@ -302,19 +290,16 @@ Dropdown closed: true
 
     Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
 
-    Test timeout of 60000ms exceeded.
+    ReferenceError: SITE is not defined
 
-    Error: locator.count: Target page, context or browser has been closed
-
-      26 |     // Fall back: fill selects sequentially
-      27 |     const sels = page.locator('select')
-    > 28 |     const n = await sels.count()
-         |                          ^
-      29 |     if (n >= 3) {
-      30 |       await sels.nth(0).selectOption(String(day))
-      31 |       await sels.nth(1).selectOption({ index: month })
-        at fillDatePicker (/home/runner/work/vedichora-frontend/vedichora-frontend/e2e/02-chart.spec.js:28:26)
-        at /home/runner/work/vedichora-frontend/vedichora-frontend/e2e/02-chart.spec.js:81:5
+      67 |   test('BABU — Generate chart (Mar 1, 1959, 14:30 IST, Chennai)', async ({ page }) => {
+      68 |     // Navigate fresh to ensure clean state
+    > 69 |     await page.goto(SITE)
+         |                     ^
+      70 |     await page.waitForLoadState('networkidle')
+      71 |     await page.goto('/chart')
+      72 |     await page.waitForTimeout(2000)
+        at /home/runner/work/vedichora-frontend/vedichora-frontend/e2e/02-chart.spec.js:69:21
 
     attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
     test-results/02-chart-CHART-—-Babu-Pram-393a7-r-1-1959-14-30-IST-Chennai--chromium-retry1/test-failed-1.png
@@ -334,81 +319,18 @@ Dropdown closed: true
 
     ────────────────────────────────────────────────────────────────────────────────────────────────
 
-  2) [chromium] › e2e/02-chart.spec.js:172:3 › CHART — Babu & Pramod Validation › BABU — North Indian chart SVG renders correctly 
+  2) [chromium] › e2e/02-chart.spec.js:202:3 › CHART — Babu & Pramod Validation › PRAMOD — Generate chart (Sep 24, 1968, 20:22 IST, Chennai) 
 
-    Error: expect(received).toBeGreaterThan(expected)
+    ReferenceError: SITE is not defined
 
-    Expected: > 3
-    Received:   0
-
-      192 |     const textCount = await page.locator('svg text').count()
-      193 |     console.log(`SVG text elements: ${textCount}`)
-    > 194 |     expect(textCount).toBeGreaterThan(3)
-          |                       ^
-      195 |   })
-      196 |
-      197 |   test('PRAMOD — Generate chart (Sep 24, 1968, 20:22 IST, Chennai)', async ({ page }) => {
-        at /home/runner/work/vedichora-frontend/vedichora-frontend/e2e/02-chart.spec.js:194:23
-
-    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
-    test-results/02-chart-CHART-—-Babu-Pram-d157a-chart-SVG-renders-correctly-chromium/test-failed-1.png
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
-    test-results/02-chart-CHART-—-Babu-Pram-d157a-chart-SVG-renders-correctly-chromium/video.webm
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    Error Context: test-results/02-chart-CHART-—-Babu-Pram-d157a-chart-SVG-renders-correctly-chromium/error-context.md
-
-    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
-
-    Error: expect(received).toBeGreaterThan(expected)
-
-    Expected: > 3
-    Received:   0
-
-      192 |     const textCount = await page.locator('svg text').count()
-      193 |     console.log(`SVG text elements: ${textCount}`)
-    > 194 |     expect(textCount).toBeGreaterThan(3)
-          |                       ^
-      195 |   })
-      196 |
-      197 |   test('PRAMOD — Generate chart (Sep 24, 1968, 20:22 IST, Chennai)', async ({ page }) => {
-        at /home/runner/work/vedichora-frontend/vedichora-frontend/e2e/02-chart.spec.js:194:23
-
-    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
-    test-results/02-chart-CHART-—-Babu-Pram-d157a-chart-SVG-renders-correctly-chromium-retry1/test-failed-1.png
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
-    test-results/02-chart-CHART-—-Babu-Pram-d157a-chart-SVG-renders-correctly-chromium-retry1/video.webm
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    Error Context: test-results/02-chart-CHART-—-Babu-Pram-d157a-chart-SVG-renders-correctly-chromium-retry1/error-context.md
-
-    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
-    test-results/02-chart-CHART-—-Babu-Pram-d157a-chart-SVG-renders-correctly-chromium-retry1/trace.zip
-    Usage:
-
-        npx playwright show-trace test-results/02-chart-CHART-—-Babu-Pram-d157a-chart-SVG-renders-correctly-chromium-retry1/trace.zip
-
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-  3) [chromium] › e2e/02-chart.spec.js:197:3 › CHART — Babu & Pramod Validation › PRAMOD — Generate chart (Sep 24, 1968, 20:22 IST, Chennai) 
-
-    Test timeout of 60000ms exceeded.
-
-    Error: locator.count: Target page, context or browser has been closed
-
-      26 |     // Fall back: fill selects sequentially
-      27 |     const sels = page.locator('select')
-    > 28 |     const n = await sels.count()
-         |                          ^
-      29 |     if (n >= 3) {
-      30 |       await sels.nth(0).selectOption(String(day))
-      31 |       await sels.nth(1).selectOption({ index: month })
-        at fillDatePicker (/home/runner/work/vedichora-frontend/vedichora-frontend/e2e/02-chart.spec.js:28:26)
-        at /home/runner/work/vedichora-frontend/vedichora-frontend/e2e/02-chart.spec.js:209:5
+      202 |   test('PRAMOD — Generate chart (Sep 24, 1968, 20:22 IST, Chennai)', async ({ page }) => {
+      203 |     // Navigate fresh to ensure clean state
+    > 204 |     await page.goto(SITE)
+          |                     ^
+      205 |     await page.waitForLoadState('networkidle')
+      206 |     await page.goto('/chart')
+      207 |     await page.waitForTimeout(2000)
+        at /home/runner/work/vedichora-frontend/vedichora-frontend/e2e/02-chart.spec.js:204:21
 
     attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
     test-results/02-chart-CHART-—-Babu-Pram-a405a--24-1968-20-22-IST-Chennai--chromium/test-failed-1.png
@@ -422,19 +344,16 @@ Dropdown closed: true
 
     Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
 
-    Test timeout of 60000ms exceeded.
+    ReferenceError: SITE is not defined
 
-    Error: locator.count: Target page, context or browser has been closed
-
-      26 |     // Fall back: fill selects sequentially
-      27 |     const sels = page.locator('select')
-    > 28 |     const n = await sels.count()
-         |                          ^
-      29 |     if (n >= 3) {
-      30 |       await sels.nth(0).selectOption(String(day))
-      31 |       await sels.nth(1).selectOption({ index: month })
-        at fillDatePicker (/home/runner/work/vedichora-frontend/vedichora-frontend/e2e/02-chart.spec.js:28:26)
-        at /home/runner/work/vedichora-frontend/vedichora-frontend/e2e/02-chart.spec.js:209:5
+      202 |   test('PRAMOD — Generate chart (Sep 24, 1968, 20:22 IST, Chennai)', async ({ page }) => {
+      203 |     // Navigate fresh to ensure clean state
+    > 204 |     await page.goto(SITE)
+          |                     ^
+      205 |     await page.waitForLoadState('networkidle')
+      206 |     await page.goto('/chart')
+      207 |     await page.waitForTimeout(2000)
+        at /home/runner/work/vedichora-frontend/vedichora-frontend/e2e/02-chart.spec.js:204:21
 
     attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
     test-results/02-chart-CHART-—-Babu-Pram-a405a--24-1968-20-22-IST-Chennai--chromium-retry1/test-failed-1.png
@@ -454,95 +373,18 @@ Dropdown closed: true
 
     ────────────────────────────────────────────────────────────────────────────────────────────────
 
-  4) [chromium] › e2e/03-match.spec.js:15:3 › MATCH — Compatibility › Match page renders correctly ─
+  3) [mobile] › e2e/02-chart.spec.js:67:3 › CHART — Babu & Pramod Validation › BABU — Generate chart (Mar 1, 1959, 14:30 IST, Chennai) 
 
-    Error: expect(locator).toBeVisible() failed
+    ReferenceError: SITE is not defined
 
-    Locator: locator('text=Person 1, text=person 1').first()
-    Expected: visible
-    Timeout: 5000ms
-    Error: element(s) not found
-
-    Call log:
-      - Expect "toBeVisible" with timeout 5000ms
-      - waiting for locator('text=Person 1, text=person 1').first()
-
-
-      18 |     await page.screenshot({ path: 'test-results/30-match-page.png' })
-      19 |     
-    > 20 |     await expect(page.locator('text=Person 1, text=person 1').first()).toBeVisible()
-         |                                                                        ^
-      21 |     await expect(page.locator('text=Person 2, text=person 2').first()).toBeVisible()
-      22 |     await expect(page.locator('button:has-text("Calculate"), button:has-text("Compatibility")'
-      23 |       ).first()).toBeVisible()
-        at /home/runner/work/vedichora-frontend/vedichora-frontend/e2e/03-match.spec.js:20:72
-
-    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
-    test-results/03-match-MATCH-—-Compatibility-Match-page-renders-correctly-chromium/test-failed-1.png
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
-    test-results/03-match-MATCH-—-Compatibility-Match-page-renders-correctly-chromium/video.webm
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    Error Context: test-results/03-match-MATCH-—-Compatibility-Match-page-renders-correctly-chromium/error-context.md
-
-    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
-
-    Error: expect(locator).toBeVisible() failed
-
-    Locator: locator('text=Person 1, text=person 1').first()
-    Expected: visible
-    Timeout: 5000ms
-    Error: element(s) not found
-
-    Call log:
-      - Expect "toBeVisible" with timeout 5000ms
-      - waiting for locator('text=Person 1, text=person 1').first()
-
-
-      18 |     await page.screenshot({ path: 'test-results/30-match-page.png' })
-      19 |     
-    > 20 |     await expect(page.locator('text=Person 1, text=person 1').first()).toBeVisible()
-         |                                                                        ^
-      21 |     await expect(page.locator('text=Person 2, text=person 2').first()).toBeVisible()
-      22 |     await expect(page.locator('button:has-text("Calculate"), button:has-text("Compatibility")'
-      23 |       ).first()).toBeVisible()
-        at /home/runner/work/vedichora-frontend/vedichora-frontend/e2e/03-match.spec.js:20:72
-
-    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
-    test-results/03-match-MATCH-—-Compatibility-Match-page-renders-correctly-chromium-retry1/test-failed-1.png
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
-    test-results/03-match-MATCH-—-Compatibility-Match-page-renders-correctly-chromium-retry1/video.webm
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    Error Context: test-results/03-match-MATCH-—-Compatibility-Match-page-renders-correctly-chromium-retry1/error-context.md
-
-    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
-    test-results/03-match-MATCH-—-Compatibility-Match-page-renders-correctly-chromium-retry1/trace.zip
-    Usage:
-
-        npx playwright show-trace test-results/03-match-MATCH-—-Compatibility-Match-page-renders-correctly-chromium-retry1/trace.zip
-
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-  5) [mobile] › e2e/02-chart.spec.js:67:3 › CHART — Babu & Pramod Validation › BABU — Generate chart (Mar 1, 1959, 14:30 IST, Chennai) 
-
-    Test timeout of 60000ms exceeded.
-
-    Error: locator.count: Target page, context or browser has been closed
-
-      26 |     // Fall back: fill selects sequentially
-      27 |     const sels = page.locator('select')
-    > 28 |     const n = await sels.count()
-         |                          ^
-      29 |     if (n >= 3) {
-      30 |       await sels.nth(0).selectOption(String(day))
-      31 |       await sels.nth(1).selectOption({ index: month })
-        at fillDatePicker (/home/runner/work/vedichora-frontend/vedichora-frontend/e2e/02-chart.spec.js:28:26)
-        at /home/runner/work/vedichora-frontend/vedichora-frontend/e2e/02-chart.spec.js:81:5
+      67 |   test('BABU — Generate chart (Mar 1, 1959, 14:30 IST, Chennai)', async ({ page }) => {
+      68 |     // Navigate fresh to ensure clean state
+    > 69 |     await page.goto(SITE)
+         |                     ^
+      70 |     await page.waitForLoadState('networkidle')
+      71 |     await page.goto('/chart')
+      72 |     await page.waitForTimeout(2000)
+        at /home/runner/work/vedichora-frontend/vedichora-frontend/e2e/02-chart.spec.js:69:21
 
     attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
     test-results/02-chart-CHART-—-Babu-Pram-393a7-r-1-1959-14-30-IST-Chennai--mobile/test-failed-1.png
@@ -556,19 +398,16 @@ Dropdown closed: true
 
     Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
 
-    Test timeout of 60000ms exceeded.
+    ReferenceError: SITE is not defined
 
-    Error: locator.count: Target page, context or browser has been closed
-
-      26 |     // Fall back: fill selects sequentially
-      27 |     const sels = page.locator('select')
-    > 28 |     const n = await sels.count()
-         |                          ^
-      29 |     if (n >= 3) {
-      30 |       await sels.nth(0).selectOption(String(day))
-      31 |       await sels.nth(1).selectOption({ index: month })
-        at fillDatePicker (/home/runner/work/vedichora-frontend/vedichora-frontend/e2e/02-chart.spec.js:28:26)
-        at /home/runner/work/vedichora-frontend/vedichora-frontend/e2e/02-chart.spec.js:81:5
+      67 |   test('BABU — Generate chart (Mar 1, 1959, 14:30 IST, Chennai)', async ({ page }) => {
+      68 |     // Navigate fresh to ensure clean state
+    > 69 |     await page.goto(SITE)
+         |                     ^
+      70 |     await page.waitForLoadState('networkidle')
+      71 |     await page.goto('/chart')
+      72 |     await page.waitForTimeout(2000)
+        at /home/runner/work/vedichora-frontend/vedichora-frontend/e2e/02-chart.spec.js:69:21
 
     attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
     test-results/02-chart-CHART-—-Babu-Pram-393a7-r-1-1959-14-30-IST-Chennai--mobile-retry1/test-failed-1.png
@@ -588,81 +427,18 @@ Dropdown closed: true
 
     ────────────────────────────────────────────────────────────────────────────────────────────────
 
-  6) [mobile] › e2e/02-chart.spec.js:172:3 › CHART — Babu & Pramod Validation › BABU — North Indian chart SVG renders correctly 
+  4) [mobile] › e2e/02-chart.spec.js:202:3 › CHART — Babu & Pramod Validation › PRAMOD — Generate chart (Sep 24, 1968, 20:22 IST, Chennai) 
 
-    Error: expect(received).toBeGreaterThan(expected)
+    ReferenceError: SITE is not defined
 
-    Expected: > 3
-    Received:   0
-
-      192 |     const textCount = await page.locator('svg text').count()
-      193 |     console.log(`SVG text elements: ${textCount}`)
-    > 194 |     expect(textCount).toBeGreaterThan(3)
-          |                       ^
-      195 |   })
-      196 |
-      197 |   test('PRAMOD — Generate chart (Sep 24, 1968, 20:22 IST, Chennai)', async ({ page }) => {
-        at /home/runner/work/vedichora-frontend/vedichora-frontend/e2e/02-chart.spec.js:194:23
-
-    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
-    test-results/02-chart-CHART-—-Babu-Pram-d157a-chart-SVG-renders-correctly-mobile/test-failed-1.png
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
-    test-results/02-chart-CHART-—-Babu-Pram-d157a-chart-SVG-renders-correctly-mobile/video.webm
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    Error Context: test-results/02-chart-CHART-—-Babu-Pram-d157a-chart-SVG-renders-correctly-mobile/error-context.md
-
-    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
-
-    Error: expect(received).toBeGreaterThan(expected)
-
-    Expected: > 3
-    Received:   0
-
-      192 |     const textCount = await page.locator('svg text').count()
-      193 |     console.log(`SVG text elements: ${textCount}`)
-    > 194 |     expect(textCount).toBeGreaterThan(3)
-          |                       ^
-      195 |   })
-      196 |
-      197 |   test('PRAMOD — Generate chart (Sep 24, 1968, 20:22 IST, Chennai)', async ({ page }) => {
-        at /home/runner/work/vedichora-frontend/vedichora-frontend/e2e/02-chart.spec.js:194:23
-
-    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
-    test-results/02-chart-CHART-—-Babu-Pram-d157a-chart-SVG-renders-correctly-mobile-retry1/test-failed-1.png
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
-    test-results/02-chart-CHART-—-Babu-Pram-d157a-chart-SVG-renders-correctly-mobile-retry1/video.webm
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    Error Context: test-results/02-chart-CHART-—-Babu-Pram-d157a-chart-SVG-renders-correctly-mobile-retry1/error-context.md
-
-    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
-    test-results/02-chart-CHART-—-Babu-Pram-d157a-chart-SVG-renders-correctly-mobile-retry1/trace.zip
-    Usage:
-
-        npx playwright show-trace test-results/02-chart-CHART-—-Babu-Pram-d157a-chart-SVG-renders-correctly-mobile-retry1/trace.zip
-
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-  7) [mobile] › e2e/02-chart.spec.js:197:3 › CHART — Babu & Pramod Validation › PRAMOD — Generate chart (Sep 24, 1968, 20:22 IST, Chennai) 
-
-    Test timeout of 60000ms exceeded.
-
-    Error: locator.count: Target page, context or browser has been closed
-
-      26 |     // Fall back: fill selects sequentially
-      27 |     const sels = page.locator('select')
-    > 28 |     const n = await sels.count()
-         |                          ^
-      29 |     if (n >= 3) {
-      30 |       await sels.nth(0).selectOption(String(day))
-      31 |       await sels.nth(1).selectOption({ index: month })
-        at fillDatePicker (/home/runner/work/vedichora-frontend/vedichora-frontend/e2e/02-chart.spec.js:28:26)
-        at /home/runner/work/vedichora-frontend/vedichora-frontend/e2e/02-chart.spec.js:209:5
+      202 |   test('PRAMOD — Generate chart (Sep 24, 1968, 20:22 IST, Chennai)', async ({ page }) => {
+      203 |     // Navigate fresh to ensure clean state
+    > 204 |     await page.goto(SITE)
+          |                     ^
+      205 |     await page.waitForLoadState('networkidle')
+      206 |     await page.goto('/chart')
+      207 |     await page.waitForTimeout(2000)
+        at /home/runner/work/vedichora-frontend/vedichora-frontend/e2e/02-chart.spec.js:204:21
 
     attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
     test-results/02-chart-CHART-—-Babu-Pram-a405a--24-1968-20-22-IST-Chennai--mobile/test-failed-1.png
@@ -676,19 +452,16 @@ Dropdown closed: true
 
     Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
 
-    Test timeout of 60000ms exceeded.
+    ReferenceError: SITE is not defined
 
-    Error: locator.count: Target page, context or browser has been closed
-
-      26 |     // Fall back: fill selects sequentially
-      27 |     const sels = page.locator('select')
-    > 28 |     const n = await sels.count()
-         |                          ^
-      29 |     if (n >= 3) {
-      30 |       await sels.nth(0).selectOption(String(day))
-      31 |       await sels.nth(1).selectOption({ index: month })
-        at fillDatePicker (/home/runner/work/vedichora-frontend/vedichora-frontend/e2e/02-chart.spec.js:28:26)
-        at /home/runner/work/vedichora-frontend/vedichora-frontend/e2e/02-chart.spec.js:209:5
+      202 |   test('PRAMOD — Generate chart (Sep 24, 1968, 20:22 IST, Chennai)', async ({ page }) => {
+      203 |     // Navigate fresh to ensure clean state
+    > 204 |     await page.goto(SITE)
+          |                     ^
+      205 |     await page.waitForLoadState('networkidle')
+      206 |     await page.goto('/chart')
+      207 |     await page.waitForTimeout(2000)
+        at /home/runner/work/vedichora-frontend/vedichora-frontend/e2e/02-chart.spec.js:204:21
 
     attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
     test-results/02-chart-CHART-—-Babu-Pram-a405a--24-1968-20-22-IST-Chennai--mobile-retry1/test-failed-1.png
@@ -708,268 +481,9 @@ Dropdown closed: true
 
     ────────────────────────────────────────────────────────────────────────────────────────────────
 
-  8) [mobile] › e2e/03-match.spec.js:15:3 › MATCH — Compatibility › Match page renders correctly ───
-
-    Error: expect(locator).toBeVisible() failed
-
-    Locator: locator('text=Person 1, text=person 1').first()
-    Expected: visible
-    Timeout: 5000ms
-    Error: element(s) not found
-
-    Call log:
-      - Expect "toBeVisible" with timeout 5000ms
-      - waiting for locator('text=Person 1, text=person 1').first()
-
-
-      18 |     await page.screenshot({ path: 'test-results/30-match-page.png' })
-      19 |     
-    > 20 |     await expect(page.locator('text=Person 1, text=person 1').first()).toBeVisible()
-         |                                                                        ^
-      21 |     await expect(page.locator('text=Person 2, text=person 2').first()).toBeVisible()
-      22 |     await expect(page.locator('button:has-text("Calculate"), button:has-text("Compatibility")'
-      23 |       ).first()).toBeVisible()
-        at /home/runner/work/vedichora-frontend/vedichora-frontend/e2e/03-match.spec.js:20:72
-
-    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
-    test-results/03-match-MATCH-—-Compatibility-Match-page-renders-correctly-mobile/test-failed-1.png
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
-    test-results/03-match-MATCH-—-Compatibility-Match-page-renders-correctly-mobile/video.webm
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    Error Context: test-results/03-match-MATCH-—-Compatibility-Match-page-renders-correctly-mobile/error-context.md
-
-    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
-
-    Error: expect(locator).toBeVisible() failed
-
-    Locator: locator('text=Person 1, text=person 1').first()
-    Expected: visible
-    Timeout: 5000ms
-    Error: element(s) not found
-
-    Call log:
-      - Expect "toBeVisible" with timeout 5000ms
-      - waiting for locator('text=Person 1, text=person 1').first()
-
-
-      18 |     await page.screenshot({ path: 'test-results/30-match-page.png' })
-      19 |     
-    > 20 |     await expect(page.locator('text=Person 1, text=person 1').first()).toBeVisible()
-         |                                                                        ^
-      21 |     await expect(page.locator('text=Person 2, text=person 2').first()).toBeVisible()
-      22 |     await expect(page.locator('button:has-text("Calculate"), button:has-text("Compatibility")'
-      23 |       ).first()).toBeVisible()
-        at /home/runner/work/vedichora-frontend/vedichora-frontend/e2e/03-match.spec.js:20:72
-
-    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
-    test-results/03-match-MATCH-—-Compatibility-Match-page-renders-correctly-mobile-retry1/test-failed-1.png
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
-    test-results/03-match-MATCH-—-Compatibility-Match-page-renders-correctly-mobile-retry1/video.webm
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    Error Context: test-results/03-match-MATCH-—-Compatibility-Match-page-renders-correctly-mobile-retry1/error-context.md
-
-    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
-    test-results/03-match-MATCH-—-Compatibility-Match-page-renders-correctly-mobile-retry1/trace.zip
-    Usage:
-
-        npx playwright show-trace test-results/03-match-MATCH-—-Compatibility-Match-page-renders-correctly-mobile-retry1/trace.zip
-
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-  9) [mobile] › e2e/03-match.spec.js:26:3 › MATCH — Compatibility › Match calculation — Ganapathy + Shreya 
-
-    Test timeout of 60000ms exceeded.
-
-    Error: page.click: Test timeout of 60000ms exceeded.
-    Call log:
-      - waiting for locator('button:has-text("Calculate"), button:has-text("Compatibility")')
-        - locator resolved to <button class="btn-primary">…</button>
-      - attempting click action
-        2 × waiting for element to be visible, enabled and stable
-          - element is visible, enabled and stable
-          - scrolling into view if needed
-          - done scrolling
-          - <label>…</label> from <div class="match-grid">…</div> subtree intercepts pointer events
-        - retrying click action
-        - waiting 20ms
-        - waiting for element to be visible, enabled and stable
-        - element is visible, enabled and stable
-        - scrolling into view if needed
-        - done scrolling
-        - <label class="label">Place of Birth</label> from <div class="match-grid">…</div> subtree intercepts pointer events
-      2 × retrying click action
-          - waiting 100ms
-          - waiting for element to be visible, enabled and stable
-          - element is visible, enabled and stable
-          - scrolling into view if needed
-          - done scrolling
-          - <label>…</label> from <div class="match-grid">…</div> subtree intercepts pointer events
-      25 × retrying click action
-           - waiting 500ms
-           - waiting for element to be visible, enabled and stable
-           - element is visible, enabled and stable
-           - scrolling into view if needed
-           - done scrolling
-           - <label>…</label> from <div class="match-grid">…</div> subtree intercepts pointer events
-         - retrying click action
-           - waiting 500ms
-           - waiting for element to be visible, enabled and stable
-           - element is visible, enabled and stable
-           - scrolling into view if needed
-           - done scrolling
-           - <input class="input" autocomplete="off" value="Coimbatore" placeholder="City, Country"/> from <div class="match-grid">…</div> subtree intercepts pointer events
-         - retrying click action
-           - waiting 500ms
-           - waiting for element to be visible, enabled and stable
-           - element is visible, enabled and stable
-           - scrolling into view if needed
-           - done scrolling
-           - <label>…</label> from <div class="match-grid">…</div> subtree intercepts pointer events
-         - retrying click action
-           - waiting 500ms
-           - waiting for element to be visible, enabled and stable
-           - element is visible, enabled and stable
-           - scrolling into view if needed
-           - done scrolling
-           - <label>…</label> from <div class="match-grid">…</div> subtree intercepts pointer events
-      - retrying click action
-        - waiting 500ms
-
-
-      57 |     
-      58 |     // Calculate
-    > 59 |     await page.click('button:has-text("Calculate"), button:has-text("Compatibility")')
-         |                ^
-      60 |     await page.waitForTimeout(12000) // Two chart calcs + match
-      61 |     
-      62 |     await page.screenshot({ path: 'test-results/32-match-result.png' })
-        at /home/runner/work/vedichora-frontend/vedichora-frontend/e2e/03-match.spec.js:59:16
-
-    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
-    test-results/03-match-MATCH-—-Compatibi-6fc06-culation-—-Ganapathy-Shreya-mobile/test-failed-1.png
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
-    test-results/03-match-MATCH-—-Compatibi-6fc06-culation-—-Ganapathy-Shreya-mobile/video.webm
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    Error Context: test-results/03-match-MATCH-—-Compatibi-6fc06-culation-—-Ganapathy-Shreya-mobile/error-context.md
-
-    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
-
-    Test timeout of 60000ms exceeded.
-
-    Error: page.click: Test timeout of 60000ms exceeded.
-    Call log:
-      - waiting for locator('button:has-text("Calculate"), button:has-text("Compatibility")')
-        - locator resolved to <button class="btn-primary">…</button>
-      - attempting click action
-        2 × waiting for element to be visible, enabled and stable
-          - element is visible, enabled and stable
-          - scrolling into view if needed
-          - done scrolling
-          - <label>…</label> from <div class="match-grid">…</div> subtree intercepts pointer events
-        - retrying click action
-        - waiting 20ms
-        - waiting for element to be visible, enabled and stable
-        - element is visible, enabled and stable
-        - scrolling into view if needed
-        - done scrolling
-        - <label class="label">Place of Birth</label> from <div class="match-grid">…</div> subtree intercepts pointer events
-      2 × retrying click action
-          - waiting 100ms
-          - waiting for element to be visible, enabled and stable
-          - element is visible, enabled and stable
-          - scrolling into view if needed
-          - done scrolling
-          - <label>…</label> from <div class="match-grid">…</div> subtree intercepts pointer events
-      25 × retrying click action
-           - waiting 500ms
-           - waiting for element to be visible, enabled and stable
-           - element is visible, enabled and stable
-           - scrolling into view if needed
-           - done scrolling
-           - <label>…</label> from <div class="match-grid">…</div> subtree intercepts pointer events
-         - retrying click action
-           - waiting 500ms
-           - waiting for element to be visible, enabled and stable
-           - element is visible, enabled and stable
-           - scrolling into view if needed
-           - done scrolling
-           - <input class="input" autocomplete="off" value="Coimbatore" placeholder="City, Country"/> from <div class="match-grid">…</div> subtree intercepts pointer events
-         - retrying click action
-           - waiting 500ms
-           - waiting for element to be visible, enabled and stable
-           - element is visible, enabled and stable
-           - scrolling into view if needed
-           - done scrolling
-           - <label>…</label> from <div class="match-grid">…</div> subtree intercepts pointer events
-         - retrying click action
-           - waiting 500ms
-           - waiting for element to be visible, enabled and stable
-           - element is visible, enabled and stable
-           - scrolling into view if needed
-           - done scrolling
-           - <label>…</label> from <div class="match-grid">…</div> subtree intercepts pointer events
-      - retrying click action
-        - waiting 500ms
-        - waiting for element to be visible, enabled and stable
-        - element is visible, enabled and stable
-        - scrolling into view if needed
-        - done scrolling
-        - <label>…</label> from <div class="match-grid">…</div> subtree intercepts pointer events
-      - retrying click action
-        - waiting 500ms
-        - waiting for element to be visible, enabled and stable
-        - element is visible, enabled and stable
-        - scrolling into view if needed
-        - done scrolling
-        - <input class="input" autocomplete="off" value="Coimbatore" placeholder="City, Country"/> from <div class="match-grid">…</div> subtree intercepts pointer events
-      - retrying click action
-        - waiting 500ms
-
-
-      57 |     
-      58 |     // Calculate
-    > 59 |     await page.click('button:has-text("Calculate"), button:has-text("Compatibility")')
-         |                ^
-      60 |     await page.waitForTimeout(12000) // Two chart calcs + match
-      61 |     
-      62 |     await page.screenshot({ path: 'test-results/32-match-result.png' })
-        at /home/runner/work/vedichora-frontend/vedichora-frontend/e2e/03-match.spec.js:59:16
-
-    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
-    test-results/03-match-MATCH-—-Compatibi-6fc06-culation-—-Ganapathy-Shreya-mobile-retry1/test-failed-1.png
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
-    test-results/03-match-MATCH-—-Compatibi-6fc06-culation-—-Ganapathy-Shreya-mobile-retry1/video.webm
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    Error Context: test-results/03-match-MATCH-—-Compatibi-6fc06-culation-—-Ganapathy-Shreya-mobile-retry1/error-context.md
-
-    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
-    test-results/03-match-MATCH-—-Compatibi-6fc06-culation-—-Ganapathy-Shreya-mobile-retry1/trace.zip
-    Usage:
-
-        npx playwright show-trace test-results/03-match-MATCH-—-Compatibi-6fc06-culation-—-Ganapathy-Shreya-mobile-retry1/trace.zip
-
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-  9 failed
+  4 failed
     [chromium] › e2e/02-chart.spec.js:67:3 › CHART — Babu & Pramod Validation › BABU — Generate chart (Mar 1, 1959, 14:30 IST, Chennai) 
-    [chromium] › e2e/02-chart.spec.js:172:3 › CHART — Babu & Pramod Validation › BABU — North Indian chart SVG renders correctly 
-    [chromium] › e2e/02-chart.spec.js:197:3 › CHART — Babu & Pramod Validation › PRAMOD — Generate chart (Sep 24, 1968, 20:22 IST, Chennai) 
-    [chromium] › e2e/03-match.spec.js:15:3 › MATCH — Compatibility › Match page renders correctly ──
+    [chromium] › e2e/02-chart.spec.js:202:3 › CHART — Babu & Pramod Validation › PRAMOD — Generate chart (Sep 24, 1968, 20:22 IST, Chennai) 
     [mobile] › e2e/02-chart.spec.js:67:3 › CHART — Babu & Pramod Validation › BABU — Generate chart (Mar 1, 1959, 14:30 IST, Chennai) 
-    [mobile] › e2e/02-chart.spec.js:172:3 › CHART — Babu & Pramod Validation › BABU — North Indian chart SVG renders correctly 
-    [mobile] › e2e/02-chart.spec.js:197:3 › CHART — Babu & Pramod Validation › PRAMOD — Generate chart (Sep 24, 1968, 20:22 IST, Chennai) 
-    [mobile] › e2e/03-match.spec.js:15:3 › MATCH — Compatibility › Match page renders correctly ────
-    [mobile] › e2e/03-match.spec.js:26:3 › MATCH — Compatibility › Match calculation — Ganapathy + Shreya 
-  91 passed (14.4m)
+    [mobile] › e2e/02-chart.spec.js:202:3 › CHART — Babu & Pramod Validation › PRAMOD — Generate chart (Sep 24, 1968, 20:22 IST, Chennai) 
+  96 passed (10.2m)
