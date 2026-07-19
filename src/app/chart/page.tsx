@@ -48,6 +48,7 @@ export default function ChartPage() {
   const [tabLoad, setTabLoad] = useState<Record<string,boolean>>({})
   const [horoId,  setHoroIdL] = useState('')
   const [navData, setNavData] = useState<any>(null)
+  const [chartStyle, setChartStyle] = useState<'north'|'south'>('north')
 
   const loadSaved = useCallback(async () => {
     if (!token) return
@@ -128,7 +129,9 @@ export default function ChartPage() {
       }
       console.log('Chart payload:', JSON.stringify(payload))
       if (!payload.PlaceName) payload.PlaceName = 'Chennai, India'
-      const res = await calculateChart(payload)
+      const res = token
+        ? await calculateChart(payload)
+        : await calculateChartGuest(payload)
       const data = (res as any)?.data?.data||(res as any)?.data
       if (data) {
         const id = data.horoscopeId||data.id||''
@@ -360,13 +363,28 @@ export default function ChartPage() {
 
               {/* ── RASI + NAVAMSHA TOGETHER ── */}
               {tab==='rasi' && (
-                <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:'24px',
-                  justifyItems:'center'}} className="chart-duo">
+                <div>
+                  {/* North/South toggle */}
+                  <div style={{display:'flex',gap:'6px',justifyContent:'center',marginBottom:'16px'}}>
+                    {(['north','south'] as const).map(m=>(
+                      <button key={m} onClick={()=>setChartStyle(m)}
+                        style={{padding:'5px 14px',borderRadius:'20px',border:'none',
+                          cursor:'pointer',fontSize:'11px',fontWeight:700,
+                          background:chartStyle===m?'var(--acc)':'var(--bg2)',
+                          color:chartStyle===m?'#fff':'var(--txm)',fontFamily:'inherit'}}>
+                        {m==='north'?t('home.north_chart')||'North Indian':t('home.south_chart')||'South Indian'}
+                      </button>
+                    ))}
+                  </div>
+                  <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:'24px',
+                    justifyItems:'center'}} className="chart-duo">
                   <div style={{width:'100%',maxWidth:'380px'}}>
                     <div style={{textAlign:'center',fontSize:'11px',fontWeight:700,
                       color:'var(--txm)',marginBottom:'10px',textTransform:'uppercase',
-                      letterSpacing:'.06em'}}>Rasi Chart (D1)</div>
-                    <NorthIndianChart planets={planets} ascendant={ascNum}/>
+                      letterSpacing:'.06em'}}>{t('home.tab_rasi')||'Rasi Chart (D1)'}</div>
+                    {chartStyle==='north'
+                      ? <NorthIndianChart planets={planets} ascendant={ascNum}/>
+                      : <SouthIndianChart planets={planets} ascendant={ascNum}/>}
                     <div style={{marginTop:'10px',textAlign:'center'}}>
                       <button onClick={()=>{ /* could toggle to south */ }}
                         style={{fontSize:'10px',color:'var(--txm)',background:'none',
@@ -387,6 +405,7 @@ export default function ChartPage() {
                           Loading Navamsha...
                         </div>}
                   </div>
+                </div>
                 </div>
               )}
 
