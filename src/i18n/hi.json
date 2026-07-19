@@ -75,7 +75,29 @@
     "lucky_number": "अंक",
     "favorable": "शुभ",
     "avoid": "परहेज",
-    "moon_note": "चंद्र"
+    "moon_note": "चंद्र",
+    "today": "आज",
+    "fire_sign": "अग्नि",
+    "earth_sign": "पृथ्वी",
+    "water_sign": "जल",
+    "air_sign": "वायु",
+    "ruled_by": "अधिपति",
+    "daily_horoscope": "दैनिक राशिफल",
+    "element": "तत्व",
+    "north_chart": "उत्तर भारतीय",
+    "south_chart": "दक्षिण भारतीय",
+    "generate": "कुंडली बनाएं",
+    "calculating": "गणना हो रही है...",
+    "sign_in_to_save": "सहेजने के लिए लॉगिन करें",
+    "tab_rasi": "राशि + नवांश",
+    "tab_planets": "ग्रह",
+    "tab_dasha": "दशा",
+    "tab_shadbala": "षड्बल",
+    "tab_ashtakavarga": "अष्टकवर्ग",
+    "tab_arudha": "आरूढ़",
+    "tab_dosha": "दोष",
+    "tab_analysis": "विश्लेषण",
+    "tab_report": "पूर्ण रिपोर्ट"
   },
   "auth": {
     "signin_title": "वापस स्वागत है",
@@ -127,5 +149,11 @@
     "Makara": "मकर",
     "Kumbha": "कुंभ",
     "Meena": "मीन"
+  },
+  "elements": {
+    "Fire": "अग्नि",
+    "Earth": "पृथ्वी",
+    "Water": "जल",
+    "Air": "वायु"
   }
 }
