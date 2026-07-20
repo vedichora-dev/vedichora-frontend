@@ -206,3 +206,14 @@ export const jyotiPeriod = (horoscopeId: string) =>
   chartApi.get(`/api/jyoti/period/${horoscopeId}`)
 
 export const getCredits = () => chartApi.get('/api/credits/balance')
+
+// ── ADMIN ─────────────────────────────────────────────────────────────
+export const adminStats       = ()          => chartApi.get('/api/admin/stats')
+export const adminUsers       = (page=1)    => chartApi.get(`/api/admin/users?page=${page}&pageSize=20`)
+export const adminUserBan     = (id:number) => chartApi.post(`/api/admin/users/${id}/ban`,{})
+export const adminUserUnban   = (id:number) => chartApi.post(`/api/admin/users/${id}/unban`,{})
+export const adminGiftCredits = (id:number, amount:number, reason:string) =>
+  chartApi.post(`/api/admin/users/${id}/gift-credits`, { amount, reason })
+export const adminLogs        = (type:'app'|'requests'|'safety', page=1) =>
+  chartApi.get(`/api/admin/logs/${type}?page=${page}&pageSize=50`)
+export const adminCreditEco   = ()          => chartApi.get('/api/admin/credit-economy')
