@@ -29,9 +29,11 @@ export default function AdminPage() {
       const AUTH_URL  = process.env.NEXT_PUBLIC_AUTH_URL  || 'https://vedichora-platform-production.up.railway.app'
       const headers   = { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' }
 
-      const [statsRes, usersRes] = await Promise.all([
-        fetch(`${AUTH_URL}/api/admin/stats`, { headers }).then(r=>r.json()).catch(()=>({})),
-        fetch(`${AUTH_URL}/api/admin/users?page=1&pageSize=10`, { headers }).then(r=>r.json()).catch(()=>({})),
+      // Admin endpoints are on the Chart service
+      const [statsRes, usersRes, creditRes] = await Promise.all([
+        fetch(`${CHART_URL}/api/admin/stats`, { headers }).then(r=>r.json()).catch(()=>({})),
+        fetch(`${CHART_URL}/api/admin/users?page=1&pageSize=10`, { headers }).then(r=>r.json()).catch(()=>({})),
+        fetch(`${CHART_URL}/api/admin/credit-economy`, { headers }).then(r=>r.json()).catch(()=>({})),
       ])
 
       setStats({
