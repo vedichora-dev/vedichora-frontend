@@ -12,6 +12,7 @@ const NAV_LINKS = [
   { href:'/', label:'Horoscope' },
   { href:'/chart', label:'Kundali' },
   { href:'/match', label:'Matching' },
+  { href:'/jyoti', label:'Jyoti AI' },
   { href:'/shop', label:'Shop' },
   { href:'/learn', label:'Learn' },
   { href:'/api-docs', label:'API' },
