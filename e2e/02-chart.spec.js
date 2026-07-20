@@ -55,7 +55,7 @@ test.describe('CHART — Babu & Pramod Validation', () => {
   })
 
   test('Chart page loads', async ({ page }) => {
-    await page.goto('/chart')
+    await page.goto(SITE + '/chart')
     await page.waitForTimeout(2000)
     await page.screenshot({ path: 'test-results/10-chart-loaded.png', fullPage: true })
 
@@ -70,7 +70,7 @@ test.describe('CHART — Babu & Pramod Validation', () => {
     await page.goto(SITE + '/chart')
     await page.waitForLoadState('networkidle')
     await page.waitForTimeout(1000)
-    await page.goto('/chart')
+    await page.goto(SITE + '/chart')
     await page.waitForTimeout(2000)
 
     // Open form
@@ -121,7 +121,7 @@ test.describe('CHART — Babu & Pramod Validation', () => {
   })
 
   test('BABU — Planets tab: verify all 9 planets', async ({ page }) => {
-    await page.goto('/chart')
+    await page.goto(SITE + '/chart')
     await page.waitForTimeout(2000)
 
     // Click Planets tab if available (chart already loaded)
@@ -153,7 +153,7 @@ test.describe('CHART — Babu & Pramod Validation', () => {
   })
 
   test('BABU — Dasha: current dasha shows NOW badge', async ({ page }) => {
-    await page.goto('/chart')
+    await page.goto(SITE + '/chart')
     await page.waitForTimeout(2000)
 
     const dashaTab = page.locator('button:has-text("Dasha")')
@@ -175,7 +175,7 @@ test.describe('CHART — Babu & Pramod Validation', () => {
   })
 
   test('BABU — North Indian chart SVG renders correctly', async ({ page }) => {
-    await page.goto('/chart')
+    await page.goto(SITE + '/chart')
     await page.waitForTimeout(2000)
 
     // Click Rasi+D9 tab
@@ -207,7 +207,7 @@ test.describe('CHART — Babu & Pramod Validation', () => {
     await page.goto(SITE + '/chart')
     await page.waitForLoadState('networkidle')
     await page.waitForTimeout(1000)
-    await page.goto('/chart')
+    await page.goto(SITE + '/chart')
     await page.waitForTimeout(2000)
 
     const btn = page.locator('button:has-text("New Chart")')
@@ -238,7 +238,7 @@ test.describe('CHART — Babu & Pramod Validation', () => {
   })
 
   test('Arudha tab — loads special lagnas', async ({ page }) => {
-    await page.goto('/chart')
+    await page.goto(SITE + '/chart')
     await page.waitForTimeout(2000)
 
     const tab = page.locator('button:has-text("Arudha")')
@@ -254,7 +254,7 @@ test.describe('CHART — Babu & Pramod Validation', () => {
   })
 
   test('Doshas tab — loads dosha data', async ({ page }) => {
-    await page.goto('/chart')
+    await page.goto(SITE + '/chart')
     await page.waitForTimeout(2000)
 
     const tab = page.locator('button:has-text("Dosha")')
@@ -270,7 +270,7 @@ test.describe('CHART — Babu & Pramod Validation', () => {
   })
 
   test('PDF button exists and is clickable', async ({ page }) => {
-    await page.goto('/chart')
+    await page.goto(SITE + '/chart')
     await page.waitForTimeout(2000)
 
     const btn = page.locator('button:has-text("PDF")')
