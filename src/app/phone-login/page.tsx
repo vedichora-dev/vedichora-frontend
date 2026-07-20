@@ -9,7 +9,7 @@ type Step = 'phone' | 'otp'
 
 export default function PhoneLoginPage() {
   const router = useRouter()
-  const { redirectAfterLogin, setRedirectAfterLogin, setToken, setUser } = useStore()
+  const { redirectAfterLogin, setRedirectAfterLogin, setAuth } = useStore()
 
   const [step, setStep]   = useState<Step>('phone')
   const [phone, setPhone] = useState('')
@@ -37,15 +37,10 @@ export default function PhoneLoginPage() {
     try {
       const res = await verifyPhoneOtp(phone.trim(), otp.trim())
       const data = (res as any)?.data?.data ?? (res as any)?.data ?? {}
-      const tok  = data.token || data.accessToken || data.access_token
-      if (tok) {
-        setToken(tok)
-        localStorage.setItem('vh_token', tok)
-        if (data.user) {
-          setUser(data.user)
-          localStorage.setItem('vh_user', JSON.stringify(data.user))
-        }
-      }
+      const tok  = data.accessToken || data.token || data.access_token || ''
+      const ref  = data.refreshToken || ''
+      const usr  = data.user || { id: 0, email: '', displayName: 'User', role: 'User' }
+      if (tok) setAuth(tok, ref, usr)
       const dest = redirectAfterLogin || '/dashboard'
       setRedirectAfterLogin(null)
       router.push(dest)
