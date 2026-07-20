@@ -83,9 +83,47 @@ export default function ChartPage() {
       arudha: async () => {
         const r = await getSpecialLagnas(horoId).catch(() => null)
         const d = r?.data?.data ?? r?.data ?? r
-        if (d && typeof d === 'object') return d
-        // Fallback: compute basic arudha from chart data (ascendant-based)
-        return null
+        if (d && typeof d === 'object' && !d.statusCode) return d
+
+        // Guest fallback: compute Arudha Lagna (AL) from ascendant
+        // AL = count from lagna lord's position back to lagna, same distance forward from lord
+        const ps = chart?.planets || chart?.Planets || []
+        const asc = chart?.ascendantHouse || chart?.AscendantHouse || 1
+        const ascRasi = chart?.ascendantRasi ?? chart?.AscendantRasi ?? (asc - 1)
+        
+        // Lagna lord based on ascendant sign
+        const lagnaLordMap: Record<number,string> = {
+          0:'Mars',1:'Venus',2:'Mercury',3:'Moon',4:'Sun',5:'Mercury',
+          6:'Venus',7:'Mars',8:'Jupiter',9:'Saturn',10:'Saturn',11:'Jupiter'
+        }
+        const lagnaLordName = lagnaLordMap[ascRasi % 12] || 'Sun'
+        const lagnaLord = ps.find((x:any)=>(x.planet||x.Planet)===lagnaLordName)
+        const lordHouse = lagnaLord ? (lagnaLord.house || lagnaLord.House || 1) : 1
+        
+        // Distance from lagna to lord
+        const dist1 = ((lordHouse - asc + 12) % 12) || 12
+        // AL = same distance from lord
+        const alHouse = ((lordHouse + dist1 - 1) % 12) + 1
+        
+        // Also compute Upapada (UL) — from 12th lord
+        const twelfthLordMap: Record<number,string> = {
+          0:'Jupiter',1:'Mars',2:'Venus',3:'Mercury',4:'Moon',5:'Sun',
+          6:'Mercury',7:'Venus',8:'Mars',9:'Jupiter',10:'Saturn',11:'Saturn'
+        }
+        const hhSign = ((asc + 10) % 12)  // 12th house sign = asc - 1
+        const ulLordName = twelfthLordMap[hhSign] || 'Venus'
+        const ulLord = ps.find((x:any)=>(x.planet||x.Planet)===ulLordName)
+        const ulLordHouse = ulLord ? (ulLord.house || ulLord.House || 1) : 1
+        const ulDist = ((ulLordHouse - ((asc+10)%12+1) + 12) % 12) || 12
+        const ulHouse = ((ulLordHouse + ulDist - 1) % 12) + 1
+        
+        const RASI_NAMES = ['Aries','Taurus','Gemini','Cancer','Leo','Virgo','Libra','Scorpio','Sagittarius','Capricorn','Aquarius','Pisces']
+        
+        return {
+          arudhaLagna: { house: alHouse, rasiName: RASI_NAMES[(alHouse-1)%12], description: 'AL — how the world perceives you; your public image and material status' },
+          upapada:     { house: ulHouse, rasiName: RASI_NAMES[(ulHouse-1)%12], description: 'UL — karaka for marriage and life partner quality' },
+          note: 'Computed from chart positions (approximate). Sign in and save chart for full classical Arudha padas.',
+        }
       },
       dosha: async () => {
         // Try auth endpoint first (for saved charts)
