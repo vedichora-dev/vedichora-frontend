@@ -1,33 +1,33 @@
 === CURRENT e2e FILES ===
 total 64
-drwxr-xr-x 2 runner runner  4096 Jul 20 01:15 .
-drwxr-xr-x 7 runner runner  4096 Jul 20 01:16 ..
--rw-r--r-- 1 runner runner  4428 Jul 20 01:15 01-auth.spec.js
--rw-r--r-- 1 runner runner 12014 Jul 20 01:15 02-chart.spec.js
--rw-r--r-- 1 runner runner  2851 Jul 20 01:15 03-match.spec.js
--rw-r--r-- 1 runner runner  2685 Jul 20 01:15 04-horoscope.spec.js
--rw-r--r-- 1 runner runner  3485 Jul 20 01:15 05-deployment.spec.js
--rw-r--r-- 1 runner runner  5422 Jul 20 01:15 06-match-10.spec.js
--rw-r--r-- 1 runner runner  8626 Jul 20 01:15 functional-test.spec.js
--rw-r--r-- 1 runner runner  2685 Jul 20 01:15 helpers.js
+drwxr-xr-x 2 runner runner  4096 Jul 20 01:17 .
+drwxr-xr-x 7 runner runner  4096 Jul 20 01:17 ..
+-rw-r--r-- 1 runner runner  4428 Jul 20 01:17 01-auth.spec.js
+-rw-r--r-- 1 runner runner 12014 Jul 20 01:17 02-chart.spec.js
+-rw-r--r-- 1 runner runner  2851 Jul 20 01:17 03-match.spec.js
+-rw-r--r-- 1 runner runner  2685 Jul 20 01:17 04-horoscope.spec.js
+-rw-r--r-- 1 runner runner  3485 Jul 20 01:17 05-deployment.spec.js
+-rw-r--r-- 1 runner runner  5422 Jul 20 01:17 06-match-10.spec.js
+-rw-r--r-- 1 runner runner  8626 Jul 20 01:17 functional-test.spec.js
+-rw-r--r-- 1 runner runner  2685 Jul 20 01:17 helpers.js
 
 === BUILD OUTPUT ===
-
-> vedichora@1.0.0 build
-> next build
-
-⚠ No build cache found. Please configure build caching for faster rebuilds. Read more: https://nextjs.org/docs/messages/no-cache
-Attention: Next.js now collects completely anonymous telemetry regarding usage.
-This information is used to shape Next.js' roadmap and prioritize features.
-You can learn more, including how to opt-out if you'd not like to participate in this anonymous program, by visiting the following URL:
-https://nextjs.org/telemetry
-
-   ▲ Next.js 14.0.4
-   - Environments: .env.local
-
    Creating an optimized production build ...
    Using tsconfig file: ./tsconfig.json
- ✓ Compiled successfully
+ ⚠ Compiled with warnings
+
+./src/app/dashboard/page.tsx
+Attempted import error: 'getCredits' is not exported from '@/api' (imported as 'getCredits').
+
+Import trace for requested module:
+./src/app/dashboard/page.tsx
+
+./src/app/dashboard/page.tsx
+Attempted import error: 'getCredits' is not exported from '@/api' (imported as 'getCredits').
+
+Import trace for requested module:
+./src/app/dashboard/page.tsx
+
    Skipping validation of types
    Linting ...
    Collecting page data ...
@@ -49,7 +49,7 @@ Route (app)                              Size     First Load JS
 ├ ○ /chart                               19.2 kB         134 kB
 ├ ○ /checkout                            5.07 kB          90 kB
 ├ ○ /consult                             5.5 kB         90.4 kB
-├ ○ /dashboard                           1.45 kB         113 kB
+├ ○ /dashboard                           1.55 kB         113 kB
 ├ ○ /learn                               2.52 kB        84.4 kB
 ├ ○ /match                               4.94 kB         120 kB
 ├ ○ /muhurta                             2.63 kB         114 kB
