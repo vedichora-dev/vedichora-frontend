@@ -178,3 +178,29 @@ export const downloadPdfFull  = (id: string) =>
 export const getGoodBadTimes    = (id: string) => chartApi.get(`/api/prediction/${id}/good-bad-times`)
 export const getDifficultPeriods= (id: string) => chartApi.get(`/api/prediction/${id}/difficult-periods`)
 export const getGoodPeriods     = (id: string) => chartApi.get(`/api/prediction/${id}/good-periods`)
+
+// ── JYOTI AI ─────────────────────────────────────────────────────────
+export const jyotiChat = (body: {
+  message: string
+  sessionId?: string
+  horoscopeId?: string
+  lang?: string
+}) => chartApi.post('/api/jyoti/chat', body)
+
+export const jyotiSessions = () =>
+  chartApi.get('/api/jyoti/sessions')
+
+export const jyotiSession = (id: string) =>
+  chartApi.get(`/api/jyoti/sessions/${id}`)
+
+export const jyotiNewSession = (title: string, horoscopeId?: string) =>
+  chartApi.post('/api/jyoti/sessions', { title, horoscopeId })
+
+export const jyotiDeleteSession = (id: string) =>
+  chartApi.delete(`/api/jyoti/sessions/${id}`)
+
+export const jyotiPersonas = () =>
+  chartApi.get('/api/jyoti/personas')
+
+export const jyotiPeriod = (horoscopeId: string) =>
+  chartApi.get(`/api/jyoti/period/${horoscopeId}`)
