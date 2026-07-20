@@ -1,15 +1,15 @@
 === CURRENT e2e FILES ===
 total 64
-drwxr-xr-x 2 runner runner  4096 Jul 20 02:59 .
-drwxr-xr-x 7 runner runner  4096 Jul 20 02:59 ..
--rw-r--r-- 1 runner runner  4428 Jul 20 02:59 01-auth.spec.js
--rw-r--r-- 1 runner runner 11055 Jul 20 02:59 02-chart.spec.js
--rw-r--r-- 1 runner runner  2851 Jul 20 02:59 03-match.spec.js
--rw-r--r-- 1 runner runner  2685 Jul 20 02:59 04-horoscope.spec.js
--rw-r--r-- 1 runner runner  3485 Jul 20 02:59 05-deployment.spec.js
--rw-r--r-- 1 runner runner  5422 Jul 20 02:59 06-match-10.spec.js
--rw-r--r-- 1 runner runner  8626 Jul 20 02:59 functional-test.spec.js
--rw-r--r-- 1 runner runner  2685 Jul 20 02:59 helpers.js
+drwxr-xr-x 2 runner runner  4096 Jul 20 03:01 .
+drwxr-xr-x 7 runner runner  4096 Jul 20 03:01 ..
+-rw-r--r-- 1 runner runner  4428 Jul 20 03:01 01-auth.spec.js
+-rw-r--r-- 1 runner runner 11055 Jul 20 03:01 02-chart.spec.js
+-rw-r--r-- 1 runner runner  2851 Jul 20 03:01 03-match.spec.js
+-rw-r--r-- 1 runner runner  2685 Jul 20 03:01 04-horoscope.spec.js
+-rw-r--r-- 1 runner runner  3485 Jul 20 03:01 05-deployment.spec.js
+-rw-r--r-- 1 runner runner  5422 Jul 20 03:01 06-match-10.spec.js
+-rw-r--r-- 1 runner runner  8626 Jul 20 03:01 functional-test.spec.js
+-rw-r--r-- 1 runner runner  2685 Jul 20 03:01 helpers.js
 
 === BUILD OUTPUT ===
 > vedichora@1.0.0 build
@@ -43,9 +43,9 @@ Route (app)                              Size     First Load JS
 ┌ ○ /                                    11.6 kB         124 kB
 ├ ○ /_not-found                          869 B          82.8 kB
 ├ ○ /about                               2.46 kB        84.4 kB
-├ ○ /admin                               4.86 kB        89.8 kB
+├ ○ /admin                               5.36 kB         117 kB
 ├ ○ /api-docs                            1.87 kB        86.8 kB
-├ ○ /chart                               19.2 kB         134 kB
+├ ○ /chart                               19.2 kB         135 kB
 ├ ○ /checkout                            5.07 kB          90 kB
 ├ ○ /consult                             5.5 kB         90.4 kB
 ├ ○ /dashboard                           3.37 kB         115 kB
@@ -58,7 +58,7 @@ Route (app)                              Size     First Load JS
 ├ ○ /remedies                            1.85 kB        83.8 kB
 ├ ○ /shop                                2.09 kB         114 kB
 ├ ○ /signin                              2.93 kB         122 kB
-├ ○ /signup                              2.68 kB         121 kB
+├ ○ /signup                              2.68 kB         122 kB
 ├ ○ /transits                            1.83 kB         114 kB
 ├ ○ /varshaphal                          1.89 kB         114 kB
 ├ ○ /western                             10.8 kB        99.5 kB
