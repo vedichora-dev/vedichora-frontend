@@ -2,17 +2,22 @@
 import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import { useStore } from "@/store"
-import { listCharts } from "@/api"
+import { listCharts, getCredits } from "@/api"
 import { LayoutDashboard } from "lucide-react"
 
 export default function DashboardPage() {
   const { token, user } = useStore()
   const router = useRouter()
   const [charts, setCharts] = useState<any[]>([])
+  const [credits, setCredits] = useState<number>(0)
 
   useEffect(() => {
     if (!token) { router.push("/signin"); return }
     listCharts().then(data => { if (data?.length) setCharts(data) })
+    getCredits().then((r: any) => {
+      const bal = r?.data?.data?.balance ?? r?.data?.balance ?? 0
+      setCredits(bal)
+    }).catch(() => {})
   }, [token])
 
   return (
@@ -26,7 +31,7 @@ export default function DashboardPage() {
         {[
           { label:"Saved Charts",    value:charts.length || 0, icon:"📜" },
           { label:"Consultations",   value:0,                  icon:"🔮" },
-          { label:"Credits Balance", value:0,                  icon:"💰" },
+          { label:"Credits Balance", value:credits,             icon:"💰" },
         ].map(s => (
           <div key={s.label} className="card card-bd text-center">
             <div className="text-3xl mb-2">{s.icon}</div>
