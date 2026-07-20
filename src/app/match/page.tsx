@@ -206,7 +206,7 @@ export default function MatchPage() {
         mdata = mres?.data?.data ?? mres?.data ?? mres
       }
 
-      if (!mdata || mdata?.ashtaKootaScore === undefined) {
+      if (!mdata || (mdata?.ashtaKootaScore === undefined && mdata?.AshtaKootaScore === undefined)) {
         // Guest or fallback: send full payloads to guest-match
         const gp1 = buildPayload(n1, d1, p1, lat1, lng1, g1)
         const gp2 = buildPayload(n2, d2, p2, lat2, lng2, g2)
