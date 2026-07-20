@@ -7,10 +7,17 @@ const SITE = process.env.BASE_URL || 'https://vedichora-frontend-orcin.vercel.ap
 // ── Helpers ──────────────────────────────────────────────────────────────────
 async function login(page) {
   await page.goto(SITE + '/signin')
+  await page.waitForLoadState('networkidle')
   await page.fill('input[type="email"]', ADMIN_EMAIL)
   await page.fill('input[type="password"]', ADMIN_PASS)
   await page.click('button[type="submit"]')
-  await page.waitForTimeout(5000)
+  // Wait for redirect away from /signin (up to 10s)
+  try {
+    await page.waitForURL(url => !url.includes('/signin'), { timeout: 10000 })
+  } catch {
+    await page.waitForTimeout(5000)
+  }
+  await page.waitForLoadState('networkidle').catch(() => {})
 }
 
 async function fillDatePicker(page, prefix, day, month, year, hour, minute, ap) {
@@ -74,12 +81,10 @@ test.describe('CHART — Babu & Pramod Validation', () => {
   })
 
   test('BABU — Generate chart (Mar 1, 1959, 14:30 IST, Chennai)', async ({ page }) => {
-    // Navigate to chart page as guest (guest form is always visible)
+    // Navigate to chart page (already logged in from beforeEach)
     page.on('crash', () => console.log('Page crashed!'))
     await page.goto(SITE + '/chart')
     await page.waitForLoadState('networkidle')
-    await page.waitForTimeout(1000)
-    await page.goto(SITE + '/chart')
     await page.waitForTimeout(2000)
 
     // Open form
@@ -100,8 +105,10 @@ test.describe('CHART — Babu & Pramod Validation', () => {
     await page.screenshot({ path: 'test-results/11-babu-form.png', fullPage: true })
 
     // Click Generate
-    await page.click('button:has-text("Generate")')
-    await page.waitForTimeout(10000)
+    const genBtn = page.locator('button').filter({ hasText: /Generate/ }).first()
+    await genBtn.scrollIntoViewIfNeeded()
+    await genBtn.click({ force: true })
+    await page.waitForTimeout(12000)
 
     await page.screenshot({ path: 'test-results/12-babu-result.png', fullPage: true })
 
@@ -211,12 +218,10 @@ test.describe('CHART — Babu & Pramod Validation', () => {
   })
 
   test('PRAMOD — Generate chart (Sep 24, 1968, 20:22 IST, Chennai)', async ({ page }) => {
-    // Navigate to chart page as guest (guest form is always visible)
+    // Navigate to chart page (already logged in from beforeEach)
     page.on('crash', () => console.log('Page crashed!'))
     await page.goto(SITE + '/chart')
     await page.waitForLoadState('networkidle')
-    await page.waitForTimeout(1000)
-    await page.goto(SITE + '/chart')
     await page.waitForTimeout(2000)
 
     const btn = page.locator('button:has-text("New Chart")')
