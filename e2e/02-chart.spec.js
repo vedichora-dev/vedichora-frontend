@@ -2,9 +2,11 @@
 const { test, expect } = require('@playwright/test')
 const { ADMIN_EMAIL, ADMIN_PASS } = require('./helpers')
 
+const SITE = process.env.BASE_URL || 'https://vedichora-frontend-orcin.vercel.app'
+
 // ── Helpers ──────────────────────────────────────────────────────────────────
 async function login(page) {
-  await page.goto('/signin')
+  await page.goto(SITE + '/signin')
   await page.fill('input[type="email"]', ADMIN_EMAIL)
   await page.fill('input[type="password"]', ADMIN_PASS)
   await page.click('button[type="submit"]')
@@ -39,12 +41,19 @@ async function fillDatePicker(page, prefix, day, month, year, hour, minute, ap) 
 
 async function fillCity(page, city) {
   const field = page.locator('input[placeholder*="City"], input[placeholder*="city"]').first()
+  await field.scrollIntoViewIfNeeded()
+  await field.click({ force: true })
   await field.fill(city)
-  await page.waitForTimeout(800)
-  // Try autocomplete dropdown
-  const drop = page.locator(`div button:has-text("${city}")`).first()
-  const visible = await drop.isVisible({ timeout: 2000 }).catch(() => false)
-  if (visible) await drop.click()
+  await page.waitForTimeout(2000)
+  // Use data-city-option selector (set by CityAutocomplete component)
+  const opt = page.locator('button[data-city-option="true"]').first()
+  const visible = await opt.isVisible({ timeout: 5000 }).catch(() => false)
+  if (visible) {
+    await opt.click({ force: true })
+    await page.waitForTimeout(700)
+  }
+  await field.press('Tab')
+  await page.waitForTimeout(300)
 }
 
 // ── Tests ────────────────────────────────────────────────────────────────────
