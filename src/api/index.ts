@@ -204,3 +204,5 @@ export const jyotiPersonas = () =>
 
 export const jyotiPeriod = (horoscopeId: string) =>
   chartApi.get(`/api/jyoti/period/${horoscopeId}`)
+
+export const getCredits = () => chartApi.get('/api/credits/balance')
