@@ -88,25 +88,58 @@ export default function ChartPage() {
         return null
       },
       dosha: async () => {
-        // Try the combined dosha endpoint first, then individual doshas
-        const CHART_URL = process.env.NEXT_PUBLIC_CHART_URL || 'https://enchanting-dedication-production.up.railway.app'
-        const authHeaders: Record<string,string> = { 'Content-Type': 'application/json' }
-        const tok = typeof localStorage !== 'undefined' ? localStorage.getItem('vh_token') : null
-        if (tok) authHeaders['Authorization'] = `Bearer ${tok}`
-        
-        // Try /api/dosha/{id} first
+        // Try auth endpoint first (for saved charts)
         const r = await getDoshas(horoId).catch(() => null)
         const d = r?.data?.data ?? r?.data ?? r
-        if (d && typeof d === 'object' && Object.keys(d).length > 0) return d
+        if (d && typeof d === 'object' && Object.keys(d).length > 0 && !d.statusCode) return d
+
+        // Guest fallback: compute from chart planets we already have
+        const ps = chart?.planets || chart?.Planets || []
+        const house = (planet: string) => {
+          const p = ps.find((x:any) => (x.planet||x.Planet) === planet)
+          return p ? (p.house || p.House || 0) : 0
+        }
+        const rasi  = (planet: string) => {
+          const p = ps.find((x:any) => (x.planet||x.Planet) === planet)
+          return p ? (p.rasi || p.Rasi || 0) : 0
+        }
+        const lagna = chart?.ascendantHouse || chart?.AscendantHouse || 1
+        const marsH = house('Mars')
+        const rahuH = house('Rahu')
+        const ketuH = house('Ketu')
+        const moonH = house('Moon')
+        const jupH  = house('Jupiter')
         
-        // Fallback: fetch individual doshas in parallel
-        const [mangal, kaalsarpa] = await Promise.all([
-          fetch(`${CHART_URL}/api/dosha/${horoId}/mangal`, { headers: authHeaders }).then(r=>r.json()).catch(()=>null),
-          fetch(`${CHART_URL}/api/dosha/${horoId}/kaalsarpa`, { headers: authHeaders }).then(r=>r.json()).catch(()=>null),
-        ])
+        // Mangal Dosha: Mars in 1,2,4,7,8,12
+        const mangalHouses = [1,2,4,7,8,12]
+        const mangalPresent = marsH > 0 && mangalHouses.includes(marsH)
+        
+        // Kaal Sarpa: all planets between Rahu and Ketu (simplified)
+        const rahuRasi = rasi('Rahu')
+        const ketuRasi = rasi('Ketu')
+        const bodyPlanets = ['Sun','Moon','Mars','Mercury','Jupiter','Venus','Saturn']
+        const allInArc = bodyPlanets.every(pn => {
+          const r = rasi(pn)
+          if (r === 0) return true
+          // simplified: between rahu and ketu going forward
+          const start = rahuRasi, end = ketuRasi
+          if (start < end) return r >= start && r <= end
+          return r >= start || r <= end
+        })
+        
+        // Guru Chandal: Jupiter+Rahu or Jupiter+Ketu same rasi
+        const guruChandal = jupH > 0 && (jupH === house('Rahu') || jupH === house('Ketu'))
+        
+        // Kemadruma: Moon has no planets in adjacent houses (2nd/12th from Moon)
+        const moonAdj = [((moonH-2+12)%12)+1, moonH%12+1]
+        const planetsInAdj = bodyPlanets.some(pn => moonAdj.includes(house(pn)))
+        const kemadruma = moonH > 0 && !planetsInAdj
+        
         return {
-          mangalDosha: mangal?.data?.data ?? mangal?.data ?? mangal,
-          kaalsarpaDosha: kaalsarpa?.data?.data ?? kaalsarpa?.data ?? kaalsarpa,
+          mangalDosha:    { present: mangalPresent,  severity: mangalPresent ? 'moderate' : 'none',  name: 'Mangal Dosha', description: mangalPresent ? \`Mars in house \${marsH} — Mangal Dosha present\` : 'Mangal Dosha not present' },
+          kaalsarpaDosha: { present: allInArc,        severity: allInArc ? 'high' : 'none',           name: 'Kaal Sarpa Dosha', description: allInArc ? 'All planets between Rahu-Ketu axis' : 'Kaal Sarpa Dosha not present' },
+          guruChandalDosha: { present: guruChandal,  severity: guruChandal ? 'moderate' : 'none',    name: 'Guru Chandal Dosha', description: guruChandal ? 'Jupiter conjunct Rahu/Ketu' : 'Guru Chandal Dosha not present' },
+          kemadrumaDosha:   { present: kemadruma,     severity: kemadruma ? 'low' : 'none',           name: 'Kemadruma Dosha', description: kemadruma ? 'Moon isolated — no planets in adjacent houses' : 'Kemadruma Dosha not present' },
         }
       },
       interpret:    async () => {
