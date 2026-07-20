@@ -9,7 +9,7 @@ type Step = 'phone' | 'otp'
 
 export default function PhoneLoginPage() {
   const router = useRouter()
-  const { redirectAfterLogin, setRedirectAfterLogin } = useStore()
+  const { redirectAfterLogin, setRedirectAfterLogin, setToken, setUser } = useStore()
 
   const [step, setStep]   = useState<Step>('phone')
   const [phone, setPhone] = useState('')
@@ -35,8 +35,18 @@ export default function PhoneLoginPage() {
     if (!otp.trim() || otp.length < 6) { setErr('Enter the 6-digit code'); return }
     setLoading(true); setErr('')
     try {
-      await verifyPhoneOtp(phone.trim(), otp.trim())
-      const dest = redirectAfterLogin || '/'
+      const res = await verifyPhoneOtp(phone.trim(), otp.trim())
+      const data = (res as any)?.data?.data ?? (res as any)?.data ?? {}
+      const tok  = data.token || data.accessToken || data.access_token
+      if (tok) {
+        setToken(tok)
+        localStorage.setItem('vh_token', tok)
+        if (data.user) {
+          setUser(data.user)
+          localStorage.setItem('vh_user', JSON.stringify(data.user))
+        }
+      }
+      const dest = redirectAfterLogin || '/dashboard'
       setRedirectAfterLogin(null)
       router.push(dest)
     } catch (e: any) {
