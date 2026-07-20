@@ -480,7 +480,7 @@ export default function WesternPage(){
                   ))}
                 </div>
               </div>
-              <div style={{textAlign:'center'}}>{btn('Reveal Compatibility ✦',()=>{setM1(getMoon(d1.dd,d1.mm,d1.yyyy));setM2(getMoon(d2.dd,d2.mm,d2.yyyy))},!d1.dd||!d1.mm||!d1.yyyy||!d2.dd||!d2.mm||!d2.yyyy)}</div>
+              <div style={{textAlign:'center'}}>{btn(compatLoading?'Calculating...':'Reveal Compatibility ✦',calcRealCompat,!d1.yyyy||!d2.yyyy)}</div>
             </div>
 
             {/* Compat result */}
