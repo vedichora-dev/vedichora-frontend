@@ -175,6 +175,9 @@ export default function WesternPage(){
   const [n2,setN2]=useState('')
   const [m1,setM1]=useState<number|null>(null)
   const [m2,setM2]=useState<number|null>(null)
+  const [compatResult, setCompatResult] = useState<any>(null)
+  const [compatLoading, setCompatLoading] = useState(false)
+  const [compatErr, setCompatErr] = useState('')
   // Chart tab state
   const [chartName,setChartName]=useState('')
   const [chartDay,setChartDay]=useState(0)
@@ -237,6 +240,37 @@ export default function WesternPage(){
       }
     }catch(e:any){setChartErr(e?.message||'Connection failed')}
     setChartLoading(false)
+  }
+
+  const calcRealCompat = async () => {
+    if (!d1.yyyy || !d2.yyyy) { setCompatErr('Enter both dates of birth'); return }
+    setCompatLoading(true); setCompatErr('')
+    try {
+      const CHART_URL = 'https://enchanting-dedication-production.up.railway.app'
+      const p1 = {
+        PersonName: n1 || 'Person 1',
+        Year: d1.yyyy, Month: d1.mm || 1, Day: d1.dd || 1,
+        Hour: 12, Minute: 0, Second: 0,
+        PlaceName: 'Chennai, India',
+        UtcOffsetHours: 5.5, AyanamsaType: 'Lahiri'
+      }
+      const p2 = {
+        PersonName: n2 || 'Person 2',
+        Year: d2.yyyy, Month: d2.mm || 1, Day: d2.dd || 1,
+        Hour: 12, Minute: 0, Second: 0,
+        PlaceName: 'Chennai, India',
+        UtcOffsetHours: 5.5, AyanamsaType: 'Lahiri'
+      }
+      const res = await fetch(`${CHART_URL}/api/chart/guest-match`, {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ Person1: p1, Person2: p2 })
+      }).then(r => r.json())
+      const data = res?.data?.data ?? res?.data ?? res
+      setCompatResult(data)
+    } catch (e: any) {
+      setCompatErr(e?.message || 'Calculation failed')
+    }
+    setCompatLoading(false)
   }
 
   const scoreColor=(s:number)=>s>=80?'#22C55E':s>=65?'#D4A52B':'#EF4444'
