@@ -174,7 +174,7 @@ export default function ChartPage() {
         const kemadruma = moonH > 0 && !planetsInAdj
         
         return {
-          mangalDosha:    { present: mangalPresent,  severity: mangalPresent ? 'moderate' : 'none',  name: 'Mangal Dosha', description: mangalPresent ? \`Mars in house \${marsH} — Mangal Dosha present\` : 'Mangal Dosha not present' },
+          mangalDosha:    { present: mangalPresent,  severity: mangalPresent ? 'moderate' : 'none',  name: 'Mangal Dosha', description: mangalPresent ? ('Mars in house ' + marsH + ' — Mangal Dosha present') : 'Mangal Dosha not present' },
           kaalsarpaDosha: { present: allInArc,        severity: allInArc ? 'high' : 'none',           name: 'Kaal Sarpa Dosha', description: allInArc ? 'All planets between Rahu-Ketu axis' : 'Kaal Sarpa Dosha not present' },
           guruChandalDosha: { present: guruChandal,  severity: guruChandal ? 'moderate' : 'none',    name: 'Guru Chandal Dosha', description: guruChandal ? 'Jupiter conjunct Rahu/Ketu' : 'Guru Chandal Dosha not present' },
           kemadrumaDosha:   { present: kemadruma,     severity: kemadruma ? 'low' : 'none',           name: 'Kemadruma Dosha', description: kemadruma ? 'Moon isolated — no planets in adjacent houses' : 'Kemadruma Dosha not present' },
