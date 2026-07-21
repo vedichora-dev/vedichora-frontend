@@ -5,7 +5,7 @@ import { useStore } from '@/store'
 import { chartApi } from '@/api/client'
 import {
   calculateChart, calculateChartGuest, listCharts, getChart,
-  getShadbala, getAshtakavarga, getVargaChart,
+  getShadbala, getAshtakavarga, getShadBalaGuest, getAshtakavargaGuest, getVargaChart,
   getSpecialLagnas, getDoshas, downloadPdfBasic,
   getInterpretPersonality, getInterpretCareer,
   getInterpretMarriage, getInterpretCurrentPeriod,
@@ -71,109 +71,29 @@ export default function ChartPage() {
 
     const loaders: Record<string, ()=>Promise<any>> = {
       shadbala: async () => {
-        const r = await getShadbala(horoId).catch(() => null)
-        const d = r?.data?.data ?? r?.data ?? r
-        if (d && !d.statusCode && (Array.isArray(d) || d.planets)) {
-          return Array.isArray(d) ? { planets: d } : d
+        // Try auth endpoint first (saved charts with login)
+        const r1 = await getShadbala(horoId).catch(() => null)
+        const d1 = r1?.data?.data ?? r1?.data ?? r1
+        if (d1 && !d1.statusCode && (Array.isArray(d1) || d1.planets || d1.strongestPlanet)) {
+          return Array.isArray(d1) ? { planets: d1 } : d1
         }
-        // Guest fallback: compute approximate Shadbala from planet positions
-        // Using simplified Sthana (positional) + Dig (directional) + Naisargika (natural) bala
-        const ps = chart?.planets || chart?.Planets || []
-        const NATURAL = { Sun:60, Moon:51.4, Mars:17.1, Mercury:25.7, Jupiter:34.3, Venus:42.9, Saturn:8.6 }
-        const EXALT   = { Sun:'Aries', Moon:'Taurus', Mars:'Capricorn', Mercury:'Virgo', Jupiter:'Cancer', Venus:'Pisces', Saturn:'Libra' }
-        const DEBIL   = { Sun:'Libra', Moon:'Scorpio', Mars:'Cancer', Mercury:'Pisces', Jupiter:'Capricorn', Venus:'Virgo', Saturn:'Aries' }
-        const DIG_BEST = { Sun:10, Moon:4, Mars:10, Mercury:1, Jupiter:1, Venus:4, Saturn:7 } // best house for dig bala
-        
-        const rows = ['Sun','Moon','Mars','Mercury','Jupiter','Venus','Saturn'].map(pn => {
-          const p = ps.find((x:any)=>(x.planet||x.Planet)===pn)
-          if (!p) return null
-          const rasi = p.rasiName || p.RasiName || ''
-          const house = p.house || p.House || 0
-          const retro = p.isRetrograde || p.IsRetrograde || false
-          
-          // Sthana bala (positional)
-          const isExalt   = rasi === (EXALT as any)[pn]
-          const isDebil   = rasi === (DEBIL as any)[pn]
-          const sthanaBala = isExalt ? 60 : isDebil ? 15 : 30
-
-          // Dig bala (directional) — max 60 in best house
-          const bestH = (DIG_BEST as any)[pn] || 1
-          const digDist = Math.abs(house - bestH)
-          const digBala = Math.max(0, 60 - (digDist * 60 / 6))
-
-          // Naisargika (natural)
-          const naisargika = (NATURAL as any)[pn] || 25
-
-          // Chesta (motional) — simplified
-          const chestaBala = retro ? 30 : 15
-
-          const total = (sthanaBala + digBala + naisargika + chestaBala) / 4
-
-          return {
-            planet: pn,
-            totalBala: +total.toFixed(1),
-            sthanaBala: +sthanaBala.toFixed(1),
-            digBala: +digBala.toFixed(1),
-            naisargikaBala: +naisargika.toFixed(1),
-            chestaBala: +chestaBala.toFixed(1),
-            kaalaBala: 30,
-            drigBala: 0,
-            isExalted: isExalt,
-            isDebilitated: isDebil,
-            note: 'Approximate — sign in & save chart for precise Shadbala'
-          }
-        }).filter(Boolean)
-
-        const sorted = [...rows].sort((a:any,b:any)=>b.totalBala-a.totalBala)
-        return {
-          planets: rows,
-          strongestPlanet: sorted[0]?.planet || '',
-          weakestPlanet: sorted[sorted.length-1]?.planet || '',
-          note: 'Approximate Shadbala computed from chart positions. Sign in and save chart for classical 6-fold calculation.'
-        }
+        // Guest endpoint — works for any horoscopeId (guest chart saved in DB temporarily)
+        const r2 = await getShadBalaGuest(horoId).catch(() => null)
+        const d2 = r2?.data?.data ?? r2?.data ?? r2
+        if (d2 && !d2.statusCode && (d2.planets || d2.strongestPlanet)) return d2
+        return null
       },
       ashtakavarga: async () => {
-        const r = await getAshtakavarga(horoId).catch(() => null)
-        const d = r?.data?.data ?? r?.data ?? r
-        if (d && !d.statusCode && d.bindus) return d
+        // Try auth endpoint first (saved charts with login)
+        const r1 = await getAshtakavarga(horoId).catch(() => null)
+        const d1 = r1?.data?.data ?? r1?.data ?? r1
+        if (d1 && !d1.statusCode && d1.bindus) return d1
 
-        // Guest fallback: compute simplified Ashtakavarga (bindus) from planet positions
-        const ps = chart?.planets || chart?.Planets || []
-        const lagna = chart?.ascendantRasi ?? (chart?.ascendantHouse ?? 1) - 1
-        
-        // Beneficial positions for each planet (houses from own sign that give bindu)
-        // Simplified version using house-based rules
-        const BENEF_HOUSES: Record<string,number[]> = {
-          Sun:    [1,2,4,7,8,9,10,11],
-          Moon:   [3,6,10,11],
-          Mars:   [3,5,6,10,11],
-          Mercury:[1,3,5,6,9,10,11],
-          Jupiter:[1,2,4,7,8,10,11],
-          Venus:  [1,2,3,4,5,8,9,11],
-          Saturn: [3,5,6,11],
-          Lagna:  [1,3,5,7,9,11],
-        }
-        
-        // Compute bindus per rasi (1-12)
-        const bindusPerRasi = Array.from({length:12},(_,i)=>i+1).map(rasi => {
-          let bindus = 0
-          const contributors = ['Sun','Moon','Mars','Mercury','Jupiter','Venus','Saturn','Lagna']
-          contributors.forEach(contrib => {
-            const p = ps.find((x:any)=>(x.planet||x.Planet)===contrib)
-            const baseRasi = contrib === 'Lagna' ? lagna : (p?.rasi ?? p?.Rasi ?? 0)
-            const relPos = ((rasi - baseRasi + 12) % 12) + 1  // house from planet's rasi
-            const benefHouses = BENEF_HOUSES[contrib] || []
-            if (benefHouses.includes(relPos)) bindus++
-          })
-          return { rasi, rasiName: ['Aries','Taurus','Gemini','Cancer','Leo','Virgo','Libra','Scorpio','Sagittarius','Capricorn','Aquarius','Pisces'][rasi-1], bindus }
-        })
-
-        return {
-          bindusPerRasi,
-          totalBindus: bindusPerRasi.reduce((s:number,r:any)=>s+r.bindus, 0),
-          averageBindus: +(bindusPerRasi.reduce((s:number,r:any)=>s+r.bindus, 0)/12).toFixed(1),
-          note: 'Approximate Sarvashtakavarga. Sign in and save chart for full planetary Ashtakavarga.'
-        }
+        // Guest endpoint — works for any horoscopeId
+        const r2 = await getAshtakavargaGuest(horoId).catch(() => null)
+        const d2 = r2?.data?.data ?? r2?.data ?? r2
+        if (d2 && !d2.statusCode && (d2.bindusPerRasi || d2.sav)) return d2
+        return null
       },
       arudha: async () => {
         const r = await getSpecialLagnas(horoId).catch(() => null)
