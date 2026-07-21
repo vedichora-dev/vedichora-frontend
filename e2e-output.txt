@@ -2,236 +2,236 @@
 Running 100 tests using 2 workers
 
 Home has VedicHora content: true
-  ✓    1 [chromium] › e2e/01-auth.spec.js:7:3 › AUTH — Login & Signup › Home page loads (2.8s)
+  ✓    1 [chromium] › e2e/01-auth.spec.js:7:3 › AUTH — Login & Signup › Home page loads (3.8s)
 Nav items visible: true
-  ✓    3 [chromium] › e2e/01-auth.spec.js:18:3 › AUTH — Login & Signup › Nav renders correctly (2.5s)
+  ✓    3 [chromium] › e2e/01-auth.spec.js:18:3 › AUTH — Login & Signup › Nav renders correctly (2.4s)
 ✓ Chart page loaded
-  ✓    2 [chromium] › e2e/02-chart.spec.js:73:3 › CHART — Babu & Pramod Validation › Chart page loads (8.8s)
+  ✓    2 [chromium] › e2e/02-chart.spec.js:73:3 › CHART — Babu & Pramod Validation › Chart page loads (9.7s)
 After login URL: https://vedichora-frontend-orcin.vercel.app/chart
   ✓    4 [chromium] › e2e/01-auth.spec.js:27:3 › AUTH — Login & Signup › Admin login succeeds (6.1s)
+Error shown: true | stays on signin: true
+  ✓    6 [chromium] › e2e/01-auth.spec.js:45:3 › AUTH — Login & Signup › Wrong password shows error (3.5s)
 Babu lagna: Pisces | Moon: Scorpio | Planets: 9
 ✓ Babu — lagna: Pisces | Cancer: false | API works
-Error shown: true | stays on signin: true
-  ✓    5 [chromium] › e2e/02-chart.spec.js:83:3 › CHART — Babu & Pramod Validation › BABU — Generate chart (Mar 1, 1959, 14:30 IST, Chennai) (6.2s)
-  ✓    6 [chromium] › e2e/01-auth.spec.js:45:3 › AUTH — Login & Signup › Wrong password shows error (3.7s)
+  ✓    5 [chromium] › e2e/02-chart.spec.js:83:3 › CHART — Babu & Pramod Validation › BABU — Generate chart (Mar 1, 1959, 14:30 IST, Chennai) (6.4s)
 Signup page has CTA: true
-  ✓    8 [chromium] › e2e/01-auth.spec.js:58:3 › AUTH — Login & Signup › Signup page renders (2.0s)
+  ✓    7 [chromium] › e2e/01-auth.spec.js:58:3 › AUTH — Login & Signup › Signup page renders (2.0s)
 Phone login page renders: true
-  ✓    9 [chromium] › e2e/01-auth.spec.js:68:3 › AUTH — Login & Signup › Phone login page renders (2.2s)
+  ✓    9 [chromium] › e2e/01-auth.spec.js:68:3 › AUTH — Login & Signup › Phone login page renders (2.1s)
 Planets tab not visible — generate chart first
-  ✓    7 [chromium] › e2e/02-chart.spec.js:112:3 › CHART — Babu & Pramod Validation › BABU — Planets tab: verify all 9 planets (8.2s)
+  ✓    8 [chromium] › e2e/02-chart.spec.js:112:3 › CHART — Babu & Pramod Validation › BABU — Planets tab: verify all 9 planets (8.1s)
 Avatar not visible — user may not be logged in
-  ✓   10 [chromium] › e2e/01-auth.spec.js:78:3 › AUTH — Login & Signup › Logout works (5.6s)
-  ✓   12 [chromium] › e2e/03-match.spec.js:15:3 › MATCH — Compatibility › Match page renders correctly (6.3s)
-  ✓   11 [chromium] › e2e/02-chart.spec.js:144:3 › CHART — Babu & Pramod Validation › BABU — Dasha: current dasha shows NOW badge (8.2s)
+  ✓   10 [chromium] › e2e/01-auth.spec.js:78:3 › AUTH — Login & Signup › Logout works (5.5s)
+  ✓   12 [chromium] › e2e/03-match.spec.js:15:3 › MATCH — Compatibility › Match page renders correctly (6.2s)
+  ✓   11 [chromium] › e2e/02-chart.spec.js:144:3 › CHART — Babu & Pramod Validation › BABU — Dasha: current dasha shows NOW badge (8.4s)
 Match page selects: 12
-SVG rendered: false
-  ✘   14 [chromium] › e2e/02-chart.spec.js:166:3 › CHART — Babu & Pramod Validation › BABU — North Indian chart SVG renders correctly (8.4s)
 SVG rendered: true
 SVG text elements: 0 | SVG shapes: 8
-  ✓   15 [chromium] › e2e/02-chart.spec.js:166:3 › CHART — Babu & Pramod Validation › BABU — North Indian chart SVG renders correctly (retry #1) (8.6s)
-Match has score data: true
-  ✓   13 [chromium] › e2e/03-match.spec.js:26:3 › MATCH — Compatibility › Match calculation — Ganapathy + Shreya (20.1s)
-Zodiac strip buttons: 13
-  ✓   17 [chromium] › e2e/04-horoscope.spec.js:6:3 › HOROSCOPE — Home Page › Home page loads zodiac strip (2.5s)
+  ✓   14 [chromium] › e2e/02-chart.spec.js:166:3 › CHART — Babu & Pramod Validation › BABU — North Indian chart SVG renders correctly (8.1s)
 Pramod lagna: Aries | Moon nakshatra: Swati | Planets: 9
 ✓ Pramod — Aries lagna confirmed via API
-  ✓   16 [chromium] › e2e/02-chart.spec.js:193:3 › CHART — Babu & Pramod Validation › PRAMOD — Generate chart (Sep 24, 1968, 20:22 IST, Chennai) (6.1s)
+  ✓   15 [chromium] › e2e/02-chart.spec.js:193:3 › CHART — Babu & Pramod Validation › PRAMOD — Generate chart (Sep 24, 1968, 20:22 IST, Chennai) (6.4s)
+Match has score data: true
+  ✓   13 [chromium] › e2e/03-match.spec.js:26:3 › MATCH — Compatibility › Match calculation — Ganapathy + Shreya (19.9s)
+Zodiac strip buttons: 13
+  ✓   17 [chromium] › e2e/04-horoscope.spec.js:6:3 › HOROSCOPE — Home Page › Home page loads zodiac strip (2.5s)
+  ✓   16 [chromium] › e2e/02-chart.spec.js:220:3 › CHART — Babu & Pramod Validation › Arudha tab — loads special lagnas (8.1s)
 Has horoscope text: true
-  ✓   18 [chromium] › e2e/04-horoscope.spec.js:17:3 › HOROSCOPE — Home Page › Clicking a rasi loads horoscope (6.7s)
-  ✓   19 [chromium] › e2e/02-chart.spec.js:220:3 › CHART — Babu & Pramod Validation › Arudha tab — loads special lagnas (8.2s)
+  ✓   18 [chromium] › e2e/04-horoscope.spec.js:17:3 › HOROSCOPE — Home Page › Clicking a rasi loads horoscope (5.5s)
+  ✓   19 [chromium] › e2e/02-chart.spec.js:236:3 › CHART — Babu & Pramod Validation › Doshas tab — loads dosha data (8.2s)
 Tamil labels visible: true
-  ✓   20 [chromium] › e2e/04-horoscope.spec.js:33:3 › HOROSCOPE — Home Page › Language switch to Tamil changes labels (5.2s)
+  ✓   20 [chromium] › e2e/04-horoscope.spec.js:33:3 › HOROSCOPE — Home Page › Language switch to Tamil changes labels (5.1s)
   ✓   22 [chromium] › e2e/04-horoscope.spec.js:57:3 › HOROSCOPE — Home Page › Theme switching works (3.0s)
 Home: found 3/3 — Horoscope, Vedic, Hora
   ✓   23 [chromium] › e2e/05-deployment.spec.js:19:5 › DEPLOYMENT — All pages return 200 › Home page loads (/) (2.0s)
-  ✓   21 [chromium] › e2e/02-chart.spec.js:236:3 › CHART — Babu & Pramod Validation › Doshas tab — loads dosha data (8.2s)
+PDF button: false
+  ✓   21 [chromium] › e2e/02-chart.spec.js:252:3 › CHART — Babu & Pramod Validation › PDF button exists and is clickable (8.1s)
 Chart: found 3/3 — Chart, Kundali, Birth
   ✓   24 [chromium] › e2e/05-deployment.spec.js:19:5 › DEPLOYMENT — All pages return 200 › Chart page loads (/chart) (2.0s)
+
+Match 1: Arjun x Priya | selects=12
 Match: found 3/3 — Match, Person, Compatibility
-  ✓   26 [chromium] › e2e/05-deployment.spec.js:19:5 › DEPLOYMENT — All pages return 200 › Match page loads (/match) (2.2s)
+  ✓   26 [chromium] › e2e/05-deployment.spec.js:19:5 › DEPLOYMENT — All pages return 200 › Match page loads (/match) (2.3s)
+  ✘   25 [chromium] › e2e/06-match-10.spec.js:37:3 › Match 1: Arjun + Priya (3.6s)
 Signup: found 2/3 — Create, email
   ✓   27 [chromium] › e2e/05-deployment.spec.js:19:5 › DEPLOYMENT — All pages return 200 › Signup page loads (/signup) (2.0s)
+
+Match 1: Arjun x Priya | selects=12
 Signin: found 2/2 — Sign in, email
-  ✓   28 [chromium] › e2e/05-deployment.spec.js:19:5 › DEPLOYMENT — All pages return 200 › Signin page loads (/signin) (1.9s)
-PDF button: false
-  ✓   25 [chromium] › e2e/02-chart.spec.js:252:3 › CHART — Babu & Pramod Validation › PDF button exists and is clickable (8.3s)
+  ✓   29 [chromium] › e2e/05-deployment.spec.js:19:5 › DEPLOYMENT — All pages return 200 › Signin page loads (/signin) (2.0s)
 PhoneLogin: found 3/3 — phone, OTP, Send
+  ✓   30 [chromium] › e2e/05-deployment.spec.js:19:5 › DEPLOYMENT — All pages return 200 › PhoneLogin page loads (/phone-login) (2.0s)
+  ✘   28 [chromium] › e2e/06-match-10.spec.js:37:3 › Match 1: Arjun + Priya (retry #1) (4.2s)
+  ✓   31 [chromium] › e2e/05-deployment.spec.js:19:5 › DEPLOYMENT — All pages return 200 › Shop page loads (/shop) (2.0s)
 
-Match 1: Arjun x Priya | selects=12
-  ✓   29 [chromium] › e2e/05-deployment.spec.js:19:5 › DEPLOYMENT — All pages return 200 › PhoneLogin page loads (/phone-login) (2.1s)
-  ✓   31 [chromium] › e2e/05-deployment.spec.js:19:5 › DEPLOYMENT — All pages return 200 › Shop page loads (/shop) (2.1s)
-  ✘   30 [chromium] › e2e/06-match-10.spec.js:37:3 › Match 1: Arjun + Priya (4.0s)
-  ✓   32 [chromium] › e2e/05-deployment.spec.js:19:5 › DEPLOYMENT — All pages return 200 › Learn page loads (/learn) (2.5s)
+Match 2: Raj x Meera | selects=12
+  ✓   33 [chromium] › e2e/05-deployment.spec.js:19:5 › DEPLOYMENT — All pages return 200 › Learn page loads (/learn) (2.2s)
+  ✘   32 [chromium] › e2e/06-match-10.spec.js:37:3 › Match 2: Raj + Meera (4.0s)
+  ✓   34 [chromium] › e2e/05-deployment.spec.js:19:5 › DEPLOYMENT — All pages return 200 › About page loads (/about) (2.2s)
 
-Match 1: Arjun x Priya | selects=12
-  ✓   34 [chromium] › e2e/05-deployment.spec.js:19:5 › DEPLOYMENT — All pages return 200 › About page loads (/about) (2.0s)
-  ✘   33 [chromium] › e2e/06-match-10.spec.js:37:3 › Match 1: Arjun + Priya (retry #1) (5.0s)
+Match 2: Raj x Meera | selects=12
 Checkout has plans: true
-  ✓   35 [chromium] › e2e/05-deployment.spec.js:34:3 › DEPLOYMENT — All pages return 200 › Checkout page loads (3.3s)
-
-Match 2: Raj x Meera | selects=12
-Consult has content: true
-  ✓   37 [chromium] › e2e/05-deployment.spec.js:45:3 › DEPLOYMENT — All pages return 200 › Consult page loads (2.7s)
-  ✘   36 [chromium] › e2e/06-match-10.spec.js:37:3 › Match 2: Raj + Meera (4.1s)
-
-Match 2: Raj x Meera | selects=12
-Console errors: []
-  ✓   38 [chromium] › e2e/05-deployment.spec.js:59:3 › DEPLOYMENT — JS errors › No console errors on home page (3.5s)
-JS crashes: []
-  ✓   40 [chromium] › e2e/05-deployment.spec.js:74:3 › DEPLOYMENT — JS errors › Chart page no JS crash (3.5s)
-  ✘   39 [chromium] › e2e/06-match-10.spec.js:37:3 › Match 2: Raj + Meera (retry #1) (4.9s)
-✓ No redirect to signin
+  ✓   36 [chromium] › e2e/05-deployment.spec.js:34:3 › DEPLOYMENT — All pages return 200 › Checkout page loads (3.5s)
+  ✘   35 [chromium] › e2e/06-match-10.spec.js:37:3 › Match 2: Raj + Meera (retry #1) (4.6s)
 
 Match 3: Kiran x Lakshmi | selects=12
+Consult has content: true
+  ✓   37 [chromium] › e2e/05-deployment.spec.js:45:3 › DEPLOYMENT — All pages return 200 › Consult page loads (2.7s)
+  ✘   38 [chromium] › e2e/06-match-10.spec.js:37:3 › Match 3: Kiran + Lakshmi (4.1s)
+Console errors: []
+  ✓   39 [chromium] › e2e/05-deployment.spec.js:59:3 › DEPLOYMENT — JS errors › No console errors on home page (3.6s)
+
+Match 3: Kiran x Lakshmi | selects=12
+JS crashes: []
+  ✓   41 [chromium] › e2e/05-deployment.spec.js:74:3 › DEPLOYMENT — JS errors › Chart page no JS crash (3.5s)
+  ✘   40 [chromium] › e2e/06-match-10.spec.js:37:3 › Match 3: Kiran + Lakshmi (retry #1) (4.8s)
+✓ No redirect to signin
+
+Match 4: Suresh x Kavitha | selects=12
 City dropdown for "Chennai" appeared: true
-  ✘   42 [chromium] › e2e/06-match-10.spec.js:37:3 › Match 3: Kiran + Lakshmi (3.9s)
 City 0 final value: "Chennai"
 City input value after selection: Chennai
 ✓ City selected, dropdown closed
 Dropdown still open after selection: false
-
-Match 3: Kiran x Lakshmi | selects=12
-  ✘   43 [chromium] › e2e/06-match-10.spec.js:37:3 › Match 3: Kiran + Lakshmi (retry #1) (4.2s)
+  ✘   43 [chromium] › e2e/06-match-10.spec.js:37:3 › Match 4: Suresh + Kavitha (3.8s)
 
 Match 4: Suresh x Kavitha | selects=12
+  ✘   44 [chromium] › e2e/06-match-10.spec.js:37:3 › Match 4: Suresh + Kavitha (retry #1) (3.8s)
+
+Match 5: Vinod x Ananya | selects=12
 Chart appeared: true
-  ✓   41 [chromium] › e2e/functional-test.spec.js:45:3 › GUEST CHART › Guest chart — no redirect, city dropdown closes, chart generates (14.4s)
-  ✘   44 [chromium] › e2e/06-match-10.spec.js:37:3 › Match 4: Suresh + Kavitha (3.8s)
+  ✘   45 [chromium] › e2e/06-match-10.spec.js:37:3 › Match 5: Vinod + Ananya (3.5s)
+  ✓   42 [chromium] › e2e/functional-test.spec.js:45:3 › GUEST CHART › Guest chart — no redirect, city dropdown closes, chart generates (14.2s)
 
-Match 4: Suresh x Kavitha | selects=12
+Match 5: Vinod x Ananya | selects=12
 Dropdown appeared: true
 Dropdown still open after click: false
 City input value: Mumbai
-  ✓   45 [chromium] › e2e/functional-test.spec.js:86:3 › CITY DROPDOWN › City dropdown closes after selection (4.4s)
+  ✓   46 [chromium] › e2e/functional-test.spec.js:86:3 › CITY DROPDOWN › City dropdown closes after selection (4.3s)
 Match selects count: 12
-  ✘   46 [chromium] › e2e/06-match-10.spec.js:37:3 › Match 4: Suresh + Kavitha (retry #1) (5.0s)
-City dropdown for "Chennai" appeared: true
+  ✘   47 [chromium] › e2e/06-match-10.spec.js:37:3 › Match 5: Vinod + Ananya (retry #1) (4.6s)
 
-Match 5: Vinod x Ananya | selects=12
-  ✘   47 [chromium] › e2e/functional-test.spec.js:120:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login (4.5s)
+Match 6: Deepak x Sunita | selects=12
+City dropdown for "Chennai" appeared: true
+  ✘   48 [chromium] › e2e/functional-test.spec.js:120:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login (4.0s)
+  ✘   49 [chromium] › e2e/06-match-10.spec.js:37:3 › Match 6: Deepak + Sunita (3.8s)
 Match selects count: 12
-  ✘   48 [chromium] › e2e/06-match-10.spec.js:37:3 › Match 5: Vinod + Ananya (4.3s)
 
-Match 5: Vinod x Ananya | selects=12
+Match 6: Deepak x Sunita | selects=12
 City dropdown for "Chennai" appeared: true
-  ✘   49 [chromium] › e2e/functional-test.spec.js:120:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login (retry #1) (5.1s)
+  ✘   50 [chromium] › e2e/functional-test.spec.js:120:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login (retry #1) (4.7s)
+  ✘   51 [chromium] › e2e/06-match-10.spec.js:37:3 › Match 6: Deepak + Sunita (retry #1) (4.7s)
 Name input visible: false
-  ✘   50 [chromium] › e2e/06-match-10.spec.js:37:3 › Match 5: Vinod + Ananya (retry #1) (4.9s)
 
-Match 6: Deepak x Sunita | selects=12
-  ✘   52 [chromium] › e2e/06-match-10.spec.js:37:3 › Match 6: Deepak + Sunita (3.9s)
+Match 7: Manoj x Shilpa | selects=12
+  ✘   53 [chromium] › e2e/06-match-10.spec.js:37:3 › Match 7: Manoj + Shilpa (3.7s)
+
+Match 7: Manoj x Shilpa | selects=12
 Numerology result visible: true
-  ✓   51 [chromium] › e2e/functional-test.spec.js:166:3 › NUMEROLOGY › Numerology — calculates life path number (7.8s)
-
-Match 6: Deepak x Sunita | selects=12
+  ✓   52 [chromium] › e2e/functional-test.spec.js:166:3 › NUMEROLOGY › Numerology — calculates life path number (7.7s)
+  ✘   54 [chromium] › e2e/06-match-10.spec.js:37:3 › Match 7: Manoj + Shilpa (retry #1) (4.0s)
 Home has VedicHora content: true
-  ✓   54 [mobile] › e2e/01-auth.spec.js:7:3 › AUTH — Login & Signup › Home page loads (3.1s)
-  ✘   53 [chromium] › e2e/06-match-10.spec.js:37:3 › Match 6: Deepak + Sunita (retry #1) (5.2s)
+  ✓   55 [mobile] › e2e/01-auth.spec.js:7:3 › AUTH — Login & Signup › Home page loads (3.1s)
+
+Match 8: Rohit x Pooja | selects=12
 Nav items visible: true
+  ✓   57 [mobile] › e2e/01-auth.spec.js:18:3 › AUTH — Login & Signup › Nav renders correctly (2.6s)
+  ✘   56 [chromium] › e2e/06-match-10.spec.js:37:3 › Match 8: Rohit + Pooja (3.8s)
 
-Match 7: Manoj x Shilpa | selects=12
-  ✓   55 [mobile] › e2e/01-auth.spec.js:18:3 › AUTH — Login & Signup › Nav renders correctly (2.9s)
-  ✘   56 [chromium] › e2e/06-match-10.spec.js:37:3 › Match 7: Manoj + Shilpa (3.9s)
-
-Match 7: Manoj x Shilpa | selects=12
+Match 8: Rohit x Pooja | selects=12
+  ✘   59 [chromium] › e2e/06-match-10.spec.js:37:3 › Match 8: Rohit + Pooja (retry #1) (4.2s)
 After login URL: https://vedichora-frontend-orcin.vercel.app/chart
-  ✓   57 [mobile] › e2e/01-auth.spec.js:27:3 › AUTH — Login & Signup › Admin login succeeds (6.8s)
-  ✘   58 [chromium] › e2e/06-match-10.spec.js:37:3 › Match 7: Manoj + Shilpa (retry #1) (4.7s)
+  ✓   58 [mobile] › e2e/01-auth.spec.js:27:3 › AUTH — Login & Signup › Admin login succeeds (6.9s)
 
-Match 8: Rohit x Pooja | selects=12
+Match 9: Srinivas x Padma | selects=12
+  ✘   60 [chromium] › e2e/06-match-10.spec.js:37:3 › Match 9: Srinivas + Padma (3.7s)
 Error shown: true | stays on signin: true
-  ✓   59 [mobile] › e2e/01-auth.spec.js:45:3 › AUTH — Login & Signup › Wrong password shows error (3.7s)
-  ✘   60 [chromium] › e2e/06-match-10.spec.js:37:3 › Match 8: Rohit + Pooja (3.7s)
+  ✓   61 [mobile] › e2e/01-auth.spec.js:45:3 › AUTH — Login & Signup › Wrong password shows error (3.8s)
+
+Match 9: Srinivas x Padma | selects=12
 Signup page has CTA: true
-  ✓   61 [mobile] › e2e/01-auth.spec.js:58:3 › AUTH — Login & Signup › Signup page renders (2.6s)
-
-Match 8: Rohit x Pooja | selects=12
+  ✓   63 [mobile] › e2e/01-auth.spec.js:58:3 › AUTH — Login & Signup › Signup page renders (2.1s)
+  ✘   62 [chromium] › e2e/06-match-10.spec.js:37:3 › Match 9: Srinivas + Padma (retry #1) (4.1s)
 Phone login page renders: true
-  ✓   63 [mobile] › e2e/01-auth.spec.js:68:3 › AUTH — Login & Signup › Phone login page renders (2.4s)
-  ✘   62 [chromium] › e2e/06-match-10.spec.js:37:3 › Match 8: Rohit + Pooja (retry #1) (4.5s)
+  ✓   64 [mobile] › e2e/01-auth.spec.js:68:3 › AUTH — Login & Signup › Phone login page renders (2.3s)
 
-Match 9: Srinivas x Padma | selects=12
+Match 10: Gopal x Radha | selects=12
+  ✘   66 [chromium] › e2e/06-match-10.spec.js:37:3 › Match 10: Gopal + Radha (3.7s)
 Avatar not visible — user may not be logged in
-  ✓   64 [mobile] › e2e/01-auth.spec.js:78:3 › AUTH — Login & Signup › Logout works (6.1s)
-  ✘   65 [chromium] › e2e/06-match-10.spec.js:37:3 › Match 9: Srinivas + Padma (3.7s)
-
-Match 9: Srinivas x Padma | selects=12
-  ✘   67 [chromium] › e2e/06-match-10.spec.js:37:3 › Match 9: Srinivas + Padma (retry #1) (4.3s)
 
 Match 10: Gopal x Radha | selects=12
+  ✓   65 [mobile] › e2e/01-auth.spec.js:78:3 › AUTH — Login & Signup › Logout works (6.1s)
+  ✘   67 [chromium] › e2e/06-match-10.spec.js:37:3 › Match 10: Gopal + Radha (retry #1) (4.2s)
+City dropdown appeared: true
+  ✘   69 [chromium] › e2e/06-match-10.spec.js:84:1 › Match page — city dropdown works + all UI present (3.6s)
 ✓ Chart page loaded
-  ✓   66 [mobile] › e2e/02-chart.spec.js:73:3 › CHART — Babu & Pramod Validation › Chart page loads (8.7s)
-  ✘   68 [chromium] › e2e/06-match-10.spec.js:37:3 › Match 10: Gopal + Radha (4.0s)
-
-Match 10: Gopal x Radha | selects=12
+  ✓   68 [mobile] › e2e/02-chart.spec.js:73:3 › CHART — Babu & Pramod Validation › Chart page loads (8.5s)
+City dropdown appeared: true
+  ✘   70 [chromium] › e2e/06-match-10.spec.js:84:1 › Match page — city dropdown works + all UI present (retry #1) (3.9s)
 Babu lagna: Pisces | Moon: Scorpio | Planets: 9
 ✓ Babu — lagna: Pisces | Cancer: false | API works
-  ✓   69 [mobile] › e2e/02-chart.spec.js:83:3 › CHART — Babu & Pramod Validation › BABU — Generate chart (Mar 1, 1959, 14:30 IST, Chennai) (6.5s)
-  ✘   70 [chromium] › e2e/06-match-10.spec.js:37:3 › Match 10: Gopal + Radha (retry #1) (4.8s)
-City dropdown appeared: false
-  ✓   72 [chromium] › e2e/06-match-10.spec.js:84:1 › Match page — city dropdown works + all UI present (4.1s)
+  ✓   71 [mobile] › e2e/02-chart.spec.js:83:3 › CHART — Babu & Pramod Validation › BABU — Generate chart (Mar 1, 1959, 14:30 IST, Chennai) (6.5s)
+  ✓   72 [mobile] › e2e/03-match.spec.js:15:3 › MATCH — Compatibility › Match page renders correctly (6.5s)
 Planets tab not visible — generate chart first
-  ✓   71 [mobile] › e2e/02-chart.spec.js:112:3 › CHART — Babu & Pramod Validation › BABU — Planets tab: verify all 9 planets (8.3s)
-  ✓   73 [mobile] › e2e/03-match.spec.js:15:3 › MATCH — Compatibility › Match page renders correctly (6.6s)
-  ✓   74 [mobile] › e2e/02-chart.spec.js:144:3 › CHART — Babu & Pramod Validation › BABU — Dasha: current dasha shows NOW badge (8.3s)
+  ✓   73 [mobile] › e2e/02-chart.spec.js:112:3 › CHART — Babu & Pramod Validation › BABU — Planets tab: verify all 9 planets (8.3s)
 Match page selects: 12
+  ✓   75 [mobile] › e2e/02-chart.spec.js:144:3 › CHART — Babu & Pramod Validation › BABU — Dasha: current dasha shows NOW badge (8.2s)
+Match has score data: true
+  ✓   74 [mobile] › e2e/03-match.spec.js:26:3 › MATCH — Compatibility › Match calculation — Ganapathy + Shreya (19.7s)
 SVG rendered: true
 SVG text elements: 0 | SVG shapes: 8
   ✓   76 [mobile] › e2e/02-chart.spec.js:166:3 › CHART — Babu & Pramod Validation › BABU — North Indian chart SVG renders correctly (8.4s)
+Zodiac strip buttons: 13
+  ✓   77 [mobile] › e2e/04-horoscope.spec.js:6:3 › HOROSCOPE — Home Page › Home page loads zodiac strip (2.6s)
 Pramod lagna: Aries | Moon nakshatra: Swati | Planets: 9
 ✓ Pramod — Aries lagna confirmed via API
-  ✓   77 [mobile] › e2e/02-chart.spec.js:193:3 › CHART — Babu & Pramod Validation › PRAMOD — Generate chart (Sep 24, 1968, 20:22 IST, Chennai) (6.3s)
-Match has score data: true
-  ✓   75 [mobile] › e2e/03-match.spec.js:26:3 › MATCH — Compatibility › Match calculation — Ganapathy + Shreya (19.7s)
-Zodiac strip buttons: 13
-  ✓   79 [mobile] › e2e/04-horoscope.spec.js:6:3 › HOROSCOPE — Home Page › Home page loads zodiac strip (2.7s)
-  ✓   78 [mobile] › e2e/02-chart.spec.js:220:3 › CHART — Babu & Pramod Validation › Arudha tab — loads special lagnas (8.3s)
 Has horoscope text: true
-  ✓   80 [mobile] › e2e/04-horoscope.spec.js:17:3 › HOROSCOPE — Home Page › Clicking a rasi loads horoscope (6.2s)
+  ✓   78 [mobile] › e2e/02-chart.spec.js:193:3 › CHART — Babu & Pramod Validation › PRAMOD — Generate chart (Sep 24, 1968, 20:22 IST, Chennai) (6.5s)
+  ✓   79 [mobile] › e2e/04-horoscope.spec.js:17:3 › HOROSCOPE — Home Page › Clicking a rasi loads horoscope (5.9s)
 Tamil labels visible: true
-  ✓   82 [mobile] › e2e/04-horoscope.spec.js:33:3 › HOROSCOPE — Home Page › Language switch to Tamil changes labels (5.5s)
-  ✓   81 [mobile] › e2e/02-chart.spec.js:236:3 › CHART — Babu & Pramod Validation › Doshas tab — loads dosha data (8.4s)
-  ✓   83 [mobile] › e2e/04-horoscope.spec.js:57:3 › HOROSCOPE — Home Page › Theme switching works (3.4s)
+  ✓   81 [mobile] › e2e/04-horoscope.spec.js:33:3 › HOROSCOPE — Home Page › Language switch to Tamil changes labels (5.3s)
+  ✓   80 [mobile] › e2e/02-chart.spec.js:220:3 › CHART — Babu & Pramod Validation › Arudha tab — loads special lagnas (8.2s)
+  ✓   82 [mobile] › e2e/04-horoscope.spec.js:57:3 › HOROSCOPE — Home Page › Theme switching works (3.3s)
 Home: found 3/3 — Horoscope, Vedic, Hora
-  ✓   85 [mobile] › e2e/05-deployment.spec.js:19:5 › DEPLOYMENT — All pages return 200 › Home page loads (/) (2.3s)
+  ✓   84 [mobile] › e2e/05-deployment.spec.js:19:5 › DEPLOYMENT — All pages return 200 › Home page loads (/) (2.2s)
 Chart: found 3/3 — Chart, Kundali, Birth
-  ✓   86 [mobile] › e2e/05-deployment.spec.js:19:5 › DEPLOYMENT — All pages return 200 › Chart page loads (/chart) (2.2s)
+  ✓   85 [mobile] › e2e/05-deployment.spec.js:19:5 › DEPLOYMENT — All pages return 200 › Chart page loads (/chart) (2.2s)
+Match: found 3/3 — Match, Person, Compatibility
+  ✓   86 [mobile] › e2e/05-deployment.spec.js:19:5 › DEPLOYMENT — All pages return 200 › Match page loads (/match) (2.2s)
+  ✓   83 [mobile] › e2e/02-chart.spec.js:236:3 › CHART — Babu & Pramod Validation › Doshas tab — loads dosha data (8.2s)
+Signup: found 2/3 — Create, email
+  ✓   87 [mobile] › e2e/05-deployment.spec.js:19:5 › DEPLOYMENT — All pages return 200 › Signup page loads (/signup) (2.1s)
+Signin: found 2/2 — Sign in, email
+  ✓   89 [mobile] › e2e/05-deployment.spec.js:19:5 › DEPLOYMENT — All pages return 200 › Signin page loads (/signin) (2.0s)
+PhoneLogin: found 3/3 — phone, OTP, Send
+  ✓   90 [mobile] › e2e/05-deployment.spec.js:19:5 › DEPLOYMENT — All pages return 200 › PhoneLogin page loads (/phone-login) (2.2s)
+  ✓   91 [mobile] › e2e/05-deployment.spec.js:19:5 › DEPLOYMENT — All pages return 200 › Shop page loads (/shop) (2.2s)
 PDF button: false
-  ✓   84 [mobile] › e2e/02-chart.spec.js:252:3 › CHART — Babu & Pramod Validation › PDF button exists and is clickable (8.4s)
+  ✓   88 [mobile] › e2e/02-chart.spec.js:252:3 › CHART — Babu & Pramod Validation › PDF button exists and is clickable (8.2s)
 
 Match 1: Arjun x Priya | selects=12
-Match: found 3/3 — Match, Person, Compatibility
-  ✓   87 [mobile] › e2e/05-deployment.spec.js:19:5 › DEPLOYMENT — All pages return 200 › Match page loads (/match) (2.3s)
-Signup: found 2/3 — Create, email
-  ✓   89 [mobile] › e2e/05-deployment.spec.js:19:5 › DEPLOYMENT — All pages return 200 › Signup page loads (/signup) (2.0s)
-Signin: found 2/2 — Sign in, email
-  ✓   90 [mobile] › e2e/05-deployment.spec.js:19:5 › DEPLOYMENT — All pages return 200 › Signin page loads (/signin) (2.1s)
-PhoneLogin: found 3/3 — phone, OTP, Send
-  ✓   91 [mobile] › e2e/05-deployment.spec.js:19:5 › DEPLOYMENT — All pages return 200 › PhoneLogin page loads (/phone-login) (2.2s)
-  ✓   92 [mobile] › e2e/05-deployment.spec.js:19:5 › DEPLOYMENT — All pages return 200 › Shop page loads (/shop) (2.3s)
-  ✓   93 [mobile] › e2e/05-deployment.spec.js:19:5 › DEPLOYMENT — All pages return 200 › Learn page loads (/learn) (2.4s)
+  ✓   92 [mobile] › e2e/05-deployment.spec.js:19:5 › DEPLOYMENT — All pages return 200 › Learn page loads (/learn) (2.3s)
   ✓   94 [mobile] › e2e/05-deployment.spec.js:19:5 › DEPLOYMENT — All pages return 200 › About page loads (/about) (2.2s)
 Checkout has plans: true
-  ✓   95 [mobile] › e2e/05-deployment.spec.js:34:3 › DEPLOYMENT — All pages return 200 › Checkout page loads (3.2s)
+  ✓   95 [mobile] › e2e/05-deployment.spec.js:34:3 › DEPLOYMENT — All pages return 200 › Checkout page loads (3.5s)
 Consult has content: true
-  ✓   96 [mobile] › e2e/05-deployment.spec.js:45:3 › DEPLOYMENT — All pages return 200 › Consult page loads (2.8s)
+  ✓   96 [mobile] › e2e/05-deployment.spec.js:45:3 › DEPLOYMENT — All pages return 200 › Consult page loads (2.7s)
 Console errors: []
-  ✓   97 [mobile] › e2e/05-deployment.spec.js:59:3 › DEPLOYMENT — JS errors › No console errors on home page (3.8s)
-Score: 46% | Koota: 5/36 | Error: false
-  ✓   88 [mobile] › e2e/06-match-10.spec.js:37:3 › Match 1: Arjun + Priya (26.9s)
-
-Match 2: Raj x Meera | selects=12
+  ✓   97 [mobile] › e2e/05-deployment.spec.js:59:3 › DEPLOYMENT — JS errors › No console errors on home page (3.4s)
 JS crashes: []
-  ✓   98 [mobile] › e2e/05-deployment.spec.js:74:3 › DEPLOYMENT — JS errors › Chart page no JS crash (3.5s)
+  ✓   98 [mobile] › e2e/05-deployment.spec.js:74:3 › DEPLOYMENT — JS errors › Chart page no JS crash (3.4s)
 ✓ No redirect to signin
 City dropdown for "Chennai" appeared: true
 City 0 final value: "Chennai"
 City input value after selection: Chennai
 ✓ City selected, dropdown closed
 Dropdown still open after selection: false
+Score: 46% | Koota: 5/36 | Error: false
+  ✓   93 [mobile] › e2e/06-match-10.spec.js:37:3 › Match 1: Arjun + Priya (26.6s)
+
+Match 2: Raj x Meera | selects=12
 Chart appeared: true
-  ✓  100 [mobile] › e2e/functional-test.spec.js:45:3 › GUEST CHART › Guest chart — no redirect, city dropdown closes, chart generates (13.9s)
+  ✓   99 [mobile] › e2e/functional-test.spec.js:45:3 › GUEST CHART › Guest chart — no redirect, city dropdown closes, chart generates (14.3s)
 Dropdown appeared: true
 Dropdown still open after click: false
 City input value: Mumbai
@@ -239,28 +239,28 @@ City input value: Mumbai
 Match selects count: 12
 City dropdown for "Chennai" appeared: true
 City 0 final value: "Chennai"
-Score: 57% | Koota: 5/36 | Error: false
 City dropdown for "Coimbatore" appeared: true
-  ✓   99 [mobile] › e2e/06-match-10.spec.js:37:3 › Match 2: Raj + Meera (26.8s)
-
-Match 3: Kiran x Lakshmi | selects=12
 City 1 final value: "Coimbatore"
 Clicking Calculate button...
+Score: 57% | Koota: 5/36 | Error: false
+  ✓  100 [mobile] › e2e/06-match-10.spec.js:37:3 › Match 2: Raj + Meera (26.5s)
+
+Match 3: Kiran x Lakshmi | selects=12
 Match result visible: true
-  ✓  102 [mobile] › e2e/functional-test.spec.js:120:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login (24.5s)
+  ✓  102 [mobile] › e2e/functional-test.spec.js:120:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login (24.4s)
 Name input visible: false
 Numerology result visible: true
-  ✓  104 [mobile] › e2e/functional-test.spec.js:166:3 › NUMEROLOGY › Numerology — calculates life path number (7.8s)
+  ✓  104 [mobile] › e2e/functional-test.spec.js:166:3 › NUMEROLOGY › Numerology — calculates life path number (7.5s)
 Score: 47% | Koota: 17/36 | Error: false
-  ✓  103 [mobile] › e2e/06-match-10.spec.js:37:3 › Match 3: Kiran + Lakshmi (26.6s)
+  ✓  103 [mobile] › e2e/06-match-10.spec.js:37:3 › Match 3: Kiran + Lakshmi (26.8s)
 
 Match 4: Suresh x Kavitha | selects=12
 Score: 71% | Koota: 5/36 | Error: false
-  ✓  105 [mobile] › e2e/06-match-10.spec.js:37:3 › Match 4: Suresh + Kavitha (26.5s)
+  ✓  105 [mobile] › e2e/06-match-10.spec.js:37:3 › Match 4: Suresh + Kavitha (26.6s)
 
 Match 5: Vinod x Ananya | selects=12
 Score: 53% | Koota: 19/36 | Error: false
-  ✓  106 [mobile] › e2e/06-match-10.spec.js:37:3 › Match 5: Vinod + Ananya (26.6s)
+  ✓  106 [mobile] › e2e/06-match-10.spec.js:37:3 › Match 5: Vinod + Ananya (26.5s)
 
 Match 6: Deepak x Sunita | selects=12
 Score: 46% | Koota: 5/36 | Error: false
@@ -268,7 +268,7 @@ Score: 46% | Koota: 5/36 | Error: false
 
 Match 7: Manoj x Shilpa | selects=12
 Score: 44% | Koota: 16/36 | Error: false
-  ✓  108 [mobile] › e2e/06-match-10.spec.js:37:3 › Match 7: Manoj + Shilpa (26.6s)
+  ✓  108 [mobile] › e2e/06-match-10.spec.js:37:3 › Match 7: Manoj + Shilpa (26.5s)
 
 Match 8: Rohit x Pooja | selects=12
 Score: 74% | Koota: 5/36 | Error: false
@@ -276,15 +276,15 @@ Score: 74% | Koota: 5/36 | Error: false
 
 Match 9: Srinivas x Padma | selects=12
 Score: —% | Koota: —/36 | Error: false
-  ✓  110 [mobile] › e2e/06-match-10.spec.js:37:3 › Match 9: Srinivas + Padma (26.9s)
+  ✓  110 [mobile] › e2e/06-match-10.spec.js:37:3 › Match 9: Srinivas + Padma (26.5s)
 
 Match 10: Gopal x Radha | selects=12
 Score: 51% | Koota: 5/36 | Error: false
-  ✓  111 [mobile] › e2e/06-match-10.spec.js:37:3 › Match 10: Gopal + Radha (26.5s)
+  ✓  111 [mobile] › e2e/06-match-10.spec.js:37:3 › Match 10: Gopal + Radha (26.4s)
 City dropdown appeared: true
 City selected: "Chennai"
 Dropdown closed: true
-  ✓  112 [mobile] › e2e/06-match-10.spec.js:84:1 › Match page — city dropdown works + all UI present (4.4s)
+  ✓  112 [mobile] › e2e/06-match-10.spec.js:84:1 › Match page — city dropdown works + all UI present (4.7s)
 
 
   1) [chromium] › e2e/06-match-10.spec.js:37:3 › Match 1: Arjun + Priya ────────────────────────────
@@ -987,7 +987,75 @@ Dropdown closed: true
 
     ────────────────────────────────────────────────────────────────────────────────────────────────
 
-  11) [chromium] › e2e/functional-test.spec.js:120:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login 
+  11) [chromium] › e2e/06-match-10.spec.js:84:1 › Match page — city dropdown works + all UI present 
+
+    Error: locator.click: Element is outside of the viewport
+    Call log:
+      - waiting for locator('button[data-city-option="true"]').first()
+        - locator resolved to <button type="button" data-city-option="true">…</button>
+      - attempting click action
+        - scrolling into view if needed
+        - done scrolling
+
+
+       99 |   console.log(`City dropdown appeared: ${appeared}`)
+      100 |   if (appeared) {
+    > 101 |     await page.locator('button[data-city-option="true"]').first().click({ force: true })
+          |                                                                   ^
+      102 |     await page.waitForTimeout(600)
+      103 |     const val = await cityInput.inputValue()
+      104 |     console.log(`City selected: "${val}"`)
+        at /home/runner/work/vedichora-frontend/vedichora-frontend/e2e/06-match-10.spec.js:101:67
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/06-match-10-Match-page-—-city-dropdown-works-all-UI-present-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/06-match-10-Match-page-—-city-dropdown-works-all-UI-present-chromium/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/06-match-10-Match-page-—-city-dropdown-works-all-UI-present-chromium/error-context.md
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: locator.click: Element is outside of the viewport
+    Call log:
+      - waiting for locator('button[data-city-option="true"]').first()
+        - locator resolved to <button type="button" data-city-option="true">…</button>
+      - attempting click action
+        - scrolling into view if needed
+        - done scrolling
+
+
+       99 |   console.log(`City dropdown appeared: ${appeared}`)
+      100 |   if (appeared) {
+    > 101 |     await page.locator('button[data-city-option="true"]').first().click({ force: true })
+          |                                                                   ^
+      102 |     await page.waitForTimeout(600)
+      103 |     const val = await cityInput.inputValue()
+      104 |     console.log(`City selected: "${val}"`)
+        at /home/runner/work/vedichora-frontend/vedichora-frontend/e2e/06-match-10.spec.js:101:67
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/06-match-10-Match-page-—-city-dropdown-works-all-UI-present-chromium-retry1/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/06-match-10-Match-page-—-city-dropdown-works-all-UI-present-chromium-retry1/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/06-match-10-Match-page-—-city-dropdown-works-all-UI-present-chromium-retry1/error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/06-match-10-Match-page-—-city-dropdown-works-all-UI-present-chromium-retry1/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/06-match-10-Match-page-—-city-dropdown-works-all-UI-present-chromium-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  12) [chromium] › e2e/functional-test.spec.js:120:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login 
 
     Error: locator.click: Element is outside of the viewport
     Call log:
@@ -1057,32 +1125,7 @@ Dropdown closed: true
 
     ────────────────────────────────────────────────────────────────────────────────────────────────
 
-  12) [chromium] › e2e/02-chart.spec.js:166:3 › CHART — Babu & Pramod Validation › BABU — North Indian chart SVG renders correctly 
-
-    Error: expect(received).toBeTruthy()
-
-    Received: false
-
-      181 |     const hasSvg = await svg.isVisible({ timeout: 5000 }).catch(() => false)
-      182 |     console.log(`SVG rendered: ${hasSvg}`)
-    > 183 |     expect(hasSvg).toBeTruthy()
-          |                    ^
-      184 |
-      185 |     // Should have multiple SVG text elements (planet abbreviations)
-      186 |     const textCount = await page.locator('svg text').count()
-        at /home/runner/work/vedichora-frontend/vedichora-frontend/e2e/02-chart.spec.js:183:20
-
-    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
-    test-results/02-chart-CHART-—-Babu-Pram-d157a-chart-SVG-renders-correctly-chromium/test-failed-1.png
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
-    test-results/02-chart-CHART-—-Babu-Pram-d157a-chart-SVG-renders-correctly-chromium/video.webm
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    Error Context: test-results/02-chart-CHART-—-Babu-Pram-d157a-chart-SVG-renders-correctly-chromium/error-context.md
-
-  11 failed
+  12 failed
     [chromium] › e2e/06-match-10.spec.js:37:3 › Match 1: Arjun + Priya ─────────────────────────────
     [chromium] › e2e/06-match-10.spec.js:37:3 › Match 2: Raj + Meera ───────────────────────────────
     [chromium] › e2e/06-match-10.spec.js:37:3 › Match 3: Kiran + Lakshmi ───────────────────────────
@@ -1093,7 +1136,6 @@ Dropdown closed: true
     [chromium] › e2e/06-match-10.spec.js:37:3 › Match 8: Rohit + Pooja ─────────────────────────────
     [chromium] › e2e/06-match-10.spec.js:37:3 › Match 9: Srinivas + Padma ──────────────────────────
     [chromium] › e2e/06-match-10.spec.js:37:3 › Match 10: Gopal + Radha ────────────────────────────
+    [chromium] › e2e/06-match-10.spec.js:84:1 › Match page — city dropdown works + all UI present ──
     [chromium] › e2e/functional-test.spec.js:120:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login 
-  1 flaky
-    [chromium] › e2e/02-chart.spec.js:166:3 › CHART — Babu & Pramod Validation › BABU — North Indian chart SVG renders correctly 
   88 passed (8.5m)
