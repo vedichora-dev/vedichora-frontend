@@ -16,6 +16,7 @@ import { useT, usePlanetName, useSignName } from '@/lib/i18n'
 import DatePicker, { DateValue } from '@/components/ui/DatePicker'
 import CityAutocomplete from '@/components/ui/CityAutocomplete'
 import NorthIndianChart from '@/components/chart/NorthIndianChart'
+import LifePredictionsTab from '@/components/chart/LifePredictionsTab'
 import SouthIndianChart from '@/components/chart/SouthIndianChart'
 import { User, ChevronRight, Plus, Star, Clock, RefreshCw, Download, AlertTriangle, X } from 'lucide-react'
 
@@ -967,7 +968,7 @@ export default function ChartPage() {
               {/* ── FULL REPORT ── */}
               {/* ── LIFE PREDICTIONS TAB ── */}
               {tab==='predictions' && (
-                <LifePredictionsTab horoId={horoId} isAdmin={!!(token && (useStore.getState() as any)?.isAdmin)} />
+                <LifePredictionsTab horoId={horoId} isAdmin={!!token} />
               )}
 
               {tab==='report' && !isLoading('report') && (
