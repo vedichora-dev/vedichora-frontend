@@ -71,10 +71,10 @@ City dropdown for "Chennai" appeared: true
 [chromium] › e2e/functional-test.spec.js:120:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login
 City dropdown for "Chennai" appeared: true
 
-[7/8] (retries) [chromium] › e2e/functional-test.spec.js:120:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login (retry #1)
 [mobile] › e2e/functional-test.spec.js:120:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login
 City 0 final value: "Chennai"
 
+[7/8] (retries) [chromium] › e2e/functional-test.spec.js:120:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login (retry #1)
 [chromium] › e2e/functional-test.spec.js:120:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login
 Match selects count: 12
 
@@ -177,4 +177,4 @@ Numerology result visible: true
 
   1 failed
     [chromium] › e2e/functional-test.spec.js:120:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login 
-  7 passed (53.1s)
+  7 passed (52.2s)
