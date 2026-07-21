@@ -41,24 +41,24 @@ Chart appeared: true
 
 [3/8] [mobile] › e2e/functional-test.spec.js:86:3 › CITY DROPDOWN › City dropdown closes after selection
 [4/8] [chromium] › e2e/functional-test.spec.js:86:3 › CITY DROPDOWN › City dropdown closes after selection
-[chromium] › e2e/functional-test.spec.js:86:3 › CITY DROPDOWN › City dropdown closes after selection
-Dropdown appeared: true
-
 [mobile] › e2e/functional-test.spec.js:86:3 › CITY DROPDOWN › City dropdown closes after selection
 Dropdown appeared: true
 
 [chromium] › e2e/functional-test.spec.js:86:3 › CITY DROPDOWN › City dropdown closes after selection
-Dropdown still open after click: false
-
-City input value: Mumbai
+Dropdown appeared: true
 
 [mobile] › e2e/functional-test.spec.js:86:3 › CITY DROPDOWN › City dropdown closes after selection
 Dropdown still open after click: false
 
 City input value: Mumbai
 
-[5/8] [chromium] › e2e/functional-test.spec.js:120:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login
-[6/8] [mobile] › e2e/functional-test.spec.js:120:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login
+[5/8] [mobile] › e2e/functional-test.spec.js:120:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login
+[chromium] › e2e/functional-test.spec.js:86:3 › CITY DROPDOWN › City dropdown closes after selection
+Dropdown still open after click: false
+
+City input value: Mumbai
+
+[6/8] [chromium] › e2e/functional-test.spec.js:120:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login
 [mobile] › e2e/functional-test.spec.js:120:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login
 Match selects count: 12
 
@@ -71,48 +71,109 @@ City dropdown for "Chennai" appeared: true
 [chromium] › e2e/functional-test.spec.js:120:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login
 City dropdown for "Chennai" appeared: true
 
+[7/8] (retries) [chromium] › e2e/functional-test.spec.js:120:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login (retry #1)
 [mobile] › e2e/functional-test.spec.js:120:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login
 City 0 final value: "Chennai"
 
 [chromium] › e2e/functional-test.spec.js:120:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login
-City 0 final value: "Chennai"
+Match selects count: 12
 
 [mobile] › e2e/functional-test.spec.js:120:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login
 City dropdown for "Coimbatore" appeared: true
 
-[chromium] › e2e/functional-test.spec.js:120:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login
-City dropdown for "Coimbatore" appeared: true
-
-[mobile] › e2e/functional-test.spec.js:120:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login
 City 1 final value: "Coimbatore"
 
-[chromium] › e2e/functional-test.spec.js:120:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login
-City 1 final value: "Coimbatore"
-
-[mobile] › e2e/functional-test.spec.js:120:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login
 Clicking Calculate button...
 
 [chromium] › e2e/functional-test.spec.js:120:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login
-Clicking Calculate button...
+City dropdown for "Chennai" appeared: true
+
+  1) [chromium] › e2e/functional-test.spec.js:120:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login 
+
+    Error: locator.click: Element is outside of the viewport
+    Call log:
+      - waiting for locator('button[data-city-option="true"]').first()
+        - locator resolved to <button type="button" data-city-option="true">…</button>
+      - attempting click action
+        - scrolling into view if needed
+        - done scrolling
+
+
+      25 |   if (appeared) {
+      26 |     await opt.scrollIntoViewIfNeeded().catch(() => {})
+    > 27 |     await opt.click({ force: true })
+         |               ^
+      28 |     await page.waitForTimeout(800)
+      29 |   } else {
+      30 |     // Fallback: type enough to trigger and accept what's in the field
+        at fillCity (/home/runner/work/vedichora-frontend/vedichora-frontend/e2e/functional-test.spec.js:27:15)
+        at /home/runner/work/vedichora-frontend/vedichora-frontend/e2e/functional-test.spec.js:135:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/functional-test-GUEST-MATC-b4d71-compatibility-without-login-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/functional-test-GUEST-MATC-b4d71-compatibility-without-login-chromium/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/functional-test-GUEST-MATC-b4d71-compatibility-without-login-chromium/error-context.md
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: locator.click: Element is outside of the viewport
+    Call log:
+      - waiting for locator('button[data-city-option="true"]').first()
+        - locator resolved to <button type="button" data-city-option="true">…</button>
+      - attempting click action
+        - scrolling into view if needed
+        - done scrolling
+
+
+      25 |   if (appeared) {
+      26 |     await opt.scrollIntoViewIfNeeded().catch(() => {})
+    > 27 |     await opt.click({ force: true })
+         |               ^
+      28 |     await page.waitForTimeout(800)
+      29 |   } else {
+      30 |     // Fallback: type enough to trigger and accept what's in the field
+        at fillCity (/home/runner/work/vedichora-frontend/vedichora-frontend/e2e/functional-test.spec.js:27:15)
+        at /home/runner/work/vedichora-frontend/vedichora-frontend/e2e/functional-test.spec.js:135:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/functional-test-GUEST-MATC-b4d71-compatibility-without-login-chromium-retry1/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/functional-test-GUEST-MATC-b4d71-compatibility-without-login-chromium-retry1/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/functional-test-GUEST-MATC-b4d71-compatibility-without-login-chromium-retry1/error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/functional-test-GUEST-MATC-b4d71-compatibility-without-login-chromium-retry1/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/functional-test-GUEST-MATC-b4d71-compatibility-without-login-chromium-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+
+[8/8] [chromium] › e2e/functional-test.spec.js:166:3 › NUMEROLOGY › Numerology — calculates life path number
+[chromium] › e2e/functional-test.spec.js:166:3 › NUMEROLOGY › Numerology — calculates life path number
+Name input visible: false
+
+Numerology result visible: true
 
 [mobile] › e2e/functional-test.spec.js:120:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login
 Match result visible: true
 
-[chromium] › e2e/functional-test.spec.js:120:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login
-Match result visible: true
-
-[7/8] [chromium] › e2e/functional-test.spec.js:166:3 › NUMEROLOGY › Numerology — calculates life path number
-[8/8] [mobile] › e2e/functional-test.spec.js:166:3 › NUMEROLOGY › Numerology — calculates life path number
+[9/8] [mobile] › e2e/functional-test.spec.js:166:3 › NUMEROLOGY › Numerology — calculates life path number
 [mobile] › e2e/functional-test.spec.js:166:3 › NUMEROLOGY › Numerology — calculates life path number
 Name input visible: false
 
-[chromium] › e2e/functional-test.spec.js:166:3 › NUMEROLOGY › Numerology — calculates life path number
-Name input visible: false
-
-[mobile] › e2e/functional-test.spec.js:166:3 › NUMEROLOGY › Numerology — calculates life path number
 Numerology result visible: true
 
-[chromium] › e2e/functional-test.spec.js:166:3 › NUMEROLOGY › Numerology — calculates life path number
-Numerology result visible: true
-
-  8 passed (53.8s)
+  1 failed
+    [chromium] › e2e/functional-test.spec.js:120:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login 
+  7 passed (53.5s)
