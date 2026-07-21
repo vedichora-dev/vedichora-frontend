@@ -10,41 +10,55 @@ interface Props {
 }
 interface DropPos { top: number; left: number; width: number }
 
-// Primary: Nominatim (OSM) — reliable, no API key, supports Indian cities well
-// Fallback: Photon (komoot)
+const CHART_URL = process.env.NEXT_PUBLIC_CHART_URL || 'https://enchanting-dedication-production.up.railway.app'
+
+// Search using our own GeoNamesAtlas backend (no external API, no CORS issues)
+// Falls back to Nominatim OSM if backend returns nothing
 async function searchCities(q: string): Promise<City[]> {
+  // 1. Our own backend — GeoNamesAtlas (150 bundled cities + GeoNames files on server)
   try {
-    const url = `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(q)}&format=json&addressdetails=1&limit=6&accept-language=en`
-    const res  = await fetch(url, { headers: { 'Accept-Language': 'en' } })
+    const res  = await fetch(`${CHART_URL}/api/geography/suggest?q=${encodeURIComponent(q)}&limit=8`)
     const data = await res.json()
-    if (!Array.isArray(data) || data.length === 0) throw new Error('no results')
-    return data
-      .filter((f: any) => f.lat && f.lon && f.display_name)
+    const suggestions: string[] = data?.data?.data ?? data?.data ?? data ?? []
+    if (Array.isArray(suggestions) && suggestions.length > 0) {
+      // suggestions are city name strings — resolve each to lat/lng via lookup
+      const resolved = await Promise.allSettled(
+        suggestions.slice(0, 6).map(async (name: string) => {
+          const r2 = await fetch(`${CHART_URL}/api/geography/lookup?place=${encodeURIComponent(name)}`)
+          const d2 = await r2.json()
+          const loc = d2?.data?.data ?? d2?.data ?? d2
+          return {
+            name: loc?.placeName ?? name.split(',')[0].trim(),
+            country: loc?.country ?? (name.includes(',') ? name.split(',').slice(-1)[0].trim() : ''),
+            lat:  loc?.latitude  ?? 0,
+            lng: loc?.longitude ?? 0,
+          } as City
+        })
+      )
+      const cities = resolved
+        .filter(r => r.status === 'fulfilled' && (r as any).value.lat !== 0)
+        .map(r => (r as any).value) as City[]
+      if (cities.length > 0) return cities
+    }
+  } catch {}
+
+  // 2. Fallback — Nominatim OSM (free, no key, good Indian city coverage)
+  try {
+    const res  = await fetch(
+      `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(q)}&format=json&addressdetails=1&limit=6&accept-language=en`,
+      { headers: { 'User-Agent': 'VedicHora/1.0' } }
+    )
+    const data = await res.json()
+    return (data || [])
+      .filter((f: any) => f.lat && f.lon)
       .map((f: any) => {
         const addr = f.address || {}
-        const name = addr.city || addr.town || addr.village || addr.county || f.name ||
-                     f.display_name.split(',')[0]
-        const country = addr.country || ''
-        return { name, country, lat: parseFloat(f.lat), lng: parseFloat(f.lon) }
+        const name = addr.city || addr.town || addr.village || addr.county || f.display_name.split(',')[0]
+        return { name, country: addr.country || '', lat: parseFloat(f.lat), lng: parseFloat(f.lon) }
       })
       .filter((c: City) => c.name)
       .slice(0, 6)
-  } catch {
-    // Fallback to Photon
-    try {
-      const res  = await fetch(`https://photon.komoot.io/api/?q=${encodeURIComponent(q)}&limit=6&lang=en`)
-      const data = await res.json()
-      return (data.features || [])
-        .filter((f: any) => f.properties?.name)
-        .slice(0, 6)
-        .map((f: any) => ({
-          name: f.properties.name || '',
-          country: f.properties.country || '',
-          lat: f.geometry.coordinates[1],
-          lng: f.geometry.coordinates[0],
-        }))
-    } catch { return [] }
-  }
+  } catch { return [] }
 }
 
 export default function CityAutocomplete({ value, onChange, placeholder = 'Type city name...' }: Props) {
@@ -96,7 +110,6 @@ export default function CityAutocomplete({ value, onChange, placeholder = 'Type 
     timer.current = setTimeout(async () => {
       setLoading(true)
       const cities = await searchCities(query)
-      // Deduplicate
       const seen = new Set<string>()
       const unique = cities.filter(c => {
         const k = c.name + '|' + c.country
@@ -106,7 +119,7 @@ export default function CityAutocomplete({ value, onChange, placeholder = 'Type 
       setResults(unique)
       if (unique.length > 0 && !selecting.current) { setOpen(true); updatePos() }
       setLoading(false)
-    }, 250)  // 250ms debounce — faster response
+    }, 300)
   }, [query, updatePos, hideDropdown])
 
   const select = (city: City) => {
@@ -118,9 +131,6 @@ export default function CityAutocomplete({ value, onChange, placeholder = 'Type 
     onChange(label, city.lat, city.lng)
     setTimeout(() => { selecting.current = false }, 400)
   }
-
-  const citySelected = results.length === 0 && query.length > 2 && !loading &&
-    !open && !selecting.current  // after selection query has value but no results open
 
   return (
     <>
@@ -150,19 +160,10 @@ export default function CityAutocomplete({ value, onChange, placeholder = 'Type 
         )}
       </div>
 
-      {/* Hint text */}
-      {query.length > 0 && query.length < 2 && (
-        <div style={{ fontSize: '11px', color: 'var(--txm)', marginTop: '3px' }}>
-          Keep typing...
-        </div>
-      )}
       {query.length >= 2 && loading && (
-        <div style={{ fontSize: '11px', color: 'var(--txm)', marginTop: '3px' }}>
-          Searching cities...
-        </div>
+        <div style={{ fontSize: '11px', color: 'var(--txm)', marginTop: '3px' }}>Searching cities...</div>
       )}
 
-      {/* Dropdown — position:fixed to escape any card z-index stacking */}
       {open && results.length > 0 && dropPos && (
         <div
           ref={dropRef}
@@ -170,12 +171,14 @@ export default function CityAutocomplete({ value, onChange, placeholder = 'Type 
             position: 'fixed',
             top: dropPos.top, left: dropPos.left, width: dropPos.width,
             background: 'var(--surf)', border: '1px solid var(--bd)', borderRadius: '10px',
-            boxShadow: '0 8px 32px rgba(0,0,0,.20)', zIndex: 999999, overflow: 'hidden',
+            boxShadow: '0 8px 32px rgba(0,0,0,.22)', zIndex: 999999, overflow: 'hidden',
           }}
         >
-          <div style={{ padding: '4px 12px', fontSize: '10px', color: 'var(--txm)',
-            borderBottom: '1px solid var(--bd)', background: 'var(--bg2)' }}>
-            Select your city ↓
+          <div style={{ padding: '5px 12px', fontSize: '10px', color: 'var(--txm)',
+            borderBottom: '1px solid var(--bd)', background: 'var(--bg2)',
+            display: 'flex', alignItems: 'center', gap: '5px' }}>
+            <MapPin style={{ width: '9px', height: '9px', color: 'var(--gold)' }} />
+            Click to select city
           </div>
           {results.map((city, i) => (
             <button
@@ -184,7 +187,7 @@ export default function CityAutocomplete({ value, onChange, placeholder = 'Type 
               data-city-option="true"
               onClick={() => select(city)}
               style={{
-                display: 'flex', alignItems: 'center', gap: '8px',
+                display: 'flex', alignItems: 'center', gap: '10px',
                 width: '100%', padding: '10px 12px',
                 border: 'none', background: 'none', cursor: 'pointer',
                 textAlign: 'left', fontSize: '13px', fontFamily: 'inherit',
@@ -196,9 +199,7 @@ export default function CityAutocomplete({ value, onChange, placeholder = 'Type 
               <div>
                 <span style={{ color: 'var(--tx)', fontWeight: 600 }}>{city.name}</span>
                 {city.country && (
-                  <span style={{ color: 'var(--txm)', marginLeft: '6px', fontSize: '11px' }}>
-                    {city.country}
-                  </span>
+                  <span style={{ color: 'var(--txm)', marginLeft: '6px', fontSize: '11px' }}>{city.country}</span>
                 )}
               </div>
             </button>
