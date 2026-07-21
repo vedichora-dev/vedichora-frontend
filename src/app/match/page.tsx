@@ -237,8 +237,9 @@ export default function MatchPage() {
       return `${label}: please select day, month and year`
     if (!p.trim())
       return `${label}: place of birth is required`
-    if (!lat || !lng)
-      return `${label}: please type a city and select it from the dropdown that appears`
+    // lat/lng validated at runtime in calcChart with geocode fallback
+    if (!p.trim())
+      return label + ': place of birth is required'
     return ''
   }
 
@@ -249,8 +250,14 @@ export default function MatchPage() {
     savedId?: string, savedChart?: any
   ) => {
     if (savedId && savedChart) return { chart: savedChart, id: savedId }
+    let rlat = lat, rlng = lng
+    if ((!rlat || !rlng) && p.trim()) {
+      const gc = await geocode(p)
+      if (gc) { rlat = gc.lat; rlng = gc.lng }
+    }
+    if (!rlat || !rlng) throw new Error('Could not locate "' + p + '" — please select from the dropdown')
     const fn = token ? calculateChart : calculateChartGuest
-    const r = await fn(buildPayload(n, d, p, lat, lng, g))
+    const r = await fn(buildPayload(n, d, p, rlat, rlng, g))
     const chart = r?.data?.data ?? r?.data
     if (!chart) throw new Error('Chart calculation failed — check date and location')
     return { chart, id: chart.horoscopeId || chart.id || '' }
@@ -321,11 +328,7 @@ export default function MatchPage() {
   const scoreColor = pct >= 70 ? '#16A34A' : pct >= 50 ? '#B45309' : '#DC2626'
 
   // Button disabled if obvious validation fails
-  const canSubmit = !loading && (
-    useSaved1 ? !!selId1 : (d1.dd > 0 && d1.mm > 0 && d1.yyyy > 0 && !!lat1)
-  ) && (
-    useSaved2 ? !!selId2 : (d2.dd > 0 && d2.mm > 0 && d2.yyyy > 0 && !!lat2)
-  )
+  const canSubmit = !loading  // button always clickable; validation is in handle()
 
   return (
     <div style={{ maxWidth: '1100px', margin: '0 auto', padding: '20px 16px' }}>
@@ -386,11 +389,10 @@ export default function MatchPage() {
         </div>
       )}
 
-      <button onClick={handle} disabled={!canSubmit}
+      <button onClick={handle} disabled={loading}
         className="btn-primary"
         style={{ width: '100%', padding: '14px', fontFamily: 'Cinzel,serif', fontSize: '15px',
-          display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px', marginBottom: '24px',
-          opacity: canSubmit ? 1 : 0.5, cursor: canSubmit ? 'pointer' : 'not-allowed' }}>
+          display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px', marginBottom: '24px' }}>
         {loading
           ? <><RefreshCw style={{ width: '16px', height: '16px', animation: 'spin 1s linear infinite' }} /> Calculating...</>
           : <>Check Compatibility <ChevronRight style={{ width: '16px', height: '16px' }} /></>
