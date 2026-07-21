@@ -3,26 +3,17 @@ Running 8 tests using 2 workers
 
 [1/8] [chromium] › e2e/functional-test.spec.js:45:3 › GUEST CHART › Guest chart — no redirect, city dropdown closes, chart generates
 [2/8] [mobile] › e2e/functional-test.spec.js:45:3 › GUEST CHART › Guest chart — no redirect, city dropdown closes, chart generates
-[chromium] › e2e/functional-test.spec.js:45:3 › GUEST CHART › Guest chart — no redirect, city dropdown closes, chart generates
-✓ No redirect to signin
-
 [mobile] › e2e/functional-test.spec.js:45:3 › GUEST CHART › Guest chart — no redirect, city dropdown closes, chart generates
 ✓ No redirect to signin
 
 [chromium] › e2e/functional-test.spec.js:45:3 › GUEST CHART › Guest chart — no redirect, city dropdown closes, chart generates
-City dropdown for "Chennai" appeared: true
+✓ No redirect to signin
 
 [mobile] › e2e/functional-test.spec.js:45:3 › GUEST CHART › Guest chart — no redirect, city dropdown closes, chart generates
 City dropdown for "Chennai" appeared: true
 
 [chromium] › e2e/functional-test.spec.js:45:3 › GUEST CHART › Guest chart — no redirect, city dropdown closes, chart generates
-City 0 final value: "Chennai"
-
-City input value after selection: Chennai
-
-✓ City selected, dropdown closed
-
-Dropdown still open after selection: false
+City dropdown for "Chennai" appeared: true
 
 [mobile] › e2e/functional-test.spec.js:45:3 › GUEST CHART › Guest chart — no redirect, city dropdown closes, chart generates
 City 0 final value: "Chennai"
@@ -34,13 +25,22 @@ City input value after selection: Chennai
 Dropdown still open after selection: false
 
 [chromium] › e2e/functional-test.spec.js:45:3 › GUEST CHART › Guest chart — no redirect, city dropdown closes, chart generates
-Chart appeared: true
+City 0 final value: "Chennai"
 
-[3/8] [chromium] › e2e/functional-test.spec.js:86:3 › CITY DROPDOWN › City dropdown closes after selection
+City input value after selection: Chennai
+
+✓ City selected, dropdown closed
+
+Dropdown still open after selection: false
+
 [mobile] › e2e/functional-test.spec.js:45:3 › GUEST CHART › Guest chart — no redirect, city dropdown closes, chart generates
 Chart appeared: true
 
-[4/8] [mobile] › e2e/functional-test.spec.js:86:3 › CITY DROPDOWN › City dropdown closes after selection
+[chromium] › e2e/functional-test.spec.js:45:3 › GUEST CHART › Guest chart — no redirect, city dropdown closes, chart generates
+Chart appeared: true
+
+[3/8] [mobile] › e2e/functional-test.spec.js:86:3 › CITY DROPDOWN › City dropdown closes after selection
+[4/8] [chromium] › e2e/functional-test.spec.js:86:3 › CITY DROPDOWN › City dropdown closes after selection
 [chromium] › e2e/functional-test.spec.js:86:3 › CITY DROPDOWN › City dropdown closes after selection
 Dropdown appeared: true
 
@@ -48,69 +48,71 @@ Dropdown appeared: true
 Dropdown appeared: true
 
 [chromium] › e2e/functional-test.spec.js:86:3 › CITY DROPDOWN › City dropdown closes after selection
+Dropdown still open after click: false
+
+City input value: Mumbai
+
+[mobile] › e2e/functional-test.spec.js:86:3 › CITY DROPDOWN › City dropdown closes after selection
 Dropdown still open after click: false
 
 City input value: Mumbai
 
 [5/8] [chromium] › e2e/functional-test.spec.js:120:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login
-[mobile] › e2e/functional-test.spec.js:86:3 › CITY DROPDOWN › City dropdown closes after selection
-Dropdown still open after click: false
-
-City input value: Mumbai
-
 [6/8] [mobile] › e2e/functional-test.spec.js:120:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login
-[chromium] › e2e/functional-test.spec.js:120:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login
-Match selects count: 12
-
 [mobile] › e2e/functional-test.spec.js:120:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login
 Match selects count: 12
 
 [chromium] › e2e/functional-test.spec.js:120:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login
-City dropdown for "Chennai" appeared: true
+Match selects count: 12
 
 [mobile] › e2e/functional-test.spec.js:120:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login
 City dropdown for "Chennai" appeared: true
 
 [chromium] › e2e/functional-test.spec.js:120:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login
-City 0 final value: "Chennai"
+City dropdown for "Chennai" appeared: true
 
 [mobile] › e2e/functional-test.spec.js:120:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login
 City 0 final value: "Chennai"
 
 [chromium] › e2e/functional-test.spec.js:120:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login
-City dropdown for "Coimbatore" appeared: true
+City 0 final value: "Chennai"
 
 [mobile] › e2e/functional-test.spec.js:120:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login
 City dropdown for "Coimbatore" appeared: true
 
 [chromium] › e2e/functional-test.spec.js:120:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login
-City 1 final value: "Coimbatore"
-
-Clicking Calculate button...
+City dropdown for "Coimbatore" appeared: true
 
 [mobile] › e2e/functional-test.spec.js:120:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login
 City 1 final value: "Coimbatore"
 
+[chromium] › e2e/functional-test.spec.js:120:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login
+City 1 final value: "Coimbatore"
+
+[mobile] › e2e/functional-test.spec.js:120:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login
 Clicking Calculate button...
+
+[chromium] › e2e/functional-test.spec.js:120:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login
+Clicking Calculate button...
+
+[mobile] › e2e/functional-test.spec.js:120:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login
+Match result visible: true
 
 [chromium] › e2e/functional-test.spec.js:120:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login
 Match result visible: true
 
 [7/8] [chromium] › e2e/functional-test.spec.js:166:3 › NUMEROLOGY › Numerology — calculates life path number
-[mobile] › e2e/functional-test.spec.js:120:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login
-Match result visible: true
-
 [8/8] [mobile] › e2e/functional-test.spec.js:166:3 › NUMEROLOGY › Numerology — calculates life path number
-[chromium] › e2e/functional-test.spec.js:166:3 › NUMEROLOGY › Numerology — calculates life path number
-Name input visible: false
-
 [mobile] › e2e/functional-test.spec.js:166:3 › NUMEROLOGY › Numerology — calculates life path number
 Name input visible: false
 
 [chromium] › e2e/functional-test.spec.js:166:3 › NUMEROLOGY › Numerology — calculates life path number
-Numerology result visible: true
+Name input visible: false
 
 [mobile] › e2e/functional-test.spec.js:166:3 › NUMEROLOGY › Numerology — calculates life path number
 Numerology result visible: true
 
-  8 passed (52.9s)
+[chromium] › e2e/functional-test.spec.js:166:3 › NUMEROLOGY › Numerology — calculates life path number
+Numerology result visible: true
+
+  8 passed (53.8s)
