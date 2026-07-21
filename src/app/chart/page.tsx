@@ -20,7 +20,7 @@ import SouthIndianChart from '@/components/chart/SouthIndianChart'
 import { User, ChevronRight, Plus, Star, Clock, RefreshCw, Download, AlertTriangle, X } from 'lucide-react'
 
 const EMPTY: DateValue = { dd:0,mm:0,yyyy:0 }
-type Tab = 'rasi'|'planets'|'dasha'|'shadbala'|'ashtakavarga'|'arudha'|'dosha'|'interpret'|'report'
+type Tab = 'rasi'|'planets'|'dasha'|'shadbala'|'ashtakavarga'|'arudha'|'dosha'|'interpret'|'predictions'|'report'
 
 export default function ChartPage() {
   const router   = useRouter()
@@ -348,6 +348,7 @@ export default function ChartPage() {
     {key:'arudha',  label:'Arudha'},
     {key:'dosha',   label:'Doshas'},
     {key:'interpret',label:'Analysis'},
+    {key:'predictions', label:'🔮 Life Predictions'},
     {key:'report',  label:'Full Report'},
   ]
 
@@ -964,6 +965,11 @@ export default function ChartPage() {
               })()}
 
               {/* ── FULL REPORT ── */}
+              {/* ── LIFE PREDICTIONS TAB ── */}
+              {tab==='predictions' && (
+                <LifePredictionsTab horoId={horoId} isAdmin={!!(token && (useStore.getState() as any)?.isAdmin)} />
+              )}
+
               {tab==='report' && !isLoading('report') && (
                 <div style={{display:'flex',flexDirection:'column',gap:'14px'}}>
                   {!data('report') ? <div style={{padding:'20px',color:'var(--txm)'}}>
