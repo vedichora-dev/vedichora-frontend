@@ -217,3 +217,9 @@ export const adminGiftCredits = (id:number, amount:number, reason:string) =>
 export const adminLogs        = (type:'app'|'requests'|'safety', page=1) =>
   chartApi.get(`/api/admin/logs/${type}?page=${page}&pageSize=50`)
 export const adminCreditEco   = ()          => chartApi.get('/api/admin/credit-economy')
+
+// ── STRENGTH (guest — no auth) ────────────────────────────────────────
+export const getShadBalaGuest    = (id: string) => chartApi.get(`/api/strength/${id}/shadbala-guest`)
+export const getAshtakavargaGuest = (id: string) => chartApi.get(`/api/strength/${id}/ashtakavarga-guest`)
+export const getCitySearch       = (q: string)   => chartApi.get(`/api/geography/suggest?q=${encodeURIComponent(q)}&limit=8`)
+export const getCityLookup       = (place: string) => chartApi.get(`/api/geography/lookup?place=${encodeURIComponent(place)}`)
