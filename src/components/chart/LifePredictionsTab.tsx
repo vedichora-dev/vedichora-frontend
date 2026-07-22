@@ -158,13 +158,28 @@ export default function LifePredictionsTab({ horoId, isAdmin }: { horoId: string
         const evt    = marked[p.period]
         const isKnown = !!p.knownEvent
 
-        // Domains
+        // Domains — activation strength per life area
+        // Domain score = HOW STRONGLY this life area is activated, not whether it's good/bad
+        // The overall period category tells us whether the activation is positive or negative
         const thriving   = trace?.thriving   || []
         const challenged = trace?.challenged  || []
         const domainScores = p.e4.domainScores || {}
+        const isNegativePeriod = ['CATASTROPHIC','DIFFICULT','CHALLENGING'].includes(p.e4.category)
+        const isPositivePeriod = ['POSITIVE','EXCEPTIONAL'].includes(p.e4.category)
+        // Build domain list with correct direction
         const topDomains = Object.entries(domainScores)
+          .filter(([,v]) => Math.abs(v) > 0.1)
           .sort((a,b) => Math.abs(b[1]) - Math.abs(a[1]))
-          .slice(0,4)
+          .slice(0,5)
+          .map(([domain, val]) => {
+            // If backend provides thriving/challenged lists, use them
+            // Otherwise: direction = period direction (catastrophic period → all activated domains are negatively affected)
+            const isThriving = thriving.includes(domain)
+            const isChallenged = challenged.includes(domain)
+            const direction = isThriving ? 'positive' : isChallenged ? 'negative'
+              : isNegativePeriod ? 'negative' : isPositivePeriod ? 'positive' : 'neutral'
+            return { domain, val: Math.abs(val), direction }
+          })
 
         // Period yogas
         const periodYogas = p.e4.yogas || []
@@ -250,25 +265,40 @@ export default function LifePredictionsTab({ horoId, isAdmin }: { horoId: string
                 {topDomains.length > 0 && (
                   <div>
                     <div style={{fontSize:'10px',fontWeight:700,color:'var(--txm)',textTransform:'uppercase',
-                      letterSpacing:'.08em',marginBottom:'6px'}}>Domains Affected</div>
+                      letterSpacing:'.08em',marginBottom:'6px'}}>Life Areas Affected</div>
                     <div style={{display:'flex',flexWrap:'wrap',gap:'6px'}}>
-                      {topDomains.map(([domain, val]) => {
-                        const positive = val > 0
+                      {topDomains.map(({domain, val, direction}) => {
+                        const isPos = direction === 'positive'
+                        const isNeg = direction === 'negative'
+                        const bg     = isPos ? '#052e16' : isNeg ? '#450a0a' : '#1e293b'
+                        const border = isPos ? '#166534' : isNeg ? '#7f1d1d' : '#334155'
+                        const clr    = isPos ? '#86efac' : isNeg ? '#fca5a5' : '#94a3b8'
+                        const icon   = isPos ? '✓' : isNeg ? '⚠' : '•'
+                        // Human-readable impact label
+                        const impactLabel = isPos
+                          ? 'benefits'
+                          : isNeg
+                            ? ['CATASTROPHIC','DIFFICULT'].includes(p.e4.category) ? 'severely hit' : 'under pressure'
+                            : 'activated'
                         return (
-                          <div key={domain} style={{display:'flex',alignItems:'center',gap:'6px',
-                            background:positive?'#052e16':'#450a0a',
-                            border:`1px solid ${positive?'#166534':'#7f1d1d'}`,
-                            borderRadius:'6px',padding:'5px 10px'}}>
-                            <span style={{fontSize:'12px',color:positive?'#86efac':'#fca5a5'}}>
-                              {DOMAIN_LABEL[domain]||domain}
+                          <div key={domain} style={{display:'flex',alignItems:'center',gap:'5px',
+                            background:bg, border:`1px solid ${border}`,
+                            borderRadius:'6px',padding:'5px 11px'}}>
+                            <span style={{fontSize:'12px',color:clr,fontWeight:600}}>
+                              {icon} {DOMAIN_LABEL[domain]||domain}
                             </span>
-                            <span style={{fontSize:'11px',fontWeight:700,color:positive?'#86efac':'#fca5a5'}}>
-                              {positive?'+':''}{val.toFixed(2)}
+                            <span style={{fontSize:'10px',color:clr,opacity:0.75}}>
+                              {impactLabel}
                             </span>
                           </div>
                         )
                       })}
                     </div>
+                    {isNegativePeriod && topDomains.length > 0 && (
+                      <div style={{fontSize:'11px',color:'#f59e0b',marginTop:'6px',fontStyle:'italic'}}>
+                        These life areas are under stress during this period — not thriving.
+                      </div>
+                    )}
                   </div>
                 )}
 
