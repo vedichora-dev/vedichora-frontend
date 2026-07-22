@@ -1,15 +1,15 @@
 === CURRENT e2e FILES ===
 total 64
-drwxr-xr-x 2 runner runner  4096 Jul 21 15:45 .
-drwxr-xr-x 7 runner runner  4096 Jul 21 15:45 ..
--rw-r--r-- 1 runner runner  4428 Jul 21 15:45 01-auth.spec.js
--rw-r--r-- 1 runner runner 11055 Jul 21 15:45 02-chart.spec.js
--rw-r--r-- 1 runner runner  2851 Jul 21 15:45 03-match.spec.js
--rw-r--r-- 1 runner runner  2685 Jul 21 15:45 04-horoscope.spec.js
--rw-r--r-- 1 runner runner  3485 Jul 21 15:45 05-deployment.spec.js
--rw-r--r-- 1 runner runner  5422 Jul 21 15:45 06-match-10.spec.js
--rw-r--r-- 1 runner runner  8626 Jul 21 15:45 functional-test.spec.js
--rw-r--r-- 1 runner runner  2685 Jul 21 15:45 helpers.js
+drwxr-xr-x 2 runner runner  4096 Jul 22 02:11 .
+drwxr-xr-x 7 runner runner  4096 Jul 22 02:12 ..
+-rw-r--r-- 1 runner runner  4428 Jul 22 02:11 01-auth.spec.js
+-rw-r--r-- 1 runner runner 11055 Jul 22 02:11 02-chart.spec.js
+-rw-r--r-- 1 runner runner  2851 Jul 22 02:11 03-match.spec.js
+-rw-r--r-- 1 runner runner  2685 Jul 22 02:11 04-horoscope.spec.js
+-rw-r--r-- 1 runner runner  3485 Jul 22 02:11 05-deployment.spec.js
+-rw-r--r-- 1 runner runner  5636 Jul 22 02:11 06-match-10.spec.js
+-rw-r--r-- 1 runner runner  8626 Jul 22 02:11 functional-test.spec.js
+-rw-r--r-- 1 runner runner  2685 Jul 22 02:11 helpers.js
 
 === BUILD OUTPUT ===
 > vedichora@1.0.0 build
@@ -45,7 +45,7 @@ Route (app)                              Size     First Load JS
 ├ ○ /about                               2.46 kB        84.4 kB
 ├ ○ /admin                               5.37 kB         117 kB
 ├ ○ /api-docs                            1.87 kB        86.8 kB
-├ ○ /chart                               20.2 kB         136 kB
+├ ○ /chart                               22.3 kB         139 kB
 ├ ○ /checkout                            5.07 kB          90 kB
 ├ ○ /consult                             5.5 kB         90.4 kB
 ├ ○ /dashboard                           3.37 kB         115 kB
