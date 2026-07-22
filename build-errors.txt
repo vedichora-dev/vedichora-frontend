@@ -1,15 +1,15 @@
 === CURRENT e2e FILES ===
 total 64
-drwxr-xr-x 2 runner runner  4096 Jul 22 02:11 .
-drwxr-xr-x 7 runner runner  4096 Jul 22 02:12 ..
--rw-r--r-- 1 runner runner  4428 Jul 22 02:11 01-auth.spec.js
--rw-r--r-- 1 runner runner 11055 Jul 22 02:11 02-chart.spec.js
--rw-r--r-- 1 runner runner  2851 Jul 22 02:11 03-match.spec.js
--rw-r--r-- 1 runner runner  2685 Jul 22 02:11 04-horoscope.spec.js
--rw-r--r-- 1 runner runner  3485 Jul 22 02:11 05-deployment.spec.js
--rw-r--r-- 1 runner runner  5636 Jul 22 02:11 06-match-10.spec.js
--rw-r--r-- 1 runner runner  8626 Jul 22 02:11 functional-test.spec.js
--rw-r--r-- 1 runner runner  2685 Jul 22 02:11 helpers.js
+drwxr-xr-x 2 runner runner  4096 Jul 22 02:44 .
+drwxr-xr-x 7 runner runner  4096 Jul 22 02:44 ..
+-rw-r--r-- 1 runner runner  4428 Jul 22 02:44 01-auth.spec.js
+-rw-r--r-- 1 runner runner 11055 Jul 22 02:44 02-chart.spec.js
+-rw-r--r-- 1 runner runner  2851 Jul 22 02:44 03-match.spec.js
+-rw-r--r-- 1 runner runner  2685 Jul 22 02:44 04-horoscope.spec.js
+-rw-r--r-- 1 runner runner  3485 Jul 22 02:44 05-deployment.spec.js
+-rw-r--r-- 1 runner runner  5636 Jul 22 02:44 06-match-10.spec.js
+-rw-r--r-- 1 runner runner  8626 Jul 22 02:44 functional-test.spec.js
+-rw-r--r-- 1 runner runner  2685 Jul 22 02:44 helpers.js
 
 === BUILD OUTPUT ===
 > vedichora@1.0.0 build
@@ -52,8 +52,8 @@ Route (app)                              Size     First Load JS
 ├ ○ /jyoti                               5.86 kB         118 kB
 ├ ○ /learn                               2.52 kB        84.4 kB
 ├ ○ /match                               5.43 kB         122 kB
-├ ○ /muhurta                             2.63 kB         115 kB
-├ ○ /numerology                          3.76 kB         113 kB
+├ ○ /muhurta                             2.58 kB         115 kB
+├ ○ /numerology                          3.73 kB         113 kB
 ├ ○ /phone-login                         2.14 kB         121 kB
 ├ ○ /remedies                            1.85 kB        83.8 kB
 ├ ○ /shop                                2.09 kB         114 kB
