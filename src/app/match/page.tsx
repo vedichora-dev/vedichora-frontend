@@ -84,24 +84,21 @@ function PersonCard({
             ))}
           </div>
           {useSaved && (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', maxHeight: '200px', overflowY: 'auto' }}>
+            <select
+              value={selId}
+              onChange={e => setSelId(e.target.value)}
+              style={{ width: '100%', padding: '9px 12px', borderRadius: '8px',
+                border: '1.5px solid var(--gold)', background: 'var(--bg)',
+                color: 'var(--tx)', fontSize: '13px', fontFamily: 'inherit', cursor: 'pointer' }}>
+              <option value="">— Select a chart —</option>
               {saved.map((c: any) => {
                 const id = c.horoscopeId || c.HoroscopeId
                 const nm = c.personName || c.PersonName || 'Chart'
                 const lg = c.ascendantName || c.AscendantName || ''
-                const sel = id === selId
-                return (
-                  <button key={id} onClick={() => setSelId(id)}
-                    style={{ padding: '8px 10px', borderRadius: '8px', textAlign: 'left',
-                      border: `1.5px solid ${sel ? 'var(--gold)' : 'var(--bd)'}`,
-                      background: sel ? 'rgba(196,146,42,.08)' : 'var(--bg2)',
-                      cursor: 'pointer', fontSize: '11px' }}>
-                    <span style={{ fontWeight: 700, color: 'var(--acc)', fontFamily: 'Cinzel,serif' }}>{nm}</span>
-                    <span style={{ color: 'var(--txm)', marginLeft: '6px' }}>{lg}</span>
-                  </button>
-                )
+                const nak = c.nakshatraName || c.NakshatraName || ''
+                return <option key={id} value={id}>{nm} — {lg}{nak ? ' · ' + nak : ''}</option>
               })}
-            </div>
+            </select>
           )}
         </div>
       )}
