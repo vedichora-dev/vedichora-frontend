@@ -10,15 +10,7 @@ import { Heart, ChevronRight, RefreshCw, CheckCircle, AlertCircle, MapPin } from
 const EMPTY: DateValue = { dd: 0, mm: 0, yyyy: 0 }
 
 // ── Geocode fallback ─────────────────────────────────────────────────────────
-async function geocode(place: string): Promise<{lat:number,lng:number}|null> {
-  try {
-    const r = await fetch(
-      `https://photon.komoot.io/api/?q=${encodeURIComponent(place)}&limit=1&lang=en`
-    ).then(r => r.json())
-    const f = r?.features?.[0]
-    return f ? { lat: f.geometry.coordinates[1], lng: f.geometry.coordinates[0] } : null
-  } catch { return null }
-}
+// geocode now inline in calcChart using Nominatim
 
 function buildPayload(n: string, d: DateValue, p: string, lat?: number, lng?: number, g?: string) {
   const tm = d.unknownTime ? { hour: 12, minute: 0 } : to24Hour(d.hr || 12, d.mi || 0, d.ap || 'AM')
@@ -252,8 +244,17 @@ export default function MatchPage() {
     if (savedId && savedChart) return { chart: savedChart, id: savedId }
     let rlat = lat, rlng = lng
     if ((!rlat || !rlng) && p.trim()) {
-      const gc = await geocode(p)
-      if (gc) { rlat = gc.lat; rlng = gc.lng }
+      // Use same Nominatim as CityAutocomplete for consistency
+      try {
+        const geoRes = await fetch(
+          'https://nominatim.openstreetmap.org/search?q=' + encodeURIComponent(p) + '&format=json&limit=1&accept-language=en',
+          { headers: { 'User-Agent': 'VedicHora/1.0' }, signal: AbortSignal.timeout(5000) }
+        ).then(r => r.json())
+        if (Array.isArray(geoRes) && geoRes[0]) {
+          rlat = parseFloat(geoRes[0].lat)
+          rlng = parseFloat(geoRes[0].lon)
+        }
+      } catch {}
     }
     if (!rlat || !rlng) throw new Error('Could not locate "' + p + '" — please select from the dropdown')
     const fn = token ? calculateChart : calculateChartGuest
