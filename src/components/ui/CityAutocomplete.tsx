@@ -20,7 +20,6 @@ async function searchCities(q: string): Promise<City[]> {
       `&featuretype=city&countrycodes=in,gb,us,au,ca,sg,ae,my,lk`
     const res = await fetch(url, {
       headers: { 'Accept-Language': 'en', 'User-Agent': 'VedicHora/1.0 (vedichora.com)' },
-      signal: AbortSignal.timeout(5000)
     })
     const data = await res.json()
     if (Array.isArray(data) && data.length > 0) {
