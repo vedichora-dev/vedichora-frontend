@@ -248,7 +248,7 @@ export default function MatchPage() {
       try {
         const geoRes = await fetch(
           'https://nominatim.openstreetmap.org/search?q=' + encodeURIComponent(p) + '&format=json&limit=1&accept-language=en',
-          { headers: { 'User-Agent': 'VedicHora/1.0' }, signal: AbortSignal.timeout(5000) }
+          { headers: { 'User-Agent': 'VedicHora/1.0' } }
         ).then(r => r.json())
         if (Array.isArray(geoRes) && geoRes[0]) {
           rlat = parseFloat(geoRes[0].lat)
