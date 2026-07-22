@@ -481,8 +481,7 @@ export default function ChartPage() {
       {(showForm || !token || saved.length===0) && (
         <div className="card" style={{marginBottom:'14px'}}>
           <div className="card-hd">
-            <User style={{width:'13px',height:'13px',color:'var(--gold)'}}/>
-            <span className="card-title">{t('chart.section')}</span>
+            <span className="card-title">Birth Details</span>
             {(showForm && token && saved.length>0) && (
               <button onClick={()=>setShowForm(false)}
                 style={{marginLeft:'auto',background:'none',border:'none',cursor:'pointer',
@@ -492,7 +491,7 @@ export default function ChartPage() {
             )}
           </div>
           <div className="card-bd">
-            <div style={{display:'flex',flexDirection:'column',gap:'14px',maxWidth:'420px'}}>
+            <div style={{display:'flex',flexDirection:'column',gap:'10px',maxWidth:'460px'}}>
 
               {/* Row 1: Full Name */}
               <div>
@@ -769,8 +768,8 @@ export default function ChartPage() {
                       const st  = d.startAt||d.StartAt||d.start||''
                       const en  = d.endAt||d.EndAt||d.end||''
                       const ads = d.antaraDasas||d.AntaraDasas||[]
-                      const sy  = st?new Date(st).getFullYear():'—'
-                      const ey  = en?new Date(en).getFullYear():'—'
+                      const sy  = st ? (new Date(st).getFullYear() || '—') : '—'
+                      const ey  = en ? (new Date(en).getFullYear() || '—') : '—'
                       const yrs = (st&&en)
                         ? ((new Date(en).getTime()-new Date(st).getTime())/(365.25*24*3600*1000)).toFixed(1):'—'
                       const now = st&&en&&new Date(st)<=new Date()&&new Date()<=new Date(en)
