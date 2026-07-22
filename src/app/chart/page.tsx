@@ -18,7 +18,7 @@ import CityAutocomplete from '@/components/ui/CityAutocomplete'
 import NorthIndianChart from '@/components/chart/NorthIndianChart'
 import LifePredictionsTab from '@/components/chart/LifePredictionsTab'
 import SouthIndianChart from '@/components/chart/SouthIndianChart'
-import { User, ChevronRight, Plus, Star, Clock, RefreshCw, Download, AlertTriangle, X } from 'lucide-react'
+import { User, ChevronRight, Plus, Star, Clock, RefreshCw, Download, AlertTriangle, X, BookOpen } from 'lucide-react'
 
 const EMPTY: DateValue = { dd:0,mm:0,yyyy:0 }
 type Tab = 'rasi'|'planets'|'dasha'|'shadbala'|'ashtakavarga'|'arudha'|'dosha'|'interpret'|'predictions'|'report'
