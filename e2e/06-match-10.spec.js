@@ -64,7 +64,11 @@ for (let i = 0; i < COUPLES.length; i++) {
     await page.screenshot({ path: `test-results/match-${i+1}-before.png` })
 
     const calcBtn = page.locator('button').filter({ hasText: /Check Compatibility|Compatibility/ }).first()
+    // Scroll to button via JS and click to avoid viewport issues
+    await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight))
+    await page.waitForTimeout(300)
     await calcBtn.scrollIntoViewIfNeeded()
+    await page.waitForTimeout(200)
     await calcBtn.click({ force: true })
     await page.waitForTimeout(18000)
 
