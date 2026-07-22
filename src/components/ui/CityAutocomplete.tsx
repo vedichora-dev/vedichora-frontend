@@ -1,205 +1,199 @@
 'use client'
 import { useState, useRef, useEffect, useCallback } from 'react'
-import { MapPin, Loader } from 'lucide-react'
+import { MapPin, Loader2, CheckCircle2 } from 'lucide-react'
 
-interface City { name: string; country: string; lat: number; lng: number }
+interface City { name: string; state: string; country: string; lat: number; lng: number }
 interface Props {
   value: string
   onChange: (city: string, lat?: number, lng?: number, tz?: string) => void
   placeholder?: string
 }
-interface DropPos { top: number; left: number; width: number }
 
 const CHART_URL = process.env.NEXT_PUBLIC_CHART_URL || 'https://enchanting-dedication-production.up.railway.app'
 
-// Search using our own GeoNamesAtlas backend (no external API, no CORS issues)
-// Falls back to Nominatim OSM if backend returns nothing
+// Search cities — Nominatim first (fast, comprehensive Indian cities), backend fallback
 async function searchCities(q: string): Promise<City[]> {
-  // 1. Our own backend — GeoNamesAtlas (150 bundled cities + GeoNames files on server)
+  // Primary: Nominatim OpenStreetMap — free, comprehensive, no API key
   try {
-    const res  = await fetch(`${CHART_URL}/api/geography/suggest?q=${encodeURIComponent(q)}&limit=8`)
+    const url = `https://nominatim.openstreetmap.org/search` +
+      `?q=${encodeURIComponent(q)}&format=json&addressdetails=1&limit=8&accept-language=en` +
+      `&featuretype=city&countrycodes=in,gb,us,au,ca,sg,ae,my,lk`
+    const res = await fetch(url, {
+      headers: { 'Accept-Language': 'en', 'User-Agent': 'VedicHora/1.0 (vedichora.com)' },
+      signal: AbortSignal.timeout(5000)
+    })
     const data = await res.json()
-    const suggestions: string[] = data?.data?.data ?? data?.data ?? data ?? []
-    if (Array.isArray(suggestions) && suggestions.length > 0) {
-      // suggestions are city name strings — resolve each to lat/lng via lookup
-      const resolved = await Promise.allSettled(
-        suggestions.slice(0, 6).map(async (name: string) => {
-          const r2 = await fetch(`${CHART_URL}/api/geography/lookup?place=${encodeURIComponent(name)}`)
-          const d2 = await r2.json()
-          const loc = d2?.data?.data ?? d2?.data ?? d2
-          return {
-            name: loc?.placeName ?? name.split(',')[0].trim(),
-            country: loc?.country ?? (name.includes(',') ? name.split(',').slice(-1)[0].trim() : ''),
-            lat:  loc?.latitude  ?? 0,
-            lng: loc?.longitude ?? 0,
-          } as City
-        })
-      )
-      const cities = resolved
-        .filter(r => r.status === 'fulfilled' && (r as any).value.lat !== 0)
-        .map(r => (r as any).value) as City[]
-      if (cities.length > 0) return cities
+    if (Array.isArray(data) && data.length > 0) {
+      return data.map((f: any) => {
+        const a = f.address || {}
+        const name = a.city || a.town || a.village || a.municipality || a.county || f.display_name.split(',')[0].trim()
+        const state = a.state || a.state_district || ''
+        const country = a.country || ''
+        return { name, state, country, lat: parseFloat(f.lat), lng: parseFloat(f.lon) }
+      }).filter((c: City) => c.name && c.lat)
     }
   } catch {}
 
-  // 2. Fallback — Nominatim OSM (free, no key, good Indian city coverage)
+  // Fallback: our GeoNamesAtlas backend (150 embedded cities)
   try {
-    const res  = await fetch(
-      `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(q)}&format=json&addressdetails=1&limit=6&accept-language=en`,
-      { headers: { 'User-Agent': 'VedicHora/1.0' } }
-    )
+    const res = await fetch(`${CHART_URL}/api/geography/suggest?q=${encodeURIComponent(q)}&limit=8`)
     const data = await res.json()
-    return (data || [])
-      .filter((f: any) => f.lat && f.lon)
-      .map((f: any) => {
-        const addr = f.address || {}
-        const name = addr.city || addr.town || addr.village || addr.county || f.display_name.split(',')[0]
-        return { name, country: addr.country || '', lat: parseFloat(f.lat), lng: parseFloat(f.lon) }
-      })
-      .filter((c: City) => c.name)
-      .slice(0, 6)
-  } catch { return [] }
+    const names: string[] = data?.data?.data ?? data?.data ?? []
+    if (Array.isArray(names) && names.length > 0) {
+      // batch lookup via our backend
+      const results = await Promise.all(names.slice(0,6).map(async name => {
+        try {
+          const r2 = await fetch(`${CHART_URL}/api/geography/lookup?place=${encodeURIComponent(name)}`)
+          const d2 = await r2.json()
+          const loc = d2?.data?.data ?? d2?.data ?? d2
+          return { name: loc?.placeName ?? name, state: '', country: loc?.country ?? '', lat: loc?.latitude ?? 0, lng: loc?.longitude ?? 0 }
+        } catch { return null }
+      }))
+      return results.filter((c): c is City => !!c && c.lat !== 0)
+    }
+  } catch {}
+  return []
 }
 
-export default function CityAutocomplete({ value, onChange, placeholder = 'Type city name...' }: Props) {
-  const [query,   setQuery]   = useState(value)
-  const [results, setResults] = useState<City[]>([])
-  const [open,    setOpen]    = useState(false)
-  const [loading, setLoading] = useState(false)
-  const [dropPos, setDropPos] = useState<DropPos | null>(null)
+export default function CityAutocomplete({ value, onChange, placeholder = 'City, Country' }: Props) {
+  const [query,    setQuery]    = useState(value)
+  const [results,  setResults]  = useState<City[]>([])
+  const [open,     setOpen]     = useState(false)
+  const [loading,  setLoading]  = useState(false)
+  const [selected, setSelected] = useState(!!value)
+  const [dropPos,  setDropPos]  = useState<{top:number;left:number;width:number}|null>(null)
   const inputRef  = useRef<HTMLInputElement>(null)
   const dropRef   = useRef<HTMLDivElement>(null)
   const timer     = useRef<NodeJS.Timeout>()
-  const selecting = useRef(false)
+  const isSelecting = useRef(false)
 
-  const hideDropdown = useCallback(() => {
+  const hide = useCallback(() => {
     if (dropRef.current) dropRef.current.style.display = 'none'
-    selecting.current = true
-    setOpen(false)
-    setResults([])
-    setTimeout(() => { selecting.current = false }, 400)
+    isSelecting.current = true
+    setOpen(false); setResults([])
+    setTimeout(() => { isSelecting.current = false }, 300)
   }, [])
 
   const updatePos = useCallback(() => {
     if (!inputRef.current) return
-    const rect = inputRef.current.getBoundingClientRect()
-    setDropPos({ top: rect.bottom + window.scrollY + 4, left: rect.left + window.scrollX, width: rect.width })
+    const r = inputRef.current.getBoundingClientRect()
+    setDropPos({ top: r.bottom + window.scrollY + 2, left: r.left + window.scrollX, width: r.width })
   }, [])
 
   useEffect(() => { if (open && dropRef.current) dropRef.current.style.display = '' }, [open])
   useEffect(() => { if (open) updatePos() }, [open, updatePos])
-
   useEffect(() => {
-    const close = (e: Event) => {
-      if (e.type === 'scroll') { hideDropdown(); return }
-      if (inputRef.current && !inputRef.current.contains(e.target as Node)) hideDropdown()
+    const fn = (e: Event) => {
+      if (e.type === 'scroll') { hide(); return }
+      if (inputRef.current && !inputRef.current.contains(e.target as Node)) hide()
     }
-    document.addEventListener('mousedown', close)
-    window.addEventListener('scroll', close, true)
+    document.addEventListener('mousedown', fn)
+    window.addEventListener('scroll', fn, true)
     window.addEventListener('resize', updatePos)
-    return () => {
-      document.removeEventListener('mousedown', close)
-      window.removeEventListener('scroll', close, true)
-      window.removeEventListener('resize', updatePos)
-    }
-  }, [hideDropdown, updatePos])
+    return () => { document.removeEventListener('mousedown', fn); window.removeEventListener('scroll', fn, true); window.removeEventListener('resize', updatePos) }
+  }, [hide, updatePos])
 
   useEffect(() => {
     clearTimeout(timer.current)
-    if (query.length < 2) { hideDropdown(); return }
+    setSelected(false)
+    if (query.length < 2) { hide(); return }
+    setLoading(true)
     timer.current = setTimeout(async () => {
-      setLoading(true)
       const cities = await searchCities(query)
+      // deduplicate
       const seen = new Set<string>()
       const unique = cities.filter(c => {
-        const k = c.name + '|' + c.country
+        const k = `${c.name}|${c.country}`.toLowerCase()
         if (seen.has(k)) return false
         seen.add(k); return true
       })
       setResults(unique)
-      if (unique.length > 0 && !selecting.current) { setOpen(true); updatePos() }
+      if (unique.length > 0 && !isSelecting.current) { setOpen(true); updatePos() }
+      else if (unique.length === 0) { hide() }
       setLoading(false)
     }, 300)
-  }, [query, updatePos, hideDropdown])
+  }, [query])
 
   const select = (city: City) => {
-    const label = city.name + (city.country ? ', ' + city.country : '')
+    const label = [city.name, city.state, city.country].filter(Boolean).join(', ')
     if (dropRef.current) dropRef.current.style.display = 'none'
-    selecting.current = true
-    setResults([]); setOpen(false)
+    isSelecting.current = true
+    setResults([]); setOpen(false); setSelected(true)
     setQuery(label)
     onChange(label, city.lat, city.lng)
-    setTimeout(() => { selecting.current = false }, 400)
+    setTimeout(() => { isSelecting.current = false }, 300)
   }
 
   return (
     <>
       <div style={{ position: 'relative' }}>
         <MapPin style={{
-          position: 'absolute', left: '9px', top: '50%', transform: 'translateY(-50%)',
-          width: '12px', height: '12px', color: 'var(--txm)', pointerEvents: 'none'
+          position: 'absolute', left: '10px', top: '50%', transform: 'translateY(-50%)',
+          width: '13px', height: '13px',
+          color: selected ? '#16A34A' : 'var(--txm)',
+          pointerEvents: 'none', flexShrink: 0
         }} />
         <input
           ref={inputRef}
           className="input"
-          style={{ paddingLeft: '28px', width: '100%', paddingRight: '28px' }}
+          style={{ paddingLeft: '30px', paddingRight: '30px', width: '100%' }}
           value={query}
-          onChange={e => { setQuery(e.target.value); onChange(e.target.value) }}
-          onFocus={() => {
-            if (!selecting.current && results.length > 0) { setOpen(true); updatePos() }
-          }}
+          onChange={e => { setQuery(e.target.value); onChange(e.target.value); setSelected(false) }}
+          onFocus={() => { if (!isSelecting.current && results.length > 0) { setOpen(true); updatePos() } }}
           placeholder={placeholder}
-          autoComplete="off"
-          autoCorrect="off"
-          spellCheck={false}
+          autoComplete="off" autoCorrect="off" spellCheck={false}
         />
-        {loading && (
-          <div style={{ position: 'absolute', right: '8px', top: '50%', transform: 'translateY(-50%)' }}>
-            <Loader style={{ width: '13px', height: '13px', color: 'var(--txm)', animation: 'spin 1s linear infinite' }} />
-          </div>
-        )}
+        <div style={{ position: 'absolute', right: '10px', top: '50%', transform: 'translateY(-50%)' }}>
+          {loading
+            ? <Loader2 style={{ width: '13px', height: '13px', color: 'var(--txm)', animation: 'spin 1s linear infinite' }} />
+            : selected
+              ? <CheckCircle2 style={{ width: '13px', height: '13px', color: '#16A34A' }} />
+              : null
+          }
+        </div>
       </div>
 
-      {query.length >= 2 && loading && (
-        <div style={{ fontSize: '11px', color: 'var(--txm)', marginTop: '3px' }}>Searching cities...</div>
+      {/* Status hint */}
+      {query.length >= 2 && !selected && (
+        <div style={{ fontSize: '11px', marginTop: '3px',
+          color: loading ? 'var(--txm)' : results.length === 0 && !loading ? '#DC2626' : 'var(--txm)' }}>
+          {loading
+            ? 'Searching...'
+            : results.length === 0 && !open
+              ? `No cities found for "${query}" — try a different spelling`
+              : 'Select a city from the list below'}
+        </div>
+      )}
+      {query.length > 0 && query.length < 2 && (
+        <div style={{ fontSize: '11px', color: 'var(--txm)', marginTop: '3px' }}>Type at least 2 letters</div>
       )}
 
+      {/* Dropdown */}
       {open && results.length > 0 && dropPos && (
-        <div
-          ref={dropRef}
-          style={{
-            position: 'fixed',
-            top: dropPos.top, left: dropPos.left, width: dropPos.width,
-            background: 'var(--surf)', border: '1px solid var(--bd)', borderRadius: '10px',
-            boxShadow: '0 8px 32px rgba(0,0,0,.22)', zIndex: 999999, overflow: 'hidden',
-          }}
-        >
-          <div style={{ padding: '5px 12px', fontSize: '10px', color: 'var(--txm)',
-            borderBottom: '1px solid var(--bd)', background: 'var(--bg2)',
-            display: 'flex', alignItems: 'center', gap: '5px' }}>
-            <MapPin style={{ width: '9px', height: '9px', color: 'var(--gold)' }} />
-            Click to select city
+        <div ref={dropRef} style={{
+          position: 'fixed', top: dropPos.top, left: dropPos.left, width: Math.max(dropPos.width, 260),
+          background: 'var(--surf)', border: '1.5px solid var(--gold)', borderRadius: '10px',
+          boxShadow: '0 8px 32px rgba(0,0,0,.18)', zIndex: 999999, overflow: 'hidden',
+        }}>
+          <div style={{ padding: '6px 12px', fontSize: '10px', fontWeight: 700,
+            color: 'var(--txm)', background: 'var(--bg2)', letterSpacing: '.04em',
+            textTransform: 'uppercase', borderBottom: '1px solid var(--bd)' }}>
+            {results.length} cities found — click to select
           </div>
           {results.map((city, i) => (
-            <button
-              key={i}
-              type="button"
-              data-city-option="true"
-              onClick={() => select(city)}
-              style={{
-                display: 'flex', alignItems: 'center', gap: '10px',
-                width: '100%', padding: '10px 12px',
-                border: 'none', background: 'none', cursor: 'pointer',
-                textAlign: 'left', fontSize: '13px', fontFamily: 'inherit',
-              }}
-              onMouseEnter={e => (e.currentTarget.style.background = 'var(--bg2)')}
-              onMouseLeave={e => (e.currentTarget.style.background = 'none')}
-            >
+            <button key={i} type="button" onClick={() => select(city)}
+              style={{ display: 'flex', alignItems: 'center', gap: '10px',
+                width: '100%', padding: '9px 12px', border: 'none', background: 'none',
+                cursor: 'pointer', textAlign: 'left', fontFamily: 'inherit' }}
+              onMouseEnter={e => (e.currentTarget.style.background = 'rgba(196,146,42,.08)')}
+              onMouseLeave={e => (e.currentTarget.style.background = 'none')}>
               <MapPin style={{ width: '11px', height: '11px', color: 'var(--gold)', flexShrink: 0 }} />
               <div>
-                <span style={{ color: 'var(--tx)', fontWeight: 600 }}>{city.name}</span>
-                {city.country && (
-                  <span style={{ color: 'var(--txm)', marginLeft: '6px', fontSize: '11px' }}>{city.country}</span>
+                <span style={{ fontSize: '13px', fontWeight: 600, color: 'var(--tx)' }}>{city.name}</span>
+                {(city.state || city.country) && (
+                  <span style={{ fontSize: '11px', color: 'var(--txm)', marginLeft: '6px' }}>
+                    {[city.state, city.country].filter(Boolean).join(', ')}
+                  </span>
                 )}
               </div>
             </button>
