@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useStore } from '@/store'
 import { authLogin } from '@/api'
-import {Eye, EyeOff, Star, Link} from 'lucide-react'
+import {Eye, EyeOff, Star} from 'lucide-react'
 
 export default function SignIn() {
   const router = useRouter()
