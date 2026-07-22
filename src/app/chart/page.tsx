@@ -909,41 +909,78 @@ export default function ChartPage() {
                   {!data('dosha') ? <div style={{padding:'20px',color:'var(--txm)'}}>Dosha data not available</div> :
                   (() => {
                     const raw = data('dosha')
-                    const doshas = raw?.data || raw
-                    return Object.entries(doshas||{}).map(([key,val]:any)=>{
-                      const present = val?.present || val?.isPresent ||
-                        (typeof val==='boolean'?val:false)
-                      return (
-                        <div key={key} style={{background:'var(--bg2)',borderRadius:'12px',
-                          padding:'14px 16px',border:'1px solid var(--bd)'}}>
-                          <div style={{display:'flex',alignItems:'center',gap:'8px',marginBottom:'6px'}}>
-                            <AlertTriangle style={{width:'13px',height:'13px',
-                              color:present?'#F87171':'#4ADE80'}}/>
-                            <span style={{fontWeight:700,color:'var(--acc)',
-                              fontFamily:'Cinzel,serif',fontSize:'13px'}}>
-                              {key.replace(/([A-Z])/g,' $1').trim()}
+                    // DoshaResult: { TotalDoshasFound, HasMajorDosha, Summary, Doshas: DoshaDetail[] }
+                    // DoshaDetail: { Name, IsPresent, Severity, Description, Remedies }
+                    const result = raw?.data ?? raw
+                    const total  = result?.TotalDoshasFound ?? result?.totalDoshasFound ?? 0
+                    const major  = result?.HasMajorDosha ?? result?.hasMajorDosha ?? false
+                    const summary= result?.Summary ?? result?.summary ?? ''
+                    const doshas : any[] = result?.Doshas ?? result?.doshas ?? []
+                    return (
+                      <div style={{display:'flex',flexDirection:'column',gap:'12px'}}>
+                        {/* Summary header */}
+                        <div style={{background:'var(--bg2)',borderRadius:'12px',padding:'14px 16px',
+                          border:`1px solid ${major?'rgba(220,38,38,.3)':'var(--bd)'}`}}>
+                          <div style={{display:'flex',alignItems:'center',gap:'10px',marginBottom:summary?'8px':'0'}}>
+                            <span style={{fontFamily:'Cinzel,serif',fontWeight:700,color:'var(--acc)',fontSize:'13px'}}>
+                              Dosha Analysis
                             </span>
-                            <span style={{marginLeft:'auto',padding:'2px 8px',borderRadius:'20px',
+                            <span style={{marginLeft:'auto',padding:'3px 10px',borderRadius:'20px',
                               fontSize:'10px',fontWeight:700,
-                              background:present?'rgba(248,113,113,.15)':'rgba(74,222,128,.15)',
-                              color:present?'#DC2626':'#16A34A'}}>
-                              {present?'Present':'Not Present'}
+                              background:major?'rgba(220,38,38,.12)':'rgba(74,222,128,.12)',
+                              color:major?'#DC2626':'#16A34A'}}>
+                              {total} dosha{total!==1?'s':''} found
                             </span>
                           </div>
-                          {typeof val==='object'&&val!==null&&Object.entries(val)
-                            .filter(([k])=>k!=='present'&&k!=='isPresent')
-                            .map(([k,v]:any)=>(
-                              <div key={k} style={{fontSize:'12px',color:'var(--tx2)',marginTop:'3px'}}>
-                                <strong style={{color:'var(--txm)'}}>{k}: </strong>{String(v)}
-                              </div>
-                            ))}
+                          {summary && <p style={{fontSize:'12px',color:'var(--txm)',margin:0,lineHeight:1.7}}>{summary}</p>}
                         </div>
-                      )
-                    })
+
+                        {/* Individual doshas */}
+                        {doshas.length === 0
+                          ? <div style={{padding:'12px 16px',borderRadius:'10px',
+                              background:'rgba(74,222,128,.06)',border:'1px solid rgba(74,222,128,.2)',
+                              fontSize:'13px',color:'#16A34A',fontWeight:600}}>
+                              ✓ No major doshas found in this chart
+                            </div>
+                          : doshas.map((d:any,i:number) => {
+                              const name     = d.Name    ?? d.name    ?? `Dosha ${i+1}`
+                              const present  = d.IsPresent ?? d.isPresent ?? false
+                              const severity = d.Severity  ?? d.severity  ?? 'None'
+                              const desc     = d.Description ?? d.description ?? ''
+                              const remedies = d.Remedies ?? d.remedies ?? ''
+                              const sevColor = severity==='High'?'#DC2626':severity==='Medium'?'#F59E0B':'#6B7280'
+                              return (
+                                <div key={i} style={{background:'var(--bg2)',borderRadius:'12px',
+                                  padding:'14px 16px',border:`1px solid ${present?'rgba(220,38,38,.25)':'var(--bd)'}`}}>
+                                  <div style={{display:'flex',alignItems:'center',gap:'8px',marginBottom:desc?'8px':'0'}}>
+                                    <AlertTriangle style={{width:'13px',height:'13px',
+                                      color:present?'#F87171':'#4ADE80',flexShrink:0}}/>
+                                    <span style={{fontWeight:700,color:'var(--acc)',
+                                      fontFamily:'Cinzel,serif',fontSize:'13px'}}>{name}</span>
+                                    <span style={{marginLeft:'auto',padding:'2px 8px',borderRadius:'20px',
+                                      fontSize:'10px',fontWeight:700,
+                                      background:present?'rgba(220,38,38,.1)':'rgba(74,222,128,.1)',
+                                      color:present?'#DC2626':'#16A34A'}}>
+                                      {present ? (severity!=='None'?severity:'Present') : 'Not Present'}
+                                    </span>
+                                  </div>
+                                  {desc && <p style={{fontSize:'12px',color:'var(--txm)',margin:'4px 0 0',lineHeight:1.7}}>{desc}</p>}
+                                  {present && remedies && (
+                                    <div style={{marginTop:'8px',padding:'8px 10px',borderRadius:'8px',
+                                      background:'rgba(196,146,42,.06)',border:'1px solid rgba(196,146,42,.2)',
+                                      fontSize:'11px',color:'var(--txm)'}}>
+                                      <strong style={{color:'var(--gold)'}}>Remedies:</strong> {remedies}
+                                    </div>
+                                  )}
+                                </div>
+                              )
+                            })
+                        }
+                      </div>
+                    )
                   })()}
                 </div>
               )}
-
               {/* ── ANALYSIS ── */}
               {tab==='interpret' && !isLoading('interpret') && (() => {
                 // Build basic predictions from chart data (no AI needed)
