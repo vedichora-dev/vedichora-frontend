@@ -52,6 +52,9 @@ export default function ChartPage() {
   const [navData, setNavData] = useState<any>(null)
   const [chartStyle, setChartStyle] = useState<'north'|'south'>('north')
   const [stripFilter, setStripFilter] = useState('')
+  const [lagnaFilter,  setLagnaFilter]  = useState('')
+  const [stripPage,    setStripPage]    = useState(0)
+  const STRIP_PAGE_SIZE = 10
 
   const loadSaved = useCallback(async () => {
     if (!token) return
@@ -264,15 +267,15 @@ export default function ChartPage() {
         payload.Latitude  = lat
         payload.Longitude = lng
       } else if (place.trim()) {
-        // Try to geocode via Photon so backend gets exact coordinates
+        // Try to geocode via Nominatim (same as CityAutocomplete uses)
         try {
           const geoRes = await fetch(
-            'https://photon.komoot.io/api/?q=' + encodeURIComponent(place) + '&limit=1&lang=en'
+            `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(place)}&format=json&limit=1&accept-language=en`,
+            { headers: { 'User-Agent': 'VedicHora/1.0' } }
           ).then(r => r.json())
-          const feat = geoRes?.features?.[0]
-          if (feat?.geometry?.coordinates) {
-            payload.Latitude  = feat.geometry.coordinates[1]
-            payload.Longitude = feat.geometry.coordinates[0]
+          if (Array.isArray(geoRes) && geoRes[0]) {
+            payload.Latitude  = parseFloat(geoRes[0].lat)
+            payload.Longitude = parseFloat(geoRes[0].lon)
           }
         } catch {}
       }
@@ -361,19 +364,47 @@ export default function ChartPage() {
 
       {/* ── SAVED CHARTS STRIP (TOP) ─────────────────────────── */}
       {token && (
-        <div style={{marginBottom:'14px'}}>
+        <div style={{marginBottom:'14px'}}>{(() => {
+          const LAGNAS = ['Aries','Taurus','Gemini','Cancer','Leo','Virgo','Libra','Scorpio','Sagittarius','Capricorn','Aquarius','Pisces']
+          const filtered = saved.filter(c => {
+            const nm = (c.personName||c.PersonName||'').toLowerCase()
+            const lg = (c.ascendantName||c.AscendantName||'').toLowerCase()
+            const matchText = !stripFilter || nm.includes(stripFilter.toLowerCase()) || lg.includes(stripFilter.toLowerCase())
+            const matchLagna = !lagnaFilter || (c.ascendantName||c.AscendantName||'') === lagnaFilter
+            return matchText && matchLagna
+          })
+          const totalPages = Math.ceil(filtered.length / STRIP_PAGE_SIZE)
+          const page = Math.min(stripPage, Math.max(0, totalPages - 1))
+          const paged = filtered.slice(page * STRIP_PAGE_SIZE, (page + 1) * STRIP_PAGE_SIZE)
+          return (<>
+          {/* Controls row */}
           <div style={{display:'flex',alignItems:'center',gap:'8px',marginBottom:'8px',flexWrap:'wrap'}}>
-            <Star style={{width:'13px',height:'13px',color:'var(--gold)',flexShrink:0}}/>
+            <BookOpen style={{width:'13px',height:'13px',color:'var(--acc)',flexShrink:0}}/>
             <span style={{fontSize:'11px',fontWeight:700,color:'var(--txm)',
               textTransform:'uppercase',letterSpacing:'.06em',flexShrink:0}}>
               Saved ({saved.length})
             </span>
-            {/* Filter */}
-            <input value={stripFilter} onChange={e=>setStripFilter(e.target.value)}
-              placeholder="Filter charts..."
-              style={{flex:1,minWidth:'100px',maxWidth:'180px',padding:'3px 8px',
-                borderRadius:'6px',border:'1px solid var(--bd)',background:'var(--bg2)',
+            {/* Text search */}
+            <input value={stripFilter} onChange={e=>{setStripFilter(e.target.value);setStripPage(0)}}
+              placeholder="Search by name..."
+              style={{flex:'1 1 120px',maxWidth:'160px',padding:'4px 8px',
+                borderRadius:'6px',border:'1px solid var(--bd)',background:'var(--bg)',
                 color:'var(--tx)',fontSize:'11px',fontFamily:'inherit'}}/>
+            {/* Lagna filter dropdown */}
+            <select value={lagnaFilter} onChange={e=>{setLagnaFilter(e.target.value);setStripPage(0)}}
+              style={{flex:'0 0 120px',padding:'4px 8px',borderRadius:'6px',
+                border:'1px solid var(--bd)',background:'var(--bg)',
+                color:'var(--tx)',fontSize:'11px',fontFamily:'inherit',cursor:'pointer'}}>
+              <option value="">All Lagnas</option>
+              {LAGNAS.map(lg=><option key={lg} value={lg}>{lg}</option>)}
+            </select>
+            {/* Clear filters */}
+            {(stripFilter||lagnaFilter) && (
+              <button onClick={()=>{setStripFilter('');setLagnaFilter('');setStripPage(0)}}
+                style={{padding:'3px 8px',borderRadius:'6px',border:'1px solid var(--bd)',
+                  background:'var(--bg2)',cursor:'pointer',fontSize:'10px',color:'var(--txm)',
+                  fontFamily:'inherit'}}>Clear</button>
+            )}
             <button onClick={()=>setShowForm(f=>!f)}
               style={{marginLeft:'auto',flexShrink:0,display:'flex',alignItems:'center',gap:'5px',
                 padding:'5px 12px',borderRadius:'8px',border:'2px dashed var(--gold)',
@@ -387,38 +418,62 @@ export default function ChartPage() {
             <div style={{fontSize:'12px',color:'var(--txm)',padding:'8px 0'}}>
               No saved charts yet — generate one below
             </div>
-          ) : (
-            <div className='saved-strip' style={{display:'flex',gap:'8px',overflowX:'auto',paddingBottom:'6px'}}>
-              {(stripFilter ? saved.filter(c=>(c.personName||c.PersonName||'').toLowerCase().includes(stripFilter.toLowerCase())||(c.ascendantName||c.AscendantName||'').toLowerCase().includes(stripFilter.toLowerCase())) : saved).map((c:any)=>{
-                const id  = c.horoscopeId||c.HoroscopeId
-                const nm  = c.personName||c.PersonName||'Chart'
-                const lg  = c.ascendantName||c.AscendantName||''
-                const nak = c.nakshatraName||c.NakshatraName||''
-                const md  = c.currentDasha||c.CurrentDasha||''
-                const active = id === horoId
-                return (
-                  <button key={id} onClick={()=>openSaved(id)}
-                    style={{
-                      flexShrink:0, display:'flex', flexDirection:'column',
-                      alignItems:'flex-start', gap:'2px',
-                      padding:'10px 14px', borderRadius:'10px',
-                      border:`1.5px solid ${active?'var(--gold)':'var(--bd)'}`,
-                      background:active?'rgba(196,146,42,.08)':'var(--bg2)',
-                      cursor:'pointer', textAlign:'left', minWidth:'120px',
-                      boxShadow:active?'0 0 0 2px rgba(196,146,42,.2)':'none',
-                    }}>
-                    <div style={{fontSize:'12px',fontWeight:700,color:active?'var(--gold)':'var(--acc)',
-                      fontFamily:'Cinzel,serif',whiteSpace:'nowrap',maxWidth:'140px',
-                      overflow:'hidden',textOverflow:'ellipsis'}}>{nm}</div>
-                    <div style={{fontSize:'10px',color:'var(--txm)',whiteSpace:'nowrap'}}>
-                      {lg||'—'}</div>
-                    {nak && <div style={{fontSize:'9px',color:'var(--gold)',whiteSpace:'nowrap'}}>
-                      {nak}{md?` · ${md} MD`:''}</div>}
-                  </button>
-                )
-              })}
+          ) : filtered.length === 0 ? (
+            <div style={{fontSize:'12px',color:'var(--txm)',padding:'8px 0'}}>
+              No charts match your filters
             </div>
+          ) : (
+            <>
+              <div className='saved-strip' style={{display:'flex',gap:'8px',flexWrap:'wrap',paddingBottom:'4px'}}>
+                {paged.map((c:any)=>{
+                  const id  = c.horoscopeId||c.HoroscopeId
+                  const nm  = c.personName||c.PersonName||'Chart'
+                  const lg  = c.ascendantName||c.AscendantName||''
+                  const nak = c.nakshatraName||c.NakshatraName||''
+                  const md  = c.currentDasha||c.CurrentDasha||''
+                  const active = id === horoId
+                  return (
+                    <button key={id} onClick={()=>openSaved(id)}
+                      style={{
+                        flexShrink:0, display:'flex', flexDirection:'column',
+                        alignItems:'flex-start', gap:'2px',
+                        padding:'10px 14px', borderRadius:'10px', minWidth:'130px',
+                        border:`1.5px solid ${active?'var(--gold)':'var(--bd)'}`,
+                        background:active?'rgba(196,146,42,.08)':'var(--bg2)',
+                        cursor:'pointer', textAlign:'left',
+                        boxShadow:active?'0 0 0 2px rgba(196,146,42,.2)':'none',
+                      }}>
+                      <div style={{fontSize:'12px',fontWeight:700,color:active?'var(--gold)':'var(--acc)',
+                        fontFamily:'Cinzel,serif',whiteSpace:'nowrap',maxWidth:'150px',
+                        overflow:'hidden',textOverflow:'ellipsis'}}>{nm}</div>
+                      <div style={{fontSize:'10px',color:'var(--txm)',whiteSpace:'nowrap'}}>{lg||'—'}</div>
+                      {nak && <div style={{fontSize:'9px',color:'var(--gold)',whiteSpace:'nowrap'}}>
+                        {nak}{md?` · ${md} MD`:''}</div>}
+                    </button>
+                  )
+                })}
+              </div>
+              {/* Pagination */}
+              {totalPages > 1 && (
+                <div style={{display:'flex',alignItems:'center',gap:'6px',marginTop:'8px',fontSize:'11px'}}>
+                  <button onClick={()=>setStripPage(p=>Math.max(0,p-1))} disabled={page===0}
+                    style={{padding:'3px 10px',borderRadius:'6px',border:'1px solid var(--bd)',
+                      background:'var(--bg2)',cursor:page===0?'not-allowed':'pointer',
+                      opacity:page===0?0.4:1,fontSize:'12px',fontFamily:'inherit'}}>‹</button>
+                  <span style={{color:'var(--txm)'}}>
+                    {page+1} / {totalPages} &nbsp;
+                    <span style={{color:'var(--txm)'}}>(showing {paged.length} of {filtered.length})</span>
+                  </span>
+                  <button onClick={()=>setStripPage(p=>Math.min(totalPages-1,p+1))} disabled={page>=totalPages-1}
+                    style={{padding:'3px 10px',borderRadius:'6px',border:'1px solid var(--bd)',
+                      background:'var(--bg2)',cursor:page>=totalPages-1?'not-allowed':'pointer',
+                      opacity:page>=totalPages-1?0.4:1,fontSize:'12px',fontFamily:'inherit'}}>›</button>
+                </div>
+              )}
+            </>
           )}
+          </>)
+        })()}
         </div>
       )}
 
