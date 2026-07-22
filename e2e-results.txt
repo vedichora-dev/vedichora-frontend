@@ -1,8 +1,8 @@
 
 Running 8 tests using 2 workers
 
-[1/8] [mobile] › e2e/functional-test.spec.js:45:3 › GUEST CHART › Guest chart — no redirect, city dropdown closes, chart generates
-[2/8] [chromium] › e2e/functional-test.spec.js:45:3 › GUEST CHART › Guest chart — no redirect, city dropdown closes, chart generates
+[1/8] [chromium] › e2e/functional-test.spec.js:45:3 › GUEST CHART › Guest chart — no redirect, city dropdown closes, chart generates
+[2/8] [mobile] › e2e/functional-test.spec.js:45:3 › GUEST CHART › Guest chart — no redirect, city dropdown closes, chart generates
 [mobile] › e2e/functional-test.spec.js:45:3 › GUEST CHART › Guest chart — no redirect, city dropdown closes, chart generates
 ✓ No redirect to signin
 
@@ -114,7 +114,6 @@ City 0 final value: "Chennai"
     ────────────────────────────────────────────────────────────────────────────────────────────────
 
 
-[5/8] [chromium] › e2e/functional-test.spec.js:86:3 › CITY DROPDOWN › City dropdown closes after selection
   2) [mobile] › e2e/functional-test.spec.js:45:3 › GUEST CHART › Guest chart — no redirect, city dropdown closes, chart generates 
 
     Test timeout of 60000ms exceeded.
@@ -180,6 +179,7 @@ City 0 final value: "Chennai"
     ────────────────────────────────────────────────────────────────────────────────────────────────
 
 
+[5/8] [chromium] › e2e/functional-test.spec.js:86:3 › CITY DROPDOWN › City dropdown closes after selection
 [6/8] [mobile] › e2e/functional-test.spec.js:86:3 › CITY DROPDOWN › City dropdown closes after selection
 [7/8] (retries) [chromium] › e2e/functional-test.spec.js:86:3 › CITY DROPDOWN › City dropdown closes after selection (retry #1)
 [8/8] (retries) [mobile] › e2e/functional-test.spec.js:86:3 › CITY DROPDOWN › City dropdown closes after selection (retry #1)
@@ -249,9 +249,6 @@ City 0 final value: "Chennai"
 
 
 [9/8] [chromium] › e2e/functional-test.spec.js:120:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login
-[chromium] › e2e/functional-test.spec.js:120:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login
-Match selects count: 12
-
   4) [mobile] › e2e/functional-test.spec.js:86:3 › CITY DROPDOWN › City dropdown closes after selection 
 
     Test timeout of 60000ms exceeded.
@@ -317,6 +314,9 @@ Match selects count: 12
     ────────────────────────────────────────────────────────────────────────────────────────────────
 
 
+[chromium] › e2e/functional-test.spec.js:120:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login
+Match selects count: 12
+
 [10/8] [mobile] › e2e/functional-test.spec.js:120:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login
 [mobile] › e2e/functional-test.spec.js:120:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login
 Match selects count: 12
@@ -357,11 +357,11 @@ Clicking Calculate button...
 Match result visible: true
 
 [11/8] [chromium] › e2e/functional-test.spec.js:166:3 › NUMEROLOGY › Numerology — calculates life path number
-[chromium] › e2e/functional-test.spec.js:166:3 › NUMEROLOGY › Numerology — calculates life path number
-Name input visible: false
-
 [mobile] › e2e/functional-test.spec.js:120:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login
 Match result visible: true
+
+[chromium] › e2e/functional-test.spec.js:166:3 › NUMEROLOGY › Numerology — calculates life path number
+Name input visible: false
 
 [12/8] [mobile] › e2e/functional-test.spec.js:166:3 › NUMEROLOGY › Numerology — calculates life path number
 [mobile] › e2e/functional-test.spec.js:166:3 › NUMEROLOGY › Numerology — calculates life path number
@@ -378,4 +378,4 @@ Numerology result visible: true
     [chromium] › e2e/functional-test.spec.js:86:3 › CITY DROPDOWN › City dropdown closes after selection 
     [mobile] › e2e/functional-test.spec.js:45:3 › GUEST CHART › Guest chart — no redirect, city dropdown closes, chart generates 
     [mobile] › e2e/functional-test.spec.js:86:3 › CITY DROPDOWN › City dropdown closes after selection 
-  4 passed (4.6m)
+  4 passed (4.7m)
