@@ -40,22 +40,22 @@ Dropdown still open after selection: false
 [mobile] › e2e/functional-test.spec.js:45:3 › GUEST CHART › Guest chart — no redirect, city dropdown closes, chart generates
 Chart appeared: true
 
+[3/8] [mobile] › e2e/functional-test.spec.js:86:3 › CITY DROPDOWN › City dropdown closes after selection
 [chromium] › e2e/functional-test.spec.js:45:3 › GUEST CHART › Guest chart — no redirect, city dropdown closes, chart generates
 Chart appeared: true
 
-[3/8] [chromium] › e2e/functional-test.spec.js:86:3 › CITY DROPDOWN › City dropdown closes after selection
-[4/8] [mobile] › e2e/functional-test.spec.js:86:3 › CITY DROPDOWN › City dropdown closes after selection
+[4/8] [chromium] › e2e/functional-test.spec.js:86:3 › CITY DROPDOWN › City dropdown closes after selection
+[mobile] › e2e/functional-test.spec.js:86:3 › CITY DROPDOWN › City dropdown closes after selection
+Dropdown appeared: false
+
+No dropdown appeared (API slow) — skip assertion
+
 [chromium] › e2e/functional-test.spec.js:86:3 › CITY DROPDOWN › City dropdown closes after selection
 Dropdown appeared: false
 
 No dropdown appeared (API slow) — skip assertion
 
 [5/8] [chromium] › e2e/functional-test.spec.js:120:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login
-[mobile] › e2e/functional-test.spec.js:86:3 › CITY DROPDOWN › City dropdown closes after selection
-Dropdown appeared: false
-
-No dropdown appeared (API slow) — skip assertion
-
 [6/8] [mobile] › e2e/functional-test.spec.js:120:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login
 [chromium] › e2e/functional-test.spec.js:120:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login
 Match selects count: 12
@@ -68,13 +68,15 @@ City dropdown for "Chennai" appeared: false
 
 No dropdown for "Chennai" — accepting typed value
 
-City 0 final value: "Chennai"
-
 [mobile] › e2e/functional-test.spec.js:120:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login
 City dropdown for "Chennai" appeared: false
 
 No dropdown for "Chennai" — accepting typed value
 
+[chromium] › e2e/functional-test.spec.js:120:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login
+City 0 final value: "Chennai"
+
+[mobile] › e2e/functional-test.spec.js:120:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login
 City 0 final value: "Chennai"
 
 [chromium] › e2e/functional-test.spec.js:120:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login
@@ -82,39 +84,41 @@ City dropdown for "Coimbatore" appeared: false
 
 No dropdown for "Coimbatore" — accepting typed value
 
-City 1 final value: "Coimbatore"
-
 [mobile] › e2e/functional-test.spec.js:120:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login
 City dropdown for "Coimbatore" appeared: false
 
 No dropdown for "Coimbatore" — accepting typed value
 
 [chromium] › e2e/functional-test.spec.js:120:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login
-Clicking Calculate button...
+City 1 final value: "Coimbatore"
 
 [mobile] › e2e/functional-test.spec.js:120:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login
 City 1 final value: "Coimbatore"
 
+[chromium] › e2e/functional-test.spec.js:120:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login
+Clicking Calculate button...
+
+[mobile] › e2e/functional-test.spec.js:120:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login
 Clicking Calculate button...
 
 [chromium] › e2e/functional-test.spec.js:120:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login
 Match result visible: true
 
-[7/8] [chromium] › e2e/functional-test.spec.js:166:3 › NUMEROLOGY › Numerology — calculates life path number
 [mobile] › e2e/functional-test.spec.js:120:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login
 Match result visible: true
 
-[8/8] [mobile] › e2e/functional-test.spec.js:166:3 › NUMEROLOGY › Numerology — calculates life path number
-[chromium] › e2e/functional-test.spec.js:166:3 › NUMEROLOGY › Numerology — calculates life path number
-Name input visible: false
-
+[7/8] [mobile] › e2e/functional-test.spec.js:166:3 › NUMEROLOGY › Numerology — calculates life path number
+[8/8] [chromium] › e2e/functional-test.spec.js:166:3 › NUMEROLOGY › Numerology — calculates life path number
 [mobile] › e2e/functional-test.spec.js:166:3 › NUMEROLOGY › Numerology — calculates life path number
 Name input visible: false
 
 [chromium] › e2e/functional-test.spec.js:166:3 › NUMEROLOGY › Numerology — calculates life path number
-Numerology result visible: true
+Name input visible: false
 
 [mobile] › e2e/functional-test.spec.js:166:3 › NUMEROLOGY › Numerology — calculates life path number
 Numerology result visible: true
 
-  8 passed (51.7s)
+[chromium] › e2e/functional-test.spec.js:166:3 › NUMEROLOGY › Numerology — calculates life path number
+Numerology result visible: true
+
+  8 passed (52.4s)
