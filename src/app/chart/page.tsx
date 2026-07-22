@@ -492,38 +492,113 @@ export default function ChartPage() {
             )}
           </div>
           <div className="card-bd">
-            <div style={{display:'grid',gridTemplateColumns:'1fr 1fr 1fr 1fr auto',
-              gap:'12px',alignItems:'end'}} className="form-grid">
+            <div style={{display:'flex',flexDirection:'column',gap:'14px',maxWidth:'420px'}}>
+
+              {/* Row 1: Full Name */}
               <div>
-                <label className="label">{t('chart.name')}</label>
+                <label className="label" style={{display:'block',marginBottom:'5px',fontWeight:700}}>
+                  Full Name <span style={{color:'var(--txm)',fontWeight:400,fontSize:'11px'}}>(optional)</span>
+                </label>
                 <input className="input" value={name}
                   onChange={e=>setName(e.target.value)}
-                  placeholder="Name (optional)"/>
+                  placeholder="e.g. Ravi Kumar"
+                  style={{width:'100%'}}/>
               </div>
+
+              {/* Row 2: Date of Birth — Day · Month · Year */}
               <div>
-                <label className="label">{t('chart.dob')}</label>
-                <DatePicker value={dob} onChange={setDob} showTime showUnknown prefix="c"/>
+                <label className="label" style={{display:'block',marginBottom:'5px',fontWeight:700}}>
+                  Date of Birth
+                </label>
+                <div style={{display:'flex',gap:'8px',alignItems:'center'}}>
+                  <select className="select" style={{flex:'0 0 80px'}}
+                    value={dob.dd||''} onChange={e=>setDob({...dob,dd:+e.target.value})}>
+                    <option value="">Day</option>
+                    {Array.from({length:31},(_,i)=>i+1).map(d=><option key={d} value={d}>{d}</option>)}
+                  </select>
+                  <select className="select" style={{flex:'0 0 130px'}}
+                    value={dob.mm||''} onChange={e=>setDob({...dob,mm:+e.target.value})}>
+                    <option value="">Month</option>
+                    {['January','February','March','April','May','June','July','August','September','October','November','December'].map((m,i)=>(
+                      <option key={m} value={i+1}>{m}</option>
+                    ))}
+                  </select>
+                  <select className="select" style={{flex:'0 0 90px'}}
+                    value={dob.yyyy||''} onChange={e=>setDob({...dob,yyyy:+e.target.value})}>
+                    <option value="">Year</option>
+                    {Array.from({length:126},(_,i)=>2025-i).map(y=><option key={y} value={y}>{y}</option>)}
+                  </select>
+                </div>
               </div>
+
+              {/* Row 3: Time of Birth — Hr : Min AM/PM */}
               <div>
-                <label className="label">{t('chart.place')}</label>
+                <label className="label" style={{display:'block',marginBottom:'5px',fontWeight:700}}>
+                  Time of Birth
+                  <span style={{color:'var(--txm)',fontWeight:400,fontSize:'11px',marginLeft:'6px'}}>
+                    (improves accuracy)
+                  </span>
+                </label>
+                <div style={{display:'flex',gap:'8px',alignItems:'center',
+                  opacity:dob.unknownTime?0.4:1,pointerEvents:dob.unknownTime?'none':'auto'}}>
+                  <select className="select" style={{flex:'0 0 74px'}}
+                    value={dob.hr||''} onChange={e=>setDob({...dob,hr:+e.target.value})} disabled={dob.unknownTime}>
+                    <option value="">Hr</option>
+                    {Array.from({length:12},(_,i)=>i+1).map(h=><option key={h} value={h}>{h}</option>)}
+                  </select>
+                  <span style={{color:'var(--txm)',fontWeight:700,fontSize:'18px'}}>:</span>
+                  <select className="select" style={{flex:'0 0 74px'}}
+                    value={dob.mi===undefined?'':dob.mi} onChange={e=>setDob({...dob,mi:+e.target.value})} disabled={dob.unknownTime}>
+                    <option value="">Min</option>
+                    {Array.from({length:60},(_,i)=>i).map(m=><option key={m} value={m}>{String(m).padStart(2,'0')}</option>)}
+                  </select>
+                  <select className="select" style={{flex:'0 0 74px'}}
+                    value={dob.ap||'AM'} onChange={e=>setDob({...dob,ap:e.target.value as 'AM'|'PM'})} disabled={dob.unknownTime}>
+                    <option>AM</option><option>PM</option>
+                  </select>
+                </div>
+                <label style={{display:'flex',alignItems:'center',gap:'7px',
+                  marginTop:'8px',fontSize:'12px',color:'var(--txm)',cursor:'pointer'}}>
+                  <input type="checkbox" checked={!!dob.unknownTime}
+                    onChange={e=>setDob({...dob,unknownTime:e.target.checked})}
+                    style={{width:'14px',height:'14px',accentColor:'var(--gold)',cursor:'pointer'}}/>
+                  I don't know my exact birth time
+                </label>
+              </div>
+
+              {/* Row 4: Place of Birth */}
+              <div>
+                <label className="label" style={{display:'block',marginBottom:'5px',fontWeight:700}}>
+                  Place of Birth
+                </label>
                 <CityAutocomplete value={place}
-                  onChange={(city:string,la:number,ln:number)=>{ setPlace(city); setLat(la); setLng(ln) }}
-                  placeholder="City, Country"/>
+                  onChange={(city:string,la?:number,ln?:number)=>{ setPlace(city); setLat(la); setLng(ln) }}
+                  placeholder="Type city name and select from list"/>
+                {place && !lat && (
+                  <div style={{fontSize:'11px',color:'#DC2626',marginTop:'4px'}}>
+                    ↑ Please select a city from the dropdown list
+                  </div>
+                )}
               </div>
-              <div style={{display:'flex',flexDirection:'column',gap:'4px'}}>
-                {err && <div style={{fontSize:'10px',color:'var(--bad,#7A1F1F)'}}>{err}</div>}
-                <button onClick={handleGenerate} disabled={loading}
-                  className="btn-primary" style={{padding:'9px 20px',whiteSpace:'nowrap',
-                    display:'flex',alignItems:'center',gap:'6px'}}>
-                  {loading
-                    ? <><RefreshCw style={{width:'12px',height:'12px'}}/> Calculating...</>
-                    : <>{t('chart.generate')} <ChevronRight style={{width:'13px',height:'13px'}}/></>}
-                </button>
-              </div>
+
+              {/* Error */}
+              {err && <div style={{fontSize:'12px',color:'#DC2626',background:'rgba(220,38,38,.07)',
+                padding:'8px 12px',borderRadius:'8px',border:'1px solid rgba(220,38,38,.2)'}}>{err}</div>}
+
+              {/* Generate button */}
+              <button onClick={handleGenerate} disabled={loading}
+                className="btn-primary" style={{padding:'11px 24px',display:'flex',
+                  alignItems:'center',justifyContent:'center',gap:'8px',fontSize:'14px',
+                  fontFamily:'Cinzel,serif'}}>
+                {loading
+                  ? <><RefreshCw style={{width:'14px',height:'14px'}}/> Calculating...</>
+                  : <>Generate Chart <ChevronRight style={{width:'14px',height:'14px'}}/></>}
+              </button>
+
               {!token && (
-                <div style={{fontSize:'11px',color:'var(--warn,#9C6B14)',
-                  background:'rgba(156,107,20,.08)',padding:'8px',borderRadius:'8px',gridColumn:'span 5'}}>
-                  🔒 Sign in to save charts
+                <div style={{fontSize:'11px',color:'#9C6B14',background:'rgba(156,107,20,.08)',
+                  padding:'8px 12px',borderRadius:'8px'}}>
+                  🔒 Sign in to save your charts and access full features
                 </div>
               )}
             </div>
