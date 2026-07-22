@@ -141,12 +141,12 @@ export default function JyotiPage() {
       const reply: Message = {
         id: (data.messageId || data.MessageId || Date.now() + 1).toString(),
         role: 'assistant',
-        content: data.reply || data.Response || data.message || data.Message || 'No response received.',
+        content: data.JyotiResponse || data.jyotiResponse || data.reply || data.Response || data.message || data.Message || 'I am unable to respond right now. Please ensure the AI API key is configured in the server.',
       }
       setMessages(prev => [...prev, reply])
       // Update session ID if new session was created
-      if (data.sessionId && !activeSession) {
-        setActiveSession(data.sessionId)
+      if ((data.sessionId || data.SessionId) && !activeSession) {
+        setActiveSession(data.sessionId || data.SessionId)
         await loadSessions()
       }
     } catch (e: any) {
