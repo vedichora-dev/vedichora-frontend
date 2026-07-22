@@ -364,7 +364,7 @@ export default function ChartPage() {
 
       {/* ── SAVED CHARTS STRIP (TOP) ─────────────────────────── */}
       {token && (
-        <div style={{marginBottom:'14px'}}>{(() => {
+        <div style={{marginBottom:'10px'}}>{(() => {
           const LAGNAS = ['Aries','Taurus','Gemini','Cancer','Leo','Virgo','Libra','Scorpio','Sagittarius','Capricorn','Aquarius','Pisces']
           const filtered = saved.filter(c => {
             const nm = (c.personName||c.PersonName||'').toLowerCase()
@@ -424,52 +424,25 @@ export default function ChartPage() {
             </div>
           ) : (
             <>
-              <div className='saved-strip' style={{display:'flex',gap:'8px',flexWrap:'wrap',paddingBottom:'4px'}}>
-                {paged.map((c:any)=>{
+              <select
+                value={horoId}
+                onChange={e => openSaved(e.target.value)}
+                style={{
+                  width:'100%', padding:'9px 12px', borderRadius:'8px',
+                  border:'1.5px solid var(--gold)', background:'var(--bg)',
+                  color:'var(--tx)', fontSize:'13px', fontFamily:'inherit',
+                  cursor:'pointer', appearance:'auto'
+                }}>
+                <option value="">— Select a saved chart —</option>
+                {filtered.map((c:any) => {
                   const id  = c.horoscopeId||c.HoroscopeId
                   const nm  = c.personName||c.PersonName||'Chart'
                   const lg  = c.ascendantName||c.AscendantName||''
                   const nak = c.nakshatraName||c.NakshatraName||''
-                  const md  = c.currentDasha||c.CurrentDasha||''
-                  const active = id === horoId
-                  return (
-                    <button key={id} onClick={()=>openSaved(id)}
-                      style={{
-                        flexShrink:0, display:'flex', flexDirection:'column',
-                        alignItems:'flex-start', gap:'2px',
-                        padding:'10px 14px', borderRadius:'10px', minWidth:'130px',
-                        border:`1.5px solid ${active?'var(--gold)':'var(--bd)'}`,
-                        background:active?'rgba(196,146,42,.08)':'var(--bg2)',
-                        cursor:'pointer', textAlign:'left',
-                        boxShadow:active?'0 0 0 2px rgba(196,146,42,.2)':'none',
-                      }}>
-                      <div style={{fontSize:'12px',fontWeight:700,color:active?'var(--gold)':'var(--acc)',
-                        fontFamily:'Cinzel,serif',whiteSpace:'nowrap',maxWidth:'150px',
-                        overflow:'hidden',textOverflow:'ellipsis'}}>{nm}</div>
-                      <div style={{fontSize:'10px',color:'var(--txm)',whiteSpace:'nowrap'}}>{lg||'—'}</div>
-                      {nak && <div style={{fontSize:'9px',color:'var(--gold)',whiteSpace:'nowrap'}}>
-                        {nak}{md?` · ${md} MD`:''}</div>}
-                    </button>
-                  )
+                  return <option key={id} value={id}>{nm} — {lg}{nak?' · '+nak:''}</option>
                 })}
-              </div>
-              {/* Pagination */}
-              {totalPages > 1 && (
-                <div style={{display:'flex',alignItems:'center',gap:'6px',marginTop:'8px',fontSize:'11px'}}>
-                  <button onClick={()=>setStripPage(p=>Math.max(0,p-1))} disabled={page===0}
-                    style={{padding:'3px 10px',borderRadius:'6px',border:'1px solid var(--bd)',
-                      background:'var(--bg2)',cursor:page===0?'not-allowed':'pointer',
-                      opacity:page===0?0.4:1,fontSize:'12px',fontFamily:'inherit'}}>‹</button>
-                  <span style={{color:'var(--txm)'}}>
-                    {page+1} / {totalPages} &nbsp;
-                    <span style={{color:'var(--txm)'}}>(showing {paged.length} of {filtered.length})</span>
-                  </span>
-                  <button onClick={()=>setStripPage(p=>Math.min(totalPages-1,p+1))} disabled={page>=totalPages-1}
-                    style={{padding:'3px 10px',borderRadius:'6px',border:'1px solid var(--bd)',
-                      background:'var(--bg2)',cursor:page>=totalPages-1?'not-allowed':'pointer',
-                      opacity:page>=totalPages-1?0.4:1,fontSize:'12px',fontFamily:'inherit'}}>›</button>
-                </div>
-              )}
+              </select>
+
             </>
           )}
           </>)
