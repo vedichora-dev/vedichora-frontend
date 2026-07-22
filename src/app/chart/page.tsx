@@ -363,91 +363,31 @@ export default function ChartPage() {
     <div style={{maxWidth:'1500px',margin:'0 auto',padding:'12px 16px'}}>
 
       {/* ── SAVED CHARTS STRIP (TOP) ─────────────────────────── */}
-      {token && (
-        <div style={{marginBottom:'10px'}}>{(() => {
-          const LAGNAS = ['Aries','Taurus','Gemini','Cancer','Leo','Virgo','Libra','Scorpio','Sagittarius','Capricorn','Aquarius','Pisces']
-          const filtered = saved.filter(c => {
-            const nm = (c.personName||c.PersonName||'').toLowerCase()
-            const lg = (c.ascendantName||c.AscendantName||'').toLowerCase()
-            const matchText = !stripFilter || nm.includes(stripFilter.toLowerCase()) || lg.includes(stripFilter.toLowerCase())
-            const matchLagna = !lagnaFilter || (c.ascendantName||c.AscendantName||'') === lagnaFilter
-            return matchText && matchLagna
-          })
-          const totalPages = Math.ceil(filtered.length / STRIP_PAGE_SIZE)
-          const page = Math.min(stripPage, Math.max(0, totalPages - 1))
-          const paged = filtered.slice(page * STRIP_PAGE_SIZE, (page + 1) * STRIP_PAGE_SIZE)
-          return (<>
-          {/* Controls row */}
-          <div style={{display:'flex',alignItems:'center',gap:'8px',marginBottom:'8px',flexWrap:'wrap'}}>
-            <BookOpen style={{width:'13px',height:'13px',color:'var(--acc)',flexShrink:0}}/>
-            <span style={{fontSize:'11px',fontWeight:700,color:'var(--txm)',
-              textTransform:'uppercase',letterSpacing:'.06em',flexShrink:0}}>
-              Saved ({saved.length})
-            </span>
-            {/* Text search */}
-            <input value={stripFilter} onChange={e=>{setStripFilter(e.target.value);setStripPage(0)}}
-              placeholder="Search by name..."
-              style={{flex:'1 1 120px',maxWidth:'160px',padding:'4px 8px',
-                borderRadius:'6px',border:'1px solid var(--bd)',background:'var(--bg)',
-                color:'var(--tx)',fontSize:'11px',fontFamily:'inherit'}}/>
-            {/* Lagna filter dropdown */}
-            <select value={lagnaFilter} onChange={e=>{setLagnaFilter(e.target.value);setStripPage(0)}}
-              style={{flex:'0 0 120px',padding:'4px 8px',borderRadius:'6px',
-                border:'1px solid var(--bd)',background:'var(--bg)',
-                color:'var(--tx)',fontSize:'11px',fontFamily:'inherit',cursor:'pointer'}}>
-              <option value="">All Lagnas</option>
-              {LAGNAS.map(lg=><option key={lg} value={lg}>{lg}</option>)}
-            </select>
-            {/* Clear filters */}
-            {(stripFilter||lagnaFilter) && (
-              <button onClick={()=>{setStripFilter('');setLagnaFilter('');setStripPage(0)}}
-                style={{padding:'3px 8px',borderRadius:'6px',border:'1px solid var(--bd)',
-                  background:'var(--bg2)',cursor:'pointer',fontSize:'10px',color:'var(--txm)',
-                  fontFamily:'inherit'}}>Clear</button>
-            )}
-            <button onClick={()=>setShowForm(f=>!f)}
-              style={{marginLeft:'auto',flexShrink:0,display:'flex',alignItems:'center',gap:'5px',
-                padding:'5px 12px',borderRadius:'8px',border:'2px dashed var(--gold)',
-                background:'rgba(196,146,42,.06)',color:'var(--gold)',cursor:'pointer',
-                fontFamily:'Cinzel,serif',fontSize:'11px',fontWeight:700}}>
-              <Plus style={{width:'12px',height:'12px'}}/> New Chart
-            </button>
-          </div>
-
-          {saved.length === 0 ? (
-            <div style={{fontSize:'12px',color:'var(--txm)',padding:'8px 0'}}>
-              No saved charts yet — generate one below
-            </div>
-          ) : filtered.length === 0 ? (
-            <div style={{fontSize:'12px',color:'var(--txm)',padding:'8px 0'}}>
-              No charts match your filters
-            </div>
-          ) : (
-            <>
-              <select
-                value={horoId}
-                onChange={e => openSaved(e.target.value)}
-                style={{
-                  width:'100%', padding:'9px 12px', borderRadius:'8px',
-                  border:'1.5px solid var(--gold)', background:'var(--bg)',
-                  color:'var(--tx)', fontSize:'13px', fontFamily:'inherit',
-                  cursor:'pointer', appearance:'auto'
-                }}>
-                <option value="">— Select a saved chart —</option>
-                {filtered.map((c:any) => {
-                  const id  = c.horoscopeId||c.HoroscopeId
-                  const nm  = c.personName||c.PersonName||'Chart'
-                  const lg  = c.ascendantName||c.AscendantName||''
-                  const nak = c.nakshatraName||c.NakshatraName||''
-                  return <option key={id} value={id}>{nm} — {lg}{nak?' · '+nak:''}</option>
-                })}
-              </select>
-
-            </>
-          )}
-          </>)
-        })()}
-        </div>
+      {saved.length > 0 && (
+        <>
+          <select
+            value={horoId}
+            onChange={e => { if(e.target.value) openSaved(e.target.value) }}
+            style={{ flex: '1 1 200px', maxWidth: '320px', padding: '7px 10px',
+              borderRadius: '8px', border: '1.5px solid var(--bd)', background: 'var(--bg)',
+              color: 'var(--tx)', fontSize: '12px', fontFamily: 'inherit', cursor: 'pointer' }}>
+            <option value="">📋 {saved.length} saved charts — select one</option>
+            {saved.map((c:any) => {
+              const id  = c.horoscopeId||c.HoroscopeId
+              const nm  = c.personName||c.PersonName||'Chart'
+              const lg  = c.ascendantName||c.AscendantName||''
+              return <option key={id} value={id}>{nm} — {lg}</option>
+            })}
+          </select>
+          <button onClick={()=>setShowForm(f=>!f)}
+            style={{ flexShrink:0, display:'flex', alignItems:'center', gap:'5px',
+              padding:'7px 14px', borderRadius:'8px', border:'2px solid var(--gold)',
+              background: showForm ? 'var(--gold)' : 'transparent',
+              color: showForm ? '#fff' : 'var(--gold)',
+              cursor:'pointer', fontFamily:'Cinzel,serif', fontSize:'11px', fontWeight:700 }}>
+            <Plus style={{width:'11px',height:'11px'}}/> New Chart
+          </button>
+        </>
       )}
 
       {/* ── NEW CHART FORM (collapsible) ──────────────────────── */}
