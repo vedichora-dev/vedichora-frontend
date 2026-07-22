@@ -734,17 +734,22 @@ export default function ChartPage() {
                     </tr></thead>
                     <tbody>{(()=>{
                         const raw = data('shadbala')
-                        const planets = Array.isArray(raw) ? raw
+                        const planets = Array.isArray(raw?.Planets) ? raw.Planets
                           : Array.isArray(raw?.planets) ? raw.planets
-                          : Array.isArray(raw?.data?.planets) ? raw.data.planets
+                          : Array.isArray(raw) ? raw
                           : []
                         return planets
                       })().map((p:any,i:number)=>{
-                      const planet = p.planet||p.Planet||''
-                      const bala   = p.totalBala||p.TotalBala||(p[1] as any)?.totalBala||'—'
-                      const vals   = [p.sthanaBala||p.SthanaBala, p.digBala||p.DigBala,
-                                      p.kaalaBala||p.KaalaBala, p.chestaBala||p.ChestaBala,
-                                      p.naisargikaBala||p.NaisargikaBala, p.drigBala||p.DrigBala]
+                      const planet = p.Planet||p.planet||''
+                      const bala   = p.Total||p.total||p.TotalBala||p.totalBala||0
+                      const vals   = [
+                        p.SthaanaBala??p.SthanaBala??p.sthanaBala??null,
+                        p.DigBala??p.digBala??null,
+                        p.KalaBala??p.KaalaBala??p.kaalaBala??null,
+                        p.CheshtaBala??p.chestaBala??null,
+                        p.NaisargikaBala??p.naisargikaBala??null,
+                        p.DrikBala??p.DrigBala??p.drigBala??null
+                      ]
                       const strong = typeof bala==='number' && bala>5
                       return (
                         <tr key={i} style={{borderBottom:'1px solid var(--bd)',
@@ -773,7 +778,46 @@ export default function ChartPage() {
                     {token ? 'Ashtakavarga not available for this chart' : 'Sign in and save chart to view Ashtakavarga points'}
                   </div> : (
                   <div style={{display:'flex',flexDirection:'column',gap:'16px'}}>
-                    {data('ashtakavarga')?.sarvashtakavarga && (
+                    {(() => {
+                      const av = data('ashtakavarga')
+                      // Support both SAV array (from real engine) and legacy bindusPerRasi
+                      const savRows: any[] = av?.SAV ?? av?.sav ?? av?.bindusPerRasi ?? []
+                      const totalSAV = av?.TotalSAV ?? av?.totalSAV ?? savRows.reduce((s:number,r:any)=>s+(r.RawBindu??r.rawBindu??r.bindus??0),0)
+                      if (!savRows.length) return <div style={{padding:'20px',color:'var(--txm)'}}>Ashtakavarga data not available</div>
+                      return (
+                      <div>
+                        <div style={{fontSize:'13px',fontWeight:700,color:'var(--acc)',
+                          marginBottom:'10px',fontFamily:'Cinzel,serif',display:'flex',justifyContent:'space-between'}}>
+                          <span>Sarvashtakavarga — Bindus per Rasi</span>
+                          <span style={{fontSize:'11px',color:'var(--txm)',fontWeight:400}}>Total: {totalSAV}</span>
+                        </div>
+                        <div style={{display:'grid',gridTemplateColumns:'repeat(4,1fr)',gap:'6px'}}>
+                          {savRows.map((r:any,i:number)=>{
+                            const rasi = r.RasiName??r.rasiName??r.rasi??`Rasi ${i+1}`
+                            const pts  = r.RawBindu??r.rawBindu??r.AfterShodhana??r.bindus??0
+                            const good = pts>=28
+                            return (
+                              <div key={i} style={{display:'flex',justifyContent:'space-between',
+                                alignItems:'center',padding:'7px 12px',borderRadius:'8px',
+                                border:`1.5px solid ${good?'rgba(74,222,128,.4)':'var(--bd)'}`,
+                                background:good?'rgba(74,222,128,.06)':'var(--bg2)'}}>
+                                <span style={{fontSize:'12px',color:'var(--tx)',fontWeight:600}}>{rasi}</span>
+                                <span style={{fontSize:'14px',fontWeight:700,
+                                  color:good?'#16A34A':pts<20?'#DC2626':'var(--txm)'}}>{pts}</span>
+                              </div>
+                            )
+                          })}
+                        </div>
+                        {av?.StrongestRasi && (
+                          <div style={{marginTop:'12px',fontSize:'12px',color:'var(--txm)'}}>
+                            Strongest: <strong style={{color:'#16A34A'}}>{av.StrongestRasi}</strong>
+                            {av.WeakestRasi && <> · Weakest: <strong style={{color:'#DC2626'}}>{av.WeakestRasi}</strong></>}
+                          </div>
+                        )}
+                      </div>
+                      )
+                    })()}
+                    {false && data('ashtakavarga')?.sarvashtakavarga && (
                       <div>
                         <div style={{fontSize:'12px',fontWeight:700,color:'var(--acc)',
                           marginBottom:'8px',fontFamily:'Cinzel,serif'}}>
