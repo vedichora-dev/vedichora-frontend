@@ -292,10 +292,35 @@ export default function MatchPage() {
           .catch(e => { throw new Error('Person 2: ' + e.message) }),
       ])
 
-      // Match via guest-match (full payloads) — always works without saved IDs
+      // Match via guest-match (full payloads)
+      // When using saved charts, extract birth data from the chart object
       const CHART_URL = process.env.NEXT_PUBLIC_CHART_URL || 'https://enchanting-dedication-production.up.railway.app'
-      const gp1 = buildPayload(n1, d1, p1, lat1, lng1, g1)
-      const gp2 = buildPayload(n2, d2, p2, lat2, lng2, g2)
+
+      const extractPayload = (chart: any, n: string, d: DateValue, p: string, lat?: number, lng?: number, g?: string) => {
+        if (chart) {
+          // Use saved chart's birth data
+          const bdt = chart.birthDateTime || chart.BirthDateTime || ''
+          const dt  = bdt ? new Date(bdt) : null
+          const hr  = dt ? dt.getHours() : 12
+          const mi  = dt ? dt.getMinutes() : 0
+          return {
+            PersonName: chart.personName || chart.PersonName || n || g || 'Person',
+            Year:  chart.year  || chart.Year  || (dt ? dt.getFullYear() : 0),
+            Month: chart.month || chart.Month || (dt ? dt.getMonth() + 1 : 0),
+            Day:   chart.day   || chart.Day   || (dt ? dt.getDate() : 0),
+            Hour: hr, Minute: mi, Second: 0,
+            PlaceName:    chart.placeName || chart.PlaceName || p || 'Chennai, India',
+            Latitude:     chart.latitude  || chart.Latitude  || lat,
+            Longitude:    chart.longitude || chart.Longitude || lng,
+            UtcOffsetHours: chart.utcOffset || chart.UtcOffset || 5.5,
+            AyanamsaType: 'Lahiri', Gender: g,
+          }
+        }
+        return buildPayload(n, d, p, lat, lng, g)
+      }
+
+      const gp1 = extractPayload(s1, n1, d1, p1, lat1, lng1, g1)
+      const gp2 = extractPayload(s2, n2, d2, p2, lat2, lng2, g2)
       const gres = await fetch(`${CHART_URL}/api/chart/guest-match`, {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ Person1: gp1, Person2: gp2 })
