@@ -741,8 +741,9 @@ export default function ChartPage() {
                       const st  = d.startAt||d.StartAt||d.start||''
                       const en  = d.endAt||d.EndAt||d.end||''
                       const ads = d.antaraDasas||d.AntaraDasas||[]
-                      const sy  = st ? (new Date(st).getFullYear() || '—') : '—'
-                      const ey  = en ? (new Date(en).getFullYear() || '—') : '—'
+                      const parseYr = (s:string) => { if(!s) return '—'; const m=s.match(/^(\d{4})/); return m?m[1]:'—' }
+                      const sy  = parseYr(st)
+                      const ey  = parseYr(en)
                       const yrs = (st&&en)
                         ? ((new Date(en).getTime()-new Date(st).getTime())/(365.25*24*3600*1000)).toFixed(1):'—'
                       const now = st&&en&&new Date(st)<=new Date()&&new Date()<=new Date(en)
