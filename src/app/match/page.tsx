@@ -319,14 +319,29 @@ export default function MatchPage() {
         return buildPayload(n, d, p, lat, lng, g)
       }
 
-      const gp1 = extractPayload(s1, n1, d1, p1, lat1, lng1, g1)
-      const gp2 = extractPayload(s2, n2, d2, p2, lat2, lng2, g2)
-      const gres = await fetch(`${CHART_URL}/api/chart/guest-match`, {
-        method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ Person1: gp1, Person2: gp2 })
-      }).then(r => r.json()).catch(() => null)
+      // Strategy: if both using saved charts + logged in → use /api/chart/match with IDs
+      // Otherwise → use guest-match with full birth data payloads
+      let mdata: any = null
 
-      const mdata = gres?.data?.data ?? gres?.data ?? gres
+      if (token && useSaved1 && selId1 && useSaved2 && selId2) {
+        // Both saved charts — use authenticated match endpoint
+        const { chartApi } = await import('@/api/client')
+        const mres = await chartApi.post('/api/chart/match', {
+          HoroscopeId1: selId1, HoroscopeId2: selId2
+        }).catch(() => null)
+        mdata = mres?.data?.data ?? mres?.data ?? mres
+      }
+
+      if (!mdata) {
+        // Fallback: guest-match with full birth data (works for all cases)
+        const gp1 = extractPayload(s1, n1, d1, p1, lat1, lng1, g1)
+        const gp2 = extractPayload(s2, n2, d2, p2, lat2, lng2, g2)
+        const gres = await fetch(`${CHART_URL}/api/chart/guest-match`, {
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ Person1: gp1, Person2: gp2 })
+        }).then(r => r.json()).catch(() => null)
+        mdata = gres?.data?.data ?? gres?.data ?? gres
+      }
 
       if (!mdata || (mdata?.AshtaKootaScore === undefined && mdata?.ashtaKootaScore === undefined)) {
         throw new Error('Compatibility calculation failed — please try again')
