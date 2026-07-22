@@ -1,8 +1,8 @@
 
 Running 8 tests using 2 workers
 
-[1/8] [chromium] › e2e/functional-test.spec.js:45:3 › GUEST CHART › Guest chart — no redirect, city dropdown closes, chart generates
-[2/8] [mobile] › e2e/functional-test.spec.js:45:3 › GUEST CHART › Guest chart — no redirect, city dropdown closes, chart generates
+[1/8] [mobile] › e2e/functional-test.spec.js:45:3 › GUEST CHART › Guest chart — no redirect, city dropdown closes, chart generates
+[2/8] [chromium] › e2e/functional-test.spec.js:45:3 › GUEST CHART › Guest chart — no redirect, city dropdown closes, chart generates
 [mobile] › e2e/functional-test.spec.js:45:3 › GUEST CHART › Guest chart — no redirect, city dropdown closes, chart generates
 ✓ No redirect to signin
 
@@ -22,103 +22,359 @@ No dropdown for "Chennai" — accepting typed value
 [mobile] › e2e/functional-test.spec.js:45:3 › GUEST CHART › Guest chart — no redirect, city dropdown closes, chart generates
 City 0 final value: "Chennai"
 
-City input value after selection: Chennai
-
-✓ City selected, dropdown closed
-
-Dropdown still open after selection: false
-
 [chromium] › e2e/functional-test.spec.js:45:3 › GUEST CHART › Guest chart — no redirect, city dropdown closes, chart generates
 City 0 final value: "Chennai"
 
-City input value after selection: Chennai
-
-✓ City selected, dropdown closed
-
-Dropdown still open after selection: false
+[3/8] (retries) [chromium] › e2e/functional-test.spec.js:45:3 › GUEST CHART › Guest chart — no redirect, city dropdown closes, chart generates (retry #1)
+[4/8] (retries) [mobile] › e2e/functional-test.spec.js:45:3 › GUEST CHART › Guest chart — no redirect, city dropdown closes, chart generates (retry #1)
+✓ No redirect to signin
 
 [mobile] › e2e/functional-test.spec.js:45:3 › GUEST CHART › Guest chart — no redirect, city dropdown closes, chart generates
-Chart appeared: true
+✓ No redirect to signin
 
 [chromium] › e2e/functional-test.spec.js:45:3 › GUEST CHART › Guest chart — no redirect, city dropdown closes, chart generates
-Chart appeared: true
+City dropdown for "Chennai" appeared: false
 
-[3/8] [mobile] › e2e/functional-test.spec.js:86:3 › CITY DROPDOWN › City dropdown closes after selection
-[4/8] [chromium] › e2e/functional-test.spec.js:86:3 › CITY DROPDOWN › City dropdown closes after selection
-[mobile] › e2e/functional-test.spec.js:86:3 › CITY DROPDOWN › City dropdown closes after selection
-Dropdown appeared: false
+No dropdown for "Chennai" — accepting typed value
 
-No dropdown appeared (API slow) — skip assertion
+[mobile] › e2e/functional-test.spec.js:45:3 › GUEST CHART › Guest chart — no redirect, city dropdown closes, chart generates
+City dropdown for "Chennai" appeared: false
 
-[chromium] › e2e/functional-test.spec.js:86:3 › CITY DROPDOWN › City dropdown closes after selection
-Dropdown appeared: false
+No dropdown for "Chennai" — accepting typed value
 
-No dropdown appeared (API slow) — skip assertion
+[chromium] › e2e/functional-test.spec.js:45:3 › GUEST CHART › Guest chart — no redirect, city dropdown closes, chart generates
+City 0 final value: "Chennai"
 
-[5/8] [mobile] › e2e/functional-test.spec.js:120:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login
-[6/8] [chromium] › e2e/functional-test.spec.js:120:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login
+[mobile] › e2e/functional-test.spec.js:45:3 › GUEST CHART › Guest chart — no redirect, city dropdown closes, chart generates
+City 0 final value: "Chennai"
+
+  1) [chromium] › e2e/functional-test.spec.js:45:3 › GUEST CHART › Guest chart — no redirect, city dropdown closes, chart generates 
+
+    Test timeout of 60000ms exceeded.
+
+    Error: locator.inputValue: Test timeout of 60000ms exceeded.
+    Call log:
+      - waiting for locator('input[placeholder*="City"]').first()
+
+
+      59 |
+      60 |     const cityInput = page.locator('input[placeholder*="City"]').first()
+    > 61 |     const cityVal   = await cityInput.inputValue()
+         |                                       ^
+      62 |     console.log('City input value after selection:', cityVal)
+      63 |     expect(cityVal.length).toBeGreaterThan(0)
+      64 |     console.log('✓ City selected, dropdown closed')
+        at /home/runner/work/vedichora-frontend/vedichora-frontend/e2e/functional-test.spec.js:61:39
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/functional-test-GUEST-CHAR-f4c3f-down-closes-chart-generates-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/functional-test-GUEST-CHAR-f4c3f-down-closes-chart-generates-chromium/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/functional-test-GUEST-CHAR-f4c3f-down-closes-chart-generates-chromium/error-context.md
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Test timeout of 60000ms exceeded.
+
+    Error: locator.inputValue: Test timeout of 60000ms exceeded.
+    Call log:
+      - waiting for locator('input[placeholder*="City"]').first()
+
+
+      59 |
+      60 |     const cityInput = page.locator('input[placeholder*="City"]').first()
+    > 61 |     const cityVal   = await cityInput.inputValue()
+         |                                       ^
+      62 |     console.log('City input value after selection:', cityVal)
+      63 |     expect(cityVal.length).toBeGreaterThan(0)
+      64 |     console.log('✓ City selected, dropdown closed')
+        at /home/runner/work/vedichora-frontend/vedichora-frontend/e2e/functional-test.spec.js:61:39
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/functional-test-GUEST-CHAR-f4c3f-down-closes-chart-generates-chromium-retry1/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/functional-test-GUEST-CHAR-f4c3f-down-closes-chart-generates-chromium-retry1/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/functional-test-GUEST-CHAR-f4c3f-down-closes-chart-generates-chromium-retry1/error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/functional-test-GUEST-CHAR-f4c3f-down-closes-chart-generates-chromium-retry1/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/functional-test-GUEST-CHAR-f4c3f-down-closes-chart-generates-chromium-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+
+[5/8] [chromium] › e2e/functional-test.spec.js:86:3 › CITY DROPDOWN › City dropdown closes after selection
+  2) [mobile] › e2e/functional-test.spec.js:45:3 › GUEST CHART › Guest chart — no redirect, city dropdown closes, chart generates 
+
+    Test timeout of 60000ms exceeded.
+
+    Error: locator.inputValue: Test timeout of 60000ms exceeded.
+    Call log:
+      - waiting for locator('input[placeholder*="City"]').first()
+
+
+      59 |
+      60 |     const cityInput = page.locator('input[placeholder*="City"]').first()
+    > 61 |     const cityVal   = await cityInput.inputValue()
+         |                                       ^
+      62 |     console.log('City input value after selection:', cityVal)
+      63 |     expect(cityVal.length).toBeGreaterThan(0)
+      64 |     console.log('✓ City selected, dropdown closed')
+        at /home/runner/work/vedichora-frontend/vedichora-frontend/e2e/functional-test.spec.js:61:39
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/functional-test-GUEST-CHAR-f4c3f-down-closes-chart-generates-mobile/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/functional-test-GUEST-CHAR-f4c3f-down-closes-chart-generates-mobile/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/functional-test-GUEST-CHAR-f4c3f-down-closes-chart-generates-mobile/error-context.md
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Test timeout of 60000ms exceeded.
+
+    Error: locator.inputValue: Test timeout of 60000ms exceeded.
+    Call log:
+      - waiting for locator('input[placeholder*="City"]').first()
+
+
+      59 |
+      60 |     const cityInput = page.locator('input[placeholder*="City"]').first()
+    > 61 |     const cityVal   = await cityInput.inputValue()
+         |                                       ^
+      62 |     console.log('City input value after selection:', cityVal)
+      63 |     expect(cityVal.length).toBeGreaterThan(0)
+      64 |     console.log('✓ City selected, dropdown closed')
+        at /home/runner/work/vedichora-frontend/vedichora-frontend/e2e/functional-test.spec.js:61:39
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/functional-test-GUEST-CHAR-f4c3f-down-closes-chart-generates-mobile-retry1/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/functional-test-GUEST-CHAR-f4c3f-down-closes-chart-generates-mobile-retry1/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/functional-test-GUEST-CHAR-f4c3f-down-closes-chart-generates-mobile-retry1/error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/functional-test-GUEST-CHAR-f4c3f-down-closes-chart-generates-mobile-retry1/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/functional-test-GUEST-CHAR-f4c3f-down-closes-chart-generates-mobile-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+
+[6/8] [mobile] › e2e/functional-test.spec.js:86:3 › CITY DROPDOWN › City dropdown closes after selection
+[7/8] (retries) [chromium] › e2e/functional-test.spec.js:86:3 › CITY DROPDOWN › City dropdown closes after selection (retry #1)
+[8/8] (retries) [mobile] › e2e/functional-test.spec.js:86:3 › CITY DROPDOWN › City dropdown closes after selection (retry #1)
+  3) [chromium] › e2e/functional-test.spec.js:86:3 › CITY DROPDOWN › City dropdown closes after selection 
+
+    Test timeout of 60000ms exceeded.
+
+    Error: locator.scrollIntoViewIfNeeded: Test timeout of 60000ms exceeded.
+    Call log:
+      - waiting for locator('input[placeholder*="City"]').first()
+
+
+      89 |
+      90 |     const cityInput = page.locator('input[placeholder*="City"]').first()
+    > 91 |     await cityInput.scrollIntoViewIfNeeded()
+         |                     ^
+      92 |     await cityInput.click({ force: true })
+      93 |     await cityInput.fill('Mumbai')
+      94 |     await page.waitForTimeout(2200)
+        at /home/runner/work/vedichora-frontend/vedichora-frontend/e2e/functional-test.spec.js:91:21
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/functional-test-CITY-DROPD-19588-down-closes-after-selection-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/functional-test-CITY-DROPD-19588-down-closes-after-selection-chromium/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/functional-test-CITY-DROPD-19588-down-closes-after-selection-chromium/error-context.md
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Test timeout of 60000ms exceeded.
+
+    Error: locator.scrollIntoViewIfNeeded: Test timeout of 60000ms exceeded.
+    Call log:
+      - waiting for locator('input[placeholder*="City"]').first()
+
+
+      89 |
+      90 |     const cityInput = page.locator('input[placeholder*="City"]').first()
+    > 91 |     await cityInput.scrollIntoViewIfNeeded()
+         |                     ^
+      92 |     await cityInput.click({ force: true })
+      93 |     await cityInput.fill('Mumbai')
+      94 |     await page.waitForTimeout(2200)
+        at /home/runner/work/vedichora-frontend/vedichora-frontend/e2e/functional-test.spec.js:91:21
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/functional-test-CITY-DROPD-19588-down-closes-after-selection-chromium-retry1/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/functional-test-CITY-DROPD-19588-down-closes-after-selection-chromium-retry1/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/functional-test-CITY-DROPD-19588-down-closes-after-selection-chromium-retry1/error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/functional-test-CITY-DROPD-19588-down-closes-after-selection-chromium-retry1/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/functional-test-CITY-DROPD-19588-down-closes-after-selection-chromium-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+
+[9/8] [chromium] › e2e/functional-test.spec.js:120:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login
+[chromium] › e2e/functional-test.spec.js:120:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login
+Match selects count: 12
+
+  4) [mobile] › e2e/functional-test.spec.js:86:3 › CITY DROPDOWN › City dropdown closes after selection 
+
+    Test timeout of 60000ms exceeded.
+
+    Error: locator.scrollIntoViewIfNeeded: Test timeout of 60000ms exceeded.
+    Call log:
+      - waiting for locator('input[placeholder*="City"]').first()
+
+
+      89 |
+      90 |     const cityInput = page.locator('input[placeholder*="City"]').first()
+    > 91 |     await cityInput.scrollIntoViewIfNeeded()
+         |                     ^
+      92 |     await cityInput.click({ force: true })
+      93 |     await cityInput.fill('Mumbai')
+      94 |     await page.waitForTimeout(2200)
+        at /home/runner/work/vedichora-frontend/vedichora-frontend/e2e/functional-test.spec.js:91:21
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/functional-test-CITY-DROPD-19588-down-closes-after-selection-mobile/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/functional-test-CITY-DROPD-19588-down-closes-after-selection-mobile/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/functional-test-CITY-DROPD-19588-down-closes-after-selection-mobile/error-context.md
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Test timeout of 60000ms exceeded.
+
+    Error: locator.scrollIntoViewIfNeeded: Test timeout of 60000ms exceeded.
+    Call log:
+      - waiting for locator('input[placeholder*="City"]').first()
+
+
+      89 |
+      90 |     const cityInput = page.locator('input[placeholder*="City"]').first()
+    > 91 |     await cityInput.scrollIntoViewIfNeeded()
+         |                     ^
+      92 |     await cityInput.click({ force: true })
+      93 |     await cityInput.fill('Mumbai')
+      94 |     await page.waitForTimeout(2200)
+        at /home/runner/work/vedichora-frontend/vedichora-frontend/e2e/functional-test.spec.js:91:21
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/functional-test-CITY-DROPD-19588-down-closes-after-selection-mobile-retry1/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/functional-test-CITY-DROPD-19588-down-closes-after-selection-mobile-retry1/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/functional-test-CITY-DROPD-19588-down-closes-after-selection-mobile-retry1/error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/functional-test-CITY-DROPD-19588-down-closes-after-selection-mobile-retry1/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/functional-test-CITY-DROPD-19588-down-closes-after-selection-mobile-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+
+[10/8] [mobile] › e2e/functional-test.spec.js:120:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login
 [mobile] › e2e/functional-test.spec.js:120:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login
 Match selects count: 12
 
 [chromium] › e2e/functional-test.spec.js:120:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login
-Match selects count: 12
+City dropdown for "Chennai" appeared: false
+
+No dropdown for "Chennai" — accepting typed value
+
+City 0 final value: "Chennai"
 
 [mobile] › e2e/functional-test.spec.js:120:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login
 City dropdown for "Chennai" appeared: false
 
 No dropdown for "Chennai" — accepting typed value
 
-[chromium] › e2e/functional-test.spec.js:120:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login
-City dropdown for "Chennai" appeared: false
-
-No dropdown for "Chennai" — accepting typed value
-
-[mobile] › e2e/functional-test.spec.js:120:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login
 City 0 final value: "Chennai"
-
-[chromium] › e2e/functional-test.spec.js:120:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login
-City 0 final value: "Chennai"
-
-[mobile] › e2e/functional-test.spec.js:120:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login
-City dropdown for "Coimbatore" appeared: false
-
-No dropdown for "Coimbatore" — accepting typed value
 
 [chromium] › e2e/functional-test.spec.js:120:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login
 City dropdown for "Coimbatore" appeared: false
 
 No dropdown for "Coimbatore" — accepting typed value
 
-[mobile] › e2e/functional-test.spec.js:120:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login
 City 1 final value: "Coimbatore"
 
-[chromium] › e2e/functional-test.spec.js:120:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login
-City 1 final value: "Coimbatore"
+Clicking Calculate button...
 
 [mobile] › e2e/functional-test.spec.js:120:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login
+City dropdown for "Coimbatore" appeared: false
+
+No dropdown for "Coimbatore" — accepting typed value
+
+City 1 final value: "Coimbatore"
+
 Clicking Calculate button...
 
 [chromium] › e2e/functional-test.spec.js:120:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login
-Clicking Calculate button...
+Match result visible: true
+
+[11/8] [chromium] › e2e/functional-test.spec.js:166:3 › NUMEROLOGY › Numerology — calculates life path number
+[chromium] › e2e/functional-test.spec.js:166:3 › NUMEROLOGY › Numerology — calculates life path number
+Name input visible: false
 
 [mobile] › e2e/functional-test.spec.js:120:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login
 Match result visible: true
 
-[chromium] › e2e/functional-test.spec.js:120:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login
-Match result visible: true
-
-[7/8] [mobile] › e2e/functional-test.spec.js:166:3 › NUMEROLOGY › Numerology — calculates life path number
-[8/8] [chromium] › e2e/functional-test.spec.js:166:3 › NUMEROLOGY › Numerology — calculates life path number
+[12/8] [mobile] › e2e/functional-test.spec.js:166:3 › NUMEROLOGY › Numerology — calculates life path number
 [mobile] › e2e/functional-test.spec.js:166:3 › NUMEROLOGY › Numerology — calculates life path number
 Name input visible: false
 
 [chromium] › e2e/functional-test.spec.js:166:3 › NUMEROLOGY › Numerology — calculates life path number
-Name input visible: false
+Numerology result visible: true
 
 [mobile] › e2e/functional-test.spec.js:166:3 › NUMEROLOGY › Numerology — calculates life path number
 Numerology result visible: true
 
-[chromium] › e2e/functional-test.spec.js:166:3 › NUMEROLOGY › Numerology — calculates life path number
-Numerology result visible: true
-
-  8 passed (52.8s)
+  4 failed
+    [chromium] › e2e/functional-test.spec.js:45:3 › GUEST CHART › Guest chart — no redirect, city dropdown closes, chart generates 
+    [chromium] › e2e/functional-test.spec.js:86:3 › CITY DROPDOWN › City dropdown closes after selection 
+    [mobile] › e2e/functional-test.spec.js:45:3 › GUEST CHART › Guest chart — no redirect, city dropdown closes, chart generates 
+    [mobile] › e2e/functional-test.spec.js:86:3 › CITY DROPDOWN › City dropdown closes after selection 
+  4 passed (4.6m)
