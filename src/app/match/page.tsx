@@ -343,75 +343,110 @@ export default function MatchPage() {
       const s1 = useSaved1 ? saved.find(c => (c.horoscopeId || c.HoroscopeId) === selId1) : null
       const s2 = useSaved2 ? saved.find(c => (c.horoscopeId || c.HoroscopeId) === selId2) : null
 
-      const [r1, r2] = await Promise.all([
-        calcChart(n1, d1, p1, lat1, lng1, g1, useSaved1 ? selId1 : undefined, s1)
-          .catch(e => { throw new Error('Person 1: ' + e.message) }),
-        calcChart(n2, d2, p2, lat2, lng2, g2, useSaved2 ? selId2 : undefined, s2)
-          .catch(e => { throw new Error('Person 2: ' + e.message) }),
+      // Geocode helper
+      const geocode = async (place: string, lat?: number, lng?: number) => {
+        if (lat && lng) return { lat, lng }
+        if (!place?.trim()) return { lat: 13.0827, lng: 80.2707 } // default Chennai
+        try {
+          const res = await fetch(
+            'https://nominatim.openstreetmap.org/search?q=' + encodeURIComponent(place) + '&format=json&limit=1',
+            { headers: { 'User-Agent': 'VedicHora/1.0' } }
+          ).then(r => r.json())
+          if (Array.isArray(res) && res[0]) return { lat: parseFloat(res[0].lat), lng: parseFloat(res[0].lon) }
+        } catch {}
+        return { lat: 13.0827, lng: 80.2707 } // fallback Chennai
+      }
+
+      const [geo1, geo2] = await Promise.all([
+        geocode(p1, lat1, lng1),
+        geocode(p2, lat2, lng2),
       ])
 
-      // Match via guest-match (full payloads)
-      // When using saved charts, extract birth data from the chart object
+      // Dummy r1/r2 for name extraction (populated after match)
+      const r1 = s1 ? { chart: s1, id: selId1 } : null
+      const r2 = s2 ? { chart: s2, id: selId2 } : null
+
       const CHART_URL = process.env.NEXT_PUBLIC_CHART_URL || 'https://enchanting-dedication-production.up.railway.app'
-
-      const extractPayload = (chart: any, n: string, d: DateValue, p: string, lat?: number, lng?: number, g?: string) => {
-        if (chart) {
-          // Use saved chart's birth data
-          const bdt = chart.birthDateTime || chart.BirthDateTime || ''
-          const dt  = bdt ? new Date(bdt) : null
-          const hr  = dt ? dt.getHours() : 12
-          const mi  = dt ? dt.getMinutes() : 0
-          return {
-            PersonName: chart.personName || chart.PersonName || n || g || 'Person',
-            Year:  chart.year  || chart.Year  || (dt ? dt.getFullYear() : 0),
-            Month: chart.month || chart.Month || (dt ? dt.getMonth() + 1 : 0),
-            Day:   chart.day   || chart.Day   || (dt ? dt.getDate() : 0),
-            Hour: hr, Minute: mi, Second: 0,
-            PlaceName:    chart.placeName || chart.PlaceName || p || 'Chennai, India',
-            Latitude:     chart.latitude  || chart.Latitude  || lat,
-            Longitude:    chart.longitude || chart.Longitude || lng,
-            UtcOffsetHours: chart.utcOffset || chart.UtcOffset || 5.5,
-            AyanamsaType: 'Lahiri', Gender: g,
-          }
-        }
-        return buildPayload(n, d, p, lat, lng, g)
-      }
-
-      // Strategy: if both using saved charts + logged in → use /api/chart/match with IDs
-      // Otherwise → use guest-match with full birth data payloads
       let mdata: any = null
 
-      if (token && useSaved1 && selId1 && useSaved2 && selId2) {
-        // Both saved charts — use authenticated match endpoint
-        const { chartApi } = await import('@/api/client')
-        const mres = await chartApi.post('/api/chart/match', {
-          HoroscopeId1: selId1, HoroscopeId2: selId2
-        }).catch(() => null)
-        mdata = mres?.data?.data ?? mres?.data ?? mres
+      // Build birth payload from either saved chart or entered form data
+      const makePayload = (chart: any, n: string, d: DateValue, geo: {lat:number,lng:number}, g?: string) => {
+        if (chart) {
+          const bdt = chart.birthDateTime || chart.BirthDateTime || ''
+          const dt  = bdt ? new Date(bdt) : null
+          return {
+            PersonName: chart.personName || chart.PersonName || n || 'Person',
+            Year:  dt ? dt.getFullYear() : (chart.year  || chart.Year  || d.yyyy || 2000),
+            Month: dt ? dt.getMonth()+1  : (chart.month || chart.Month || d.mm   || 1),
+            Day:   dt ? dt.getDate()     : (chart.day   || chart.Day   || d.dd   || 1),
+            Hour:  dt ? dt.getHours()    : 12,
+            Minute:dt ? dt.getMinutes()  : 0,
+            Second: 0,
+            PlaceName: chart.placeName || chart.PlaceName || 'Chennai, India',
+            Latitude:  chart.latitude  || chart.Latitude  || geo.lat,
+            Longitude: chart.longitude || chart.Longitude || geo.lng,
+            UtcOffsetHours: chart.utcOffset || chart.UtcOffset || 5.5,
+            AyanamsaType: 'Lahiri',
+          }
+        }
+        const tm = d.unknownTime ? {hour:12,minute:0} : to24Hour(d.hr||12, d.mi||0, d.ap||'AM')
+        return {
+          PersonName: n || 'Person',
+          Year: d.yyyy, Month: d.mm, Day: d.dd,
+          Hour: tm.hour, Minute: tm.minute, Second: 0,
+          PlaceName: 'Chennai, India',
+          Latitude: geo.lat, Longitude: geo.lng,
+          UtcOffsetHours: 5.5, AyanamsaType: 'Lahiri',
+        }
       }
 
-      if (!mdata) {
-        // Fallback: guest-match with full birth data (works for all cases)
-        const gp1 = extractPayload(s1, n1, d1, p1, lat1, lng1, g1)
-        const gp2 = extractPayload(s2, n2, d2, p2, lat2, lng2, g2)
-        let gres: any = null
+      const gp1 = makePayload(s1, n1, d1, geo1, g1)
+      const gp2 = makePayload(s2, n2, d2, geo2, g2)
+
+      // Strategy A: both saved + logged in → use auth endpoint (fast, persists)
+      if (token && useSaved1 && selId1 && useSaved2 && selId2) {
         try {
-          const gresp = await fetch(`${CHART_URL}/api/chart/guest-match`, {
-            method: 'POST', headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ Person1: gp1, Person2: gp2 })
-          })
-          const gtext = await gresp.text()
-          console.log('[guest-match] status:', gresp.status, 'body:', gtext.slice(0, 500))
-          try { gres = JSON.parse(gtext) } catch { gres = null }
-          if (!gresp.ok) {
-            const errMsg = gres?.error || gres?.message || gtext.slice(0, 200) || `HTTP ${gresp.status}`
-            throw new Error('Match API: ' + errMsg)
+          const { chartApi } = await import('@/api/client')
+          const mres = await chartApi.post('/api/chart/match', { HoroscopeId1: selId1, HoroscopeId2: selId2 })
+          const raw = mres?.data?.data ?? mres?.data ?? mres
+          // Auth endpoint returns {Match:{TotalPoints,...}, HoroscopeId1, HoroscopeId2}
+          if (raw?.Match?.TotalPoints !== undefined) {
+            const m = raw.Match
+            mdata = {
+              AshtaKootaScore: m.TotalPoints ?? 0,
+              AshtaKootaTotal: m.MaxPoints   ?? 36,
+              Percentage:      m.Percentage  ?? 0,
+              Summary:         m.Verdict     ?? '',
+              KootaDetails: [
+                { KootaName:'Varna',        Score:m.Varna?.Points??0,       MaxScore:1 },
+                { KootaName:'Vashya',       Score:m.Vashya?.Points??0,      MaxScore:2 },
+                { KootaName:'Tara',         Score:m.Tara?.Points??0,        MaxScore:3 },
+                { KootaName:'Yoni',         Score:m.Yoni?.Points??0,        MaxScore:4 },
+                { KootaName:'Graha Maitri', Score:m.GrahaMaitri?.Points??0, MaxScore:5 },
+                { KootaName:'Gana',         Score:m.Gana?.Points??0,        MaxScore:6 },
+                { KootaName:'Bhakoota',     Score:m.Bhakoota?.Points??0,    MaxScore:7 },
+                { KootaName:'Nadi',         Score:m.Nadi?.Points??0,        MaxScore:8 },
+              ],
+            }
           }
-        } catch (fe: any) {
-          throw new Error(fe.message || 'guest-match request failed')
+        } catch {}
+      }
+
+      // Strategy B: guest-match (always works, no auth needed)
+      if (!mdata) {
+        const gresp = await fetch(`${CHART_URL}/api/chart/guest-match`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ Person1: gp1, Person2: gp2 })
+        })
+        const gtext = await gresp.text()
+        let gres: any = null
+        try { gres = JSON.parse(gtext) } catch {}
+        if (!gresp.ok) {
+          const msg = gres?.error || gres?.message || gres?.title || `Server error ${gresp.status}`
+          throw new Error(msg)
         }
         mdata = gres?.data?.data ?? gres?.data ?? gres
-        console.log('[guest-match] mdata:', JSON.stringify(mdata)?.slice(0, 300))
       }
 
       // Normalize: authenticated /api/chart/match returns {Match:{TotalPoints,...}, HoroscopeId1/2}
@@ -442,9 +477,9 @@ export default function MatchPage() {
         throw new Error('Compatibility calculation failed — please try again')
       }
 
-      const nm1 = n1 || r1.chart?.personName || r1.chart?.PersonName || g1
-      const nm2 = n2 || r2.chart?.personName || r2.chart?.PersonName || g2
-      setResult({ ...mdata, name1: nm1, name2: nm2, chart1: r1.chart, chart2: r2.chart })
+      const nm1 = n1 || s1?.personName || s1?.PersonName || g1 || 'Person 1'
+      const nm2 = n2 || s2?.personName || s2?.PersonName || g2 || 'Person 2'
+      setResult({ ...mdata, name1: nm1, name2: nm2, chart1: s1, chart2: s2 })
     } catch (e: any) {
       const msg = e?.message || 'Calculation failed — please try again'
       // Parse person-specific errors
