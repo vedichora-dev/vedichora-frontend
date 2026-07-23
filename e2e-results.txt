@@ -1,8 +1,8 @@
 
 Running 8 tests using 2 workers
 
-[1/8] [mobile] › e2e/functional-test.spec.js:45:3 › GUEST CHART › Guest chart — no redirect, city dropdown closes, chart generates
-[2/8] [chromium] › e2e/functional-test.spec.js:45:3 › GUEST CHART › Guest chart — no redirect, city dropdown closes, chart generates
+[1/8] [chromium] › e2e/functional-test.spec.js:45:3 › GUEST CHART › Guest chart — no redirect, city dropdown closes, chart generates
+[2/8] [mobile] › e2e/functional-test.spec.js:45:3 › GUEST CHART › Guest chart — no redirect, city dropdown closes, chart generates
 [mobile] › e2e/functional-test.spec.js:45:3 › GUEST CHART › Guest chart — no redirect, city dropdown closes, chart generates
 ✓ No redirect to signin
 
@@ -113,6 +113,7 @@ City 0 final value: "Chennai"
     ────────────────────────────────────────────────────────────────────────────────────────────────
 
 
+[5/8] [chromium] › e2e/functional-test.spec.js:86:3 › CITY DROPDOWN › City dropdown closes after selection
   2) [mobile] › e2e/functional-test.spec.js:45:3 › GUEST CHART › Guest chart — no redirect, city dropdown closes, chart generates 
 
     Test timeout of 60000ms exceeded.
@@ -178,7 +179,6 @@ City 0 final value: "Chennai"
     ────────────────────────────────────────────────────────────────────────────────────────────────
 
 
-[5/8] [chromium] › e2e/functional-test.spec.js:86:3 › CITY DROPDOWN › City dropdown closes after selection
 [6/8] [mobile] › e2e/functional-test.spec.js:86:3 › CITY DROPDOWN › City dropdown closes after selection
 [7/8] (retries) [chromium] › e2e/functional-test.spec.js:86:3 › CITY DROPDOWN › City dropdown closes after selection (retry #1)
 [8/8] (retries) [mobile] › e2e/functional-test.spec.js:86:3 › CITY DROPDOWN › City dropdown closes after selection (retry #1)
