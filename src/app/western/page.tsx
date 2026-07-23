@@ -582,6 +582,45 @@ export default function WesternPage(){
                 </div>
               </div>
             )}
+
+            {/* LoveMeter API result */}
+            {loveResult && (
+              <div style={{background:'var(--w-surf)',border:'1px solid var(--w-bd)',borderRadius:'20px',padding:'28px',marginTop:'20px',boxShadow:'0 4px 24px rgba(0,0,0,.06)'}}>
+                <div style={{textAlign:'center',marginBottom:'20px'}}>
+                  <div style={{fontSize:'11px',fontWeight:700,color:'var(--w-acc)',letterSpacing:'.08em',textTransform:'uppercase',marginBottom:'8px'}}>Cosmic Compatibility Score</div>
+                  <div style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:'56px',fontWeight:900,lineHeight:1,color:scoreColor(loveResult.overallScore??loveResult.OverallScore??0)}}>
+                    {loveResult.overallScore??loveResult.OverallScore??0}%
+                  </div>
+                  <div style={{fontSize:'14px',color:'var(--w-tx2)',marginTop:'8px'}}>{loveResult.verdict??loveResult.Verdict??''}</div>
+                </div>
+                {(loveResult.subScores||loveResult.SubScores||[]).length > 0 && (
+                  <div style={{display:'grid',gridTemplateColumns:'repeat(3,1fr)',gap:'10px',marginBottom:'16px'}}>
+                    {(loveResult.subScores??loveResult.SubScores??[]).map((s:any,i:number)=>(
+                      <div key={i} style={{textAlign:'center',padding:'12px 6px',borderRadius:'12px',background:`var(--w-bg)`,border:'1px solid var(--w-bd)'}}>
+                        <div style={{fontSize:'22px',fontWeight:800,color:scoreColor(s.score??s.Score??0)}}>{s.score??s.Score??0}</div>
+                        <div style={{fontSize:'10px',color:'var(--w-tx2)',marginTop:'3px',lineHeight:1.3}}>{s.label??s.Label??s.name??s.Name??''}</div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+                {(loveResult.strengths??loveResult.Strengths??[]).length > 0 && (
+                  <div style={{marginBottom:'12px'}}>
+                    <div style={{fontSize:'11px',fontWeight:700,color:'#22C55E',marginBottom:'6px'}}>✓ Strengths</div>
+                    {(loveResult.strengths??loveResult.Strengths??[]).map((s:string,i:number)=>(
+                      <div key={i} style={{fontSize:'12px',color:'var(--w-tx2)',padding:'2px 0'}}>• {s}</div>
+                    ))}
+                  </div>
+                )}
+                {(loveResult.warnings??loveResult.Warnings??[]).length > 0 && (
+                  <div>
+                    <div style={{fontSize:'11px',fontWeight:700,color:'#EF4444',marginBottom:'6px'}}>⚠ Areas to navigate</div>
+                    {(loveResult.warnings??loveResult.Warnings??[]).map((w:string,i:number)=>(
+                      <div key={i} style={{fontSize:'12px',color:'var(--w-tx2)',padding:'2px 0'}}>• {w}</div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
           </div>
         )}
 
