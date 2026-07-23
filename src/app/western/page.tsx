@@ -173,6 +173,9 @@ export default function WesternPage(){
   const [d2,setD2]=useState({dd:0,mm:0,yyyy:0})
   const [n1,setN1]=useState('')
   const [n2,setN2]=useState('')
+  const [t1,setT1]=useState({hr:12,mi:0,ap:'AM'})
+  const [t2,setT2]=useState({hr:12,mi:0,ap:'AM'})
+  const [loveResult,setLoveResult]=useState<any>(null)
   const [m1,setM1]=useState<number|null>(null)
   const [m2,setM2]=useState<number|null>(null)
   const [compatResult, setCompatResult] = useState<any>(null)
@@ -244,29 +247,57 @@ export default function WesternPage(){
 
   const calcRealCompat = async () => {
     if (!d1.yyyy || !d2.yyyy) { setCompatErr('Enter both dates of birth'); return }
-    setCompatLoading(true); setCompatErr('')
+    setCompatLoading(true); setCompatErr(''); setLoveResult(null)
     try {
       const CHART_URL = 'https://enchanting-dedication-production.up.railway.app'
+      const to24=(hr:number,mi:number,ap:string)=>{
+        let h=hr||12
+        if(ap==='PM'&&h!==12) h+=12
+        if(ap==='AM'&&h===12) h=0
+        return {hour:h,minute:mi||0}
+      }
+      const tm1=to24(t1.hr,t1.mi,t1.ap)
+      const tm2=to24(t2.hr,t2.mi,t2.ap)
       const p1 = {
         PersonName: n1 || 'Person 1',
-        Year: d1.yyyy, Month: d1.mm || 1, Day: d1.dd || 1,
-        Hour: 12, Minute: 0, Second: 0,
-        PlaceName: 'Chennai, India',
-        UtcOffsetHours: 5.5, AyanamsaType: 'Lahiri'
+        Year: d1.yyyy, Month: d1.mm||1, Day: d1.dd||1,
+        Hour: tm1.hour, Minute: tm1.minute, Second: 0,
+        PlaceName: 'Chennai, India', UtcOffsetHours: 5.5, AyanamsaType: 'Lahiri'
       }
       const p2 = {
         PersonName: n2 || 'Person 2',
-        Year: d2.yyyy, Month: d2.mm || 1, Day: d2.dd || 1,
-        Hour: 12, Minute: 0, Second: 0,
-        PlaceName: 'Chennai, India',
-        UtcOffsetHours: 5.5, AyanamsaType: 'Lahiri'
+        Year: d2.yyyy, Month: d2.mm||1, Day: d2.dd||1,
+        Hour: tm2.hour, Minute: tm2.minute, Second: 0,
+        PlaceName: 'Chennai, India', UtcOffsetHours: 5.5, AyanamsaType: 'Lahiri'
       }
-      const res = await fetch(`${CHART_URL}/api/chart/guest-match`, {
-        method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ Person1: p1, Person2: p2 })
-      }).then(r => r.json())
-      const data = res?.data?.data ?? res?.data ?? res
-      setCompatResult(data)
+      // Calculate both charts via guest endpoint
+      const [r1, r2] = await Promise.all([
+        fetch(`${CHART_URL}/api/chart/guest`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(p1)}).then(r=>r.json()),
+        fetch(`${CHART_URL}/api/chart/guest`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(p2)}).then(r=>r.json()),
+      ])
+      const c1 = r1?.data?.data ?? r1?.data ?? r1
+      const c2 = r2?.data?.data ?? r2?.data ?? r2
+      // Also get guest-match for Ashta Koota score
+      const mres = await fetch(`${CHART_URL}/api/chart/guest-match`,{
+        method:'POST',headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({Person1:p1,Person2:p2})
+      }).then(r=>r.json())
+      const mdata = mres?.data?.data ?? mres?.data ?? mres
+      // Try LoveMeter if both charts were created (need horoscopeId)
+      const h1 = c1?.horoscopeId || c1?.HoroscopeId
+      const h2 = c2?.horoscopeId || c2?.HoroscopeId
+      let loveMeter = null
+      if (h1 && h2) {
+        try {
+          const lr = await fetch(`${CHART_URL}/api/western-profile/love-meter`,{
+            method:'POST',headers:{'Content-Type':'application/json'},
+            body:JSON.stringify({horoscopeId1:h1,horoscopeId2:h2})
+          }).then(r=>r.json())
+          loveMeter = lr?.data?.data ?? lr?.data ?? lr
+        } catch {}
+      }
+      setCompatResult(mdata)
+      if (loveMeter) setLoveResult(loveMeter)
     } catch (e: any) {
       setCompatErr(e?.message || 'Calculation failed')
     }
@@ -465,6 +496,15 @@ export default function WesternPage(){
                         opts={f==='dd'?DAYS.map(d=>({v:d,l:String(d)})):f==='mm'?MONTHS.map((m,i)=>({v:i+1,l:m})):YEARS_100.map(y=>({v:y,l:String(y)}))} />
                     </div>
                   ))}
+                  <div style={{display:'flex',gap:'6px',marginTop:'4px'}}>
+                    <Sel value={t1.hr} onChange={v=>setT1(t=>({...t,hr:+v}))} placeholder="Hr" w="34%"
+                      opts={[12,1,2,3,4,5,6,7,8,9,10,11].map(h=>({v:h,l:String(h)}))} />
+                    <Sel value={t1.mi} onChange={v=>setT1(t=>({...t,mi:+v}))} placeholder="Min" w="33%"
+                      opts={[0,5,10,15,20,25,30,35,40,45,50,55].map(m=>({v:m,l:m===0?'00':String(m)}))} />
+                    <Sel value={t1.ap} onChange={v=>setT1(t=>({...t,ap:v}))} placeholder="AM/PM" w="33%"
+                      opts={[{v:'AM',l:'AM'},{v:'PM',l:'PM'}]} />
+                  </div>
+                  <div style={{fontSize:'10px',color:'var(--w-tx2)',marginTop:'3px',marginBottom:'6px'}}>Time of birth (optional — improves accuracy)</div>
                 </div>
                 <div style={{textAlign:'center',paddingTop:'60px',fontSize:'24px',color:'#EF4444'}}>♥</div>
                 {/* Person 2 */}
@@ -478,6 +518,15 @@ export default function WesternPage(){
                         opts={f==='dd'?DAYS.map(d=>({v:d,l:String(d)})):f==='mm'?MONTHS.map((m,i)=>({v:i+1,l:m})):YEARS_100.map(y=>({v:y,l:String(y)}))} />
                     </div>
                   ))}
+                  <div style={{display:'flex',gap:'6px',marginTop:'4px'}}>
+                    <Sel value={t2.hr} onChange={v=>setT2(t=>({...t,hr:+v}))} placeholder="Hr" w="34%"
+                      opts={[12,1,2,3,4,5,6,7,8,9,10,11].map(h=>({v:h,l:String(h)}))} />
+                    <Sel value={t2.mi} onChange={v=>setT2(t=>({...t,mi:+v}))} placeholder="Min" w="33%"
+                      opts={[0,5,10,15,20,25,30,35,40,45,50,55].map(m=>({v:m,l:m===0?'00':String(m)}))} />
+                    <Sel value={t2.ap} onChange={v=>setT2(t=>({...t,ap:v}))} placeholder="AM/PM" w="33%"
+                      opts={[{v:'AM',l:'AM'},{v:'PM',l:'PM'}]} />
+                  </div>
+                  <div style={{fontSize:'10px',color:'var(--w-tx2)',marginTop:'3px',marginBottom:'6px'}}>Time of birth (optional — improves accuracy)</div>
                 </div>
               </div>
               <div style={{textAlign:'center'}}>{btn(compatLoading?'Calculating...':'Reveal Compatibility ✦',calcRealCompat,!d1.yyyy||!d2.yyyy)}</div>
