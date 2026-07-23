@@ -1,15 +1,15 @@
 === CURRENT e2e FILES ===
 total 64
-drwxr-xr-x 2 runner runner  4096 Jul 23 04:11 .
-drwxr-xr-x 7 runner runner  4096 Jul 23 04:11 ..
--rw-r--r-- 1 runner runner  4428 Jul 23 04:11 01-auth.spec.js
--rw-r--r-- 1 runner runner 11055 Jul 23 04:11 02-chart.spec.js
--rw-r--r-- 1 runner runner  2851 Jul 23 04:11 03-match.spec.js
--rw-r--r-- 1 runner runner  2685 Jul 23 04:11 04-horoscope.spec.js
--rw-r--r-- 1 runner runner  3485 Jul 23 04:11 05-deployment.spec.js
--rw-r--r-- 1 runner runner  5636 Jul 23 04:11 06-match-10.spec.js
--rw-r--r-- 1 runner runner  8626 Jul 23 04:11 functional-test.spec.js
--rw-r--r-- 1 runner runner  2685 Jul 23 04:11 helpers.js
+drwxr-xr-x 2 runner runner  4096 Jul 23 04:12 .
+drwxr-xr-x 7 runner runner  4096 Jul 23 04:13 ..
+-rw-r--r-- 1 runner runner  4428 Jul 23 04:12 01-auth.spec.js
+-rw-r--r-- 1 runner runner 11055 Jul 23 04:12 02-chart.spec.js
+-rw-r--r-- 1 runner runner  2851 Jul 23 04:12 03-match.spec.js
+-rw-r--r-- 1 runner runner  2685 Jul 23 04:12 04-horoscope.spec.js
+-rw-r--r-- 1 runner runner  3485 Jul 23 04:12 05-deployment.spec.js
+-rw-r--r-- 1 runner runner  5636 Jul 23 04:12 06-match-10.spec.js
+-rw-r--r-- 1 runner runner  8626 Jul 23 04:12 functional-test.spec.js
+-rw-r--r-- 1 runner runner  2685 Jul 23 04:12 helpers.js
 
 === BUILD OUTPUT ===
 
@@ -35,16 +35,22 @@ Failed to compile.
 
 ./src/app/chart/page.tsx
 Error: 
-  [31mx[0m Expected unicode escape
-     ,-[[36;1;4m/home/runner/work/vedichora-frontend/vedichora-frontend/src/app/chart/page.tsx[0m:196:1]
- [2m196[0m | 
- [2m197[0m |         const doshas = [
- [2m198[0m |           { name: 'Mangal Dosha',    isPresent: mangalPresent,   severity: mangalPresent ? 'Medium' : 'None',
- [2m199[0m |             description: mangalPresent ? \`Mars in house \${marsH} — creates friction in relationships and marriage.\` : 'Mars is well-placed. No Mangal Dosha.',
-     : [31;1m                                         ^[0m
- [2m200[0m |             remedies: mangalPresent ? 'Worship Lord Hanuman on Tuesdays. Wear red coral after consulting an astrologer.' : '' },
- [2m201[0m |           { name: 'Kaal Sarpa Dosha', isPresent: ksPresent,       severity: ksPresent ? 'High' : 'None',
- [2m202[0m |             description: ksPresent ? 'All planets between Rahu-Ketu axis — periods of struggle and delay before breakthrough.' : 'No Kaal Sarpa Dosha. Planets are not enclosed by Rahu-Ketu axis.',
+  [31mx[0m Expected '}', got '<eof>'
+     ,-[[36;1;4m/home/runner/work/vedichora-frontend/vedichora-frontend/src/app/chart/page.tsx[0m:232:1]
+ [2m232[0m |           totalDoshasFound: presentDoshas.length,
+ [2m233[0m |           hasMajorDosha:    majorDoshas.length > 0,
+ [2m234[0m |           summary:          summaryText,
+ [2m235[0m |         }
+     : [31;1m        ^[0m
+     `----
+
+  [31mx[0m Unexpected eof
+     ,-[[36;1;4m/home/runner/work/vedichora-frontend/vedichora-frontend/src/app/chart/page.tsx[0m:232:1]
+ [2m232[0m |           totalDoshasFound: presentDoshas.length,
+ [2m233[0m |           hasMajorDosha:    majorDoshas.length > 0,
+ [2m234[0m |           summary:          summaryText,
+ [2m235[0m |         }
+     : [31;1m         ^[0m
      `----
 
 Caused by:
