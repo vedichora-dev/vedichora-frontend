@@ -88,15 +88,20 @@ export default function ChartPage() {
         return null
       },
       ashtakavarga: async () => {
-        // Try auth endpoint first (saved charts with login)
+        // API: GET /api/strength/{id}/ashtakavarga → AllowAnonymous
+        // Returns { success, data: { sav:[{rasiName,rawBindu,afterShodhana}], bav:[...], totalSAV } }
         const r1 = await getAshtakavarga(horoId).catch(() => null)
-        // API returns { success, data: { sav:[{rasiName,rawBindu}], bav:[...], totalSAV } }
-        const d1 = r1?.data?.data ?? r1?.data ?? r1
-        if (d1 && !d1.statusCode && (d1.sav || d1.SAV || d1.bav)) return d1
-
-        const r2 = await getAshtakavargaGuest(horoId).catch(() => null)
-        const d2 = r2?.data?.data ?? r2?.data ?? r2
-        if (d2 && !d2.statusCode && (d2.sav || d2.SAV || d2.bav)) return d2
+        if (r1?.data?.data?.sav?.length) return r1.data.data
+        if (r1?.data?.sav?.length)       return r1.data
+        if (r1?.data?.data?.bav?.length) return r1.data.data
+        if (r1?.data?.bav?.length)       return r1.data
+        // Also try with the navData horoscopeId in case horoId differs
+        const altId = navData?.horoscopeId || navData?.HoroscopeId
+        if (altId && altId !== horoId) {
+          const r2 = await getAshtakavarga(altId).catch(() => null)
+          if (r2?.data?.data?.sav?.length) return r2.data.data
+          if (r2?.data?.sav?.length)       return r2.data
+        }
         return null
       },
       arudha: async () => {
@@ -783,9 +788,7 @@ export default function ChartPage() {
               {/* ── ASHTAKAVARGA ── */}
               {tab==='ashtakavarga' && !isLoading('ashtakavarga') && (
                 <div>
-                  {!data('ashtakavarga') ? <div style={{padding:'20px',color:'var(--txm)'}}>
-                    {token ? 'Ashtakavarga not available for this chart' : 'Sign in and save chart to view Ashtakavarga points'}
-                  </div> : (
+                  {!data('ashtakavarga') ? <div style={{padding:'20px',color:'var(--txm)'}}>Ashtakavarga data not available for this chart.</div> : (
                   <div style={{display:'flex',flexDirection:'column',gap:'16px'}}>
                     {(() => {
                       const av = data('ashtakavarga')
