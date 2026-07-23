@@ -1,17 +1,13 @@
 
 Running 8 tests using 2 workers
 
-[1/8] [mobile] › e2e/functional-test.spec.js:45:3 › GUEST CHART › Guest chart — no redirect, city dropdown closes, chart generates
-[2/8] [chromium] › e2e/functional-test.spec.js:45:3 › GUEST CHART › Guest chart — no redirect, city dropdown closes, chart generates
+[1/8] [chromium] › e2e/functional-test.spec.js:45:3 › GUEST CHART › Guest chart — no redirect, city dropdown closes, chart generates
+[2/8] [mobile] › e2e/functional-test.spec.js:45:3 › GUEST CHART › Guest chart — no redirect, city dropdown closes, chart generates
 [mobile] › e2e/functional-test.spec.js:45:3 › GUEST CHART › Guest chart — no redirect, city dropdown closes, chart generates
 ✓ No redirect to signin
 
 [chromium] › e2e/functional-test.spec.js:45:3 › GUEST CHART › Guest chart — no redirect, city dropdown closes, chart generates
 ✓ No redirect to signin
-
-City dropdown for "Chennai" appeared: false
-
-No dropdown for "Chennai" — accepting typed value
 
 [mobile] › e2e/functional-test.spec.js:45:3 › GUEST CHART › Guest chart — no redirect, city dropdown closes, chart generates
 City dropdown for "Chennai" appeared: false
@@ -19,14 +15,18 @@ City dropdown for "Chennai" appeared: false
 No dropdown for "Chennai" — accepting typed value
 
 [chromium] › e2e/functional-test.spec.js:45:3 › GUEST CHART › Guest chart — no redirect, city dropdown closes, chart generates
+City dropdown for "Chennai" appeared: false
+
+No dropdown for "Chennai" — accepting typed value
+
+[mobile] › e2e/functional-test.spec.js:45:3 › GUEST CHART › Guest chart — no redirect, city dropdown closes, chart generates
 City 0 final value: "Chennai"
 
-[mobile] › e2e/functional-test.spec.js:45:3 › GUEST CHART › Guest chart — no redirect, city dropdown closes, chart generates
+[chromium] › e2e/functional-test.spec.js:45:3 › GUEST CHART › Guest chart — no redirect, city dropdown closes, chart generates
 City 0 final value: "Chennai"
 
 [3/8] (retries) [chromium] › e2e/functional-test.spec.js:45:3 › GUEST CHART › Guest chart — no redirect, city dropdown closes, chart generates (retry #1)
 [4/8] (retries) [mobile] › e2e/functional-test.spec.js:45:3 › GUEST CHART › Guest chart — no redirect, city dropdown closes, chart generates (retry #1)
-[chromium] › e2e/functional-test.spec.js:45:3 › GUEST CHART › Guest chart — no redirect, city dropdown closes, chart generates
 ✓ No redirect to signin
 
 [mobile] › e2e/functional-test.spec.js:45:3 › GUEST CHART › Guest chart — no redirect, city dropdown closes, chart generates
@@ -37,13 +37,15 @@ City dropdown for "Chennai" appeared: false
 
 No dropdown for "Chennai" — accepting typed value
 
+[mobile] › e2e/functional-test.spec.js:45:3 › GUEST CHART › Guest chart — no redirect, city dropdown closes, chart generates
+City dropdown for "Chennai" appeared: false
+
+No dropdown for "Chennai" — accepting typed value
+
+[chromium] › e2e/functional-test.spec.js:45:3 › GUEST CHART › Guest chart — no redirect, city dropdown closes, chart generates
 City 0 final value: "Chennai"
 
 [mobile] › e2e/functional-test.spec.js:45:3 › GUEST CHART › Guest chart — no redirect, city dropdown closes, chart generates
-City dropdown for "Chennai" appeared: false
-
-No dropdown for "Chennai" — accepting typed value
-
 City 0 final value: "Chennai"
 
   1) [chromium] › e2e/functional-test.spec.js:45:3 › GUEST CHART › Guest chart — no redirect, city dropdown closes, chart generates 
