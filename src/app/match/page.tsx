@@ -401,6 +401,30 @@ export default function MatchPage() {
         mdata = gres?.data?.data ?? gres?.data ?? gres
       }
 
+      // Normalize: authenticated /api/chart/match returns {Match:{TotalPoints,...}, HoroscopeId1/2}
+      // Guest /api/chart/guest-match returns {AshtaKootaScore, AshtaKootaTotal, KootaDetails...}
+      if (mdata?.Match && mdata.Match?.TotalPoints !== undefined) {
+        const m = mdata.Match
+        const kootas = [
+          { KootaName: 'Varna',        Score: m.Varna?.Points       ?? 0, MaxScore: m.Varna?.MaxPoints       ?? 1 },
+          { KootaName: 'Vashya',       Score: m.Vashya?.Points      ?? 0, MaxScore: m.Vashya?.MaxPoints      ?? 2 },
+          { KootaName: 'Tara',         Score: m.Tara?.Points        ?? 0, MaxScore: m.Tara?.MaxPoints        ?? 3 },
+          { KootaName: 'Yoni',         Score: m.Yoni?.Points        ?? 0, MaxScore: m.Yoni?.MaxPoints        ?? 4 },
+          { KootaName: 'Graha Maitri', Score: m.GrahaMaitri?.Points ?? 0, MaxScore: m.GrahaMaitri?.MaxPoints ?? 5 },
+          { KootaName: 'Gana',         Score: m.Gana?.Points        ?? 0, MaxScore: m.Gana?.MaxPoints        ?? 6 },
+          { KootaName: 'Bhakoota',     Score: m.Bhakoota?.Points    ?? 0, MaxScore: m.Bhakoota?.MaxPoints    ?? 7 },
+          { KootaName: 'Nadi',         Score: m.Nadi?.Points        ?? 0, MaxScore: m.Nadi?.MaxPoints        ?? 8 },
+        ]
+        mdata = {
+          AshtaKootaScore: m.TotalPoints ?? 0,
+          AshtaKootaTotal: m.MaxPoints   ?? 36,
+          KootaDetails: kootas,
+          Summary: m.Verdict ?? '',
+          horoscopeId1: mdata.HoroscopeId1,
+          horoscopeId2: mdata.HoroscopeId2,
+        }
+      }
+
       if (!mdata || (mdata?.AshtaKootaScore === undefined && mdata?.ashtaKootaScore === undefined)) {
         throw new Error('Compatibility calculation failed — please try again')
       }
