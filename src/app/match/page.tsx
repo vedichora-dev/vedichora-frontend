@@ -394,11 +394,24 @@ export default function MatchPage() {
         // Fallback: guest-match with full birth data (works for all cases)
         const gp1 = extractPayload(s1, n1, d1, p1, lat1, lng1, g1)
         const gp2 = extractPayload(s2, n2, d2, p2, lat2, lng2, g2)
-        const gres = await fetch(`${CHART_URL}/api/chart/guest-match`, {
-          method: 'POST', headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ Person1: gp1, Person2: gp2 })
-        }).then(r => r.json()).catch(() => null)
+        let gres: any = null
+        try {
+          const gresp = await fetch(`${CHART_URL}/api/chart/guest-match`, {
+            method: 'POST', headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ Person1: gp1, Person2: gp2 })
+          })
+          const gtext = await gresp.text()
+          console.log('[guest-match] status:', gresp.status, 'body:', gtext.slice(0, 500))
+          try { gres = JSON.parse(gtext) } catch { gres = null }
+          if (!gresp.ok) {
+            const errMsg = gres?.error || gres?.message || gtext.slice(0, 200) || `HTTP ${gresp.status}`
+            throw new Error('Match API: ' + errMsg)
+          }
+        } catch (fe: any) {
+          throw new Error(fe.message || 'guest-match request failed')
+        }
         mdata = gres?.data?.data ?? gres?.data ?? gres
+        console.log('[guest-match] mdata:', JSON.stringify(mdata)?.slice(0, 300))
       }
 
       // Normalize: authenticated /api/chart/match returns {Match:{TotalPoints,...}, HoroscopeId1/2}
