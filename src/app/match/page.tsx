@@ -1,5 +1,5 @@
 'use client'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { calculateChart, calculateChartGuest, listCharts } from '@/api'
 import { useStore } from '@/store'
 import { to24Hour } from '@/lib/utils'
@@ -248,7 +248,33 @@ export default function MatchPage() {
   const [err1,    setErr1]    = useState('')  // person-1 field error
   const [err2,    setErr2]    = useState('')  // person-2 field error
 
+
+  const KOOTA_MEANING: Record<string, string> = {
+    'Varna':        'Spiritual & work compatibility',
+    'Vashya':       'Mutual attraction & control',
+    'Tara':         'Birth star harmony & health',
+    'Yoni':         'Physical & intimate compatibility',
+    'Graha Maitri': 'Mental & emotional bonding',
+    'Gana':         'Temperament & nature match',
+    'Bhakoota':     'Financial & family harmony',
+    'Nadi':         'Genetic & health compatibility',
+  }
+
+  const PORUTHAM_MEANING: Record<string, string> = {
+    'Dina':      'Day star compatibility — health & longevity',
+    'Gana':      'Temperament match — nature & character',
+    'Mahendra':  'Prosperity & children — wealth & progeny',
+    'Sthree Dheerga': 'Long & prosperous marriage — wife's longevity',
+    'Yoni':      'Physical compatibility — intimacy & attraction',
+    'Rasi':      'Moon sign compatibility — family & harmony',
+    'Rasyadhipa': 'Moon lord friendship — mental compatibility',
+    'Vasiya':    'Attraction & attachment — mutual affection',
+    'Rajju':     'Longevity of husband — most critical dosha',
+    'Vedha':     'Absence of obstruction — removes afflictions',
+  }
   const [pdfLoading, setPdfLoading] = useState<string|null>(null)
+  const [collapsed, setCollapsed] = useState(false)
+  const resultsRef = useRef<HTMLDivElement>(null)
 
   const downloadPdf = async (type: 'english'|'vedic'|'both') => {
     const id1 = result?.chart1?.horoscopeId || result?.chart1?.HoroscopeId
@@ -480,6 +506,10 @@ export default function MatchPage() {
       const nm1 = n1 || s1?.personName || s1?.PersonName || g1 || 'Person 1'
       const nm2 = n2 || s2?.personName || s2?.PersonName || g2 || 'Person 2'
       setResult({ ...mdata, name1: nm1, name2: nm2, chart1: s1, chart2: s2 })
+      setCollapsed(true)
+      setTimeout(() => {
+        resultsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      }, 150)
     } catch (e: any) {
       const msg = e?.message || 'Calculation failed — please try again'
       // Parse person-specific errors
@@ -572,7 +602,7 @@ export default function MatchPage() {
 
       {/* ── RESULTS ── */}
       {result && (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+        <div ref={resultsRef} style={{ display: 'flex', flexDirection: 'column', gap: '16px', scrollMarginTop: '20px' }}>
 
           {/* Score banner */}
           <div className="card" style={{ padding: '28px', textAlign: 'center' }}>
@@ -602,7 +632,7 @@ export default function MatchPage() {
               <div style={{ overflowX: 'auto' }}>
                 <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '12px' }}>
                   <thead><tr style={{ borderBottom: '2px solid var(--bd)' }}>
-                    {['Koota', 'Max', 'Score', 'Status'].map(h => (
+                    {['Koota', 'Max', 'Score', 'Status', 'What it means'].map(h => (
                       <th key={h} style={{ padding: '8px 12px', textAlign: 'left', fontSize: '9px',
                         fontWeight: 700, textTransform: 'uppercase', color: 'var(--txm)' }}>{h}</th>
                     ))}
@@ -620,12 +650,65 @@ export default function MatchPage() {
                         <td style={{ padding: '8px 12px', color: 'var(--txm)' }}>{km}</td>
                         <td style={{ padding: '8px 12px', fontWeight: 700, color: ok ? '#16A34A' : '#DC2626' }}>{ks}</td>
                         <td style={{ padding: '8px 12px', fontSize: '11px', color: ok ? '#16A34A' : '#DC2626' }}>
-                          {ok ? '✓ Compatible' : '✗ Incompatible'}
+                          {ok ? '✓' : '✗'}
+                        </td>
+                        <td style={{ padding: '8px 12px', fontSize: '10px', color: 'var(--txm)', fontStyle: 'italic' }}>
+                          {KOOTA_MEANING[k.KootaName || k.kootaName || ''] || ''}
                         </td>
                       </tr>
                     )
                   })}</tbody>
                 </table>
+              </div>
+            </div>
+          )}
+
+
+          {/* Pathu Porutham */}
+          {result.Poruthams && result.Poruthams.length > 0 && (
+            <div className="card">
+              <div className="card-hd"><span className="card-title">Pathu Porutham (10 Compatibilities)</span></div>
+              {result.RajjuWarning && (
+                <div style={{ margin: '0 16px 12px', padding: '10px 14px', background: '#FEF2F2',
+                  border: '1px solid #FCA5A5', borderRadius: '8px', fontSize: '12px', color: '#DC2626' }}>
+                  ⚠ {result.RajjuWarning}
+                </div>
+              )}
+              <div style={{ overflowX: 'auto' }}>
+                <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '12px' }}>
+                  <thead><tr style={{ borderBottom: '2px solid var(--bd)' }}>
+                    {['Porutham', 'Result', 'What it means'].map(h => (
+                      <th key={h} style={{ padding: '8px 12px', textAlign: 'left',
+                        fontSize: '9px', fontWeight: 700, textTransform: 'uppercase', color: 'var(--txm)' }}>{h}</th>
+                    ))}
+                  </tr></thead>
+                  <tbody>{result.Poruthams.map((p: any, i: number) => {
+                    const pass = p.Verdict === 'Compatible' || p.pass || p.Pass
+                    const name = p.KootaName || p.name || p.Name || `Porutham ${i+1}`
+                    return (
+                      <tr key={i} style={{ borderBottom: '1px solid var(--bd)',
+                        background: i % 2 ? 'var(--bg2)' : 'transparent' }}>
+                        <td style={{ padding: '8px 12px', fontWeight: 600, fontFamily: 'Cinzel,serif', color: 'var(--tx)' }}>
+                          {name}
+                        </td>
+                        <td style={{ padding: '8px 12px', fontWeight: 700,
+                          color: pass ? '#16A34A' : '#DC2626', fontSize: '11px' }}>
+                          {pass ? '✓ Pass' : '✗ Fail'}
+                        </td>
+                        <td style={{ padding: '8px 12px', fontSize: '10px', color: 'var(--txm)', fontStyle: 'italic' }}>
+                          {PORUTHAM_MEANING[name] || ''}
+                        </td>
+                      </tr>
+                    )
+                  })}</tbody>
+                </table>
+              </div>
+              <div style={{ padding: '12px 16px', fontSize: '11px', color: 'var(--txm)', borderTop: '1px solid var(--bd)' }}>
+                <strong>Note:</strong> Rajju and Vedha are considered critical — a failure in either requires remediation.
+                Mahendra Porutham (prosperity & children) is highly auspicious when present.
+                {result.PathuPoruthamScore !== undefined && (
+                  <span> Score: <strong>{result.PathuPoruthamScore}/{result.PathuPoruthamTotal || 10}</strong>.</span>
+                )}
               </div>
             </div>
           )}
