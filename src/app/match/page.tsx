@@ -5,7 +5,7 @@ import { useStore } from '@/store'
 import { to24Hour } from '@/lib/utils'
 import DatePicker, { DateValue } from '@/components/ui/DatePicker'
 import CityAutocomplete from '@/components/ui/CityAutocomplete'
-import { Heart, ChevronRight, RefreshCw, CheckCircle, AlertCircle, MapPin } from 'lucide-react'
+import { Heart, ChevronRight, RefreshCw, CheckCircle, AlertCircle, MapPin, Download } from 'lucide-react'
 
 const EMPTY: DateValue = { dd: 0, mm: 0, yyyy: 0 }
 
@@ -173,6 +173,46 @@ function PersonCard({
               {error}
             </div>
           )}
+
+          {/* PDF Download */}
+          <div className="card" style={{ padding: '20px' }}>
+            <div className="card-hd" style={{ marginBottom: '12px' }}>
+              <span className="card-title">Download Report</span>
+            </div>
+            <p style={{ fontSize: '12px', color: 'var(--txm)', marginBottom: '14px' }}>
+              {token ? 'Download a detailed compatibility report as a printable PDF.' : '🔒 Sign in to download PDF reports.'}
+            </p>
+            <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+              {[
+                { type: 'english', label: 'English Narrative', desc: 'Plain-language 10-year timeline' },
+                { type: 'vedic',   label: 'Vedic Porutham',    desc: 'Ashta Koota · Pathu Porutham · Doshas' },
+                { type: 'both',    label: 'Complete Report',   desc: 'Both reports combined' },
+              ].map(({ type, label, desc }) => (
+                <button key={type}
+                  onClick={() => downloadPdf(type as any)}
+                  disabled={!token || pdfLoading === type}
+                  style={{
+                    display: 'flex', alignItems: 'center', gap: '8px',
+                    padding: '10px 16px', borderRadius: '10px', border: '1.5px solid var(--acc)',
+                    background: pdfLoading === type ? 'var(--acc)' : 'transparent',
+                    color: pdfLoading === type ? '#fff' : 'var(--acc)',
+                    cursor: !token ? 'not-allowed' : 'pointer', fontSize: '12px', fontWeight: 600,
+                    opacity: !token ? 0.5 : 1,
+                  }}>
+                  <Download style={{ width: '13px', height: '13px' }} />
+                  <div style={{ textAlign: 'left' }}>
+                    <div>{pdfLoading === type ? 'Generating…' : label}</div>
+                    <div style={{ fontWeight: 400, fontSize: '10px', color: pdfLoading === type ? 'rgba(255,255,255,.8)' : 'var(--txm)' }}>{desc}</div>
+                  </div>
+                </button>
+              ))}
+            </div>
+            {!token && (
+              <p style={{ fontSize: '11px', color: 'var(--txm)', marginTop: '10px' }}>
+                <a href="/signin" style={{ color: 'var(--acc)', fontWeight: 600 }}>Sign in</a> to download PDF reports.
+              </p>
+            )}
+          </div>
         </div>
       )}
     </div>
@@ -207,6 +247,27 @@ export default function MatchPage() {
   const [err,     setErr]     = useState('')
   const [err1,    setErr1]    = useState('')  // person-1 field error
   const [err2,    setErr2]    = useState('')  // person-2 field error
+
+  const [pdfLoading, setPdfLoading] = useState<string|null>(null)
+
+  const downloadPdf = async (type: 'english'|'vedic'|'both') => {
+    const id1 = result?.chart1?.horoscopeId || result?.chart1?.HoroscopeId
+    const id2 = result?.chart2?.horoscopeId || result?.chart2?.HoroscopeId
+    if (!id1 || !id2) { alert('Charts must be saved to download PDF. Please sign in.'); return }
+    setPdfLoading(type)
+    try {
+      const CHART_URL = 'https://enchanting-dedication-production.up.railway.app'
+      const token = localStorage.getItem('vh_token')
+      const res = await fetch(`${CHART_URL}/api/matchmaking/${id1}/${id2}/pdf/${type}`, {
+        headers: token ? { 'Authorization': `Bearer ${token}` } : {}
+      })
+      if (!res.ok) { alert('PDF requires sign-in'); setPdfLoading(null); return }
+      const html = await res.text()
+      const win = window.open('', '_blank')
+      if (win) { win.document.write(html); win.document.close(); setTimeout(() => win.print(), 500) }
+    } catch (e) { alert('PDF generation failed') }
+    setPdfLoading(null)
+  }
 
   useEffect(() => {
     if (!token) return
@@ -505,6 +566,46 @@ export default function MatchPage() {
               </div>
             </div>
           )}
+
+          {/* PDF Download */}
+          <div className="card" style={{ padding: '20px' }}>
+            <div className="card-hd" style={{ marginBottom: '12px' }}>
+              <span className="card-title">Download Report</span>
+            </div>
+            <p style={{ fontSize: '12px', color: 'var(--txm)', marginBottom: '14px' }}>
+              {token ? 'Download a detailed compatibility report as a printable PDF.' : '🔒 Sign in to download PDF reports.'}
+            </p>
+            <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+              {[
+                { type: 'english', label: 'English Narrative', desc: 'Plain-language 10-year timeline' },
+                { type: 'vedic',   label: 'Vedic Porutham',    desc: 'Ashta Koota · Pathu Porutham · Doshas' },
+                { type: 'both',    label: 'Complete Report',   desc: 'Both reports combined' },
+              ].map(({ type, label, desc }) => (
+                <button key={type}
+                  onClick={() => downloadPdf(type as any)}
+                  disabled={!token || pdfLoading === type}
+                  style={{
+                    display: 'flex', alignItems: 'center', gap: '8px',
+                    padding: '10px 16px', borderRadius: '10px', border: '1.5px solid var(--acc)',
+                    background: pdfLoading === type ? 'var(--acc)' : 'transparent',
+                    color: pdfLoading === type ? '#fff' : 'var(--acc)',
+                    cursor: !token ? 'not-allowed' : 'pointer', fontSize: '12px', fontWeight: 600,
+                    opacity: !token ? 0.5 : 1,
+                  }}>
+                  <Download style={{ width: '13px', height: '13px' }} />
+                  <div style={{ textAlign: 'left' }}>
+                    <div>{pdfLoading === type ? 'Generating…' : label}</div>
+                    <div style={{ fontWeight: 400, fontSize: '10px', color: pdfLoading === type ? 'rgba(255,255,255,.8)' : 'var(--txm)' }}>{desc}</div>
+                  </div>
+                </button>
+              ))}
+            </div>
+            {!token && (
+              <p style={{ fontSize: '11px', color: 'var(--txm)', marginTop: '10px' }}>
+                <a href="/signin" style={{ color: 'var(--acc)', fontWeight: 600 }}>Sign in</a> to download PDF reports.
+              </p>
+            )}
+          </div>
         </div>
       )}
     </div>
