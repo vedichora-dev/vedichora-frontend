@@ -208,6 +208,7 @@ export default function ChartPage() {
             ? 'No major doshas. Planetary positions are generally harmonious.'
             : present.length+' dosha'+(present.length>1?'s':'')+' found: '+present.map(d=>d.name).join(', ')+'.'
         }
+      },
       interpret:    async () => {
         const [a,b,c,d] = await Promise.all([
           getInterpretPersonality(horoId).catch(()=>null),
