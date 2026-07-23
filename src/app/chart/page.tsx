@@ -204,9 +204,7 @@ export default function ChartPage() {
           doshas,
           totalDoshasFound: present.length,
           hasMajorDosha: major.length > 0,
-          summary: present.length === 0
-            ? 'No major doshas. Planetary positions are generally harmonious.'
-            : present.length+' dosha'+(present.length>1?'s':'')+' found: '+present.map(d=>d.name).join(', ')+'.'
+          summary: present.length === 0 ? 'No major doshas found. Chart is harmonious.' : (present.length+' dosha(s) found: '+present.map((d:any)=>d.name).join(', ')+'.')
         }
       },
       interpret:    async () => {
