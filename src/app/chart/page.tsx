@@ -77,9 +77,9 @@ export default function ChartPage() {
       shadbala: async () => {
         // Try auth endpoint first (saved charts with login)
         const r1 = await getShadbala(horoId).catch(() => null)
-        const d1 = r1?.data?.Data ?? r1?.data?.data ?? r1?.data ?? r1
-        if (d1 && !d1.statusCode && (Array.isArray(d1) || d1.Planets || d1.planets || d1.StrongestPlanet || d1.strongestPlanet)) {
-          return Array.isArray(d1) ? { Planets: d1 } : d1
+        const d1 = r1?.data?.data ?? r1?.data?.Data ?? r1?.data ?? r1
+        if (d1 && !d1.statusCode && (Array.isArray(d1) || d1.planets || d1.Planets)) {
+          return d1
         }
         // Guest endpoint — works for any horoscopeId (guest chart saved in DB temporarily)
         const r2 = await getShadBalaGuest(horoId).catch(() => null)
@@ -734,24 +734,22 @@ export default function ChartPage() {
                     </tr></thead>
                     <tbody>{(()=>{
                         const raw = data('shadbala')
-                        // ApiResponse<ShadBalaResult>.Data (PascalCase) → raw.Data or raw.data
-                        const shadResult = raw?.Data ?? raw?.data ?? raw
-                        const planets = Array.isArray(shadResult?.Planets) ? shadResult.Planets
-                          : Array.isArray(shadResult?.planets) ? shadResult.planets
-                          : Array.isArray(raw?.Planets) ? raw.Planets
-                          : Array.isArray(raw?.planets) ? raw.planets
+                        // API returns { success, data: { planets: [...] } }
+                        const shadResult = raw?.data ?? raw?.Data ?? raw
+                        const planets: any[] = Array.isArray(shadResult?.planets) ? shadResult.planets
+                          : Array.isArray(shadResult?.Planets) ? shadResult.Planets
                           : Array.isArray(raw) ? raw : []
                         return planets
                       })().map((p:any,i:number)=>{
-                      const planet = p.Planet||p.planet||''
-                      const bala   = p.Total||p.total||p.TotalBala||p.totalBala||0
+                      const planet = p.planet||p.Planet||''
+                      const bala   = p.total??p.Total??0
                       const vals   = [
-                        p.SthaanaBala??p.SthanaBala??p.sthanaBala??null,
-                        p.DigBala??p.digBala??null,
-                        p.KalaBala??p.KaalaBala??p.kaalaBala??null,
-                        p.CheshtaBala??p.chestaBala??null,
-                        p.NaisargikaBala??p.naisargikaBala??null,
-                        p.DrikBala??p.DrigBala??p.drigBala??null
+                        p.sthaanaBala??p.SthaanaBala??null,
+                        p.digBala??p.DigBala??null,
+                        p.kalaBala??p.KalaBala??null,
+                        p.cheshtaBala??p.CheshtaBala??null,
+                        p.naisargikaBala??p.NaisargikaBala??null,
+                        p.drikBala??p.DrikBala??null
                       ]
                       const strong = typeof bala==='number' && bala>5
                       return (
@@ -783,10 +781,10 @@ export default function ChartPage() {
                   <div style={{display:'flex',flexDirection:'column',gap:'16px'}}>
                     {(() => {
                       const av = data('ashtakavarga')
-                      // ApiResponse.Data (PascalCase) wrapping
-                      const avData = av?.Data ?? av?.data ?? av
-                      const savRows: any[] = avData?.SAV ?? avData?.sav ?? av?.SAV ?? av?.sav ?? av?.bindusPerRasi ?? []
-                      const totalSAV = avData?.TotalSAV ?? avData?.totalSAV ?? av?.TotalSAV ?? savRows.reduce((s:number,r:any)=>s+(r.RawBindu??r.rawBindu??r.bindus??0),0)
+                      // API: { success, data: { sav: [{rasiName,rawBindu,afterShodhana}], bav, totalSAV } }
+                      const avData = av?.data ?? av?.Data ?? av
+                      const savRows: any[] = avData?.sav ?? avData?.SAV ?? []
+                      const totalSAV: number = avData?.totalSAV ?? avData?.TotalSAV ?? 0
                       if (!savRows.length) return <div style={{padding:'20px',color:'var(--txm)'}}>Ashtakavarga data not available</div>
                       return (
                       <div>
@@ -797,8 +795,8 @@ export default function ChartPage() {
                         </div>
                         <div style={{display:'grid',gridTemplateColumns:'repeat(4,1fr)',gap:'6px'}}>
                           {savRows.map((r:any,i:number)=>{
-                            const rasi = r.RasiName??r.rasiName??r.rasi??`Rasi ${i+1}`
-                            const pts  = r.RawBindu??r.rawBindu??r.AfterShodhana??r.bindus??0
+                            const rasi = r.rasiName??r.RasiName??`Rasi ${i+1}`
+                            const pts  = r.rawBindu??r.RawBindu??0
                             const good = pts>=28
                             return (
                               <div key={i} style={{display:'flex',justifyContent:'space-between',
@@ -812,10 +810,10 @@ export default function ChartPage() {
                             )
                           })}
                         </div>
-                        {av?.StrongestRasi && (
+                        {(avData?.strongestRasi||avData?.StrongestRasi) && (
                           <div style={{marginTop:'12px',fontSize:'12px',color:'var(--txm)'}}>
-                            Strongest: <strong style={{color:'#16A34A'}}>{av.StrongestRasi}</strong>
-                            {av.WeakestRasi && <> · Weakest: <strong style={{color:'#DC2626'}}>{av.WeakestRasi}</strong></>}
+                            Strongest: <strong style={{color:'#16A34A'}}>{avData.strongestRasi??avData.StrongestRasi}</strong>
+                            {(avData?.weakestRasi||avData?.WeakestRasi) && <> · Weakest: <strong style={{color:'#DC2626'}}>{avData.weakestRasi??avData.WeakestRasi}</strong></>}
                           </div>
                         )}
                       </div>
@@ -915,11 +913,11 @@ export default function ChartPage() {
                     const raw = data('dosha')
                     // DoshaResult: { TotalDoshasFound, HasMajorDosha, Summary, Doshas: DoshaDetail[] }
                     // DoshaDetail: { Name, IsPresent, Severity, Description, Remedies }
-                    const result = raw?.Data ?? raw?.data ?? raw
-                    const total  = result?.TotalDoshasFound ?? result?.totalDoshasFound ?? 0
-                    const major  = result?.HasMajorDosha ?? result?.hasMajorDosha ?? false
-                    const summary= result?.Summary ?? result?.summary ?? ''
-                    const doshas : any[] = result?.Doshas ?? result?.doshas ?? []
+                    const result = raw?.data ?? raw?.Data ?? raw
+                    const total  = result?.totalDoshasFound ?? result?.TotalDoshasFound ?? 0
+                    const major  = result?.hasMajorDosha ?? result?.HasMajorDosha ?? false
+                    const summary= result?.summary ?? result?.Summary ?? ''
+                    const doshas : any[] = result?.doshas ?? result?.Doshas ?? []
                     return (
                       <div style={{display:'flex',flexDirection:'column',gap:'12px'}}>
                         {/* Summary header */}
@@ -947,11 +945,11 @@ export default function ChartPage() {
                               ✓ No major doshas found in this chart
                             </div>
                           : doshas.map((d:any,i:number) => {
-                              const name     = d.Name    ?? d.name    ?? `Dosha ${i+1}`
-                              const present  = d.IsPresent ?? d.isPresent ?? false
-                              const severity = d.Severity  ?? d.severity  ?? 'None'
-                              const desc     = d.Description ?? d.description ?? ''
-                              const remedies = d.Remedies ?? d.remedies ?? ''
+                              const name     = d.name    ?? d.Name    ?? `Dosha ${i+1}`
+                              const present  = d.isPresent ?? d.IsPresent ?? false
+                              const severity = d.severity  ?? d.Severity  ?? 'None'
+                              const desc     = d.description ?? d.Description ?? ''
+                              const remedies = d.remedies ?? d.Remedies ?? ''
                               const sevColor = severity==='High'?'#DC2626':severity==='Medium'?'#F59E0B':'#6B7280'
                               return (
                                 <div key={i} style={{background:'var(--bg2)',borderRadius:'12px',
