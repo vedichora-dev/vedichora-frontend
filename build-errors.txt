@@ -1,15 +1,15 @@
 === CURRENT e2e FILES ===
 total 64
-drwxr-xr-x 2 runner runner  4096 Jul 23 06:20 .
-drwxr-xr-x 7 runner runner  4096 Jul 23 06:21 ..
--rw-r--r-- 1 runner runner  4428 Jul 23 06:20 01-auth.spec.js
--rw-r--r-- 1 runner runner 11055 Jul 23 06:20 02-chart.spec.js
--rw-r--r-- 1 runner runner  2851 Jul 23 06:20 03-match.spec.js
--rw-r--r-- 1 runner runner  2685 Jul 23 06:20 04-horoscope.spec.js
--rw-r--r-- 1 runner runner  3485 Jul 23 06:20 05-deployment.spec.js
--rw-r--r-- 1 runner runner  5636 Jul 23 06:20 06-match-10.spec.js
--rw-r--r-- 1 runner runner  8626 Jul 23 06:20 functional-test.spec.js
--rw-r--r-- 1 runner runner  2685 Jul 23 06:20 helpers.js
+drwxr-xr-x 2 runner runner  4096 Jul 23 06:30 .
+drwxr-xr-x 7 runner runner  4096 Jul 23 06:30 ..
+-rw-r--r-- 1 runner runner  4428 Jul 23 06:30 01-auth.spec.js
+-rw-r--r-- 1 runner runner 11055 Jul 23 06:30 02-chart.spec.js
+-rw-r--r-- 1 runner runner  2851 Jul 23 06:30 03-match.spec.js
+-rw-r--r-- 1 runner runner  2685 Jul 23 06:30 04-horoscope.spec.js
+-rw-r--r-- 1 runner runner  3485 Jul 23 06:30 05-deployment.spec.js
+-rw-r--r-- 1 runner runner  5636 Jul 23 06:30 06-match-10.spec.js
+-rw-r--r-- 1 runner runner  8626 Jul 23 06:30 functional-test.spec.js
+-rw-r--r-- 1 runner runner  2685 Jul 23 06:30 helpers.js
 
 === BUILD OUTPUT ===
 
@@ -38,10 +38,11 @@ https://nextjs.org/telemetry
    Generating static pages (0/25) ...
  ⚠ Entire page /checkout deopted into client-side rendering. https://nextjs.org/docs/messages/deopted-into-client-rendering /checkout
    Generating static pages (6/25) 
+   Generating static pages (12/25) 
 ReferenceError: pdfLoading is not defined
-    at /home/runner/work/vedichora-frontend/vedichora-frontend/.next/server/app/match/page.js:36:5821
+    at /home/runner/work/vedichora-frontend/vedichora-frontend/.next/server/app/match/page.js:36:5514
     at Array.map (<anonymous>)
-    at v (/home/runner/work/vedichora-frontend/vedichora-frontend/.next/server/app/match/page.js:36:5579)
+    at f (/home/runner/work/vedichora-frontend/vedichora-frontend/.next/server/app/match/page.js:36:5272)
     at nP (/home/runner/work/vedichora-frontend/vedichora-frontend/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:45321)
     at n$ (/home/runner/work/vedichora-frontend/vedichora-frontend/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:61978)
     at nj (/home/runner/work/vedichora-frontend/vedichora-frontend/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:64628)
@@ -52,9 +53,9 @@ ReferenceError: pdfLoading is not defined
 
 Error occurred prerendering page "/match". Read more: https://nextjs.org/docs/messages/prerender-error
 ReferenceError: pdfLoading is not defined
-    at /home/runner/work/vedichora-frontend/vedichora-frontend/.next/server/app/match/page.js:36:5821
+    at /home/runner/work/vedichora-frontend/vedichora-frontend/.next/server/app/match/page.js:36:5514
     at Array.map (<anonymous>)
-    at v (/home/runner/work/vedichora-frontend/vedichora-frontend/.next/server/app/match/page.js:36:5579)
+    at f (/home/runner/work/vedichora-frontend/vedichora-frontend/.next/server/app/match/page.js:36:5272)
     at nP (/home/runner/work/vedichora-frontend/vedichora-frontend/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:45321)
     at n$ (/home/runner/work/vedichora-frontend/vedichora-frontend/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:61978)
     at nj (/home/runner/work/vedichora-frontend/vedichora-frontend/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:64628)
@@ -62,7 +63,6 @@ ReferenceError: pdfLoading is not defined
     at n$ (/home/runner/work/vedichora-frontend/vedichora-frontend/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:62224)
     at nj (/home/runner/work/vedichora-frontend/vedichora-frontend/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:64628)
     at nP (/home/runner/work/vedichora-frontend/vedichora-frontend/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:56390)
-   Generating static pages (12/25) 
    Generating static pages (18/25) 
  ✓ Generating static pages (25/25) 
 
