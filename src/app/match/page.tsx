@@ -336,7 +336,7 @@ export default function MatchPage() {
     'Dina':      'Day star compatibility — health & longevity',
     'Gana':      'Temperament match — nature & character',
     'Mahendra':  'Prosperity & children — wealth & progeny',
-    'Sthree Dheerga': 'Long & prosperous marriage — wife's longevity',
+    'Sthree Dheerga': 'Long & prosperous marriage — wife longevity',
     'Yoni':      'Physical compatibility — intimacy & attraction',
     'Rasi':      'Moon sign compatibility — family & harmony',
     'Rasyadhipa': 'Moon lord friendship — mental compatibility',
