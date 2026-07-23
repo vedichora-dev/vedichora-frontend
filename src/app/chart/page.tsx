@@ -90,13 +90,13 @@ export default function ChartPage() {
       ashtakavarga: async () => {
         // Try auth endpoint first (saved charts with login)
         const r1 = await getAshtakavarga(horoId).catch(() => null)
+        // API returns { success, data: { sav:[{rasiName,rawBindu}], bav:[...], totalSAV } }
         const d1 = r1?.data?.data ?? r1?.data ?? r1
-        if (d1 && !d1.statusCode && d1.bindus) return d1
+        if (d1 && !d1.statusCode && (d1.sav || d1.SAV || d1.bav)) return d1
 
-        // Guest endpoint — works for any horoscopeId
         const r2 = await getAshtakavargaGuest(horoId).catch(() => null)
         const d2 = r2?.data?.data ?? r2?.data ?? r2
-        if (d2 && !d2.statusCode) return d2   // return whatever we get
+        if (d2 && !d2.statusCode && (d2.sav || d2.SAV || d2.bav)) return d2
         return null
       },
       arudha: async () => {
@@ -147,8 +147,9 @@ export default function ChartPage() {
       dosha: async () => {
         // Try auth endpoint first (for saved charts)
         const r = await getDoshas(horoId).catch(() => null)
+        // API: { success, data: { doshas:[...], totalDoshasFound, hasMajorDosha, summary } }
         const d = r?.data?.data ?? r?.data ?? r
-        if (d && typeof d === 'object' && Object.keys(d).length > 0 && !d.statusCode) return d
+        if (d && typeof d === 'object' && (d.doshas || d.Doshas || d.totalDoshasFound != null)) return d
 
         // Guest fallback: compute from chart planets we already have
         const ps = chart?.planets || chart?.Planets || []
