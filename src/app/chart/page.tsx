@@ -788,6 +788,9 @@ export default function ChartPage() {
               {/* ── ASHTAKAVARGA ── */}
               {tab==='ashtakavarga' && !isLoading('ashtakavarga') && (
                 <div>
+                  <div style={{fontSize:'10px',color:'var(--txm)',padding:'4px 8px',background:'var(--bg2)',borderRadius:'4px',marginBottom:'8px'}}>
+                    DEBUG: loaded={String(!!data('ashtakavarga'))}, keys={data('ashtakavarga')?Object.keys(data('ashtakavarga')).join(','):'none'}, sav={data('ashtakavarga')?.sav?.length??'?'}
+                  </div>
                   {!data('ashtakavarga') ? <div style={{padding:'20px',color:'var(--txm)'}}>Ashtakavarga data not available for this chart.</div> : (
                   <div style={{display:'flex',flexDirection:'column',gap:'16px'}}>
                     {(() => {
