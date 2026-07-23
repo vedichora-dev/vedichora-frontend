@@ -1,8 +1,8 @@
 
 Running 8 tests using 2 workers
 
-[1/8] [mobile] › e2e/functional-test.spec.js:45:3 › GUEST CHART › Guest chart — no redirect, city dropdown closes, chart generates
-[2/8] [chromium] › e2e/functional-test.spec.js:45:3 › GUEST CHART › Guest chart — no redirect, city dropdown closes, chart generates
+[1/8] [chromium] › e2e/functional-test.spec.js:45:3 › GUEST CHART › Guest chart — no redirect, city dropdown closes, chart generates
+[2/8] [mobile] › e2e/functional-test.spec.js:45:3 › GUEST CHART › Guest chart — no redirect, city dropdown closes, chart generates
 [mobile] › e2e/functional-test.spec.js:45:3 › GUEST CHART › Guest chart — no redirect, city dropdown closes, chart generates
 ✓ No redirect to signin
 
