@@ -1,15 +1,15 @@
 === CURRENT e2e FILES ===
 total 64
-drwxr-xr-x 2 runner runner  4096 Jul 23 18:31 .
-drwxr-xr-x 7 runner runner  4096 Jul 23 18:31 ..
--rw-r--r-- 1 runner runner  4428 Jul 23 18:31 01-auth.spec.js
--rw-r--r-- 1 runner runner 11055 Jul 23 18:31 02-chart.spec.js
--rw-r--r-- 1 runner runner  2851 Jul 23 18:31 03-match.spec.js
--rw-r--r-- 1 runner runner  2685 Jul 23 18:31 04-horoscope.spec.js
--rw-r--r-- 1 runner runner  3485 Jul 23 18:31 05-deployment.spec.js
--rw-r--r-- 1 runner runner  5636 Jul 23 18:31 06-match-10.spec.js
--rw-r--r-- 1 runner runner  8626 Jul 23 18:31 functional-test.spec.js
--rw-r--r-- 1 runner runner  2685 Jul 23 18:31 helpers.js
+drwxr-xr-x 2 runner runner  4096 Jul 23 18:41 .
+drwxr-xr-x 7 runner runner  4096 Jul 23 18:42 ..
+-rw-r--r-- 1 runner runner  4428 Jul 23 18:41 01-auth.spec.js
+-rw-r--r-- 1 runner runner 11055 Jul 23 18:41 02-chart.spec.js
+-rw-r--r-- 1 runner runner  2851 Jul 23 18:41 03-match.spec.js
+-rw-r--r-- 1 runner runner  2685 Jul 23 18:41 04-horoscope.spec.js
+-rw-r--r-- 1 runner runner  3485 Jul 23 18:41 05-deployment.spec.js
+-rw-r--r-- 1 runner runner  5636 Jul 23 18:41 06-match-10.spec.js
+-rw-r--r-- 1 runner runner  8626 Jul 23 18:41 functional-test.spec.js
+-rw-r--r-- 1 runner runner  2685 Jul 23 18:41 helpers.js
 
 === BUILD OUTPUT ===
 
@@ -36,15 +36,15 @@ Failed to compile.
 ./src/app/match/page.tsx
 Error: 
   [31mx[0m Expected ',', got 's'
-     ,-[[36;1;4m/home/runner/work/vedichora-frontend/vedichora-frontend/src/app/match/page.tsx[0m:264:1]
- [2m264[0m |     'Dina':      'Day star compatibility — health & longevity',
- [2m265[0m |     'Gana':      'Temperament match — nature & character',
- [2m266[0m |     'Mahendra':  'Prosperity & children — wealth & progeny',
- [2m267[0m |     'Sthree Dheerga': 'Long & prosperous marriage — wife's longevity',
+     ,-[[36;1;4m/home/runner/work/vedichora-frontend/vedichora-frontend/src/app/match/page.tsx[0m:336:1]
+ [2m336[0m |     'Dina':      'Day star compatibility — health & longevity',
+ [2m337[0m |     'Gana':      'Temperament match — nature & character',
+ [2m338[0m |     'Mahendra':  'Prosperity & children — wealth & progeny',
+ [2m339[0m |     'Sthree Dheerga': 'Long & prosperous marriage — wife's longevity',
      : [31;1m                                                           ^[0m
- [2m268[0m |     'Yoni':      'Physical compatibility — intimacy & attraction',
- [2m269[0m |     'Rasi':      'Moon sign compatibility — family & harmony',
- [2m270[0m |     'Rasyadhipa': 'Moon lord friendship — mental compatibility',
+ [2m340[0m |     'Yoni':      'Physical compatibility — intimacy & attraction',
+ [2m341[0m |     'Rasi':      'Moon sign compatibility — family & harmony',
+ [2m342[0m |     'Rasyadhipa': 'Moon lord friendship — mental compatibility',
      `----
 
 Caused by:
