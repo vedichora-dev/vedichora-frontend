@@ -96,7 +96,7 @@ export default function ChartPage() {
         // Guest endpoint — works for any horoscopeId
         const r2 = await getAshtakavargaGuest(horoId).catch(() => null)
         const d2 = r2?.data?.data ?? r2?.data ?? r2
-        if (d2 && !d2.statusCode && (d2.bindusPerRasi || d2.sav)) return d2
+        if (d2 && !d2.statusCode) return d2   // return whatever we get
         return null
       },
       arudha: async () => {
@@ -762,7 +762,7 @@ export default function ChartPage() {
                           {vals.map((v,j)=>(
                             <td key={j} style={{padding:'7px 10px',color:'var(--txm)',
                               fontSize:'11px',fontVariantNumeric:'tabular-nums'}}>
-                              {typeof v==='number'?v.toFixed(2):v||'—'}</td>
+                              {v!=null?Number(v).toFixed(2):'—'}</td>
                           ))}
                         </tr>
                       )
