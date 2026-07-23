@@ -1,15 +1,15 @@
 === CURRENT e2e FILES ===
 total 64
-drwxr-xr-x 2 runner runner  4096 Jul 23 04:12 .
-drwxr-xr-x 7 runner runner  4096 Jul 23 04:13 ..
--rw-r--r-- 1 runner runner  4428 Jul 23 04:12 01-auth.spec.js
--rw-r--r-- 1 runner runner 11055 Jul 23 04:12 02-chart.spec.js
--rw-r--r-- 1 runner runner  2851 Jul 23 04:12 03-match.spec.js
--rw-r--r-- 1 runner runner  2685 Jul 23 04:12 04-horoscope.spec.js
--rw-r--r-- 1 runner runner  3485 Jul 23 04:12 05-deployment.spec.js
--rw-r--r-- 1 runner runner  5636 Jul 23 04:12 06-match-10.spec.js
--rw-r--r-- 1 runner runner  8626 Jul 23 04:12 functional-test.spec.js
--rw-r--r-- 1 runner runner  2685 Jul 23 04:12 helpers.js
+drwxr-xr-x 2 runner runner  4096 Jul 23 04:16 .
+drwxr-xr-x 7 runner runner  4096 Jul 23 04:16 ..
+-rw-r--r-- 1 runner runner  4428 Jul 23 04:16 01-auth.spec.js
+-rw-r--r-- 1 runner runner 11055 Jul 23 04:16 02-chart.spec.js
+-rw-r--r-- 1 runner runner  2851 Jul 23 04:16 03-match.spec.js
+-rw-r--r-- 1 runner runner  2685 Jul 23 04:16 04-horoscope.spec.js
+-rw-r--r-- 1 runner runner  3485 Jul 23 04:16 05-deployment.spec.js
+-rw-r--r-- 1 runner runner  5636 Jul 23 04:16 06-match-10.spec.js
+-rw-r--r-- 1 runner runner  8626 Jul 23 04:16 functional-test.spec.js
+-rw-r--r-- 1 runner runner  2685 Jul 23 04:16 helpers.js
 
 === BUILD OUTPUT ===
 
@@ -35,22 +35,26 @@ Failed to compile.
 
 ./src/app/chart/page.tsx
 Error: 
-  [31mx[0m Expected '}', got '<eof>'
-     ,-[[36;1;4m/home/runner/work/vedichora-frontend/vedichora-frontend/src/app/chart/page.tsx[0m:232:1]
- [2m232[0m |           totalDoshasFound: presentDoshas.length,
- [2m233[0m |           hasMajorDosha:    majorDoshas.length > 0,
- [2m234[0m |           summary:          summaryText,
- [2m235[0m |         }
-     : [31;1m        ^[0m
-     `----
-
-  [31mx[0m Unexpected eof
-     ,-[[36;1;4m/home/runner/work/vedichora-frontend/vedichora-frontend/src/app/chart/page.tsx[0m:232:1]
- [2m232[0m |           totalDoshasFound: presentDoshas.length,
- [2m233[0m |           hasMajorDosha:    majorDoshas.length > 0,
- [2m234[0m |           summary:          summaryText,
- [2m235[0m |         }
-     : [31;1m         ^[0m
+  [31mx[0m Expected ';', '}' or <eof>
+     ,-[[36;1;4m/home/runner/work/vedichora-frontend/vedichora-frontend/src/app/chart/page.tsx[0m:208:1]
+ [2m208[0m |                 ? 'No major doshas. Planetary positions are generally harmonious.'
+ [2m209[0m |                 : present.length+' dosha'+(present.length>1?'s':'')+' found: '+present.map(d=>d.name).join(', ')+'.'
+ [2m210[0m |             }
+ [2m211[0m | [31;1m,[0m[31;1m-[0m[31;1m>[0m       interpret:    async () => {
+ [2m212[0m | [31;1m|[0m           const [a,b,c,d] = await Promise.all([
+ [2m213[0m | [31;1m|[0m             getInterpretPersonality(horoId).catch(()=>null),
+ [2m214[0m | [31;1m|[0m             getInterpretCareer(horoId).catch(()=>null),
+ [2m215[0m | [31;1m|[0m             getInterpretMarriage(horoId).catch(()=>null),
+ [2m216[0m | [31;1m|[0m             getInterpretCurrentPeriod(horoId).catch(()=>null),
+ [2m217[0m | [31;1m|[0m           ])
+ [2m218[0m | [31;1m|[0m           return { personality:a?.data, career:b?.data, marriage:c?.data, currentPeriod:d?.data }
+ [2m219[0m | [31;1m|[0m         },
+ [2m220[0m | [31;1m|[0m[31;1m-[0m[31;1m>[0m       report: async () => {
+     : [31;1m`[0m[31;1m---[0m[33;1m            ^[0m
+     : [31;1m`[0m[31;1m---[0m[31;1m-[0m [31;1mThis is the expression part of an expression statement[0m
+ [2m221[0m |             const [rep, yogas] = await Promise.all([
+ [2m222[0m |               getChartReportStage1(horoId).catch(()=>null),
+ [2m223[0m |               fetch(process.env.NEXT_PUBLIC_CHART_URL ? process.env.NEXT_PUBLIC_CHART_URL + '/api/chart/' + horoId + '/yogas' : 'https://enchanting-dedication-production.up.railway.app/api/chart/' + horoId + '/yogas',
      `----
 
 Caused by:
