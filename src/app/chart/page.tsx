@@ -196,13 +196,13 @@ export default function ChartPage() {
 
         const doshas = [
           { name: 'Mangal Dosha',    isPresent: mangalPresent,   severity: mangalPresent ? 'Medium' : 'None',
-            description: mangalPresent ? \`Mars in house \${marsH} — creates friction in relationships and marriage.\` : 'Mars is well-placed. No Mangal Dosha.',
+            description: mangalPresent ? `Mars in house \${marsH} — creates friction in relationships and marriage.` : 'Mars is well-placed. No Mangal Dosha.',
             remedies: mangalPresent ? 'Worship Lord Hanuman on Tuesdays. Wear red coral after consulting an astrologer.' : '' },
           { name: 'Kaal Sarpa Dosha', isPresent: ksPresent,       severity: ksPresent ? 'High' : 'None',
             description: ksPresent ? 'All planets between Rahu-Ketu axis — periods of struggle and delay before breakthrough.' : 'No Kaal Sarpa Dosha. Planets are not enclosed by Rahu-Ketu axis.',
             remedies: ksPresent ? 'Perform Kaal Sarpa puja at Trimbakeshwar. Chant Maha Mrityunjaya mantra.' : '' },
           { name: 'Guru Chandal Dosha', isPresent: guruChandalPresent, severity: guruChandalPresent ? 'Medium' : 'None',
-            description: guruChandalPresent ? \`Jupiter conjunct \${jupH === rahuH ? 'Rahu' : 'Ketu'} — can cloud wisdom and ethics.\` : 'Jupiter is free from Rahu/Ketu influence.',
+            description: guruChandalPresent ? `Jupiter conjunct \${jupH === rahuH ? 'Rahu' : 'Ketu'} — can cloud wisdom and ethics.` : 'Jupiter is free from Rahu/Ketu influence.',
             remedies: guruChandalPresent ? 'Donate yellow items on Thursdays. Chant Guru Beeja mantra.' : '' },
           { name: 'Kemadruma Dosha', isPresent: kemadrumaPresent,  severity: kemadrumaPresent ? 'Low' : 'None',
             description: kemadrumaPresent ? 'Moon isolated — no planets in adjacent houses. May cause emotional instability.' : 'Moon has planetary support. No Kemadruma Dosha.',
@@ -214,7 +214,7 @@ export default function ChartPage() {
             description: shrapitPresent ? 'Saturn conjunct Rahu — karmic delays and obstacles in life.' : 'No Saturn-Rahu conjunction.',
             remedies: shrapitPresent ? 'Perform Shrapit Dosha nivaran puja. Feed crows on Saturdays.' : '' },
           { name: 'Vish Yoga',       isPresent: vishPresent,      severity: vishPresent ? 'Medium' : 'None',
-            description: vishPresent ? \`Saturn and Moon in house \${satH} — emotional heaviness and pessimism.\` : 'Saturn and Moon are in different houses.',
+            description: vishPresent ? `Saturn and Moon in house \${satH} — emotional heaviness and pessimism.` : 'Saturn and Moon are in different houses.',
             remedies: vishPresent ? 'Wear pearl after consulting astrologer. Chant Chandra mantra on Mondays.' : '' },
           { name: 'Pitra Dosha',     isPresent: pitraPresent,     severity: pitraPresent ? 'Medium' : 'None',
             description: pitraPresent ? 'Sun conjunct Rahu — ancestral karma affecting the chart. Obstacles from past-life debts.' : 'No Sun-Rahu conjunction indicating Pitra Dosha.',
@@ -225,7 +225,7 @@ export default function ChartPage() {
         const majorDoshas    = presentDoshas.filter(d => d.severity === 'High')
         const summaryText    = presentDoshas.length === 0
           ? 'No major doshas found in this chart. The planetary positions are generally harmonious.'
-          : \`\${presentDoshas.length} dosha\${presentDoshas.length > 1 ? 's' : ''} found: \${presentDoshas.map(d => d.name).join(', ')}.\`
+          : `\${presentDoshas.length} dosha\${presentDoshas.length > 1 ? 's' : ''} found: \${presentDoshas.map(d => d.name).join(', ')}.`
 
         return {
           doshas,
