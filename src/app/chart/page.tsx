@@ -77,9 +77,9 @@ export default function ChartPage() {
       shadbala: async () => {
         // Try auth endpoint first (saved charts with login)
         const r1 = await getShadbala(horoId).catch(() => null)
-        const d1 = r1?.data?.data ?? r1?.data ?? r1
-        if (d1 && !d1.statusCode && (Array.isArray(d1) || d1.planets || d1.strongestPlanet)) {
-          return Array.isArray(d1) ? { planets: d1 } : d1
+        const d1 = r1?.data?.Data ?? r1?.data?.data ?? r1?.data ?? r1
+        if (d1 && !d1.statusCode && (Array.isArray(d1) || d1.Planets || d1.planets || d1.StrongestPlanet || d1.strongestPlanet)) {
+          return Array.isArray(d1) ? { Planets: d1 } : d1
         }
         // Guest endpoint — works for any horoscopeId (guest chart saved in DB temporarily)
         const r2 = await getShadBalaGuest(horoId).catch(() => null)
@@ -734,10 +734,13 @@ export default function ChartPage() {
                     </tr></thead>
                     <tbody>{(()=>{
                         const raw = data('shadbala')
-                        const planets = Array.isArray(raw?.Planets) ? raw.Planets
+                        // ApiResponse<ShadBalaResult>.Data (PascalCase) → raw.Data or raw.data
+                        const shadResult = raw?.Data ?? raw?.data ?? raw
+                        const planets = Array.isArray(shadResult?.Planets) ? shadResult.Planets
+                          : Array.isArray(shadResult?.planets) ? shadResult.planets
+                          : Array.isArray(raw?.Planets) ? raw.Planets
                           : Array.isArray(raw?.planets) ? raw.planets
-                          : Array.isArray(raw) ? raw
-                          : []
+                          : Array.isArray(raw) ? raw : []
                         return planets
                       })().map((p:any,i:number)=>{
                       const planet = p.Planet||p.planet||''
@@ -780,9 +783,10 @@ export default function ChartPage() {
                   <div style={{display:'flex',flexDirection:'column',gap:'16px'}}>
                     {(() => {
                       const av = data('ashtakavarga')
-                      // Support both SAV array (from real engine) and legacy bindusPerRasi
-                      const savRows: any[] = av?.SAV ?? av?.sav ?? av?.bindusPerRasi ?? []
-                      const totalSAV = av?.TotalSAV ?? av?.totalSAV ?? savRows.reduce((s:number,r:any)=>s+(r.RawBindu??r.rawBindu??r.bindus??0),0)
+                      // ApiResponse.Data (PascalCase) wrapping
+                      const avData = av?.Data ?? av?.data ?? av
+                      const savRows: any[] = avData?.SAV ?? avData?.sav ?? av?.SAV ?? av?.sav ?? av?.bindusPerRasi ?? []
+                      const totalSAV = avData?.TotalSAV ?? avData?.totalSAV ?? av?.TotalSAV ?? savRows.reduce((s:number,r:any)=>s+(r.RawBindu??r.rawBindu??r.bindus??0),0)
                       if (!savRows.length) return <div style={{padding:'20px',color:'var(--txm)'}}>Ashtakavarga data not available</div>
                       return (
                       <div>
@@ -911,7 +915,7 @@ export default function ChartPage() {
                     const raw = data('dosha')
                     // DoshaResult: { TotalDoshasFound, HasMajorDosha, Summary, Doshas: DoshaDetail[] }
                     // DoshaDetail: { Name, IsPresent, Severity, Description, Remedies }
-                    const result = raw?.data ?? raw
+                    const result = raw?.Data ?? raw?.data ?? raw
                     const total  = result?.TotalDoshasFound ?? result?.totalDoshasFound ?? 0
                     const major  = result?.HasMajorDosha ?? result?.hasMajorDosha ?? false
                     const summary= result?.Summary ?? result?.summary ?? ''
