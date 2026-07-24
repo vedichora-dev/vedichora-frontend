@@ -1,216 +1,220 @@
 
 Running 2 tests using 2 workers
 
-SS01: form
-API score: 27 / 36
-Poruthams: 8
-Select count: 12
-SS01: form
-API score: 27 / 36
-Poruthams: 8
-Select count: 12
-Select fill error: locator.selectOption: Test timeout of 60000ms exceeded.
+Dropdowns found: 12
+Selects: [{"i":0,"name":"","value":"","optCount":32,"firstOpts":[":Day","1:1","2:2","3:3","4:4"]},{"i":1,"name":"","value":"","optCount":13,"firstOpts":[":Month","1:January","2:February","3:March","4:April"]},{"i":2,"name":"","value":"","optCount":127,"firstOpts":[":Year","2025:2025","2024:2024","2023:2023","2022:2022"]},{"i":3,"name":"","value":"","optCount":13,"firstOpts":[":Hr","1:1","2:2","3:3","4:4"]},{"i":4,"name":"","value":"","optCount":61,"firstOpts":[":Min","0:00","1:01","2:02","3:03"]},{"i":5,"name":"","value":"AM","optCount":2,"firstOpts":["AM:AM","PM:PM"]}]
+Dropdowns found: 12
+Selects: [{"i":0,"name":"","value":"","optCount":32,"firstOpts":[":Day","1:1","2:2","3:3","4:4"]},{"i":1,"name":"","value":"","optCount":13,"firstOpts":[":Month","1:January","2:February","3:March","4:April"]},{"i":2,"name":"","value":"","optCount":127,"firstOpts":[":Year","2025:2025","2024:2024","2023:2023","2022:2022"]},{"i":3,"name":"","value":"","optCount":13,"firstOpts":[":Hr","1:1","2:2","3:3","4:4"]},{"i":4,"name":"","value":"","optCount":61,"firstOpts":[":Min","0:00","1:01","2:02","3:03"]},{"i":5,"name":"","value":"AM","optCount":2,"firstOpts":["AM:AM","PM:PM"]}]
+Native selects: 12
+Native selects: 12
+Select[0] options: [ '', '1', '2', '3', '4' ]
+Select[0] options: [ '', '1', '2', '3', '4' ]
+Select[1] options: [ '', '1', '2', '3', '4' ]
+Select[1] options: [ '', '1', '2', '3', '4' ]
+Select[2] options: [ '', '2025', '2024', '2023', '2022' ]
+Select[2] options: [ '', '2025', '2024', '2023', '2022' ]
+Select[3] options: [ '', '1', '2', '3', '4' ]
+Select[3] options: [ '', '1', '2', '3', '4' ]
+Select[4] options: [ '', '0', '1', '2', '3' ]
+Select[4] options: [ '', '0', '1', '2', '3' ]
+Select[5] options: [ 'AM', 'PM' ]
+Select[5] options: [ 'AM', 'PM' ]
+Select[6] options: [ '', '1', '2', '3', '4' ]
+Select[6] options: [ '', '1', '2', '3', '4' ]
+Select[7] options: [ '', '1', '2', '3', '4' ]
+Select[8] options: [ '', '2025', '2024', '2023', '2022' ]
+Select[7] options: [ '', '1', '2', '3', '4' ]
+Select[8] options: [ '', '2025', '2024', '2023', '2022' ]
+Select[9] options: [ '', '1', '2', '3', '4' ]
+Select[9] options: [ '', '1', '2', '3', '4' ]
+Select[10] options: [ '', '0', '1', '2', '3' ]
+Select[10] options: [ '', '0', '1', '2', '3' ]
+Select[11] options: [ 'AM', 'PM' ]
+Select[11] options: [ 'AM', 'PM' ]
+SS01 inspect taken
+select count via locator: 12
+Sel0 opts: [ 'Day', '1', '2', '3', '4', '5' ]
+Sel1 opts: [ 'Month', 'January', 'February', 'March', 'April', 'May' ]
+Sel2 opts: [ 'Year', '2025', '2024', '2023', '2022', '2021' ]
+SS01 inspect taken
+select count via locator: 12
+Sel0 opts: [ 'Day', '1', '2', '3', '4', '5' ]
+Sel1 opts: [ 'Month', 'January', 'February', 'March', 'April', 'May' ]
+Sel2 opts: [ 'Year', '2025', '2024', '2023', '2022', '2021' ]
+Select error: locator.selectOption: Test timeout of 120000ms exceeded.
 Call log:
-  - waiting for locator('select').nth(3)
-    - locator resolved to <select class="select">…</select>
-  - attempting select option action
-    2 × waiting for element to be visible and enabled
-      - did not find some options
-    - retrying select option action
-    - waiting 20ms
-    2 × waiting for element to be visible and enabled
-      - did not find some options
-    - retrying select option action
-      - waiting 100ms
-    112 × waiting for element to be visible and enabled
-        - did not find some options
-      - retrying select option action
-        - waiting 500ms
-
-  ✘  1 [chromium] › e2e/screenshot.spec.js:5:1 › match page full result UI (1.0m)
-Select fill error: locator.selectOption: Test timeout of 60000ms exceeded.
+  - waiting for locator('sele
+  ✘  1 [chromium] › e2e/screenshot.spec.js:5:1 › result UI screenshot (2.0m)
+Select error: locator.selectOption: Test timeout of 120000ms exceeded.
 Call log:
-  - waiting for locator('select').nth(3)
-    - locator resolved to <select class="select">…</select>
-  - attempting select option action
-    2 × waiting for element to be visible and enabled
-      - did not find some options
-    - retrying select option action
-    - waiting 20ms
-    2 × waiting for element to be visible and enabled
-      - did not find some options
-    - retrying select option action
-      - waiting 100ms
-    112 × waiting for element to be visible and enabled
-        - did not find some options
-      - retrying select option action
-        - waiting 500ms
-
-  ✘  2 [mobile] › e2e/screenshot.spec.js:5:1 › match page full result UI (1.0m)
-SS01: form
-API score: 27 / 36
-Poruthams: 8
-Select count: 12
-SS01: form
-API score: 27 / 36
-Poruthams: 8
-Select count: 12
-Select fill error: locator.selectOption: Test timeout of 60000ms exceeded.
+  - waiting for locator('sele
+  ✘  2 [mobile] › e2e/screenshot.spec.js:5:1 › result UI screenshot (2.0m)
+Dropdowns found: 12
+Selects: [{"i":0,"name":"","value":"","optCount":32,"firstOpts":[":Day","1:1","2:2","3:3","4:4"]},{"i":1,"name":"","value":"","optCount":13,"firstOpts":[":Month","1:January","2:February","3:March","4:April"]},{"i":2,"name":"","value":"","optCount":127,"firstOpts":[":Year","2025:2025","2024:2024","2023:2023","2022:2022"]},{"i":3,"name":"","value":"","optCount":13,"firstOpts":[":Hr","1:1","2:2","3:3","4:4"]},{"i":4,"name":"","value":"","optCount":61,"firstOpts":[":Min","0:00","1:01","2:02","3:03"]},{"i":5,"name":"","value":"AM","optCount":2,"firstOpts":["AM:AM","PM:PM"]}]
+Native selects: 12
+Select[0] options: [ '', '1', '2', '3', '4' ]
+Select[1] options: [ '', '1', '2', '3', '4' ]
+Select[2] options: [ '', '2025', '2024', '2023', '2022' ]
+Select[3] options: [ '', '1', '2', '3', '4' ]
+Select[4] options: [ '', '0', '1', '2', '3' ]
+Select[5] options: [ 'AM', 'PM' ]
+Select[6] options: [ '', '1', '2', '3', '4' ]
+Select[7] options: [ '', '1', '2', '3', '4' ]
+Select[8] options: [ '', '2025', '2024', '2023', '2022' ]
+Select[9] options: [ '', '1', '2', '3', '4' ]
+Select[10] options: [ '', '0', '1', '2', '3' ]
+Select[11] options: [ 'AM', 'PM' ]
+SS01 inspect taken
+select count via locator: 12
+Dropdowns found: 12
+Sel0 opts: [ 'Day', '1', '2', '3', '4', '5' ]
+Sel1 opts: [ 'Month', 'January', 'February', 'March', 'April', 'May' ]
+Sel2 opts: [ 'Year', '2025', '2024', '2023', '2022', '2021' ]
+Selects: [{"i":0,"name":"","value":"","optCount":32,"firstOpts":[":Day","1:1","2:2","3:3","4:4"]},{"i":1,"name":"","value":"","optCount":13,"firstOpts":[":Month","1:January","2:February","3:March","4:April"]},{"i":2,"name":"","value":"","optCount":127,"firstOpts":[":Year","2025:2025","2024:2024","2023:2023","2022:2022"]},{"i":3,"name":"","value":"","optCount":13,"firstOpts":[":Hr","1:1","2:2","3:3","4:4"]},{"i":4,"name":"","value":"","optCount":61,"firstOpts":[":Min","0:00","1:01","2:02","3:03"]},{"i":5,"name":"","value":"AM","optCount":2,"firstOpts":["AM:AM","PM:PM"]}]
+Native selects: 12
+Select[0] options: [ '', '1', '2', '3', '4' ]
+Select[1] options: [ '', '1', '2', '3', '4' ]
+Select[2] options: [ '', '2025', '2024', '2023', '2022' ]
+Select[3] options: [ '', '1', '2', '3', '4' ]
+Select[4] options: [ '', '0', '1', '2', '3' ]
+Select[5] options: [ 'AM', 'PM' ]
+Select[6] options: [ '', '1', '2', '3', '4' ]
+Select[7] options: [ '', '1', '2', '3', '4' ]
+Select[8] options: [ '', '2025', '2024', '2023', '2022' ]
+Select[9] options: [ '', '1', '2', '3', '4' ]
+Select[10] options: [ '', '0', '1', '2', '3' ]
+Select[11] options: [ 'AM', 'PM' ]
+SS01 inspect taken
+select count via locator: 12
+Sel0 opts: [ 'Day', '1', '2', '3', '4', '5' ]
+Sel1 opts: [ 'Month', 'January', 'February', 'March', 'April', 'May' ]
+Sel2 opts: [ 'Year', '2025', '2024', '2023', '2022', '2021' ]
+Select error: locator.selectOption: Test timeout of 120000ms exceeded.
 Call log:
-  - waiting for locator('select').nth(3)
-    - locator resolved to <select class="select">…</select>
-  - attempting select option action
-    2 × waiting for element to be visible and enabled
-      - did not find some options
-    - retrying select option action
-    - waiting 20ms
-    2 × waiting for element to be visible and enabled
-      - did not find some options
-    - retrying select option action
-      - waiting 100ms
-    116 × waiting for element to be visible and enabled
-        - did not find some options
-      - retrying select option action
-        - waiting 500ms
-
-Select fill error: locator.selectOption: Test timeout of 60000ms exceeded.
+  - waiting for locator('sele
+Select error: locator.selectOption: Test timeout of 120000ms exceeded.
 Call log:
-  - waiting for locator('select').nth(3)
-    - locator resolved to <select class="select">…</select>
-  - attempting select option action
-    2 × waiting for element to be visible and enabled
-      - did not find some options
-    - retrying select option action
-    - waiting 20ms
-    2 × waiting for element to be visible and enabled
-      - did not find some options
-    - retrying select option action
-      - waiting 100ms
-    114 × waiting for element to be visible and enabled
-        - did not find some options
-      - retrying select option action
-        - waiting 500ms
-
-  ✘  4 [mobile] › e2e/screenshot.spec.js:5:1 › match page full result UI (retry #1) (1.0m)
-  ✘  3 [chromium] › e2e/screenshot.spec.js:5:1 › match page full result UI (retry #1) (1.0m)
+  - waiting for locator('sele
+  ✘  4 [mobile] › e2e/screenshot.spec.js:5:1 › result UI screenshot (retry #1) (2.1m)
+  ✘  3 [chromium] › e2e/screenshot.spec.js:5:1 › result UI screenshot (retry #1) (2.1m)
 
 
-  1) [chromium] › e2e/screenshot.spec.js:5:1 › match page full result UI ───────────────────────────
+  1) [chromium] › e2e/screenshot.spec.js:5:1 › result UI screenshot ────────────────────────────────
 
-    Test timeout of 60000ms exceeded.
+    Test timeout of 120000ms exceeded.
 
-    Error: locator.all: Target page, context or browser has been closed
+    Error: page.screenshot: Target page, context or browser has been closed
 
-      61 |
-      62 |   // Also fill name inputs
-    > 63 |   const inputs = await page.locator('input').all()
-         |                                              ^
-      64 |   for (let i = 0; i < inputs.length; i++) {
-      65 |     const ph = await inputs[i].getAttribute('placeholder') || ''
-      66 |     if (ph.toLowerCase().includes('name') || ph === '') {
-        at /home/runner/work/vedichora-frontend/vedichora-frontend/e2e/screenshot.spec.js:63:46
+      131 |   }
+      132 |
+    > 133 |   await page.screenshot({ path: 'screenshots/02_dates.png' })
+          |              ^
+      134 |   console.log('SS02 dates taken')
+      135 |
+      136 |   // Fill city inputs
+        at /home/runner/work/vedichora-frontend/vedichora-frontend/e2e/screenshot.spec.js:133:14
 
     attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
-    test-results/screenshot-match-page-full-result-UI-chromium/test-failed-1.png
+    test-results/screenshot-result-UI-screenshot-chromium/test-failed-1.png
     ────────────────────────────────────────────────────────────────────────────────────────────────
 
     attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
-    test-results/screenshot-match-page-full-result-UI-chromium/video.webm
+    test-results/screenshot-result-UI-screenshot-chromium/video.webm
     ────────────────────────────────────────────────────────────────────────────────────────────────
 
-    Error Context: test-results/screenshot-match-page-full-result-UI-chromium/error-context.md
+    Error Context: test-results/screenshot-result-UI-screenshot-chromium/error-context.md
 
     Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
 
-    Test timeout of 60000ms exceeded.
+    Test timeout of 120000ms exceeded.
 
-    Error: locator.all: Target page, context or browser has been closed
+    Error: page.screenshot: Target page, context or browser has been closed
 
-      61 |
-      62 |   // Also fill name inputs
-    > 63 |   const inputs = await page.locator('input').all()
-         |                                              ^
-      64 |   for (let i = 0; i < inputs.length; i++) {
-      65 |     const ph = await inputs[i].getAttribute('placeholder') || ''
-      66 |     if (ph.toLowerCase().includes('name') || ph === '') {
-        at /home/runner/work/vedichora-frontend/vedichora-frontend/e2e/screenshot.spec.js:63:46
+      131 |   }
+      132 |
+    > 133 |   await page.screenshot({ path: 'screenshots/02_dates.png' })
+          |              ^
+      134 |   console.log('SS02 dates taken')
+      135 |
+      136 |   // Fill city inputs
+        at /home/runner/work/vedichora-frontend/vedichora-frontend/e2e/screenshot.spec.js:133:14
 
     attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
-    test-results/screenshot-match-page-full-result-UI-chromium-retry1/test-failed-1.png
+    test-results/screenshot-result-UI-screenshot-chromium-retry1/test-failed-1.png
     ────────────────────────────────────────────────────────────────────────────────────────────────
 
     attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
-    test-results/screenshot-match-page-full-result-UI-chromium-retry1/video.webm
+    test-results/screenshot-result-UI-screenshot-chromium-retry1/video.webm
     ────────────────────────────────────────────────────────────────────────────────────────────────
 
-    Error Context: test-results/screenshot-match-page-full-result-UI-chromium-retry1/error-context.md
+    Error Context: test-results/screenshot-result-UI-screenshot-chromium-retry1/error-context.md
 
     attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
-    test-results/screenshot-match-page-full-result-UI-chromium-retry1/trace.zip
+    test-results/screenshot-result-UI-screenshot-chromium-retry1/trace.zip
     Usage:
 
-        npx playwright show-trace test-results/screenshot-match-page-full-result-UI-chromium-retry1/trace.zip
+        npx playwright show-trace test-results/screenshot-result-UI-screenshot-chromium-retry1/trace.zip
 
     ────────────────────────────────────────────────────────────────────────────────────────────────
 
-  2) [mobile] › e2e/screenshot.spec.js:5:1 › match page full result UI ─────────────────────────────
+  2) [mobile] › e2e/screenshot.spec.js:5:1 › result UI screenshot ──────────────────────────────────
 
-    Test timeout of 60000ms exceeded.
+    Test timeout of 120000ms exceeded.
 
-    Error: locator.all: Target page, context or browser has been closed
+    Error: page.screenshot: Target page, context or browser has been closed
 
-      61 |
-      62 |   // Also fill name inputs
-    > 63 |   const inputs = await page.locator('input').all()
-         |                                              ^
-      64 |   for (let i = 0; i < inputs.length; i++) {
-      65 |     const ph = await inputs[i].getAttribute('placeholder') || ''
-      66 |     if (ph.toLowerCase().includes('name') || ph === '') {
-        at /home/runner/work/vedichora-frontend/vedichora-frontend/e2e/screenshot.spec.js:63:46
+      131 |   }
+      132 |
+    > 133 |   await page.screenshot({ path: 'screenshots/02_dates.png' })
+          |              ^
+      134 |   console.log('SS02 dates taken')
+      135 |
+      136 |   // Fill city inputs
+        at /home/runner/work/vedichora-frontend/vedichora-frontend/e2e/screenshot.spec.js:133:14
 
     attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
-    test-results/screenshot-match-page-full-result-UI-mobile/test-failed-1.png
+    test-results/screenshot-result-UI-screenshot-mobile/test-failed-1.png
     ────────────────────────────────────────────────────────────────────────────────────────────────
 
     attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
-    test-results/screenshot-match-page-full-result-UI-mobile/video.webm
+    test-results/screenshot-result-UI-screenshot-mobile/video.webm
     ────────────────────────────────────────────────────────────────────────────────────────────────
 
-    Error Context: test-results/screenshot-match-page-full-result-UI-mobile/error-context.md
+    Error Context: test-results/screenshot-result-UI-screenshot-mobile/error-context.md
 
     Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
 
-    Test timeout of 60000ms exceeded.
+    Test timeout of 120000ms exceeded.
 
-    Error: locator.all: Target page, context or browser has been closed
+    Error: page.screenshot: Target page, context or browser has been closed
 
-      61 |
-      62 |   // Also fill name inputs
-    > 63 |   const inputs = await page.locator('input').all()
-         |                                              ^
-      64 |   for (let i = 0; i < inputs.length; i++) {
-      65 |     const ph = await inputs[i].getAttribute('placeholder') || ''
-      66 |     if (ph.toLowerCase().includes('name') || ph === '') {
-        at /home/runner/work/vedichora-frontend/vedichora-frontend/e2e/screenshot.spec.js:63:46
+      131 |   }
+      132 |
+    > 133 |   await page.screenshot({ path: 'screenshots/02_dates.png' })
+          |              ^
+      134 |   console.log('SS02 dates taken')
+      135 |
+      136 |   // Fill city inputs
+        at /home/runner/work/vedichora-frontend/vedichora-frontend/e2e/screenshot.spec.js:133:14
 
     attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
-    test-results/screenshot-match-page-full-result-UI-mobile-retry1/test-failed-1.png
+    test-results/screenshot-result-UI-screenshot-mobile-retry1/test-failed-1.png
     ────────────────────────────────────────────────────────────────────────────────────────────────
 
     attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
-    test-results/screenshot-match-page-full-result-UI-mobile-retry1/video.webm
+    test-results/screenshot-result-UI-screenshot-mobile-retry1/video.webm
     ────────────────────────────────────────────────────────────────────────────────────────────────
 
-    Error Context: test-results/screenshot-match-page-full-result-UI-mobile-retry1/error-context.md
+    Error Context: test-results/screenshot-result-UI-screenshot-mobile-retry1/error-context.md
 
     attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
-    test-results/screenshot-match-page-full-result-UI-mobile-retry1/trace.zip
+    test-results/screenshot-result-UI-screenshot-mobile-retry1/trace.zip
     Usage:
 
-        npx playwright show-trace test-results/screenshot-match-page-full-result-UI-mobile-retry1/trace.zip
+        npx playwright show-trace test-results/screenshot-result-UI-screenshot-mobile-retry1/trace.zip
 
     ────────────────────────────────────────────────────────────────────────────────────────────────
 
   2 failed
-    [chromium] › e2e/screenshot.spec.js:5:1 › match page full result UI ────────────────────────────
-    [mobile] › e2e/screenshot.spec.js:5:1 › match page full result UI ──────────────────────────────
+    [chromium] › e2e/screenshot.spec.js:5:1 › result UI screenshot ─────────────────────────────────
+    [mobile] › e2e/screenshot.spec.js:5:1 › result UI screenshot ───────────────────────────────────
