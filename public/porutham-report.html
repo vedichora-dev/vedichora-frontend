@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>{{TITLE}}</title>
+<title>Vivaha Porutham Report</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap');
   :root{
@@ -475,6 +475,7 @@ function renderPathu(poruthams) {
 }
 
 function renderAshta(kootas) {
+  kootas = kootas || [];
   const tbody = document.getElementById('ashta-tbody');
   tbody.innerHTML = '';
   let totalScore = 0, totalMax = 0;
@@ -510,19 +511,19 @@ function renderScoreBand() {
   const ashtaScore = DATA.AshtaKootaScore ?? DATA.ashtaKootaScore ?? 0;
   const ashtaTotal = DATA.AshtaKootaTotal ?? DATA.ashtaKootaTotal ?? 36;
   const pathuScore = DATA.PathuPoruthamScore ?? DATA.pathuPoruthamScore ?? 0;
-  const pathuTotal = DATA.PathuPoruthamTotal ?? DATA.pathuPoruthamTotal ?? 10;
-  const doshaCount = (DATA.MangalDosha ? 1 : 0);
+  const pathuTotal = DATA.PathuPoruthamTotal ?? DATA.pathuPoruthamTotal ?? 24;
+  const doshaCount = (DATA.MangalDosha || DATA.mangalDosha ? 1 : 0);
 
   const ap = pct(ashtaScore, ashtaTotal);
   const pp = pct(pathuScore, pathuTotal);
 
-  document.getElementById('sc-ashta-val').textContent = `${ashtaScore}/${ashtaTotal}`;
+  document.getElementById('sc-ashta-val').textContent = ashtaScore + '/' + ashtaTotal;
   document.getElementById('sc-ashta-val').className = 'score-num ' + scoreClass(ap);
-  document.getElementById('sc-ashta-pct').textContent = `${ap}%`;
+  document.getElementById('sc-ashta-pct').textContent = ap + '%';
 
-  document.getElementById('sc-pathu-val').textContent = `${pathuScore}/${pathuTotal}`;
+  document.getElementById('sc-pathu-val').textContent = pathuScore + '/' + pathuTotal;
   document.getElementById('sc-pathu-val').className = 'score-num ' + scoreClass(pp);
-  document.getElementById('sc-pathu-pct').textContent = `${pp}%`;
+  document.getElementById('sc-pathu-pct').textContent = pp + '%';
 
   document.getElementById('sc-dosha-val').textContent = String(doshaCount);
   document.getElementById('sc-dosha-val').className = 'score-num ' + (doshaCount === 0 ? 'score-good' : 'score-bad');
@@ -530,7 +531,7 @@ function renderScoreBand() {
 }
 
 function renderVerdict() {
-  const isRec = DATA.IsRecommended ?? DATA.isRecommended ?? false;
+  const isRec  = DATA.IsRecommended ?? DATA.isRecommended ?? false;
   const summary = DATA.Summary ?? DATA.summary ?? '';
   const box = document.getElementById('verdict-box');
   box.className = 'verdict ' + (isRec ? 'verdict-good' : 'verdict-warn');
@@ -612,21 +613,23 @@ function renderRemedies(poruthams) {
 }
 
 function renderBirthDetails() {
-  document.getElementById('name1').textContent = DATA.name1 || '';
-  document.getElementById('name2').textContent = DATA.name2 || '';
-  document.getElementById('cover-names').textContent = (DATA.name1 || 'Person 1') + ' & ' + (DATA.name2 || 'Person 2');
+  const n1 = DATA.name1 || 'Person 1';
+  const n2 = DATA.name2 || 'Person 2';
+  document.getElementById('name1').textContent = n1;
+  document.getElementById('name2').textContent = n2;
+  document.getElementById('cover-names').textContent = n1 + ' & ' + n2;
   document.getElementById('dob1').textContent = DATA.dob1 || '';
   document.getElementById('dob2').textContent = DATA.dob2 || '';
-  document.getElementById('nak1').textContent = DATA.groomNakshatra || '';
-  document.getElementById('nak2').textContent = DATA.brideNakshatra || '';
-  document.getElementById('rasi1').textContent = DATA.groomRasi || '';
-  document.getElementById('rasi2').textContent = DATA.brideRasi || '';
+  document.getElementById('nak1').textContent  = DATA.GroomNakshatra || DATA.groomNakshatra || '';
+  document.getElementById('nak2').textContent  = DATA.BrideNakshatra || DATA.brideNakshatra || '';
+  document.getElementById('rasi1').textContent = DATA.GroomRasi || DATA.groomRasi || '';
+  document.getElementById('rasi2').textContent = DATA.BrideRasi || DATA.brideRasi || '';
   document.getElementById('lagna1').textContent = DATA.groomLagna || '';
   document.getElementById('lagna2').textContent = DATA.brideLagna || '';
-  document.getElementById('nadi1').textContent = DATA.groomNadi || '';
-  document.getElementById('nadi2').textContent = DATA.brideNadi || '';
-  document.getElementById('rajju1').textContent = DATA.groomRajju || '';
-  document.getElementById('rajju2').textContent = DATA.brideRajju || '';
+  document.getElementById('nadi1').textContent  = DATA.groomNadi || '';
+  document.getElementById('nadi2').textContent  = DATA.brideNadi || '';
+  document.getElementById('rajju1').textContent = DATA.GroomRajju || DATA.groomRajju || '';
+  document.getElementById('rajju2').textContent = DATA.BrideRajju || DATA.brideRajju || '';
   // Pada from planet positions if available
   const groomPada = DATA.groomPada || (DATA.chart1?.planets?.find(p=>p.planet==='Moon')?.nakshatraPada) || '';
   const bridePada = DATA.bridePada || (DATA.chart2?.planets?.find(p=>p.planet==='Moon')?.nakshatraPada) || '';
@@ -643,16 +646,24 @@ function renderBirthDetails() {
 
 // ── Init ──────────────────────────────────────────────────────────────────
 function init() {
+  if (!window.__VH_DATA) { 
+    document.body.innerHTML = '<div style="padding:40px;font-family:sans-serif;color:#666">No data. Open this report from the VedicHora match page.</div>';
+    return;
+  }
   applyLabels();
   renderBirthDetails();
   renderScoreBand();
   const poruthams = DATA.Poruthams || DATA.poruthams || [];
-  const kootas = DATA.KootaDetails || DATA.kootaDetails || [];
+  const kootas    = DATA.KootaDetails || DATA.kootaDetails || [];
+  console.log('init: poruthams=', poruthams.length, 'kootas=', kootas.length, 'score=', DATA.AshtaKootaScore);
   renderPathu(poruthams);
   renderAshta(kootas);
   renderStrengths(poruthams, kootas);
   renderVerdict();
   renderRemedies(poruthams);
+  // Replace cover title with actual title
+  const t = document.getElementById('cover-title');
+  if(t) t.textContent = L.title;
 }
 
 if (document.readyState === 'loading') {
