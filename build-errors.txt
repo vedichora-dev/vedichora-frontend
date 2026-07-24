@@ -1,16 +1,16 @@
 === CURRENT e2e FILES ===
-total 68
-drwxr-xr-x 2 runner runner  4096 Jul 24 02:02 .
-drwxr-xr-x 9 runner runner  4096 Jul 24 02:03 ..
--rw-r--r-- 1 runner runner  4428 Jul 24 02:02 01-auth.spec.js
--rw-r--r-- 1 runner runner 11055 Jul 24 02:02 02-chart.spec.js
--rw-r--r-- 1 runner runner  2851 Jul 24 02:02 03-match.spec.js
--rw-r--r-- 1 runner runner  2685 Jul 24 02:02 04-horoscope.spec.js
--rw-r--r-- 1 runner runner  3485 Jul 24 02:02 05-deployment.spec.js
--rw-r--r-- 1 runner runner  5636 Jul 24 02:02 06-match-10.spec.js
--rw-r--r-- 1 runner runner  8626 Jul 24 02:02 functional-test.spec.js
--rw-r--r-- 1 runner runner  2685 Jul 24 02:02 helpers.js
--rw-r--r-- 1 runner runner  2939 Jul 24 02:02 screenshot.spec.js
+total 72
+drwxr-xr-x 2 runner runner  4096 Jul 24 02:24 .
+drwxr-xr-x 9 runner runner  4096 Jul 24 02:25 ..
+-rw-r--r-- 1 runner runner  4428 Jul 24 02:24 01-auth.spec.js
+-rw-r--r-- 1 runner runner 11055 Jul 24 02:24 02-chart.spec.js
+-rw-r--r-- 1 runner runner  2851 Jul 24 02:24 03-match.spec.js
+-rw-r--r-- 1 runner runner  2685 Jul 24 02:24 04-horoscope.spec.js
+-rw-r--r-- 1 runner runner  3485 Jul 24 02:24 05-deployment.spec.js
+-rw-r--r-- 1 runner runner  5636 Jul 24 02:24 06-match-10.spec.js
+-rw-r--r-- 1 runner runner  8626 Jul 24 02:24 functional-test.spec.js
+-rw-r--r-- 1 runner runner  2685 Jul 24 02:24 helpers.js
+-rw-r--r-- 1 runner runner  4399 Jul 24 02:24 screenshot.spec.js
 
 === BUILD OUTPUT ===
 
@@ -39,6 +39,7 @@ https://nextjs.org/telemetry
    Generating static pages (0/25) ...
  ⚠ Entire page /checkout deopted into client-side rendering. https://nextjs.org/docs/messages/deopted-into-client-rendering /checkout
    Generating static pages (6/25) 
+   Generating static pages (12/25) 
 ReferenceError: pdfLoading is not defined
     at /home/runner/work/vedichora-frontend/vedichora-frontend/.next/server/app/match/page.js:36:5514
     at Array.map (<anonymous>)
@@ -63,7 +64,6 @@ ReferenceError: pdfLoading is not defined
     at n$ (/home/runner/work/vedichora-frontend/vedichora-frontend/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:62224)
     at nj (/home/runner/work/vedichora-frontend/vedichora-frontend/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:64628)
     at nP (/home/runner/work/vedichora-frontend/vedichora-frontend/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:56390)
-   Generating static pages (12/25) 
    Generating static pages (18/25) 
  ✓ Generating static pages (25/25) 
 
