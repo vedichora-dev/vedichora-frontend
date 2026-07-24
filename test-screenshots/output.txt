@@ -1,136 +1,23 @@
+SyntaxError: /home/runner/work/vedichora-frontend/vedichora-frontend/e2e/screenshot.spec.js: Unexpected token, expected "," (50:73)
 
-Running 2 tests using 2 workers
+  48 |   // Remove the print() call so it doesn't block
+  49 |   html = html.replace("setTimeout(() => { try { win.print() } catch {} }, 800)", "")
+> 50 |   html = html.replace('onclick="window.print()"', 'onclick="console.log('print')"')
+     |                                                                          ^
+  51 |
+  52 |   // Write to page
+  53 |   await page.setContent(html, { waitUntil: 'domcontentloaded' })
 
-SS01 match result taken
-SS01 match result taken
-NO_POPUP_OPENED
-  ✘  1 [chromium] › e2e/screenshot.spec.js:4:1 › PDF report renders correctly (2.0m)
-NO_POPUP_OPENED
-  ✘  2 [mobile] › e2e/screenshot.spec.js:4:1 › PDF report renders correctly (2.0m)
-SS01 match result taken
-SS01 match result taken
-NO_POPUP_OPENED
-NO_POPUP_OPENED
-  ✘  3 [chromium] › e2e/screenshot.spec.js:4:1 › PDF report renders correctly (retry #1) (2.0m)
-  ✘  4 [mobile] › e2e/screenshot.spec.js:4:1 › PDF report renders correctly (retry #1) (2.0m)
+   at screenshot.spec.js:50
 
+  48 |   // Remove the print() call so it doesn't block
+  49 |   html = html.replace("setTimeout(() => { try { win.print() } catch {} }, 800)", "")
+> 50 |   html = html.replace('onclick="window.print()"', 'onclick="console.log('print')"')
+     |                                                                         ^
+  51 |
+  52 |   // Write to page
+  53 |   await page.setContent(html, { waitUntil: 'domcontentloaded' })
+Error: No tests found.
+Make sure that arguments are regular expressions matching test files.
+You may need to escape symbols like "$" or "*" and quote the arguments.
 
-  1) [chromium] › e2e/screenshot.spec.js:4:1 › PDF report renders correctly ────────────────────────
-
-    Test timeout of 120000ms exceeded.
-
-    Error: locator.allTextContents: Target page, context or browser has been closed
-
-      73 |     console.log('NO_POPUP_OPENED')
-      74 |     // Try clicking the button differently
-    > 75 |     const btns = await page.locator('button').allTextContents()
-         |                                               ^
-      76 |     console.log('BUTTONS:' + btns.join(' | '))
-      77 |   }
-      78 | })
-        at /home/runner/work/vedichora-frontend/vedichora-frontend/e2e/screenshot.spec.js:75:47
-
-    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
-    test-results/screenshot-PDF-report-renders-correctly-chromium/test-failed-1.png
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
-    test-results/screenshot-PDF-report-renders-correctly-chromium/video.webm
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    Error Context: test-results/screenshot-PDF-report-renders-correctly-chromium/error-context.md
-
-    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
-
-    Test timeout of 120000ms exceeded.
-
-    Error: locator.allTextContents: Target page, context or browser has been closed
-
-      73 |     console.log('NO_POPUP_OPENED')
-      74 |     // Try clicking the button differently
-    > 75 |     const btns = await page.locator('button').allTextContents()
-         |                                               ^
-      76 |     console.log('BUTTONS:' + btns.join(' | '))
-      77 |   }
-      78 | })
-        at /home/runner/work/vedichora-frontend/vedichora-frontend/e2e/screenshot.spec.js:75:47
-
-    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
-    test-results/screenshot-PDF-report-renders-correctly-chromium-retry1/test-failed-1.png
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
-    test-results/screenshot-PDF-report-renders-correctly-chromium-retry1/video.webm
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    Error Context: test-results/screenshot-PDF-report-renders-correctly-chromium-retry1/error-context.md
-
-    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
-    test-results/screenshot-PDF-report-renders-correctly-chromium-retry1/trace.zip
-    Usage:
-
-        npx playwright show-trace test-results/screenshot-PDF-report-renders-correctly-chromium-retry1/trace.zip
-
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-  2) [mobile] › e2e/screenshot.spec.js:4:1 › PDF report renders correctly ──────────────────────────
-
-    Test timeout of 120000ms exceeded.
-
-    Error: locator.allTextContents: Target page, context or browser has been closed
-
-      73 |     console.log('NO_POPUP_OPENED')
-      74 |     // Try clicking the button differently
-    > 75 |     const btns = await page.locator('button').allTextContents()
-         |                                               ^
-      76 |     console.log('BUTTONS:' + btns.join(' | '))
-      77 |   }
-      78 | })
-        at /home/runner/work/vedichora-frontend/vedichora-frontend/e2e/screenshot.spec.js:75:47
-
-    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
-    test-results/screenshot-PDF-report-renders-correctly-mobile/test-failed-1.png
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
-    test-results/screenshot-PDF-report-renders-correctly-mobile/video.webm
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    Error Context: test-results/screenshot-PDF-report-renders-correctly-mobile/error-context.md
-
-    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
-
-    Test timeout of 120000ms exceeded.
-
-    Error: locator.allTextContents: Target page, context or browser has been closed
-
-      73 |     console.log('NO_POPUP_OPENED')
-      74 |     // Try clicking the button differently
-    > 75 |     const btns = await page.locator('button').allTextContents()
-         |                                               ^
-      76 |     console.log('BUTTONS:' + btns.join(' | '))
-      77 |   }
-      78 | })
-        at /home/runner/work/vedichora-frontend/vedichora-frontend/e2e/screenshot.spec.js:75:47
-
-    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
-    test-results/screenshot-PDF-report-renders-correctly-mobile-retry1/test-failed-1.png
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
-    test-results/screenshot-PDF-report-renders-correctly-mobile-retry1/video.webm
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    Error Context: test-results/screenshot-PDF-report-renders-correctly-mobile-retry1/error-context.md
-
-    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
-    test-results/screenshot-PDF-report-renders-correctly-mobile-retry1/trace.zip
-    Usage:
-
-        npx playwright show-trace test-results/screenshot-PDF-report-renders-correctly-mobile-retry1/trace.zip
-
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-  2 failed
-    [chromium] › e2e/screenshot.spec.js:4:1 › PDF report renders correctly ─────────────────────────
-    [mobile] › e2e/screenshot.spec.js:4:1 › PDF report renders correctly ───────────────────────────
