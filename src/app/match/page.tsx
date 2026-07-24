@@ -385,14 +385,11 @@ export default function MatchPage() {
     if (!d.dd || !d.mm || !d.yyyy)
       return `${label}: please select day, month and year`
     if (!p.trim())
-      return `${label}: place of birth is required`
-    // lat/lng validated at runtime in calcChart with geocode fallback
-    if (!p.trim())
       return label + ': place of birth is required'
     return ''
   }
 
-    // ── Submit ─────────────────────────────────────────────────────────────────
+  // ── Submit ─────────────────────────────────────────────────────────────────
 
   const handle = async () => {
     setErr(''); setErr1(''); setErr2(''); setResult(null)
