@@ -44,7 +44,7 @@ jobs:
           REPO: ${{ github.repository }}
         run: |
           # Commit tab screenshots if they exist
-          for f in screenshots/tab_*.png; do
+          for f in test-screenshots/tab_*.png; do
             [ -f "$f" ] || continue
             NAME=$(basename $f)
             CONTENT_IMG=$(base64 -w 0 $f)
