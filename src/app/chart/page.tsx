@@ -88,21 +88,16 @@ export default function ChartPage() {
         return null
       },
       ashtakavarga: async () => {
-        // API: GET /api/strength/{id}/ashtakavarga → AllowAnonymous
-        // Returns { success, data: { sav:[{rasiName,rawBindu,afterShodhana}], bav:[...], totalSAV } }
-        const r1 = await getAshtakavarga(horoId).catch(() => null)
-        if (r1?.data?.data?.sav?.length) return r1.data.data
-        if (r1?.data?.sav?.length)       return r1.data
-        if (r1?.data?.data?.bav?.length) return r1.data.data
-        if (r1?.data?.bav?.length)       return r1.data
-        // Also try with the navData horoscopeId in case horoId differs
-        const altId = navData?.horoscopeId || navData?.HoroscopeId
-        if (altId && altId !== horoId) {
-          const r2 = await getAshtakavarga(altId).catch(() => null)
-          if (r2?.data?.data?.sav?.length) return r2.data.data
-          if (r2?.data?.sav?.length)       return r2.data
-        }
-        return null
+        // Use fetch directly — bypasses axios interceptors that may interfere
+        const id = horoId || navData?.horoscopeId || navData?.HoroscopeId || ''
+        if (!id) return null
+        try {
+          const res = await fetch(`https://enchanting-dedication-production.up.railway.app/api/strength/${id}/ashtakavarga`)
+          if (!res.ok) return null
+          const json = await res.json()
+          // API returns { success, data: { sav:[{rasiName,rawBindu}], bav:[...], totalSAV } }
+          return json?.data ?? null
+        } catch { return null }
       },
       arudha: async () => {
         const r = await getSpecialLagnas(horoId).catch(() => null)
@@ -788,15 +783,12 @@ export default function ChartPage() {
               {/* ── ASHTAKAVARGA ── */}
               {tab==='ashtakavarga' && !isLoading('ashtakavarga') && (
                 <div>
-                  <div style={{fontSize:'10px',color:'var(--txm)',padding:'4px 8px',background:'var(--bg2)',borderRadius:'4px',marginBottom:'8px'}}>
-                    DEBUG: loaded={String(!!data('ashtakavarga'))}, keys={data('ashtakavarga')?Object.keys(data('ashtakavarga')).join(','):'none'}, sav={data('ashtakavarga')?.sav?.length??'?'}
-                  </div>
                   {!data('ashtakavarga') ? <div style={{padding:'20px',color:'var(--txm)'}}>Ashtakavarga data not available for this chart.</div> : (
                   <div style={{display:'flex',flexDirection:'column',gap:'16px'}}>
                     {(() => {
                       const av = data('ashtakavarga')
                       // API: { success, data: { sav: [{rasiName,rawBindu,afterShodhana}], bav, totalSAV } }
-                      const avData = av?.data ?? av?.Data ?? av
+                      const avData = av  // loader already returns inner data object
                       const savRows: any[] = avData?.sav ?? avData?.SAV ?? []
                       const totalSAV: number = avData?.totalSAV ?? avData?.TotalSAV ?? 0
                       if (!savRows.length) return <div style={{padding:'20px',color:'var(--txm)'}}>Ashtakavarga data not available</div>
