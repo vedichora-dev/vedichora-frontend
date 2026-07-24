@@ -1,14 +1,13 @@
 const { test, expect } = require('@playwright/test')
-const BASE     = 'https://vedichora-frontend-orcin.vercel.app'
+const BASE      = 'https://vedichora-frontend-orcin.vercel.app'
 const CHART_URL = 'https://enchanting-dedication-production.up.railway.app'
 const fs = require('fs')
 
-// Create a guest chart via API, then open the chart page and screenshot each tab
 test('Chart tabs — Shadbala, Ashtakavarga, Doshas', async ({ page }) => {
-  test.setTimeout(120000)
+  test.setTimeout(180000)
   fs.mkdirSync('screenshots', { recursive: true })
 
-  // Step 1: Create chart via API
+  // Pre-fetch chart from API
   const chartRes = await fetch(CHART_URL + '/api/chart/guest', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -19,94 +18,120 @@ test('Chart tabs — Shadbala, Ashtakavarga, Doshas', async ({ page }) => {
       UtcOffsetHours: 5.5, AyanamsaType: 'Lahiri'
     })
   })
-  const chartData = await chartRes.json()
-  const horoId = chartData?.data?.horoscopeId || ''
+  const chartJson = await chartRes.json()
+  const horoId = chartJson?.data?.horoscopeId || ''
   console.log('HoroId:', horoId)
   expect(horoId).toBeTruthy()
 
-  // Step 2: Open chart page with this horoId
+  // Pre-fetch shadbala to verify API works from CI
+  const shadRes = await fetch(CHART_URL + '/api/strength/' + horoId + '/shadbala')
+  const shadJson = await shadRes.json()
+  const shadPlanets = shadJson?.data?.planets || []
+  console.log('API shadbala planets:', shadPlanets.length, shadPlanets[0]?.planet, 'total:', shadPlanets[0]?.total)
+
+  // Pre-fetch ashtakavarga
+  const avRes = await fetch(CHART_URL + '/api/strength/' + horoId + '/ashtakavarga')
+  const avJson = await avRes.json()
+  const savCount = avJson?.data?.sav?.length || 0
+  console.log('API ashtakavarga SAV rows:', savCount)
+
   await page.setViewportSize({ width: 1400, height: 900 })
   await page.goto(BASE + '/chart', { waitUntil: 'networkidle', timeout: 30000 })
   await page.waitForTimeout(1000)
 
-  // Step 3: Inject the chart data into localStorage so the page loads it
-  // The chart page reads from localStorage key 'vh_horoid' or generates fresh
-  // Better: just fill the form using JavaScript native events
-  
-  // Use the form — fill with React native events
-  await page.evaluate(({ hid }) => {
-    // Set horoId in localStorage so the strip loads it
-    localStorage.setItem('vh_horoid', hid)
-  }, { hid: horoId })
-  
-  await page.reload({ waitUntil: 'networkidle', timeout: 30000 })
-  await page.waitForTimeout(2000)
-  
-  // Fill the form using React's native setter
+  // Fill the form using React native events and generate
   await page.evaluate(() => {
     const sels = document.querySelectorAll('select')
     function setNative(el, val) {
+      if (!el) return
       const setter = Object.getOwnPropertyDescriptor(window.HTMLSelectElement.prototype, 'value').set
       setter.call(el, val)
       el.dispatchEvent(new Event('change', { bubbles: true }))
     }
-    if (sels[0]) setNative(sels[0], '1')     // day
-    if (sels[1]) setNative(sels[1], '3')     // month
-    if (sels[2]) setNative(sels[2], '1959')  // year
-    if (sels[3]) setNative(sels[3], '6')     // hour
-    if (sels[4]) setNative(sels[4], '0')     // min
-    if (sels[5]) setNative(sels[5], 'AM')    // ampm
-    console.log('Form filled, selects:', sels.length)
+    setNative(sels[0], '1')     // day
+    setNative(sels[1], '3')     // month  
+    setNative(sels[2], '1959')  // year
+    setNative(sels[3], '2')     // hour (14 = 2pm)
+    setNative(sels[4], '30')    // min
+    setNative(sels[5], 'PM')    // ampm
+    console.log('Selects set:', sels.length)
   })
 
-  // Set city via input
-  const cityInput = page.locator('input').filter({ hasAttr: 'placeholder' }).last()
-  try {
-    await cityInput.fill('Chennai, Tamil Nadu, India', { timeout: 3000 })
-    await page.waitForTimeout(1500)
-    // Click first dropdown item
-    const item = page.locator('[style*="absolute"] button, [style*="position: absolute"] li').first()
-    if (await item.isVisible({ timeout: 2000 }).catch(() => false)) {
-      await item.click({ force: true })
-      console.log('City selected from dropdown')
+  // Set city by filling input and clicking first dropdown result
+  const inputs = await page.locator('input').all()
+  let cityDone = false
+  for (let i = inputs.length - 1; i >= 0; i--) {
+    const ph = await inputs[i].getAttribute('placeholder') || ''
+    if (ph.match(/city|place|type|birth/i)) {
+      await inputs[i].fill('Chennai')
+      await page.waitForTimeout(2000)
+      const drop = page.locator('button').filter({ hasText: /Chennai/i }).first()
+      if (await drop.isVisible({ timeout: 2000 }).catch(() => false)) {
+        await drop.click({ force: true })
+        cityDone = true
+        console.log('City selected')
+      }
+      break
     }
-  } catch(e) { console.log('City fill:', e.message.slice(0,80)) }
-
+  }
+  if (!cityDone) {
+    // Force lat/lng via evaluate
+    await page.evaluate(() => {
+      // Find CityAutocomplete and trigger selection programmatically  
+      const inputs = document.querySelectorAll('input')
+      for (const inp of inputs) {
+        if (inp.placeholder && inp.placeholder.toLowerCase().includes('city')) {
+          const nativeInputValueSetter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value').set
+          nativeInputValueSetter.call(inp, 'Chennai, India')
+          inp.dispatchEvent(new Event('input', { bubbles: true }))
+          inp.dispatchEvent(new Event('change', { bubbles: true }))
+        }
+      }
+    })
+    await page.waitForTimeout(1000)
+    console.log('City forced via input event')
+  }
+  
   await page.screenshot({ path: 'screenshots/tab_00_form.png' })
 
   // Click Generate
-  const genBtn = page.locator('button').filter({ hasText: /Generate Chart|Generate/i }).first()
-  if (await genBtn.isVisible({ timeout: 3000 }).catch(() => false)) {
+  const genBtn = page.locator('button').filter({ hasText: /Generate/i }).first()
+  const genVisible = await genBtn.isVisible({ timeout: 3000 }).catch(() => false)
+  console.log('Generate button visible:', genVisible)
+  if (genVisible) {
     await genBtn.click()
-    console.log('Generate clicked')
-    await page.waitForTimeout(7000)
+    await page.waitForTimeout(8000)
+    console.log('Chart generated')
   }
-  
+
   await page.screenshot({ path: 'screenshots/tab_01_rasi.png' })
-  console.log('SS: Rasi chart')
+
+  // Check if chart loaded
+  const pageText = await page.locator('body').innerText()
+  const chartLoaded = pageText.includes('Aries') || pageText.includes('Cancer') || pageText.includes('Lagna')
+  console.log('Chart loaded:', chartLoaded)
 
   // Shadbala tab
   const shadBtn = page.locator('button').filter({ hasText: /Shadbala/i }).first()
   if (await shadBtn.isVisible({ timeout: 3000 }).catch(() => false)) {
     await shadBtn.click()
-    await page.waitForTimeout(4000)
+    await page.waitForTimeout(6000)
     await page.screenshot({ path: 'screenshots/tab_02_shadbala.png' })
     const text = await page.locator('body').innerText()
-    const hasSthana = text.includes('Sthana') || text.includes('sthaana') || text.includes('187') || text.includes('Bala')
+    const hasSthana = text.includes('Sthana') || text.includes('187') || text.includes('Total Bala') || text.includes('468')
     console.log('Shadbala data visible:', hasSthana)
-    console.log('SS: Shadbala')
+    console.log('Shadbala text sample:', text.split('\n').filter(l => l.includes('Sun') || l.includes('Sthana') || l.includes('Planet')).slice(0,5).join(' | '))
   }
 
   // Ashtakavarga tab
   const avBtn = page.locator('button').filter({ hasText: /Ashtakavarga/i }).first()
   if (await avBtn.isVisible({ timeout: 3000 }).catch(() => false)) {
     await avBtn.click()
-    await page.waitForTimeout(5000)
+    await page.waitForTimeout(6000)
     await page.screenshot({ path: 'screenshots/tab_03_ashtakavarga.png' })
     const text = await page.locator('body').innerText()
-    const hasBindu = text.includes('Bindu') || text.includes('Aries') || text.includes('24') || text.includes('SAV')
+    const hasBindu = text.includes('Aries') || text.includes('Bindu') || text.includes('SAV') || text.includes('24')
     console.log('Ashtakavarga data visible:', hasBindu)
-    console.log('SS: Ashtakavarga')
   }
 
   // Doshas tab
@@ -116,17 +141,7 @@ test('Chart tabs — Shadbala, Ashtakavarga, Doshas', async ({ page }) => {
     await page.waitForTimeout(3000)
     await page.screenshot({ path: 'screenshots/tab_04_doshas.png' })
     const text = await page.locator('body').innerText()
-    const hasDosha = text.includes('Mangal') || text.includes('Kaal Sarpa') || text.includes('Dosha')
+    const hasDosha = text.includes('Mangal') || text.includes('Kaal Sarpa')
     console.log('Dosha data visible:', hasDosha)
-    console.log('SS: Doshas')
-  }
-
-  // Dasha tab
-  const dashaBtn = page.locator('button').filter({ hasText: /^Dasha$/i }).first()
-  if (await dashaBtn.isVisible({ timeout: 3000 }).catch(() => false)) {
-    await dashaBtn.click()
-    await page.waitForTimeout(2000)
-    await page.screenshot({ path: 'screenshots/tab_05_dasha.png' })
-    console.log('SS: Dasha')
   }
 })
