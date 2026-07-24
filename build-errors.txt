@@ -1,15 +1,16 @@
 === CURRENT e2e FILES ===
-total 64
-drwxr-xr-x 2 runner runner  4096 Jul 24 01:29 .
-drwxr-xr-x 7 runner runner  4096 Jul 24 01:29 ..
--rw-r--r-- 1 runner runner  4428 Jul 24 01:29 01-auth.spec.js
--rw-r--r-- 1 runner runner 11055 Jul 24 01:29 02-chart.spec.js
--rw-r--r-- 1 runner runner  2851 Jul 24 01:29 03-match.spec.js
--rw-r--r-- 1 runner runner  2685 Jul 24 01:29 04-horoscope.spec.js
--rw-r--r-- 1 runner runner  3485 Jul 24 01:29 05-deployment.spec.js
--rw-r--r-- 1 runner runner  5636 Jul 24 01:29 06-match-10.spec.js
--rw-r--r-- 1 runner runner  8626 Jul 24 01:29 functional-test.spec.js
--rw-r--r-- 1 runner runner  2685 Jul 24 01:29 helpers.js
+total 72
+drwxr-xr-x 2 runner runner  4096 Jul 24 01:39 .
+drwxr-xr-x 7 runner runner  4096 Jul 24 01:39 ..
+-rw-r--r-- 1 runner runner  4428 Jul 24 01:39 01-auth.spec.js
+-rw-r--r-- 1 runner runner 11055 Jul 24 01:39 02-chart.spec.js
+-rw-r--r-- 1 runner runner  2851 Jul 24 01:39 03-match.spec.js
+-rw-r--r-- 1 runner runner  2685 Jul 24 01:39 04-horoscope.spec.js
+-rw-r--r-- 1 runner runner  3485 Jul 24 01:39 05-deployment.spec.js
+-rw-r--r-- 1 runner runner  5636 Jul 24 01:39 06-match-10.spec.js
+-rw-r--r-- 1 runner runner  8626 Jul 24 01:39 functional-test.spec.js
+-rw-r--r-- 1 runner runner  2685 Jul 24 01:39 helpers.js
+-rw-r--r-- 1 runner runner  5232 Jul 24 01:39 screenshot.spec.js
 
 === BUILD OUTPUT ===
 
@@ -36,8 +37,9 @@ https://nextjs.org/telemetry
    Linting ...
    Collecting page data ...
    Generating static pages (0/25) ...
- ⚠ Entire page /checkout deopted into client-side rendering. https://nextjs.org/docs/messages/deopted-into-client-rendering /checkout
    Generating static pages (6/25) 
+ ⚠ Entire page /checkout deopted into client-side rendering. https://nextjs.org/docs/messages/deopted-into-client-rendering /checkout
+   Generating static pages (12/25) 
 ReferenceError: pdfLoading is not defined
     at /home/runner/work/vedichora-frontend/vedichora-frontend/.next/server/app/match/page.js:36:5514
     at Array.map (<anonymous>)
@@ -49,7 +51,6 @@ ReferenceError: pdfLoading is not defined
     at n$ (/home/runner/work/vedichora-frontend/vedichora-frontend/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:62224)
     at nj (/home/runner/work/vedichora-frontend/vedichora-frontend/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:64628)
     at nP (/home/runner/work/vedichora-frontend/vedichora-frontend/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:56390)
-   Generating static pages (12/25) 
 
 Error occurred prerendering page "/match". Read more: https://nextjs.org/docs/messages/prerender-error
 ReferenceError: pdfLoading is not defined
