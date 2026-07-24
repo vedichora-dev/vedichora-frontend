@@ -114,6 +114,7 @@ City 0 final value: "Chennai"
     ────────────────────────────────────────────────────────────────────────────────────────────────
 
 
+[5/8] [chromium] › e2e/functional-test.spec.js:86:3 › CITY DROPDOWN › City dropdown closes after selection
   2) [mobile] › e2e/functional-test.spec.js:45:3 › GUEST CHART › Guest chart — no redirect, city dropdown closes, chart generates 
 
     Test timeout of 60000ms exceeded.
@@ -179,7 +180,6 @@ City 0 final value: "Chennai"
     ────────────────────────────────────────────────────────────────────────────────────────────────
 
 
-[5/8] [chromium] › e2e/functional-test.spec.js:86:3 › CITY DROPDOWN › City dropdown closes after selection
 [6/8] [mobile] › e2e/functional-test.spec.js:86:3 › CITY DROPDOWN › City dropdown closes after selection
 [7/8] (retries) [chromium] › e2e/functional-test.spec.js:86:3 › CITY DROPDOWN › City dropdown closes after selection (retry #1)
 [8/8] (retries) [mobile] › e2e/functional-test.spec.js:86:3 › CITY DROPDOWN › City dropdown closes after selection (retry #1)
@@ -328,22 +328,22 @@ Match selects count: 12
 [chromium] › e2e/functional-test.spec.js:120:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login
 City 0 final value: "Chennai"
 
-City dropdown for "Coimbatore" appeared: false
-
-No dropdown for "Coimbatore" — accepting typed value
-
 [mobile] › e2e/functional-test.spec.js:120:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login
 City dropdown for "Chennai" appeared: false
 
 No dropdown for "Chennai" — accepting typed value
 
 [chromium] › e2e/functional-test.spec.js:120:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login
-City 1 final value: "Coimbatore"
+City dropdown for "Coimbatore" appeared: false
+
+No dropdown for "Coimbatore" — accepting typed value
 
 [mobile] › e2e/functional-test.spec.js:120:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login
 City 0 final value: "Chennai"
 
 [chromium] › e2e/functional-test.spec.js:120:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login
+City 1 final value: "Coimbatore"
+
 Clicking Calculate button...
 
 [mobile] › e2e/functional-test.spec.js:120:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login
