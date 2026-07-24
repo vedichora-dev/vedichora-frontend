@@ -311,22 +311,50 @@ export default function MatchPage() {
   const [lang, setLang] = useState<'en'|'ta'|'hi'>('en')
   const resultsRef = useRef<HTMLDivElement>(null)
 
-  const downloadPdf = async (type: 'english'|'vedic'|'both') => {
-    const id1 = result?.hid1 || result?.chart1?.horoscopeId || result?.chart1?.HoroscopeId
-    const id2 = result?.hid2 || result?.chart2?.horoscopeId || result?.chart2?.HoroscopeId
-    if (!id1 || !id2) { alert('PDF reports need saved charts — please sign in to save your charts first.'); return }
-    setPdfLoading(type)
+  const downloadPdf = async (reportLang: 'en'|'ta'|'hi' = lang) => {
+    if (!result) return
+    setPdfLoading('gen')
     try {
-      const CHART_URL = 'https://enchanting-dedication-production.up.railway.app'
-      const token = localStorage.getItem('vh_token')
-      const res = await fetch(`${CHART_URL}/api/matchmaking/${id1}/${id2}/pdf/${type}`, {
-        headers: token ? { 'Authorization': `Bearer ${token}` } : {}
-      })
-      if (!res.ok) { alert('PDF requires sign-in'); setPdfLoading(null); return }
-      const html = await res.text()
+      // Fetch the HTML report template from public/
+      const tmplRes = await fetch('/porutham-report.html')
+      const tmpl = await tmplRes.text()
+      // Inject data
+      const data = {
+        ...result,
+        lang: reportLang,
+        name1: result.name1 || 'Person 1',
+        name2: result.name2 || 'Person 2',
+        dob1:  result.dob1  || '',
+        dob2:  result.dob2  || '',
+        groomNakshatra: result.GroomNakshatra || result.groomNakshatra || '',
+        brideNakshatra: result.BrideNakshatra || result.brideNakshatra || '',
+        groomRasi: result.GroomRasi || result.groomRasi || '',
+        brideRasi: result.BrideRasi || result.brideRasi || '',
+        groomLagna: result.groomLagna || '',
+        brideLagna: result.brideLagna || '',
+        groomNadi: result.groomNadi || '',
+        brideNadi: result.brideNadi || '',
+        groomRajju: result.GroomRajju || result.groomRajju || '',
+        brideRajju: result.BrideRajju || result.brideRajju || '',
+      }
+      // Open new window and inject data + template
       const win = window.open('', '_blank')
-      if (win) { win.document.write(html); win.document.close(); setTimeout(() => win.print(), 500) }
-    } catch (e) { alert('PDF generation failed') }
+      if (!win) { alert('Please allow popups for PDF download'); setPdfLoading(null); return }
+      win.document.write(tmpl)
+      win.document.close()
+      // Inject data after document is ready
+      setTimeout(() => {
+        try {
+          win.__VH_DATA = data
+          // Re-trigger init
+          if (win.document.readyState === 'complete') {
+            const script = win.document.createElement('script')
+            script.textContent = 'window.__VH_DATA = ' + JSON.stringify(data) + '; if(typeof init==="function") init();'
+            win.document.body.appendChild(script)
+          }
+        } catch {}
+      }, 300)
+    } catch(e) { alert('Report generation failed: ' + e) }
     setPdfLoading(null)
   }
 
@@ -491,7 +519,16 @@ export default function MatchPage() {
       // Attach horoscopeIds for PDF download (from saved charts or API response)
       const hid1 = selId1 || mdata?.horoscopeId1 || mdata?.HoroscopeId1 || ''
       const hid2 = selId2 || mdata?.horoscopeId2 || mdata?.HoroscopeId2 || ''
-      setResult({ ...mdata, name1: nm1, name2: nm2, chart1: s1, chart2: s2, hid1, hid2 })
+      // Format dob strings for PDF report
+      const fmtDate = (d: DateValue) => d.yyyy ? `${d.dd || '?'}/${d.mm || '?'}/${d.yyyy}` : ''
+      setResult({
+        ...mdata,
+        name1: nm1, name2: nm2, chart1: s1, chart2: s2, hid1, hid2,
+        dob1: s1?.birthDateTime ? new Date(s1.birthDateTime || s1.BirthDateTime).toLocaleDateString() : fmtDate(d1),
+        dob2: s2?.birthDateTime ? new Date(s2.birthDateTime || s2.BirthDateTime).toLocaleDateString() : fmtDate(d2),
+        groomLagna: s1?.ascendantName || s1?.AscendantName || '',
+        brideLagna: s2?.ascendantName || s2?.AscendantName || '',
+      })
       setCollapsed(true)
       setTimeout(() => {
         resultsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
