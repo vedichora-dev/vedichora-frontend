@@ -1,15 +1,15 @@
 === CURRENT e2e FILES ===
 total 64
-drwxr-xr-x 2 runner runner  4096 Jul 24 01:23 .
-drwxr-xr-x 7 runner runner  4096 Jul 24 01:23 ..
--rw-r--r-- 1 runner runner  4428 Jul 24 01:23 01-auth.spec.js
--rw-r--r-- 1 runner runner 11055 Jul 24 01:23 02-chart.spec.js
--rw-r--r-- 1 runner runner  2851 Jul 24 01:23 03-match.spec.js
--rw-r--r-- 1 runner runner  2685 Jul 24 01:23 04-horoscope.spec.js
--rw-r--r-- 1 runner runner  3485 Jul 24 01:23 05-deployment.spec.js
--rw-r--r-- 1 runner runner  5636 Jul 24 01:23 06-match-10.spec.js
--rw-r--r-- 1 runner runner  8626 Jul 24 01:23 functional-test.spec.js
--rw-r--r-- 1 runner runner  2685 Jul 24 01:23 helpers.js
+drwxr-xr-x 2 runner runner  4096 Jul 24 01:26 .
+drwxr-xr-x 7 runner runner  4096 Jul 24 01:26 ..
+-rw-r--r-- 1 runner runner  4428 Jul 24 01:26 01-auth.spec.js
+-rw-r--r-- 1 runner runner 11055 Jul 24 01:26 02-chart.spec.js
+-rw-r--r-- 1 runner runner  2851 Jul 24 01:26 03-match.spec.js
+-rw-r--r-- 1 runner runner  2685 Jul 24 01:26 04-horoscope.spec.js
+-rw-r--r-- 1 runner runner  3485 Jul 24 01:26 05-deployment.spec.js
+-rw-r--r-- 1 runner runner  5636 Jul 24 01:26 06-match-10.spec.js
+-rw-r--r-- 1 runner runner  8626 Jul 24 01:26 functional-test.spec.js
+-rw-r--r-- 1 runner runner  2685 Jul 24 01:26 helpers.js
 
 === BUILD OUTPUT ===
 
@@ -36,15 +36,15 @@ Failed to compile.
 ./src/app/match/page.tsx
 Error: 
   [31mx[0m Unexpected token `div`. Expected jsx identifier
-     ,-[[36;1;4m/home/runner/work/vedichora-frontend/vedichora-frontend/src/app/match/page.tsx[0m:524:1]
- [2m524[0m |   const canSubmit = !loading  // button always clickable; validation is in handle()
- [2m525[0m | 
- [2m526[0m |   return (
- [2m527[0m |     <div style={{ maxWidth: '1100px', margin: '0 auto', padding: '20px 16px' }}>
+     ,-[[36;1;4m/home/runner/work/vedichora-frontend/vedichora-frontend/src/app/match/page.tsx[0m:521:1]
+ [2m521[0m |   const canSubmit = !loading  // button always clickable; validation is in handle()
+ [2m522[0m | 
+ [2m523[0m |   return (
+ [2m524[0m |     <div style={{ maxWidth: '1100px', margin: '0 auto', padding: '20px 16px' }}>
      : [31;1m     ^^^[0m
- [2m528[0m |       <div style={{ marginBottom: '20px' }}>
- [2m529[0m |         <h1 style={{ fontFamily: 'Cinzel,serif', fontWeight: 700, fontSize: '22px', color: 'var(--acc)' }}>
- [2m530[0m |           Compatibility Matching
+ [2m525[0m |       <div style={{ marginBottom: '20px' }}>
+ [2m526[0m |         <h1 style={{ fontFamily: 'Cinzel,serif', fontWeight: 700, fontSize: '22px', color: 'var(--acc)' }}>
+ [2m527[0m |           Compatibility Matching
      `----
 
 Caused by:
