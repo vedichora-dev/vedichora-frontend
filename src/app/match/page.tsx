@@ -392,36 +392,8 @@ export default function MatchPage() {
     return ''
   }
 
-  // ── Calc one chart ─────────────────────────────────────────────────────────
-  const calcChart = async (
-    n: string, d: DateValue, p: string,
-    lat?: number, lng?: number, g?: string,
-    savedId?: string, savedChart?: any
-  ) => {
-    if (savedId && savedChart) return { chart: savedChart, id: savedId }
-    let rlat = lat, rlng = lng
-    if ((!rlat || !rlng) && p.trim()) {
-      // Use same Nominatim as CityAutocomplete for consistency
-      try {
-        const geoRes = await fetch(
-          'https://nominatim.openstreetmap.org/search?q=' + encodeURIComponent(p) + '&format=json&limit=1&accept-language=en',
-          { headers: { 'User-Agent': 'VedicHora/1.0' } }
-        ).then(r => r.json())
-        if (Array.isArray(geoRes) && geoRes[0]) {
-          rlat = parseFloat(geoRes[0].lat)
-          rlng = parseFloat(geoRes[0].lon)
-        }
-      } catch {}
-    }
-    if (!rlat || !rlng) throw new Error('Could not locate "' + p + '" — please select from the dropdown')
-    const fn = token ? calculateChart : calculateChartGuest
-    const r = await fn(buildPayload(n, d, p, rlat, rlng, g))
-    const chart = r?.data?.data ?? r?.data
-    if (!chart) throw new Error('Chart calculation failed — check date and location')
-    return { chart, id: chart.horoscopeId || chart.id || '' }
-  }
+    // ── Submit ─────────────────────────────────────────────────────────────────
 
-  // ── Submit ─────────────────────────────────────────────────────────────────
   const handle = async () => {
     setErr(''); setErr1(''); setErr2(''); setResult(null)
 
