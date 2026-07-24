@@ -466,24 +466,23 @@ export default function MatchPage() {
       const r2 = s2 ? { chart: s2, id: selId2 } : null
 
       const CHART_URL = process.env.NEXT_PUBLIC_CHART_URL || 'https://enchanting-dedication-production.up.railway.app'
-      let mdata: any = null
 
-      // Build birth payload from either saved chart or entered form data
-      const makePayload = (chart: any, n: string, d: DateValue, geo: {lat:number,lng:number}, g?: string) => {
+      // Build payload from saved chart or form inputs
+      const makePayload = (chart: any, n: string, d: DateValue, geo: {lat:number,lng:number}) => {
         if (chart) {
           const bdt = chart.birthDateTime || chart.BirthDateTime || ''
           const dt  = bdt ? new Date(bdt) : null
           return {
             PersonName: chart.personName || chart.PersonName || n || 'Person',
-            Year:  dt ? dt.getFullYear() : (chart.year  || chart.Year  || d.yyyy || 2000),
-            Month: dt ? dt.getMonth()+1  : (chart.month || chart.Month || d.mm   || 1),
-            Day:   dt ? dt.getDate()     : (chart.day   || chart.Day   || d.dd   || 1),
-            Hour:  dt ? dt.getHours()    : 12,
-            Minute:dt ? dt.getMinutes()  : 0,
+            Year:   dt ? dt.getFullYear() : (chart.year  || chart.Year  || d.yyyy || 2000),
+            Month:  dt ? dt.getMonth()+1  : (chart.month || chart.Month || d.mm   || 1),
+            Day:    dt ? dt.getDate()     : (chart.day   || chart.Day   || d.dd   || 1),
+            Hour:   dt ? dt.getHours()    : 12,
+            Minute: dt ? dt.getMinutes()  : 0,
             Second: 0,
-            PlaceName: chart.placeName || chart.PlaceName || 'Chennai, India',
-            Latitude:  chart.latitude  || chart.Latitude  || geo.lat,
-            Longitude: chart.longitude || chart.Longitude || geo.lng,
+            PlaceName:  chart.placeName || chart.PlaceName || 'Chennai, India',
+            Latitude:   chart.latitude  || chart.Latitude  || geo.lat,
+            Longitude:  chart.longitude || chart.Longitude || geo.lng,
             UtcOffsetHours: chart.utcOffset || chart.UtcOffset || 5.5,
             AyanamsaType: 'Lahiri',
           }
@@ -499,78 +498,26 @@ export default function MatchPage() {
         }
       }
 
-      const gp1 = makePayload(s1, n1, d1, geo1, g1)
-      const gp2 = makePayload(s2, n2, d2, geo2, g2)
+      const gp1 = makePayload(s1, n1, d1, geo1)
+      const gp2 = makePayload(s2, n2, d2, geo2)
 
-      // Strategy A: both saved + logged in → use auth endpoint (fast, persists)
-      if (token && useSaved1 && selId1 && useSaved2 && selId2) {
-        try {
-          const { chartApi } = await import('@/api/client')
-          const mres = await chartApi.post('/api/chart/match', { HoroscopeId1: selId1, HoroscopeId2: selId2 })
-          const raw = mres?.data?.data ?? mres?.data ?? mres
-          // Auth endpoint returns {Match:{TotalPoints,...}, HoroscopeId1, HoroscopeId2}
-          if (raw?.Match?.TotalPoints !== undefined) {
-            const m = raw.Match
-            mdata = {
-              AshtaKootaScore: m.TotalPoints ?? 0,
-              AshtaKootaTotal: m.MaxPoints   ?? 36,
-              Percentage:      m.Percentage  ?? 0,
-              Summary:         m.Verdict     ?? '',
-              KootaDetails: [
-                { KootaName:'Varna',        Score:m.Varna?.Points??0,       MaxScore:1 },
-                { KootaName:'Vashya',       Score:m.Vashya?.Points??0,      MaxScore:2 },
-                { KootaName:'Tara',         Score:m.Tara?.Points??0,        MaxScore:3 },
-                { KootaName:'Yoni',         Score:m.Yoni?.Points??0,        MaxScore:4 },
-                { KootaName:'Graha Maitri', Score:m.GrahaMaitri?.Points??0, MaxScore:5 },
-                { KootaName:'Gana',         Score:m.Gana?.Points??0,        MaxScore:6 },
-                { KootaName:'Bhakoota',     Score:m.Bhakoota?.Points??0,    MaxScore:7 },
-                { KootaName:'Nadi',         Score:m.Nadi?.Points??0,        MaxScore:8 },
-              ],
-            }
-          }
-        } catch {}
+      // Always use guest-match — returns full data: Ashta Koota + Pathu Porutham + Rajju
+      // Auth endpoint only gives Ashta Koota, no Pathu Porutham
+      const gresp = await fetch(`${CHART_URL}/api/chart/guest-match`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ Person1: gp1, Person2: gp2 })
+      })
+      const gtext = await gresp.text()
+      let gres: any = null
+      try { gres = JSON.parse(gtext) } catch {}
+      if (!gresp.ok) {
+        throw new Error(gres?.error || gres?.message || gres?.title || `Server error ${gresp.status}`)
       }
-
-      // Strategy B: guest-match (always works, no auth needed)
-      if (!mdata) {
-        const gresp = await fetch(`${CHART_URL}/api/chart/guest-match`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ Person1: gp1, Person2: gp2 })
-        })
-        const gtext = await gresp.text()
-        let gres: any = null
-        try { gres = JSON.parse(gtext) } catch {}
-        if (!gresp.ok) {
-          const msg = gres?.error || gres?.message || gres?.title || `Server error ${gresp.status}`
-          throw new Error(msg)
-        }
-        mdata = gres?.data?.data ?? gres?.data ?? gres
-      }
-
-      // Normalize: authenticated /api/chart/match returns {Match:{TotalPoints,...}, HoroscopeId1/2}
-      // Guest /api/chart/guest-match returns {AshtaKootaScore, AshtaKootaTotal, KootaDetails...}
-      if (mdata?.Match && mdata.Match?.TotalPoints !== undefined) {
-        const m = mdata.Match
-        const kootas = [
-          { KootaName: 'Varna',        Score: m.Varna?.Points       ?? 0, MaxScore: m.Varna?.MaxPoints       ?? 1 },
-          { KootaName: 'Vashya',       Score: m.Vashya?.Points      ?? 0, MaxScore: m.Vashya?.MaxPoints      ?? 2 },
-          { KootaName: 'Tara',         Score: m.Tara?.Points        ?? 0, MaxScore: m.Tara?.MaxPoints        ?? 3 },
-          { KootaName: 'Yoni',         Score: m.Yoni?.Points        ?? 0, MaxScore: m.Yoni?.MaxPoints        ?? 4 },
-          { KootaName: 'Graha Maitri', Score: m.GrahaMaitri?.Points ?? 0, MaxScore: m.GrahaMaitri?.MaxPoints ?? 5 },
-          { KootaName: 'Gana',         Score: m.Gana?.Points        ?? 0, MaxScore: m.Gana?.MaxPoints        ?? 6 },
-          { KootaName: 'Bhakoota',     Score: m.Bhakoota?.Points    ?? 0, MaxScore: m.Bhakoota?.MaxPoints    ?? 7 },
-          { KootaName: 'Nadi',         Score: m.Nadi?.Points        ?? 0, MaxScore: m.Nadi?.MaxPoints        ?? 8 },
-        ]
-        mdata = {
-          AshtaKootaScore: m.TotalPoints ?? 0,
-          AshtaKootaTotal: m.MaxPoints   ?? 36,
-          KootaDetails: kootas,
-          Summary: m.Verdict ?? '',
-          horoscopeId1: mdata.HoroscopeId1,
-          horoscopeId2: mdata.HoroscopeId2,
-        }
-      }
+      let mdata: any = gres?.data?.data ?? gres?.data ?? gres
+      // Attach horoscopeIds from saved charts (needed for PDF download buttons)
+      if (selId1) mdata.horoscopeId1 = selId1
+      if (selId2) mdata.horoscopeId2 = selId2
 
       if (!mdata || (mdata?.AshtaKootaScore === undefined && mdata?.ashtaKootaScore === undefined)) {
         throw new Error('Compatibility calculation failed — please try again')
