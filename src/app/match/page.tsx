@@ -174,45 +174,7 @@ function PersonCard({
             </div>
           )}
 
-          {/* PDF Download */}
-          <div className="card" style={{ padding: '20px' }}>
-            <div className="card-hd" style={{ marginBottom: '12px' }}>
-              <span className="card-title">Download Report</span>
-            </div>
-            <p style={{ fontSize: '12px', color: 'var(--txm)', marginBottom: '14px' }}>
-              {token ? 'Download a detailed compatibility report as a printable PDF.' : '🔒 Sign in to download PDF reports.'}
-            </p>
-            <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
-              {[
-                { type: 'english', label: 'English Narrative', desc: 'Plain-language 10-year timeline' },
-                { type: 'vedic',   label: 'Vedic Porutham',    desc: 'Ashta Koota · Pathu Porutham · Doshas' },
-                { type: 'both',    label: 'Complete Report',   desc: 'Both reports combined' },
-              ].map(({ type, label, desc }) => (
-                <button key={type}
-                  onClick={() => downloadPdf(type as any)}
-                  disabled={!token || pdfLoading === type}
-                  style={{
-                    display: 'flex', alignItems: 'center', gap: '8px',
-                    padding: '10px 16px', borderRadius: '10px', border: '1.5px solid var(--acc)',
-                    background: pdfLoading === type ? 'var(--acc)' : 'transparent',
-                    color: pdfLoading === type ? '#fff' : 'var(--acc)',
-                    cursor: !token ? 'not-allowed' : 'pointer', fontSize: '12px', fontWeight: 600,
-                    opacity: !token ? 0.5 : 1,
-                  }}>
-                  <Download style={{ width: '13px', height: '13px' }} />
-                  <div style={{ textAlign: 'left' }}>
-                    <div>{pdfLoading === type ? 'Generating…' : label}</div>
-                    <div style={{ fontWeight: 400, fontSize: '10px', color: pdfLoading === type ? 'rgba(255,255,255,.8)' : 'var(--txm)' }}>{desc}</div>
-                  </div>
-                </button>
-              ))}
-            </div>
-            {!token && (
-              <p style={{ fontSize: '11px', color: 'var(--txm)', marginTop: '10px' }}>
-                <a href="/signin" style={{ color: 'var(--acc)', fontWeight: 600 }}>Sign in</a> to download PDF reports.
-              </p>
-            )}
-          </div>
+
         </div>
       )}
     </div>
@@ -350,9 +312,9 @@ export default function MatchPage() {
   const resultsRef = useRef<HTMLDivElement>(null)
 
   const downloadPdf = async (type: 'english'|'vedic'|'both') => {
-    const id1 = result?.chart1?.horoscopeId || result?.chart1?.HoroscopeId
-    const id2 = result?.chart2?.horoscopeId || result?.chart2?.HoroscopeId
-    if (!id1 || !id2) { alert('Charts must be saved to download PDF. Please sign in.'); return }
+    const id1 = result?.hid1 || result?.chart1?.horoscopeId || result?.chart1?.HoroscopeId
+    const id2 = result?.hid2 || result?.chart2?.horoscopeId || result?.chart2?.HoroscopeId
+    if (!id1 || !id2) { alert('PDF reports need saved charts — please sign in to save your charts first.'); return }
     setPdfLoading(type)
     try {
       const CHART_URL = 'https://enchanting-dedication-production.up.railway.app'
@@ -502,37 +464,8 @@ export default function MatchPage() {
       const gp1 = makePayload(s1, n1, d1, geo1, g1)
       const gp2 = makePayload(s2, n2, d2, geo2, g2)
 
-      // Strategy A: both saved + logged in → use auth endpoint (fast, persists)
-      if (token && useSaved1 && selId1 && useSaved2 && selId2) {
-        try {
-          const { chartApi } = await import('@/api/client')
-          const mres = await chartApi.post('/api/chart/match', { HoroscopeId1: selId1, HoroscopeId2: selId2 })
-          const raw = mres?.data?.data ?? mres?.data ?? mres
-          // Auth endpoint returns {Match:{TotalPoints,...}, HoroscopeId1, HoroscopeId2}
-          if (raw?.Match?.TotalPoints !== undefined) {
-            const m = raw.Match
-            mdata = {
-              AshtaKootaScore: m.TotalPoints ?? 0,
-              AshtaKootaTotal: m.MaxPoints   ?? 36,
-              Percentage:      m.Percentage  ?? 0,
-              Summary:         m.Verdict     ?? '',
-              KootaDetails: [
-                { KootaName:'Varna',        Score:m.Varna?.Points??0,       MaxScore:1 },
-                { KootaName:'Vashya',       Score:m.Vashya?.Points??0,      MaxScore:2 },
-                { KootaName:'Tara',         Score:m.Tara?.Points??0,        MaxScore:3 },
-                { KootaName:'Yoni',         Score:m.Yoni?.Points??0,        MaxScore:4 },
-                { KootaName:'Graha Maitri', Score:m.GrahaMaitri?.Points??0, MaxScore:5 },
-                { KootaName:'Gana',         Score:m.Gana?.Points??0,        MaxScore:6 },
-                { KootaName:'Bhakoota',     Score:m.Bhakoota?.Points??0,    MaxScore:7 },
-                { KootaName:'Nadi',         Score:m.Nadi?.Points??0,        MaxScore:8 },
-              ],
-            }
-          }
-        } catch {}
-      }
-
-      // Strategy B: guest-match (always works, no auth needed)
-      if (!mdata) {
+      // Always use guest-match — returns complete data: Ashta Koota + Pathu Porutham + Rajju
+      if (true) {
         const gresp = await fetch(`${CHART_URL}/api/chart/guest-match`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -548,29 +481,6 @@ export default function MatchPage() {
         mdata = gres?.data?.data ?? gres?.data ?? gres
       }
 
-      // Normalize: authenticated /api/chart/match returns {Match:{TotalPoints,...}, HoroscopeId1/2}
-      // Guest /api/chart/guest-match returns {AshtaKootaScore, AshtaKootaTotal, KootaDetails...}
-      if (mdata?.Match && mdata.Match?.TotalPoints !== undefined) {
-        const m = mdata.Match
-        const kootas = [
-          { KootaName: 'Varna',        Score: m.Varna?.Points       ?? 0, MaxScore: m.Varna?.MaxPoints       ?? 1 },
-          { KootaName: 'Vashya',       Score: m.Vashya?.Points      ?? 0, MaxScore: m.Vashya?.MaxPoints      ?? 2 },
-          { KootaName: 'Tara',         Score: m.Tara?.Points        ?? 0, MaxScore: m.Tara?.MaxPoints        ?? 3 },
-          { KootaName: 'Yoni',         Score: m.Yoni?.Points        ?? 0, MaxScore: m.Yoni?.MaxPoints        ?? 4 },
-          { KootaName: 'Graha Maitri', Score: m.GrahaMaitri?.Points ?? 0, MaxScore: m.GrahaMaitri?.MaxPoints ?? 5 },
-          { KootaName: 'Gana',         Score: m.Gana?.Points        ?? 0, MaxScore: m.Gana?.MaxPoints        ?? 6 },
-          { KootaName: 'Bhakoota',     Score: m.Bhakoota?.Points    ?? 0, MaxScore: m.Bhakoota?.MaxPoints    ?? 7 },
-          { KootaName: 'Nadi',         Score: m.Nadi?.Points        ?? 0, MaxScore: m.Nadi?.MaxPoints        ?? 8 },
-        ]
-        mdata = {
-          AshtaKootaScore: m.TotalPoints ?? 0,
-          AshtaKootaTotal: m.MaxPoints   ?? 36,
-          KootaDetails: kootas,
-          Summary: m.Verdict ?? '',
-          horoscopeId1: mdata.HoroscopeId1,
-          horoscopeId2: mdata.HoroscopeId2,
-        }
-      }
 
       if (!mdata || (mdata?.AshtaKootaScore === undefined && mdata?.ashtaKootaScore === undefined)) {
         throw new Error('Compatibility calculation failed — please try again')
@@ -578,7 +488,10 @@ export default function MatchPage() {
 
       const nm1 = n1 || s1?.personName || s1?.PersonName || g1 || 'Person 1'
       const nm2 = n2 || s2?.personName || s2?.PersonName || g2 || 'Person 2'
-      setResult({ ...mdata, name1: nm1, name2: nm2, chart1: s1, chart2: s2 })
+      // Attach horoscopeIds for PDF download (from saved charts or API response)
+      const hid1 = selId1 || mdata?.horoscopeId1 || mdata?.HoroscopeId1 || ''
+      const hid2 = selId2 || mdata?.horoscopeId2 || mdata?.HoroscopeId2 || ''
+      setResult({ ...mdata, name1: nm1, name2: nm2, chart1: s1, chart2: s2, hid1, hid2 })
       setCollapsed(true)
       setTimeout(() => {
         resultsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
@@ -602,7 +515,7 @@ export default function MatchPage() {
   const isRec       = result?.IsRecommended ?? result?.isRecommended ?? false
   const rajjuWarn   = result?.RajjuWarning  ?? result?.rajjuWarning  ?? ''
   const vedhaPresent= result?.VedhaPresent  ?? result?.vedhaPresent  ?? false
-  const summary     = result?.Summary       ?? result?.summary       ?? '' ?? 10
+  const summary     = result?.Summary       ?? result?.summary       ?? ''
   const kuta   = result?.KootaDetails || result?.kootaDetails || []
   const pct    = total > 0 ? Math.round((score / total) * 100) : 0
   const scoreColor = pct >= 70 ? '#16A34A' : pct >= 50 ? '#B45309' : '#DC2626'
@@ -891,45 +804,7 @@ export default function MatchPage() {
           </div>
 
 
-          {/* PDF Download */}
-          <div className="card" style={{ padding: '20px' }}>
-            <div className="card-hd" style={{ marginBottom: '12px' }}>
-              <span className="card-title">Download Report</span>
-            </div>
-            <p style={{ fontSize: '12px', color: 'var(--txm)', marginBottom: '14px' }}>
-              {token ? 'Download a detailed compatibility report as a printable PDF.' : '🔒 Sign in to download PDF reports.'}
-            </p>
-            <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
-              {[
-                { type: 'english', label: 'English Narrative', desc: 'Plain-language 10-year timeline' },
-                { type: 'vedic',   label: 'Vedic Porutham',    desc: 'Ashta Koota · Pathu Porutham · Doshas' },
-                { type: 'both',    label: 'Complete Report',   desc: 'Both reports combined' },
-              ].map(({ type, label, desc }) => (
-                <button key={type}
-                  onClick={() => downloadPdf(type as any)}
-                  disabled={!token || pdfLoading === type}
-                  style={{
-                    display: 'flex', alignItems: 'center', gap: '8px',
-                    padding: '10px 16px', borderRadius: '10px', border: '1.5px solid var(--acc)',
-                    background: pdfLoading === type ? 'var(--acc)' : 'transparent',
-                    color: pdfLoading === type ? '#fff' : 'var(--acc)',
-                    cursor: !token ? 'not-allowed' : 'pointer', fontSize: '12px', fontWeight: 600,
-                    opacity: !token ? 0.5 : 1,
-                  }}>
-                  <Download style={{ width: '13px', height: '13px' }} />
-                  <div style={{ textAlign: 'left' }}>
-                    <div>{pdfLoading === type ? 'Generating…' : label}</div>
-                    <div style={{ fontWeight: 400, fontSize: '10px', color: pdfLoading === type ? 'rgba(255,255,255,.8)' : 'var(--txm)' }}>{desc}</div>
-                  </div>
-                </button>
-              ))}
-            </div>
-            {!token && (
-              <p style={{ fontSize: '11px', color: 'var(--txm)', marginTop: '10px' }}>
-                <a href="/signin" style={{ color: 'var(--acc)', fontWeight: 600 }}>Sign in</a> to download PDF reports.
-              </p>
-            )}
-          </div>
+
         </div>
       )}
     </div>
