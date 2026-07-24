@@ -1,17 +1,17 @@
 === CURRENT e2e FILES ===
 total 84
-drwxr-xr-x 2 runner runner  4096 Jul 24 04:38 .
-drwxr-xr-x 9 runner runner  4096 Jul 24 04:38 ..
--rw-r--r-- 1 runner runner  4428 Jul 24 04:38 01-auth.spec.js
--rw-r--r-- 1 runner runner 13487 Jul 24 04:38 02-chart.spec.js
--rw-r--r-- 1 runner runner  2851 Jul 24 04:38 03-match.spec.js
--rw-r--r-- 1 runner runner  2685 Jul 24 04:38 04-horoscope.spec.js
--rw-r--r-- 1 runner runner  3485 Jul 24 04:38 05-deployment.spec.js
--rw-r--r-- 1 runner runner  5636 Jul 24 04:38 06-match-10.spec.js
--rw-r--r-- 1 runner runner  8626 Jul 24 04:38 functional-test.spec.js
--rw-r--r-- 1 runner runner  2685 Jul 24 04:38 helpers.js
--rw-r--r-- 1 runner runner  5853 Jul 24 04:38 screenshot.spec.js
--rw-r--r-- 1 runner runner  5586 Jul 24 04:38 tab-screenshots.spec.js
+drwxr-xr-x 2 runner runner  4096 Jul 24 04:49 .
+drwxr-xr-x 9 runner runner  4096 Jul 24 04:49 ..
+-rw-r--r-- 1 runner runner  4428 Jul 24 04:49 01-auth.spec.js
+-rw-r--r-- 1 runner runner 13487 Jul 24 04:49 02-chart.spec.js
+-rw-r--r-- 1 runner runner  2851 Jul 24 04:49 03-match.spec.js
+-rw-r--r-- 1 runner runner  2685 Jul 24 04:49 04-horoscope.spec.js
+-rw-r--r-- 1 runner runner  3485 Jul 24 04:49 05-deployment.spec.js
+-rw-r--r-- 1 runner runner  5636 Jul 24 04:49 06-match-10.spec.js
+-rw-r--r-- 1 runner runner  8626 Jul 24 04:49 functional-test.spec.js
+-rw-r--r-- 1 runner runner  2685 Jul 24 04:49 helpers.js
+-rw-r--r-- 1 runner runner  5853 Jul 24 04:49 screenshot.spec.js
+-rw-r--r-- 1 runner runner  5586 Jul 24 04:49 tab-screenshots.spec.js
 
 === BUILD OUTPUT ===
 > vedichora@1.0.0 build
@@ -47,7 +47,7 @@ Route (app)                              Size     First Load JS
 ├ ○ /about                               2.46 kB        84.4 kB
 ├ ○ /admin                               5.37 kB         117 kB
 ├ ○ /api-docs                            1.87 kB        86.8 kB
-├ ○ /chart                               20.3 kB         139 kB
+├ ○ /chart                               20.1 kB         139 kB
 ├ ○ /checkout                            5.07 kB          90 kB
 ├ ○ /consult                             5.5 kB         90.4 kB
 ├ ○ /dashboard                           3.37 kB         115 kB
