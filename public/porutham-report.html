@@ -126,7 +126,8 @@
       <div class="birth-row"><span class="birth-label" id="lbl-rasi">Rasi (Moon Sign)</span><span class="birth-val" id="rasi1">{{RASI1}}</span></div>
       <div class="birth-row"><span class="birth-label" id="lbl-lagna">Lagna</span><span class="birth-val" id="lagna1">{{LAGNA1}}</span></div>
       <div class="birth-row"><span class="birth-label" id="lbl-nadi">Nadi</span><span class="birth-val" id="nadi1">{{NADI1}}</span></div>
-      <div class="birth-row"><span class="birth-label" id="lbl-rajju">Rajju</span><span class="birth-val" id="rajju1">{{RAJJU1}}</span></div>
+      <div class="birth-row"><span class="birth-label" id="lbl-rajju">Rajju Group</span><span class="birth-val" id="rajju1">{{RAJJU1}}</span></div>
+      <div class="birth-row"><span class="birth-label">Pada</span><span class="birth-val" id="pada1"></span></div>
     </div>
     <div class="birth-card">
       <div class="birth-card-hd" id="lbl-groom">👰 Bride</div>
@@ -136,7 +137,8 @@
       <div class="birth-row"><span class="birth-label">Rasi (Moon Sign)</span><span class="birth-val" id="rasi2">{{RASI2}}</span></div>
       <div class="birth-row"><span class="birth-label">Lagna</span><span class="birth-val" id="lagna2">{{LAGNA2}}</span></div>
       <div class="birth-row"><span class="birth-label">Nadi</span><span class="birth-val" id="nadi2">{{NADI2}}</span></div>
-      <div class="birth-row"><span class="birth-label">Rajju</span><span class="birth-val" id="rajju2">{{RAJJU2}}</span></div>
+      <div class="birth-row"><span class="birth-label">Rajju Group</span><span class="birth-val" id="rajju2">{{RAJJU2}}</span></div>
+      <div class="birth-row"><span class="birth-label">Pada</span><span class="birth-val" id="pada2"></span></div>
     </div>
   </div>
 
@@ -307,17 +309,17 @@ const L = T[LANG] || T.en;
 
 // ── Porutham definitions ──────────────────────────────────────────────────
 const PORUTHAM_DEF = {
-  'Dina': {
+  'Dinam': {
     en: { name:'Dinam (தினம்)', meaning:'Birth star health & longevity', explanation:'Counts the nakshatra distance from bride to groom. Must be 2nd, 4th, 6th, 8th, or divisible by 3. Governs health, wellbeing and longevity of the couple.' },
     ta: { name:'திணம் (Dina)', meaning:'நட்சத்திர தூரம் — ஆரோக்கியம் & ஆயுள்', explanation:'மணமகளின் நட்சத்திரத்திலிருந்து மணமகனின் நட்சத்திரம் வரை எண்ணுக. 2, 4, 6, 8 அல்லது 3ஆல் வகுபட வேண்டும். தம்பதியின் ஆரோக்கியம் மற்றும் ஆயுளை குறிக்கிறது.' },
     hi: { name:'दिनम् (Dina)', meaning:'नक्षत्र दूरी — स्वास्थ्य और दीर्घायु', explanation:'दुल्हन से दूल्हे के नक्षत्र तक की गिनती करें। 2, 4, 6, 8 या 3 का गुणज होना चाहिए।' },
   },
-  'Gana': {
+  'Ganam': {
     en: { name:'Ganam (கணம்)', meaning:'Nature & temperament compatibility', explanation:'Three ganas: Deva (divine, calm), Manushya (human, balanced), Rakshasa (assertive, intense). Same gana = full points. Deva+Manushya = partial. Rakshasa + any other = incompatible.' },
     ta: { name:'கணம் (Gana)', meaning:'குணம் & இயல்பு பொருத்தம்', explanation:'மூன்று கணங்கள்: தேவ (அமைதி), மனுஷ்ய (சமநிலை), ராக்ஷஸ (வலிமை). ஒரே கணம் = முழு மதிப்பெண். தேவ+மனுஷ்ய = பகுதி. ராக்ஷஸ + வேறு = பொருத்தமில்லை.' },
     hi: { name:'गणम् (Gana)', meaning:'स्वभाव और प्रकृति', explanation:'तीन गण: देव, मनुष्य, राक्षस। एक ही गण = पूर्ण अंक। देव+मनुष्य = आंशिक। राक्षस + अन्य = अनुकूल नहीं।' },
   },
-  'Mahendra': {
+  'Mahendram': {
     en: { name:'Mahendram (மகேந்திரம்)', meaning:'Prosperity & children — wealth & progeny', explanation:'Counts from bride\'s star to groom\'s. Must fall on 4th, 7th, 10th, 13th, 16th, 19th, 22nd or 25th position. Blesses the couple with prosperity and children.' },
     ta: { name:'மஹேந்திரம் (Mahendra)', meaning:'செல்வம் & குழந்தை வரம்', explanation:'மணமகளின் நட்சத்திரத்திலிருந்து மணமகனின் நட்சத்திரம் 4, 7, 10, 13, 16, 19, 22, 25வது இடத்தில் விழ வேண்டும். செல்வம் மற்றும் குழந்தை பாக்கியத்தை அளிக்கும்.' },
     hi: { name:'महेंद्रम् (Mahendra)', meaning:'समृद्धि और संतान', explanation:'दुल्हन से दूल्हे का नक्षत्र 4, 7, 10, 13, 16, 19, 22 या 25वें स्थान पर होना चाहिए।' },
@@ -337,7 +339,7 @@ const PORUTHAM_DEF = {
     ta: { name:'ராசி (Rasi)', meaning:'ராசி இணக்கம் — குடும்ப நல்லிணக்கம்', explanation:'சந்திர ராசிகளின் ஒப்பீட்டு நிலையை அடிப்படையாகக் கொண்டது. 7ம் இட ராசி = மிக சிறப்பான மதிப்பெண். குடும்ப நல்லிணக்கம் மற்றும் ஆரோக்கியத்தை குறிக்கிறது.' },
     hi: { name:'राशि (Rasi)', meaning:'राशि अनुकूलता — पारिवारिक सामंजस्य', explanation:'चंद्र राशियों की सापेक्ष स्थिति पर आधारित। 7वीं राशि की दूरी अत्यंत शुभ है।' },
   },
-  'Rasyadhipa': {
+  'Rasiyathipati': {
     en: { name:'Rasyadhipa (ராசியாதிபதி)', meaning:'Moon lord friendship — mental & emotional harmony', explanation:'Checks if the lords of both Moon signs are friends, neutral, or enemies. Friends = full score. Neutral = partial. Enemies = incompatible. Per BV Raman: "If lords are in 1-7 position from each other, no enmity applies." Governs mental compatibility and emotional understanding.' },
     ta: { name:'ராசியாதிபதி (Rasyadhipa)', meaning:'கிரக நட்பு — மன பொருத்தம்', explanation:'இரு ராசிகளின் அதிபதிகள் நட்பு, நடுவர், அல்லது பகை என்று அறிக. BV ராமன்: "1-7 இடத்தில் இருந்தால் பகை பொருந்தாது." மன பொருத்தம் மற்றும் உணர்வு புரிதலை குறிக்கிறது.' },
     hi: { name:'राश्याधिप (Rasyadhipa)', meaning:'ग्रह मैत्री — मानसिक सामंजस्य', explanation:'दोनों चंद्र राशियों के स्वामियों की मित्रता जाँचें। BV रमण: "1-7 स्थान पर हों तो शत्रुता लागू नहीं।"' },
@@ -411,6 +413,7 @@ function renderPathu(poruthams) {
   const tbody = document.getElementById('pathu-tbody');
   let pass = 0, total = 0;
   tbody.innerHTML = '';
+  // Add 8 poruthams first
   poruthams.forEach((p, i) => {
     const key = p.KootaName || p.kootaName || '';
     const def = PORUTHAM_DEF[key];
@@ -418,7 +421,7 @@ function renderPathu(poruthams) {
     const isCritical = key === 'Rajju' || key === 'Vedha';
     const name = def ? (def[LANG]?.name || def.en.name) : key;
     const meaning = def ? (def[LANG]?.meaning || def.en.meaning) : '';
-    const explanation = def ? (def[LANG]?.explanation || def.en.explanation) : '';
+    const explanation = p.Description || (def ? (def[LANG]?.explanation || def.en.explanation) : '');
     const score = p.Score ?? 0;
     const maxScore = p.MaxScore ?? 1;
     if (isPass) pass += score;
@@ -437,6 +440,34 @@ function renderPathu(poruthams) {
       </td>`;
     tbody.appendChild(tr);
   });
+
+  // Add Rajju (9th) and Vedha (10th) as separate rows from dedicated fields
+  const rajjuDef = PORUTHAM_DEF['Rajju'];
+  const rajjuPass = DATA.RajjuPass ?? DATA.rajjuPass ?? true;
+  const rajjuRow = document.createElement('tr');
+  rajjuRow.innerHTML = `
+    <td style="text-align:center;color:var(--txm);font-size:9px">9</td>
+    <td>
+      <div class="td-name">${rajjuDef ? (rajjuDef[LANG]?.name || rajjuDef.en.name) : 'Rajju'}<span class="critical-badge">★ critical</span></div>
+      <div class="td-sub">${rajjuDef ? (rajjuDef[LANG]?.meaning || rajjuDef.en.meaning) : 'Husband longevity'}</div>
+    </td>
+    <td style="font-size:9px;color:var(--txm);line-height:1.5">${DATA.RajjuWarning || DATA.rajjuWarning || (rajjuPass ? 'Bride and groom are in different Rajju groups — auspicious.' : 'Same Rajju group — dosha present.')}</td>
+    <td><span class="pill ${rajjuPass ? 'pill-pass' : 'pill-fail'}">${rajjuPass ? '✓ ' + L.pass : '✗ ' + L.fail}</span></td>`;
+  tbody.appendChild(rajjuRow);
+
+  const vedhaDef = PORUTHAM_DEF['Vedha'];
+  const vedhaPass = !(DATA.VedhaPresent ?? DATA.vedhaPresent ?? false);
+  const vedhaRow = document.createElement('tr');
+  vedhaRow.innerHTML = `
+    <td style="text-align:center;color:var(--txm);font-size:9px">10</td>
+    <td>
+      <div class="td-name">${vedhaDef ? (vedhaDef[LANG]?.name || vedhaDef.en.name) : 'Vedha'}<span class="critical-badge">★ critical</span></div>
+      <div class="td-sub">${vedhaDef ? (vedhaDef[LANG]?.meaning || vedhaDef.en.meaning) : 'Absence of affliction'}</div>
+    </td>
+    <td style="font-size:9px;color:var(--txm);line-height:1.5">${DATA.VedhaWarning || DATA.vedhaWarning || (vedhaPass ? 'No Vedha affliction between nakshatra pair — auspicious.' : 'Vedha affliction present — Muhurtha correction required.')}</td>
+    <td><span class="pill ${vedhaPass ? 'pill-pass' : 'pill-fail'}">${vedhaPass ? '✓ ' + L.pass : '✗ ' + L.fail}</span></td>`;
+  tbody.appendChild(vedhaRow);
+
   const pathuScore = DATA.PathuPoruthamScore ?? DATA.pathuPoruthamScore ?? pass;
   const pathuTotal = DATA.PathuPoruthamTotal ?? DATA.pathuPoruthamTotal ?? total;
   document.getElementById('pathu-total-cell').innerHTML =
@@ -596,6 +627,11 @@ function renderBirthDetails() {
   document.getElementById('nadi2').textContent = DATA.brideNadi || '';
   document.getElementById('rajju1').textContent = DATA.groomRajju || '';
   document.getElementById('rajju2').textContent = DATA.brideRajju || '';
+  // Pada from planet positions if available
+  const groomPada = DATA.groomPada || (DATA.chart1?.planets?.find(p=>p.planet==='Moon')?.nakshatraPada) || '';
+  const bridePada = DATA.bridePada || (DATA.chart2?.planets?.find(p=>p.planet==='Moon')?.nakshatraPada) || '';
+  const el1 = document.getElementById('pada1'); if(el1) el1.textContent = groomPada ? groomPada + '/4' : '';
+  const el2 = document.getElementById('pada2'); if(el2) el2.textContent = bridePada ? bridePada + '/4' : '';
   document.getElementById('cover-date').textContent = [DATA.dob1, DATA.dob2].filter(Boolean).join(' · ');
 
   const warn = DATA.RajjuWarning || DATA.rajjuWarning;
