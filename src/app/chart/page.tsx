@@ -731,7 +731,7 @@ export default function ChartPage() {
               {tab==='shadbala' && !isLoading('shadbala') && (
                 <div style={{overflowX:'auto'}}>
                   {!data('shadbala') ? <div style={{padding:'20px',color:'var(--txm)'}}>
-                {token ? 'Shadbala data not available for this chart' : 'Sign in and save chart to view Shadbala strength scores'}
+                Shadbala data not available for this chart
               </div> :
                   <table style={{width:'100%',borderCollapse:'collapse',fontSize:'12px'}}>
                     <thead><tr style={{borderBottom:'2px solid var(--bd)'}}>
