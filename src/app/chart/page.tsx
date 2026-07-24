@@ -75,17 +75,17 @@ export default function ChartPage() {
 
     const loaders: Record<string, ()=>Promise<any>> = {
       shadbala: async () => {
-        // Try auth endpoint first (saved charts with login)
-        const r1 = await getShadbala(horoId).catch(() => null)
-        const d1 = r1?.data?.data ?? r1?.data?.Data ?? r1?.data ?? r1
-        if (d1 && !d1.statusCode && (Array.isArray(d1) || d1.planets || d1.Planets)) {
-          return d1
-        }
-        // Guest endpoint — works for any horoscopeId (guest chart saved in DB temporarily)
-        const r2 = await getShadBalaGuest(horoId).catch(() => null)
-        const d2 = r2?.data?.data ?? r2?.data ?? r2
-        if (d2 && !d2.statusCode && (d2.planets || d2.strongestPlanet)) return d2
-        return null
+        // Use fetch directly — bypasses axios interceptor issues for guests
+        // API: GET /api/strength/{id}/shadbala → AllowAnonymous
+        // Returns: { success, data: { planets:[{planet,sthaanaBala,digBala,kalaBala,...,total}] } }
+        const id = horoId || navData?.horoscopeId || navData?.HoroscopeId || ''
+        if (!id) return null
+        try {
+          const res = await fetch(`https://enchanting-dedication-production.up.railway.app/api/strength/${id}/shadbala`)
+          if (!res.ok) return null
+          const json = await res.json()
+          return json?.data ?? null  // return { planets:[...], strongestPlanet, weakestPlanet }
+        } catch { return null }
       },
       ashtakavarga: async () => {
         // Use fetch directly — bypasses axios interceptors that may interfere
