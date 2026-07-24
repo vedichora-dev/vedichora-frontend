@@ -633,7 +633,17 @@ export default function MatchPage() {
         </span>
       </div>
 
-      {/* Two person forms */}
+      {/* Edit button when collapsed */}
+      {collapsed && (
+        <button onClick={() => setCollapsed(false)} style={{
+          width: '100%', padding: '10px', borderRadius: '10px',
+          border: '1px solid var(--bd)', background: 'var(--bg2)',
+          color: 'var(--txm)', fontSize: '12px', cursor: 'pointer', marginBottom: '8px'
+        }}>✎ Edit birth details</button>
+      )}
+
+      {!collapsed && (
+      <>{/* Two person forms */}
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '16px' }}
         className="match-grid">
         <PersonCard num={1} gender={g1} setGender={setG1}
