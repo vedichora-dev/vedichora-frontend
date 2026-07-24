@@ -257,99 +257,191 @@ const PORUTHAM_MEANING_LANG: Record<string, Record<string,string>> = {
 
 // ── VedicHora Layered Dasha Matching Section ─────────────────────────────
 function DashaMatchSection({ result, lang }: { result: any; lang: string }) {
-  const [dasha, setDasha] = React.useState<any>(null)
+  const [deep, setDeep] = React.useState<any>(null)
+  const [dashaYears, setDashaYears] = React.useState<any[]>([])
   const [loading, setLoading] = React.useState(false)
-  const CHART_URL = process.env.NEXT_PUBLIC_CHART_URL || 'https://enchanting-dedication-production.up.railway.app'
+  const [loaded, setLoaded] = React.useState(false)
 
-  // Labels
-  const lbl: Record<string,Record<string,string>> = {
-    title:    { en:'VedicHora Layered Matching — Dasha Sync', ta:'வேதிக்ஹோரா அடுக்கு பொருத்தம் — தசை இணக்கம்', hi:'वेदिकहोरा परतदार मिलान — दशा समकालिकता' },
-    optimal:  { en:'Optimal Marriage Window', ta:'சிறந்த திருமண காலம்', hi:'सर्वोत्तम विवाह विंडो' },
-    loading:  { en:'Analysing dasha periods…', ta:'தசை காலங்களை ஆராய்கிறோம்…', hi:'दशा काल विश्लेषण…' },
-    check:    { en:'Analyse Dasha Compatibility', ta:'தசை பொருத்தம் காண்க', hi:'दशा अनुकूलता जाँचें' },
-    both:     { en:'Both Compatible', ta:'இருவரும் பொருத்தமாக', hi:'दोनों अनुकूल' },
-    p1only:   { en:'Person 1 Strong', ta:'முதலாமவர் வலிமையாக', hi:'व्यक्ति 1 मजबूत' },
-    p2only:   { en:'Person 2 Strong', ta:'இரண்டாமவர் வலிமையாக', hi:'व्यक्ति 2 मजबूत' },
-    neither:  { en:'Challenging Period', ta:'சவாலான காலம்', hi:'चुनौतीपूर्ण काल' },
+  const L: Record<string,string> = {
+    en: 'VedicHora Layered Matching', ta: 'வேதிக்ஹோரா அடுக்கு பொருத்தம்', hi: 'वेदिकहोरा परतदार मिलान',
   }
-  const t = (k: string) => lbl[k]?.[lang] || lbl[k]?.en || k
+  const title = L[lang] || L.en
 
-  const analyse = async () => {
-    if (!result?.dob1 || !result?.dob2) return
+  const load = async () => {
+    const hid1 = result?.hid1 || result?.horoscopeId1
+    const hid2 = result?.hid2 || result?.horoscopeId2
+    if (!hid1 || !hid2) return  // only for saved charts
+
     setLoading(true)
     try {
-      // Build a simple dasha compatibility analysis from the two birth dates
-      const res = await fetch(`${CHART_URL}/api/chart/dasha-compat`, {
-        method:'POST',
-        headers:{'Content-Type':'application/json'},
-        body: JSON.stringify({ Dob1: result.dob1, Dob2: result.dob2,
-          Name1: result.name1, Name2: result.name2 })
-      })
-      if (res.ok) {
-        const data = await res.json()
-        setDasha(data?.data?.data ?? data?.data ?? data)
-      }
+      const { chartApi } = await import('@/api/client')
+      // Call /api/compat/score for combined score + BestYears/ChallengingYears
+      const [scoreRes, syncRes] = await Promise.all([
+        chartApi.post('/api/compat/score', { HoroscopeIdA: hid1, HoroscopeIdB: hid2 }).catch(() => null),
+        chartApi.post('/api/compat/dasha-sync', { HoroscopeIdA: hid1, HoroscopeIdB: hid2 }, { params: { years: 15 } }).catch(() => null),
+      ])
+      const score = scoreRes?.data?.data ?? scoreRes?.data
+      const sync  = syncRes?.data?.data  ?? syncRes?.data
+      setDeep(score)
+      setDashaYears(sync?.years ?? [])
     } catch {}
     setLoading(false)
+    setLoaded(true)
   }
 
-  // Simple client-side dasha window calculation if no API endpoint
-  const getSimpleDashaWindow = () => {
-    // Based on classical rules: Venus/Jupiter MD for bride, Sun/Moon/Jupiter for groom
-    const isRec = result?.IsRecommended ?? result?.isRecommended
-    const rajjuOk = result?.RajjuPass ?? result?.rajjuPass ?? true
-    const years = new Date().getFullYear()
+  // Score from guest-match for non-saved-chart users
+  const ashta = result?.AshtaKootaScore ?? result?.ashtaKootaScore ?? 0
+  const pathu = result?.PathuPoruthamScore ?? result?.pathuPoruthamScore ?? 0
+  const isRec = result?.IsRecommended ?? result?.isRecommended ?? false
+  const rajjuOk = result?.RajjuPass ?? result?.rajjuPass ?? true
+  const hasSavedCharts = !!(result?.hid1 || result?.horoscopeId1)
 
-    // Marriage optimal window based on matching scores
-    const ashta = result?.AshtaKootaScore ?? result?.ashtaKootaScore ?? 0
-    const pathu = result?.PathuPoruthamScore ?? result?.pathuPoruthamScore ?? 0
-    const score = (ashta / 36) * 0.5 + (pathu / 24) * 0.5
+  // Best years from deep engine OR estimate from scores
+  const bestYears: string[] = deep?.combined?.bestYears ?? []
+  const badYears: string[]  = deep?.combined?.challengingYears ?? []
+  const combined = deep?.combined
 
-    return {
-      window: `${years}–${years + 5}`,
-      peak: `${years + 1}–${years + 3}`,
-      score: Math.round(score * 100),
-      approved: isRec && rajjuOk,
-      note: isRec
-        ? `Score ${ashta}/36 Ashta Koota · ${pathu}/24 Pathu Porutham. Classic Muhurtha selection recommended.`
-        : `Consider Muhurtha correction for failed poruthams before proceeding.`
-    }
+  // Year-by-year table from dasha-sync
+  const now = new Date().getFullYear()
+  const syncTable = dashaYears.filter(y => y.year >= now && y.year <= now + 12)
+
+  const catColor = (cat: string) => {
+    if (!cat) return '#6B4C2A'
+    const c = cat.toUpperCase()
+    if (c.includes('EXCELLENT') || c.includes('POSITIVE') || c.includes('BOTH')) return '#15803D'
+    if (c.includes('CHALLENGING') || c.includes('DIFFICULT')) return '#DC2626'
+    return '#B45309'
   }
-
-  const window = getSimpleDashaWindow()
 
   return (
-    <div style={{marginTop:'20px',padding:'16px',background:'linear-gradient(135deg,#FAF6F0,#FFF8F0)',border:'1.5px solid #C8A96A',borderRadius:'10px'}}>
-      <div style={{fontFamily:'Georgia,serif',fontSize:'12px',fontWeight:700,color:'#3D0808',marginBottom:'12px',display:'flex',alignItems:'center',gap:'8px'}}>
+    <div style={{marginTop:'20px',padding:'18px',background:'linear-gradient(135deg,#FAF6F0,#FFF8F0)',border:'1.5px solid #C8A96A',borderRadius:'10px'}}>
+
+      {/* Section title */}
+      <div style={{fontFamily:'Georgia,serif',fontSize:'12px',fontWeight:700,color:'#3D0808',marginBottom:'14px',display:'flex',alignItems:'center',gap:'8px'}}>
         <div style={{flex:1,height:'1px',background:'linear-gradient(90deg,#C8A96A,transparent)'}}/>
-        {t('title')}
+        {title}
         <div style={{flex:1,height:'1px',background:'linear-gradient(270deg,#C8A96A,transparent)'}}/>
       </div>
 
-      <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:'10px',marginBottom:'12px'}}>
-        <div style={{background:window.approved?'#F0FDF4':'#FFFBEB',border:`1px solid ${window.approved?'#16A34A':'#D97706'}`,borderRadius:'8px',padding:'12px',textAlign:'center'}}>
-          <div style={{fontSize:'20px',marginBottom:'3px'}}>{window.approved?'✅':'⚠️'}</div>
-          <div style={{fontFamily:'Georgia,serif',fontWeight:700,fontSize:'12px',color:window.approved?'#15803D':'#B45309'}}>
-            {window.approved ? (lang==='ta'?'பரிந்துரைக்கப்படுகிறது':'Recommended ✓') : (lang==='ta'?'ஆய்வு தேவை':'Needs Review')}
+      {/* Summary row from guest-match scores */}
+      <div style={{display:'grid',gridTemplateColumns:'repeat(3,1fr)',gap:'8px',marginBottom:'14px'}}>
+        {[
+          { label: lang==='ta'?'அஷ்டகூட':'Ashta Koota', val:`${ashta}/36`, pct:`${Math.round(ashta/36*100)}%`, ok: ashta>=21 },
+          { label: lang==='ta'?'பத்து பொருத்தம்':'Pathu Porutham', val:`${pathu}/24`, pct:`${Math.round(pathu/24*100)}%`, ok: pathu>=12 },
+          { label: lang==='ta'?'ரஜ்ஜு & வேதம்':'Rajju & Vedha', val: (isRec&&rajjuOk)?'✓ Clear':'⚠ Check', pct:'', ok: isRec&&rajjuOk },
+        ].map(({label,val,pct,ok})=>(
+          <div key={label} style={{background:ok?'#F0FDF4':'#FEF9F0',border:`1px solid ${ok?'#16A34A':'#D97706'}`,borderRadius:'8px',padding:'10px',textAlign:'center'}}>
+            <div style={{fontFamily:'Georgia,serif',fontSize:'16px',fontWeight:900,color:ok?'#15803D':'#B45309'}}>{val}</div>
+            <div style={{fontSize:'8.5px',color:'#6B4C2A',textTransform:'uppercase',letterSpacing:'.06em',margin:'3px 0 1px'}}>{label}</div>
+            {pct && <div style={{fontSize:'10px',color:ok?'#15803D':'#B45309',fontWeight:700}}>{pct}</div>}
           </div>
-          <div style={{fontSize:'9px',color:'#6B4C2A',marginTop:'3px'}}>VedicHora Match Score: {window.score}%</div>
-        </div>
-        <div style={{background:'#FFF8F0',border:'1px solid #E8D8C0',borderRadius:'8px',padding:'12px',textAlign:'center'}}>
-          <div style={{fontSize:'18px',marginBottom:'3px'}}>📅</div>
-          <div style={{fontFamily:'Georgia,serif',fontWeight:700,fontSize:'12px',color:'#3D0808'}}>{window.peak}</div>
-          <div style={{fontSize:'9px',color:'#6B4C2A',marginTop:'3px'}}>{t('optimal')}</div>
-        </div>
+        ))}
       </div>
 
-      <div style={{fontSize:'10px',color:'#6B4C2A',lineHeight:1.6,padding:'8px 10px',background:'rgba(200,169,106,.1)',borderRadius:'6px',borderLeft:'3px solid #C8A96A'}}>
-        <strong style={{color:'#3D0808'}}>Layered Analysis:</strong> {window.note}
-        {window.approved && (
-          <span> Optimal window: <strong style={{color:'#3D0808'}}>{window.window}</strong>. Peak alignment: <strong style={{color:'#3D0808'}}>{window.peak}</strong>.</span>
-        )}
-      </div>
+      {/* For saved charts: load deep analysis */}
+      {hasSavedCharts && !loaded && (
+        <button onClick={load} disabled={loading}
+          style={{width:'100%',padding:'10px',background:'#3D0808',color:'#C8A96A',border:'none',borderRadius:'8px',cursor:'pointer',fontFamily:'Georgia,serif',fontSize:'11px',fontWeight:700,marginBottom:'12px'}}>
+          {loading
+            ? (lang==='ta'?'தசை காலங்களை ஆராய்கிறோம்…':'Analysing Dasha periods…')
+            : (lang==='ta'?'தசை பொருத்தம் & ஆழமான பகுப்பாய்வு →':'Load Full Layered Analysis (Dasha Sync + Deep) →')}
+        </button>
+      )}
 
+      {/* Deep score summary */}
+      {combined && (
+        <div style={{marginBottom:'12px',padding:'10px 12px',background:'#FFF8F0',borderRadius:'8px',border:'1px solid #E8D8C0'}}>
+          <div style={{fontFamily:'Georgia,serif',fontWeight:700,fontSize:'12px',color:'#3D0808',marginBottom:'6px'}}>
+            VedicHora Combined Score: <span style={{color:combined.score>=70?'#15803D':combined.score>=50?'#B45309':'#DC2626'}}>{combined.score}% — {combined.label}</span>
+          </div>
+          {combined.mainStrengths?.length > 0 && (
+            <div style={{fontSize:'10px',color:'#15803D',marginBottom:'4px'}}>✓ {combined.mainStrengths.slice(0,3).join(' · ')}</div>
+          )}
+          {combined.mainChallenges?.length > 0 && (
+            <div style={{fontSize:'10px',color:'#DC2626'}}>⚠ {combined.mainChallenges.slice(0,2).join(' · ')}</div>
+          )}
+        </div>
+      )}
+
+      {/* Best & Challenging years */}
+      {(bestYears.length > 0 || badYears.length > 0) && (
+        <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:'8px',marginBottom:'12px'}}>
+          {bestYears.length > 0 && (
+            <div style={{background:'#F0FDF4',border:'1px solid #16A34A',borderRadius:'8px',padding:'10px'}}>
+              <div style={{fontSize:'9px',fontWeight:700,color:'#15803D',textTransform:'uppercase',letterSpacing:'.06em',marginBottom:'5px'}}>
+                🌟 {lang==='ta'?'சிறந்த காலங்கள்':'Best Years'}
+              </div>
+              {bestYears.slice(0,4).map((y:string) => (
+                <div key={y} style={{fontSize:'10px',color:'#15803D',fontWeight:600}}>{y}</div>
+              ))}
+            </div>
+          )}
+          {badYears.length > 0 && (
+            <div style={{background:'#FEF2F2',border:'1px solid #FCA5A5',borderRadius:'8px',padding:'10px'}}>
+              <div style={{fontSize:'9px',fontWeight:700,color:'#DC2626',textTransform:'uppercase',letterSpacing:'.06em',marginBottom:'5px'}}>
+                ⚠ {lang==='ta'?'சவாலான காலங்கள்':'Challenging Years'}
+              </div>
+              {badYears.slice(0,4).map((y:string) => (
+                <div key={y} style={{fontSize:'10px',color:'#DC2626',fontWeight:600}}>{y}</div>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Year-by-year dasha sync table */}
+      {syncTable.length > 0 && (
+        <div style={{marginBottom:'12px'}}>
+          <div style={{fontSize:'10px',fontWeight:700,color:'#3D0808',marginBottom:'6px',fontFamily:'Georgia,serif'}}>
+            {lang==='ta'?'ஆண்டுவாரி தசை இணக்கம்':'Year-by-Year Dasha Compatibility'}
+          </div>
+          <div style={{overflowX:'auto'}}>
+            <table style={{width:'100%',borderCollapse:'collapse',fontSize:'9.5px'}}>
+              <thead>
+                <tr style={{background:'#3D0808'}}>
+                  {['Year','Person 1 Dasha','Person 2 Dasha','Combined','Verdict'].map(h=>(
+                    <th key={h} style={{padding:'5px 8px',color:'#C8A96A',textAlign:'left',fontFamily:'Georgia,serif',fontSize:'8px',textTransform:'uppercase'}}>{h}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {syncTable.map((y:any,i:number) => (
+                  <tr key={y.year} style={{background:i%2?'#FDF6EE':'#fff',borderBottom:'1px solid #EDE0CC'}}>
+                    <td style={{padding:'5px 8px',fontWeight:700,color:'#3D0808'}}>{y.year}</td>
+                    <td style={{padding:'5px 8px',color:'#6B4C2A'}}>{y.personA?.dasha || y.personA?.Dasha || '—'}</td>
+                    <td style={{padding:'5px 8px',color:'#6B4C2A'}}>{y.personB?.dasha || y.personB?.Dasha || '—'}</td>
+                    <td style={{padding:'5px 8px',color:catColor(y.combined || y.combinedCategory || '')}}>
+                      {y.combined || y.combinedCategory || '—'}
+                    </td>
+                    <td style={{padding:'5px 8px',fontSize:'9px',color:catColor(y.combined||'')}}>
+                      {y.syncLabel || y.recommendation || ''}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
+
+      {/* Guest: show sign-in prompt for deep analysis */}
+      {!hasSavedCharts && (
+        <div style={{fontSize:'10px',color:'#6B4C2A',padding:'8px 10px',background:'rgba(200,169,106,.1)',borderRadius:'6px',borderLeft:'3px solid #C8A96A'}}>
+          <strong style={{color:'#3D0808'}}>
+            {lang==='ta'?'ஆழமான பகுப்பாய்வு:':'Deep Layered Analysis:'}
+          </strong>
+          {' '}{lang==='ta'
+            ? 'உள்நுழைந்து வரைபடங்களை சேமிக்கவும் — தசை ஒத்திசைவு, சிறந்த திருமண காலம், ஆண்டுவாரி பலன் காண்க.'
+            : 'Sign in and save charts to unlock Dasha Sync year-by-year, Best Marriage Window, Overlay Analysis, and AI Report.'}
+          <a href="/signin" style={{color:'var(--acc)',fontWeight:700,marginLeft:'4px',display:'inline-block',marginTop:'4px'}}>
+            Sign in →
+          </a>
+        </div>
+      )}
+
+      {/* Summary note */}
       {result?.Summary && (
-        <div style={{marginTop:'8px',fontSize:'10px',color:'#6B4C2A',fontStyle:'italic',lineHeight:1.5}}>
+        <div style={{marginTop:'8px',fontSize:'10px',color:'#6B4C2A',fontStyle:'italic',lineHeight:1.5,borderTop:'1px solid #E8D8C0',paddingTop:'8px'}}>
           {result.Summary}
         </div>
       )}
