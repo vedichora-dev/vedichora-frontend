@@ -160,6 +160,236 @@ function Sel({value,onChange,opts,placeholder,w}:{value:number|string,onChange:(
   )
 }
 
+
+// ── Western Layered Matching Section ─────────────────────────────────────
+function WesternDashaSection({
+  compatResult, name1, name2, scoreColor
+}: {
+  compatResult: any; name1: string; name2: string; scoreColor: (n:number)=>string
+}) {
+  const [deep, setDeep] = useState<any>(null)
+  const [dashaYears, setDashaYears] = useState<any[]>([])
+  const [loading, setLoading] = useState(false)
+  const [loaded, setLoaded] = useState(false)
+
+  const r = compatResult as any
+  const ashta   = r?.AshtaKootaScore  ?? r?.ashtaKootaScore  ?? 0
+  const aTotal  = r?.AshtaKootaTotal  ?? r?.ashtaKootaTotal  ?? 36
+  const pathu   = r?.PathuPoruthamScore ?? r?.pathuPoruthamScore ?? 0
+  const pTotal  = r?.PathuPoruthamTotal ?? r?.pathuPoruthamTotal ?? 24
+  const isRec   = r?.IsRecommended ?? r?.isRecommended ?? false
+  const rajjuOk = r?.RajjuPass ?? r?.rajjuPass ?? true
+  const rajjuWarn = r?.RajjuWarning ?? r?.rajjuWarning ?? ''
+  const summary = r?.Summary ?? r?.summary ?? ''
+  const poruthams = r?.Poruthams ?? r?.poruthams ?? []
+  const kootas    = r?.KootaDetails ?? r?.kootaDetails ?? []
+  const hasSaved  = !!(r?.hid1 || r?.horoscopeId1)
+
+  const loadDeep = async () => {
+    const hid1 = r?.hid1 || r?.horoscopeId1
+    const hid2 = r?.hid2 || r?.horoscopeId2
+    if (!hid1 || !hid2) return
+    setLoading(true)
+    try {
+      const { chartApi } = await import('@/api/client')
+      const [sr, sy] = await Promise.all([
+        chartApi.post('/api/compat/score',      { HoroscopeIdA: hid1, HoroscopeIdB: hid2 }).catch(() => null),
+        chartApi.post('/api/compat/dasha-sync', { HoroscopeIdA: hid1, HoroscopeIdB: hid2 }, { params:{ years:15 } }).catch(() => null),
+      ])
+      setDeep(sr?.data?.data ?? sr?.data)
+      setDashaYears((sy?.data?.data ?? sy?.data)?.years ?? [])
+    } catch {}
+    setLoading(false); setLoaded(true)
+  }
+
+  const combined = deep?.combined
+  const bestYrs: string[] = combined?.bestYears ?? []
+  const badYrs: string[]  = combined?.challengingYears ?? []
+  const now = new Date().getFullYear()
+  const syncTable = dashaYears.filter((y:any) => y.year >= now && y.year <= now + 12)
+
+  const catColor = (cat: string) => {
+    if (!cat) return '#888'
+    const c = cat.toUpperCase()
+    if (c.includes('EXCELLENT') || c.includes('BOTH')) return '#16a34a'
+    if (c.includes('CHALLENGING') || c.includes('DIFFICULT')) return '#dc2626'
+    return '#d97706'
+  }
+
+  return (
+    <div style={{display:'flex',flexDirection:'column',gap:'16px'}}>
+
+      {/* Vedic compatibility scores */}
+      <div style={{background:'var(--w-surf)',border:'1px solid var(--w-bd)',borderRadius:'20px',padding:'28px',boxShadow:'0 4px 24px rgba(0,0,0,.06)'}}>
+        <div style={{textAlign:'center',marginBottom:'20px'}}>
+          <div style={{fontSize:'11px',fontWeight:700,letterSpacing:'.1em',textTransform:'uppercase',color:'var(--w-acc)',marginBottom:'6px'}}>
+            VedicHora Layered Matching
+          </div>
+          <div style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:'28px',fontWeight:700,color:'var(--w-tx)',marginBottom:'4px'}}>
+            {name1} & {name2}
+          </div>
+          <div style={{fontSize:'13px',color:'var(--w-tx2)'}}>
+            {isRec && rajjuOk ? '✅ Recommended Match' : '⚠️ Needs Consideration'}
+          </div>
+        </div>
+
+        {/* 3-box score row */}
+        <div style={{display:'grid',gridTemplateColumns:'repeat(3,1fr)',gap:'10px',marginBottom:'20px'}}>
+          {[
+            { label:'Ashta Koota', val:`${ashta}/${aTotal}`, pct:Math.round(ashta/aTotal*100), ok: ashta >= aTotal*0.6 },
+            { label:'Pathu Porutham', val:`${pathu}/${pTotal}`, pct:Math.round(pathu/pTotal*100), ok: pathu >= pTotal*0.5 },
+            { label:'Rajju & Vedha', val: rajjuOk ? '✓ Clear' : '✗ Dosha', pct: rajjuOk ? 100 : 0, ok: rajjuOk },
+          ].map(({label,val,pct,ok}) => (
+            <div key={label} style={{textAlign:'center',padding:'16px 8px',borderRadius:'12px',background:'var(--w-bg)',border:`1px solid ${ok?'#16a34a44':'#ef444444'}`}}>
+              <div style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:'22px',fontWeight:800,color:scoreColor(pct)}}>{val}</div>
+              <div style={{fontSize:'10px',color:'var(--w-tx2)',marginTop:'4px',textTransform:'uppercase',letterSpacing:'.04em'}}>{label}</div>
+            </div>
+          ))}
+        </div>
+
+        {/* Rajju warning */}
+        {rajjuWarn && (
+          <div style={{background:'#fef2f2',border:'1px solid #fca5a5',borderRadius:'8px',padding:'10px 14px',fontSize:'12px',color:'#dc2626',marginBottom:'14px'}}>
+            ⚠ {rajjuWarn}
+          </div>
+        )}
+
+        {/* Pathu Porutham list */}
+        {poruthams.length > 0 && (
+          <div style={{marginBottom:'16px'}}>
+            <div style={{fontSize:'11px',fontWeight:700,color:'var(--w-acc)',textTransform:'uppercase',letterSpacing:'.08em',marginBottom:'10px'}}>
+              Pathu Porutham — 10 Compatibility Factors
+            </div>
+            <div style={{display:'flex',flexDirection:'column',gap:'4px'}}>
+              {poruthams.map((p:any, i:number) => {
+                const pass = p.Verdict==='Compatible' || p.pass || p.Pass
+                const name = p.KootaName || p.kootaName || `Porutham ${i+1}`
+                const desc = p.Description || p.description || ''
+                return (
+                  <div key={i} style={{display:'grid',gridTemplateColumns:'24px 1fr auto',gap:'8px',alignItems:'start',padding:'6px 0',borderBottom:'1px solid var(--w-bd)'}}>
+                    <div style={{fontSize:'10px',color:'var(--w-tx2)',paddingTop:'1px'}}>{i+1}</div>
+                    <div>
+                      <div style={{fontSize:'12px',fontWeight:600,color:'var(--w-tx)'}}>{name}</div>
+                      {desc && <div style={{fontSize:'10px',color:'var(--w-tx2)',marginTop:'2px',lineHeight:1.4}}>{desc}</div>}
+                    </div>
+                    <div style={{fontSize:'11px',fontWeight:700,color:pass?'#16a34a':'#dc2626',paddingTop:'1px',whiteSpace:'nowrap'}}>
+                      {pass ? '✓ Pass' : '✗ Fail'}
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
+          </div>
+        )}
+
+        {/* Ashta Koota table */}
+        {kootas.length > 0 && (
+          <div>
+            <div style={{fontSize:'11px',fontWeight:700,color:'var(--w-acc)',textTransform:'uppercase',letterSpacing:'.08em',marginBottom:'10px'}}>
+              Ashta Koota — 8 Factor Analysis
+            </div>
+            <div style={{display:'grid',gridTemplateColumns:'repeat(4,1fr)',gap:'6px'}}>
+              {kootas.map((k:any) => {
+                const score = k.Score ?? k.score ?? 0
+                const max   = k.MaxScore ?? k.maxScore ?? 1
+                const ok    = score >= max * 0.5
+                return (
+                  <div key={k.KootaName||k.kootaName} style={{padding:'10px',borderRadius:'10px',background:'var(--w-bg)',border:`1px solid ${ok?'#16a34a33':'#ef444433'}`,textAlign:'center'}}>
+                    <div style={{fontSize:'18px',fontWeight:800,color:scoreColor(Math.round(score/max*100))}}>{score}</div>
+                    <div style={{fontSize:'8.5px',color:'var(--w-tx2)',marginTop:'2px'}}>/{max}</div>
+                    <div style={{fontSize:'9px',color:'var(--w-tx2)',marginTop:'3px',lineHeight:1.2}}>{k.KootaName||k.kootaName}</div>
+                  </div>
+                )
+              })}
+            </div>
+          </div>
+        )}
+
+        {summary && (
+          <div style={{marginTop:'14px',padding:'10px 14px',background:'var(--w-bg)',borderRadius:'8px',fontSize:'12px',color:'var(--w-tx2)',lineHeight:1.6,borderLeft:'3px solid var(--w-acc)'}}>
+            {summary}
+          </div>
+        )}
+      </div>
+
+      {/* Dasha sync section */}
+      <div style={{background:'var(--w-surf)',border:'1px solid var(--w-bd)',borderRadius:'20px',padding:'28px',boxShadow:'0 4px 24px rgba(0,0,0,.06)'}}>
+        <div style={{fontSize:'11px',fontWeight:700,letterSpacing:'.1em',textTransform:'uppercase',color:'var(--w-acc)',marginBottom:'16px',textAlign:'center'}}>
+          VedicHora Dasha Compatibility — Year-by-Year Analysis
+        </div>
+
+        {hasSaved && !loaded && (
+          <button onClick={loadDeep} disabled={loading}
+            style={{width:'100%',padding:'12px',background:'var(--w-acc)',color:'#fff',border:'none',borderRadius:'10px',cursor:'pointer',fontSize:'13px',fontWeight:600,marginBottom:'12px'}}>
+            {loading ? 'Analysing Dasha periods…' : 'Load Full Dasha Sync Analysis →'}
+          </button>
+        )}
+
+        {combined && (
+          <div style={{textAlign:'center',marginBottom:'16px'}}>
+            <div style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:'32px',fontWeight:800,color:scoreColor(combined.score??0)}}>{combined.score}%</div>
+            <div style={{fontSize:'14px',fontWeight:600,color:'var(--w-acc)',margin:'4px 0'}}>{combined.label}</div>
+            {combined.mainStrengths?.length > 0 && (
+              <div style={{fontSize:'12px',color:'#16a34a'}}>✓ {combined.mainStrengths.slice(0,3).join(' · ')}</div>
+            )}
+            {combined.mainChallenges?.length > 0 && (
+              <div style={{fontSize:'12px',color:'#dc2626',marginTop:'4px'}}>⚠ {combined.mainChallenges.slice(0,2).join(' · ')}</div>
+            )}
+          </div>
+        )}
+
+        {(bestYrs.length > 0 || badYrs.length > 0) && (
+          <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:'10px',marginBottom:'16px'}}>
+            {bestYrs.length > 0 && (
+              <div style={{padding:'14px',background:'#f0fdf4',border:'1px solid #16a34a',borderRadius:'10px'}}>
+                <div style={{fontSize:'10px',fontWeight:700,color:'#15803d',marginBottom:'6px',textTransform:'uppercase'}}>🌟 Best Years</div>
+                {bestYrs.slice(0,4).map((y:string) => <div key={y} style={{fontSize:'12px',color:'#15803d',fontWeight:600}}>{y}</div>)}
+              </div>
+            )}
+            {badYrs.length > 0 && (
+              <div style={{padding:'14px',background:'#fef2f2',border:'1px solid #fca5a5',borderRadius:'10px'}}>
+                <div style={{fontSize:'10px',fontWeight:700,color:'#dc2626',marginBottom:'6px',textTransform:'uppercase'}}>⚠ Challenging Years</div>
+                {badYrs.slice(0,4).map((y:string) => <div key={y} style={{fontSize:'12px',color:'#dc2626',fontWeight:600}}>{y}</div>)}
+              </div>
+            )}
+          </div>
+        )}
+
+        {syncTable.length > 0 && (
+          <div style={{overflowX:'auto'}}>
+            <table style={{width:'100%',borderCollapse:'collapse',fontSize:'11px'}}>
+              <thead>
+                <tr style={{borderBottom:'2px solid var(--w-bd)'}}>
+                  {['Year','Person 1 Dasha','Person 2 Dasha','Match'].map(h => (
+                    <th key={h} style={{padding:'6px 10px',textAlign:'left',fontSize:'9px',fontWeight:700,textTransform:'uppercase',color:'var(--w-tx2)',letterSpacing:'.05em'}}>{h}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {syncTable.map((y:any, i:number) => (
+                  <tr key={y.year} style={{borderBottom:'1px solid var(--w-bd)',background:i%2?'var(--w-bg)':'transparent'}}>
+                    <td style={{padding:'6px 10px',fontWeight:700,color:'var(--w-tx)'}}>{y.year}</td>
+                    <td style={{padding:'6px 10px',color:'var(--w-tx2)'}}>{y.personA?.dasha||y.personA?.Dasha||'—'}</td>
+                    <td style={{padding:'6px 10px',color:'var(--w-tx2)'}}>{y.personB?.dasha||y.personB?.Dasha||'—'}</td>
+                    <td style={{padding:'6px 10px',fontWeight:600,color:catColor(y.combined||y.combinedCategory||'')}}>{y.syncLabel||y.combined||y.combinedCategory||'—'}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+
+        {!hasSaved && (
+          <div style={{padding:'14px',background:'var(--w-bg)',borderRadius:'10px',fontSize:'12px',color:'var(--w-tx2)',lineHeight:1.6,textAlign:'center'}}>
+            <strong style={{color:'var(--w-tx)'}}>Sign in & save charts</strong> to unlock year-by-year Dasha Sync, Best Marriage Window, and Deep Compatibility Analysis.{' '}
+            <a href="/signin" style={{color:'var(--w-acc)',fontWeight:600}}>Sign in →</a>
+          </div>
+        )}
+      </div>
+    </div>
+  )
+}
+
 export default function WesternPage(){
   const [tab,setTab]=useState<Tab>('horoscope')
   const [themeKey,setThemeKey]=useState('cream')
@@ -621,6 +851,14 @@ export default function WesternPage(){
                 )}
               </div>
             )}
+
+            {/* ── VedicHora Layered Matching Results ── */}
+            {compatResult && (
+              <div style={{marginTop:'20px'}}>
+                <WesternDashaSection compatResult={compatResult} name1={n1||'Person 1'} name2={n2||'Person 2'} scoreColor={scoreColor} />
+              </div>
+            )}
+
           </div>
         )}
 
