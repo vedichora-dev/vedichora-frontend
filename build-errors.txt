@@ -1,16 +1,16 @@
 === CURRENT e2e FILES ===
 total 72
-drwxr-xr-x 2 runner runner  4096 Jul 24 02:27 .
-drwxr-xr-x 9 runner runner  4096 Jul 24 02:27 ..
--rw-r--r-- 1 runner runner  4428 Jul 24 02:27 01-auth.spec.js
--rw-r--r-- 1 runner runner 11055 Jul 24 02:27 02-chart.spec.js
--rw-r--r-- 1 runner runner  2851 Jul 24 02:27 03-match.spec.js
--rw-r--r-- 1 runner runner  2685 Jul 24 02:27 04-horoscope.spec.js
--rw-r--r-- 1 runner runner  3485 Jul 24 02:27 05-deployment.spec.js
--rw-r--r-- 1 runner runner  5636 Jul 24 02:27 06-match-10.spec.js
--rw-r--r-- 1 runner runner  8626 Jul 24 02:27 functional-test.spec.js
--rw-r--r-- 1 runner runner  2685 Jul 24 02:27 helpers.js
--rw-r--r-- 1 runner runner  4399 Jul 24 02:27 screenshot.spec.js
+drwxr-xr-x 2 runner runner  4096 Jul 24 02:31 .
+drwxr-xr-x 9 runner runner  4096 Jul 24 02:31 ..
+-rw-r--r-- 1 runner runner  4428 Jul 24 02:31 01-auth.spec.js
+-rw-r--r-- 1 runner runner 11055 Jul 24 02:31 02-chart.spec.js
+-rw-r--r-- 1 runner runner  2851 Jul 24 02:31 03-match.spec.js
+-rw-r--r-- 1 runner runner  2685 Jul 24 02:31 04-horoscope.spec.js
+-rw-r--r-- 1 runner runner  3485 Jul 24 02:31 05-deployment.spec.js
+-rw-r--r-- 1 runner runner  5636 Jul 24 02:31 06-match-10.spec.js
+-rw-r--r-- 1 runner runner  8626 Jul 24 02:31 functional-test.spec.js
+-rw-r--r-- 1 runner runner  2685 Jul 24 02:31 helpers.js
+-rw-r--r-- 1 runner runner  7432 Jul 24 02:31 screenshot.spec.js
 
 === BUILD OUTPUT ===
 
@@ -37,8 +37,8 @@ https://nextjs.org/telemetry
    Linting ...
    Collecting page data ...
    Generating static pages (0/25) ...
-   Generating static pages (6/25) 
  ⚠ Entire page /checkout deopted into client-side rendering. https://nextjs.org/docs/messages/deopted-into-client-rendering /checkout
+   Generating static pages (6/25) 
    Generating static pages (12/25) 
    Generating static pages (18/25) 
 ReferenceError: pdfLoading is not defined
