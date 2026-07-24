@@ -1,148 +1,33 @@
 
 Running 2 tests using 2 workers
 
-City 1 dropdown clicked
-City 1 dropdown clicked
-SS01 taken
-SS01 taken
-  ✘  2 [chromium] › e2e/screenshot.spec.js:17:1 › result UI screenshot (2.0m)
-  ✘  1 [mobile] › e2e/screenshot.spec.js:17:1 › result UI screenshot (2.0m)
-City 1 dropdown clicked
-SS01 taken
-City 1 dropdown clicked
-SS01 taken
-  ✘  3 [chromium] › e2e/screenshot.spec.js:17:1 › result UI screenshot (retry #1) (2.0m)
-  ✘  4 [mobile] › e2e/screenshot.spec.js:17:1 › result UI screenshot (retry #1) (2.0m)
+City inputs: 2
+City inputs: 2
+City 1 suggestion clicked
+City 1 suggestion clicked
+City 2 suggestion clicked
+City 2 suggestion clicked
+SS01: form ready
+Calc button visible: true
+Clicked calculate
+SS01: form ready
+Calc button visible: true
+Clicked calculate
+SS02: after click
+Has crimson: false
+Has result: true
+Error visible: false
+BODY: Skip to main content VedicHora North South Horoscope Kundali Matching Jyoti AI Shop Learn API About More 🇮🇳 EN ₹ INR Sign in Get started 📜 Free Kundali Report · North & South Indian Charts Lagna · Navamsha · 9 planets · Dashas · Yogas Generate Free Full PDF ₹299 Compatibility Matching  Ashta Koota · Pathu Porutham · Mangal Dosha · Traditional Vedic Matching  🔒 Guest mode — Sign in to use saved charts How to use: Fill in the date of birth, type a city and click the city suggestion from the dropdown — then click Check Compatibility. Person 1 ♂ Male ♀ Female FULL NAME (OPTIONAL) DATE & TIME OF BIRTH Day 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 Month January February March April May June July August September October November December Year 2025 20
+SS03: scrolled
+SS04: full page done
+  ✓  1 [chromium] › e2e/screenshot.spec.js:5:1 › full result UI (15.2s)
+SS02: after click
+Has crimson: false
+Has result: true
+Error visible: false
+BODY: Skip to main content VedicHora North South Horoscope Kundali Matching Jyoti AI Shop Learn API About More 🇮🇳 EN ₹ INR Sign in Get started 📜 Free Kundali Report · North & South Indian Charts Lagna · Navamsha · 9 planets · Dashas · Yogas Generate Free Full PDF ₹299 Compatibility Matching  Ashta Koota · Pathu Porutham · Mangal Dosha · Traditional Vedic Matching  🔒 Guest mode — Sign in to use saved charts How to use: Fill in the date of birth, type a city and click the city suggestion from the dropdown — then click Check Compatibility. Person 1 ♂ Male ♀ Female FULL NAME (OPTIONAL) DATE & TIME OF BIRTH Day 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 Month January February March April May June July August September October November December Year 2025 20
+SS03: scrolled
+SS04: full page done
+  ✓  2 [mobile] › e2e/screenshot.spec.js:5:1 › full result UI (16.9s)
 
-
-  1) [chromium] › e2e/screenshot.spec.js:17:1 › result UI screenshot ───────────────────────────────
-
-    Test timeout of 120000ms exceeded.
-
-    Error: locator.click: Test timeout of 120000ms exceeded.
-    Call log:
-      - waiting for locator('button').filter({ hasText: /Check Compatibility/i }).first()
-
-
-      69 |   // Click Calculate
-      70 |   const calcBtn = page.locator('button').filter({ hasText: /Check Compatibility/i }).first()
-    > 71 |   await calcBtn.click()
-         |                 ^
-      72 |   console.log('Calculate clicked')
-      73 |   await page.waitForTimeout(6000) // wait for API
-      74 |
-        at /home/runner/work/vedichora-frontend/vedichora-frontend/e2e/screenshot.spec.js:71:17
-
-    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
-    test-results/screenshot-result-UI-screenshot-chromium/test-failed-1.png
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
-    test-results/screenshot-result-UI-screenshot-chromium/video.webm
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    Error Context: test-results/screenshot-result-UI-screenshot-chromium/error-context.md
-
-    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
-
-    Test timeout of 120000ms exceeded.
-
-    Error: locator.click: Test timeout of 120000ms exceeded.
-    Call log:
-      - waiting for locator('button').filter({ hasText: /Check Compatibility/i }).first()
-
-
-      69 |   // Click Calculate
-      70 |   const calcBtn = page.locator('button').filter({ hasText: /Check Compatibility/i }).first()
-    > 71 |   await calcBtn.click()
-         |                 ^
-      72 |   console.log('Calculate clicked')
-      73 |   await page.waitForTimeout(6000) // wait for API
-      74 |
-        at /home/runner/work/vedichora-frontend/vedichora-frontend/e2e/screenshot.spec.js:71:17
-
-    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
-    test-results/screenshot-result-UI-screenshot-chromium-retry1/test-failed-1.png
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
-    test-results/screenshot-result-UI-screenshot-chromium-retry1/video.webm
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    Error Context: test-results/screenshot-result-UI-screenshot-chromium-retry1/error-context.md
-
-    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
-    test-results/screenshot-result-UI-screenshot-chromium-retry1/trace.zip
-    Usage:
-
-        npx playwright show-trace test-results/screenshot-result-UI-screenshot-chromium-retry1/trace.zip
-
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-  2) [mobile] › e2e/screenshot.spec.js:17:1 › result UI screenshot ─────────────────────────────────
-
-    Test timeout of 120000ms exceeded.
-
-    Error: locator.click: Test timeout of 120000ms exceeded.
-    Call log:
-      - waiting for locator('button').filter({ hasText: /Check Compatibility/i }).first()
-
-
-      69 |   // Click Calculate
-      70 |   const calcBtn = page.locator('button').filter({ hasText: /Check Compatibility/i }).first()
-    > 71 |   await calcBtn.click()
-         |                 ^
-      72 |   console.log('Calculate clicked')
-      73 |   await page.waitForTimeout(6000) // wait for API
-      74 |
-        at /home/runner/work/vedichora-frontend/vedichora-frontend/e2e/screenshot.spec.js:71:17
-
-    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
-    test-results/screenshot-result-UI-screenshot-mobile/test-failed-1.png
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
-    test-results/screenshot-result-UI-screenshot-mobile/video.webm
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    Error Context: test-results/screenshot-result-UI-screenshot-mobile/error-context.md
-
-    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
-
-    Test timeout of 120000ms exceeded.
-
-    Error: locator.click: Test timeout of 120000ms exceeded.
-    Call log:
-      - waiting for locator('button').filter({ hasText: /Check Compatibility/i }).first()
-
-
-      69 |   // Click Calculate
-      70 |   const calcBtn = page.locator('button').filter({ hasText: /Check Compatibility/i }).first()
-    > 71 |   await calcBtn.click()
-         |                 ^
-      72 |   console.log('Calculate clicked')
-      73 |   await page.waitForTimeout(6000) // wait for API
-      74 |
-        at /home/runner/work/vedichora-frontend/vedichora-frontend/e2e/screenshot.spec.js:71:17
-
-    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
-    test-results/screenshot-result-UI-screenshot-mobile-retry1/test-failed-1.png
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
-    test-results/screenshot-result-UI-screenshot-mobile-retry1/video.webm
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    Error Context: test-results/screenshot-result-UI-screenshot-mobile-retry1/error-context.md
-
-    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
-    test-results/screenshot-result-UI-screenshot-mobile-retry1/trace.zip
-    Usage:
-
-        npx playwright show-trace test-results/screenshot-result-UI-screenshot-mobile-retry1/trace.zip
-
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-  2 failed
-    [chromium] › e2e/screenshot.spec.js:17:1 › result UI screenshot ────────────────────────────────
-    [mobile] › e2e/screenshot.spec.js:17:1 › result UI screenshot ──────────────────────────────────
+  2 passed (19.5s)
