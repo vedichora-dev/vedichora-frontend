@@ -315,46 +315,61 @@ export default function MatchPage() {
     if (!result) return
     setPdfLoading('gen')
     try {
-      // Fetch the HTML report template from public/
+      // Fetch HTML template
       const tmplRes = await fetch('/porutham-report.html')
-      const tmpl = await tmplRes.text()
-      // Inject data
+      let tmpl = await tmplRes.text()
+
+      // Build data object with all normalised field names
+      const r = result as any
       const data = {
-        ...result,
         lang: reportLang,
-        name1: result.name1 || 'Person 1',
-        name2: result.name2 || 'Person 2',
-        dob1:  result.dob1  || '',
-        dob2:  result.dob2  || '',
-        groomNakshatra: result.GroomNakshatra || result.groomNakshatra || '',
-        brideNakshatra: result.BrideNakshatra || result.brideNakshatra || '',
-        groomRasi: result.GroomRasi || result.groomRasi || '',
-        brideRasi: result.BrideRasi || result.brideRasi || '',
-        groomLagna: result.groomLagna || '',
-        brideLagna: result.brideLagna || '',
-        groomNadi: result.groomNadi || '',
-        brideNadi: result.brideNadi || '',
-        groomRajju: result.GroomRajju || result.groomRajju || '',
-        brideRajju: result.BrideRajju || result.brideRajju || '',
+        name1: r.name1 || 'Person 1',
+        name2: r.name2 || 'Person 2',
+        dob1:  r.dob1  || '',
+        dob2:  r.dob2  || '',
+        // Ashta Koota
+        AshtaKootaScore:  r.AshtaKootaScore  ?? r.ashtaKootaScore  ?? 0,
+        AshtaKootaTotal:  r.AshtaKootaTotal  ?? r.ashtaKootaTotal  ?? 36,
+        AshtaKootaPct:    r.AshtaKootaPct    ?? r.ashtaKootaPct    ?? 0,
+        KootaDetails:     r.KootaDetails     ?? r.kootaDetails     ?? [],
+        // Pathu Porutham
+        PathuPoruthamScore: r.PathuPoruthamScore ?? r.pathuPoruthamScore ?? 0,
+        PathuPoruthamTotal: r.PathuPoruthamTotal ?? r.pathuPoruthamTotal ?? 10,
+        Poruthams:          r.Poruthams ?? r.poruthams ?? [],
+        // Flags
+        IsRecommended:    r.IsRecommended    ?? r.isRecommended    ?? false,
+        RajjuPass:        r.RajjuPass        ?? r.rajjuPass        ?? true,
+        RajjuWarning:     r.RajjuWarning     ?? r.rajjuWarning     ?? '',
+        VedhaPresent:     r.VedhaPresent     ?? r.vedhaPresent     ?? false,
+        VedhaWarning:     r.VedhaWarning     ?? r.vedhaWarning     ?? '',
+        MahendramPresent: r.MahendramPresent ?? r.mahendramPresent ?? false,
+        MangalDosha:      r.MangalDosha      ?? r.mangalDosha      ?? false,
+        Summary:          r.Summary          ?? r.summary          ?? '',
+        // Birth details
+        GroomNakshatra: r.GroomNakshatra ?? r.groomNakshatra ?? '',
+        BrideNakshatra: r.BrideNakshatra ?? r.brideNakshatra ?? '',
+        GroomRasi:      r.GroomRasi      ?? r.groomRasi      ?? '',
+        BrideRasi:      r.BrideRasi      ?? r.brideRasi      ?? '',
+        GroomRajju:     r.GroomRajju     ?? r.groomRajju     ?? '',
+        BrideRajju:     r.BrideRajju     ?? r.brideRajju     ?? '',
+        groomLagna:     r.groomLagna     ?? '',
+        brideLagna:     r.brideLagna     ?? '',
+        groomNadi:      r.groomNadi      ?? '',
+        brideNadi:      r.brideNadi      ?? '',
       }
-      // Open new window and inject data + template
+
+      // Inject data DIRECTLY into the HTML before writing to window
+      // This ensures window.__VH_DATA is set before any script runs
+      const dataScript = '<script>window.__VH_DATA = ' + JSON.stringify(data) + ';<\/script>'
+      tmpl = tmpl.replace('</head>', dataScript + '</head>')
+
       const win = window.open('', '_blank')
       if (!win) { alert('Please allow popups for PDF download'); setPdfLoading(null); return }
       win.document.write(tmpl)
       win.document.close()
-      // Inject data after document is ready
-      setTimeout(() => {
-        try {
-          win.__VH_DATA = data
-          // Re-trigger init
-          if (win.document.readyState === 'complete') {
-            const script = win.document.createElement('script')
-            script.textContent = 'window.__VH_DATA = ' + JSON.stringify(data) + '; if(typeof init==="function") init();'
-            win.document.body.appendChild(script)
-          }
-        } catch {}
-      }, 300)
-    } catch(e) { alert('Report generation failed: ' + e) }
+      // Print after render
+      setTimeout(() => { try { win.print() } catch {} }, 800)
+    } catch(e) { alert('Report failed: ' + String(e)) }
     setPdfLoading(null)
   }
 
