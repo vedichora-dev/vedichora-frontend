@@ -317,28 +317,30 @@ Match selects count: 12
 
 
 [10/8] [mobile] › e2e/functional-test.spec.js:120:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login
+City dropdown for "Chennai" appeared: false
+
+No dropdown for "Chennai" — accepting typed value
+
 [mobile] › e2e/functional-test.spec.js:120:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login
 Match selects count: 12
 
 [chromium] › e2e/functional-test.spec.js:120:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login
-City dropdown for "Chennai" appeared: false
-
-No dropdown for "Chennai" — accepting typed value
-
 City 0 final value: "Chennai"
 
 [mobile] › e2e/functional-test.spec.js:120:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login
 City dropdown for "Chennai" appeared: false
 
 No dropdown for "Chennai" — accepting typed value
-
-City 0 final value: "Chennai"
 
 [chromium] › e2e/functional-test.spec.js:120:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login
 City dropdown for "Coimbatore" appeared: false
 
 No dropdown for "Coimbatore" — accepting typed value
 
+[mobile] › e2e/functional-test.spec.js:120:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login
+City 0 final value: "Chennai"
+
+[chromium] › e2e/functional-test.spec.js:120:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login
 City 1 final value: "Coimbatore"
 
 Clicking Calculate button...
