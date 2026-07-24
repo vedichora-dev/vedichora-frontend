@@ -220,6 +220,6 @@ export const adminCreditEco   = ()          => chartApi.get('/api/admin/credit-e
 
 // ── STRENGTH (guest — no auth) ────────────────────────────────────────
 export const getShadBalaGuest    = (id: string) => chartApi.get(`/api/strength/${id}/shadbala-guest`)
-export const getAshtakavargaGuest = (id: string) => chartApi.get(`/api/strength/${id}/ashtakavarga-guest`)
+export const getAshtakavargaGuest = (id: string) => chartApi.get(`/api/strength/${id}/ashtakavarga`)
 export const getCitySearch       = (q: string)   => chartApi.get(`/api/geography/suggest?q=${encodeURIComponent(q)}&limit=8`)
 export const getCityLookup       = (place: string) => chartApi.get(`/api/geography/lookup?place=${encodeURIComponent(place)}`)
