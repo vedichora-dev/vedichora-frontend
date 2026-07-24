@@ -5,7 +5,7 @@ const fs = require('fs')
 
 test('Chart tabs — Shadbala, Ashtakavarga, Doshas', async ({ page }) => {
   test.setTimeout(180000)
-  fs.mkdirSync('screenshots', { recursive: true })
+  fs.mkdirSync('test-screenshots', { recursive: true })
 
   // Pre-fetch chart from API
   const chartRes = await fetch(CHART_URL + '/api/chart/guest', {
@@ -92,7 +92,7 @@ test('Chart tabs — Shadbala, Ashtakavarga, Doshas', async ({ page }) => {
     console.log('City forced via input event')
   }
   
-  await page.screenshot({ path: 'screenshots/tab_00_form.png' })
+  await page.screenshot({ path: 'test-screenshots/tab_00_form.png' })
 
   // Click Generate
   const genBtn = page.locator('button').filter({ hasText: /Generate/i }).first()
@@ -104,7 +104,7 @@ test('Chart tabs — Shadbala, Ashtakavarga, Doshas', async ({ page }) => {
     console.log('Chart generated')
   }
 
-  await page.screenshot({ path: 'screenshots/tab_01_rasi.png' })
+  await page.screenshot({ path: 'test-screenshots/tab_01_rasi.png' })
 
   // Check if chart loaded
   const pageText = await page.locator('body').innerText()
@@ -119,7 +119,7 @@ test('Chart tabs — Shadbala, Ashtakavarga, Doshas', async ({ page }) => {
   })
   console.log('Shadbala tab clicked via JS')
   await page.waitForTimeout(8000)
-  await page.screenshot({ path: 'screenshots/tab_02_shadbala.png' })
+  await page.screenshot({ path: 'test-screenshots/tab_02_shadbala.png' })
   {
     const text = await page.locator('body').innerText()
     const hasSthana = text.includes('Sthana') || text.includes('Total Bala') || text.includes('Planet') || text.includes('Sun')
@@ -135,7 +135,7 @@ test('Chart tabs — Shadbala, Ashtakavarga, Doshas', async ({ page }) => {
   })
   console.log('Ashtakavarga tab clicked via JS')
   await page.waitForTimeout(8000)
-  await page.screenshot({ path: 'screenshots/tab_03_ashtakavarga.png' })
+  await page.screenshot({ path: 'test-screenshots/tab_03_ashtakavarga.png' })
   {
     const text = await page.locator('body').innerText()
     const hasAshta = text.includes('Aries') || text.includes('Bindu') || text.includes('SAV') || text.includes('Rasi')
@@ -151,7 +151,7 @@ test('Chart tabs — Shadbala, Ashtakavarga, Doshas', async ({ page }) => {
   })
   console.log('Dosha tab clicked via JS')
   await page.waitForTimeout(4000)
-  await page.screenshot({ path: 'screenshots/tab_04_doshas.png' })
+  await page.screenshot({ path: 'test-screenshots/tab_04_doshas.png' })
   {
     const text = await page.locator('body').innerText()
     const hasDosha = text.includes('Mangal') || text.includes('Kaal Sarpa') || text.includes('Present') || text.includes('None')
