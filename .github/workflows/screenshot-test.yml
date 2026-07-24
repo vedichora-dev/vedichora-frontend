@@ -1,0 +1,106 @@
+name: Screenshot Tests
+on:
+  workflow_dispatch:
+  push:
+    paths: ['.github/workflows/screenshot-test.yml']
+jobs:
+  screenshots:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: '20' }
+      - name: Install Playwright
+        run: |
+          npm install playwright
+          npx playwright install chromium --with-deps
+      - name: Run screenshot tests
+        run: |
+          cat > pw_test.js << 'SCRIPT'
+          const { chromium } = require('playwright');
+          const fs = require('fs');
+          const BASE = 'https://vedichora-frontend-orcin.vercel.app';
+          (async () => {
+            const browser = await chromium.launch({ headless: true });
+            const ctx = await browser.newContext({ viewport: { width: 1400, height: 900 } });
+            const page = await ctx.newPage();
+            const ss = async (n) => { await page.screenshot({ path: n }); console.log('SS:', n); };
+            
+            // Chart page
+            await page.goto(BASE+'/chart', { waitUntil: 'networkidle', timeout: 30000 });
+            await page.waitForTimeout(2000);
+            await ss('ss_01_chart_form.png');
+            
+            // Fill form
+            const selects = page.locator('select');
+            const sc = await selects.count();
+            console.log('Selects:', sc);
+            if (sc >= 5) {
+              await selects.nth(0).selectOption('1');
+              await selects.nth(1).selectOption('3');
+              await selects.nth(2).selectOption('1959');
+              await selects.nth(3).selectOption('6');
+              await selects.nth(4).selectOption('0');
+              if (sc >= 6) await selects.nth(5).selectOption('AM');
+            }
+            const allInputs = page.locator('input');
+            const ic = await allInputs.count();
+            for (let i = ic-1; i >= 0; i--) {
+              const ph = (await allInputs.nth(i).getAttribute('placeholder')) || '';
+              if (ph.toLowerCase().includes('city') || ph.toLowerCase().includes('place') || ph.toLowerCase().includes('type') || ph.toLowerCase().includes('birth')) {
+                await allInputs.nth(i).fill('Chennai, India');
+                console.log('City input at', i, ph);
+                await page.waitForTimeout(2000);
+                const drop = page.locator('[style*="position: absolute"] button, [style*="z-index"] button').first();
+                if (await drop.count()) { await drop.click({ force: true }); console.log('Clicked dropdown'); }
+                break;
+              }
+            }
+            await ss('ss_02_form_filled.png');
+            
+            // Generate
+            const gen = page.locator('button').filter({ hasText: /Generate/i }).first();
+            if (await gen.count()) { await gen.click(); await page.waitForTimeout(8000); }
+            await ss('ss_03_rasi_chart.png');
+            
+            // Shadbala
+            const sh = page.locator('button').filter({ hasText: /shadbala/i }).first();
+            if (await sh.count()) { await sh.click(); await page.waitForTimeout(3000); }
+            await ss('ss_04_shadbala.png');
+            
+            // Ashtakavarga
+            const av = page.locator('button').filter({ hasText: /ashtak/i }).first();
+            if (await av.count()) { await av.click(); await page.waitForTimeout(4000); }
+            await ss('ss_05_ashtakavarga.png');
+            
+            // Dosha
+            const dsh = page.locator('button').filter({ hasText: /dosha/i }).first();
+            if (await dsh.count()) { await dsh.click(); await page.waitForTimeout(2000); }
+            await ss('ss_06_doshas.png');
+            
+            // Match page
+            await page.goto(BASE+'/match', { waitUntil: 'networkidle', timeout: 30000 });
+            await page.waitForTimeout(2000);
+            await ss('ss_07_match.png');
+            
+            await browser.close();
+            console.log('ALL DONE');
+          })().catch(e => { console.error('ERR:', e.message); process.exit(0); });
+          SCRIPT
+          node pw_test.js
+      - name: Commit screenshots
+        run: |
+          git config user.email "ci@vedichora.com"
+          git config user.name "CI Bot"
+          for f in ss_*.png; do
+            [ -f "$f" ] && git add "$f" && echo "Added $f"
+          done
+          git diff --staged --quiet || (git commit -m "ci: screenshots [skip ci]" && git push)
+      - name: Upload as artifact
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: screenshots
+          path: ss_*.png
