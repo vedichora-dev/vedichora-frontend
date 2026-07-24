@@ -58,6 +58,31 @@ jobs:
               "https://api.github.com/repos/$REPO/contents/e2e-output.txt" > /dev/null
           fi
           echo "Results pushed"
+      - name: Commit tab screenshots
+        if: always()
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO: ${{ github.repository }}
+        run: |
+          for f in test-results/17-doshas.png test-results/18-shadbala.png test-results/19-ashtakavarga.png; do
+            [ -f "$f" ] || continue
+            NAME=$(basename $f)
+            CONTENT=$(base64 -w 0 $f)
+            EXISTING=$(curl -s -H "Authorization: token $GH_TOKEN" \
+              "https://api.github.com/repos/$REPO/contents/test-screenshots/$NAME" | \
+              python3 -c "import sys,json; print(json.load(sys.stdin).get('sha',''))" 2>/dev/null || echo "")
+            if [ -n "$EXISTING" ]; then
+              curl -s -X PUT -H "Authorization: token $GH_TOKEN" -H "Content-Type: application/json" \
+                -d '{"message":"ci: '"$NAME"' [skip ci]","content":"'"$CONTENT"'","sha":"'"$EXISTING"'"}' \
+                "https://api.github.com/repos/$REPO/contents/test-screenshots/$NAME" > /dev/null
+            else
+              curl -s -X PUT -H "Authorization: token $GH_TOKEN" -H "Content-Type: application/json" \
+                -d '{"message":"ci: '"$NAME"' [skip ci]","content":"'"$CONTENT"'"}' \
+                "https://api.github.com/repos/$REPO/contents/test-screenshots/$NAME" > /dev/null
+            fi
+            echo "Committed $NAME"
+          done
+
       - uses: actions/upload-artifact@v4
         if: always()
         with:
