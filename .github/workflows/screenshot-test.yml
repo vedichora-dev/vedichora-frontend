@@ -10,97 +10,99 @@ jobs:
       contents: write
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
       - uses: actions/setup-node@v4
         with: { node-version: '20' }
       - name: Install Playwright
         run: |
           npm install playwright
-          npx playwright install chromium --with-deps
+          npx playwright install chromium --with-deps 2>&1 | tail -3
       - name: Run screenshot tests
         run: |
-          cat > pw_test.js << 'SCRIPT'
+          node - << 'SCRIPT'
           const { chromium } = require('playwright');
           const fs = require('fs');
           const BASE = 'https://vedichora-frontend-orcin.vercel.app';
           (async () => {
-            const browser = await chromium.launch({ headless: true });
-            const ctx = await browser.newContext({ viewport: { width: 1400, height: 900 } });
-            const page = await ctx.newPage();
-            const ss = async (n) => { await page.screenshot({ path: n }); console.log('SS:', n); };
+            const b = await chromium.launch({ headless: true });
+            const ctx = await b.newContext({ viewport: { width: 1400, height: 900 } });
+            const p = await ctx.newPage();
+            const ss = async (n) => { await p.screenshot({ path: n }); console.log('SS:', n); };
             
-            // Chart page
-            await page.goto(BASE+'/chart', { waitUntil: 'networkidle', timeout: 30000 });
-            await page.waitForTimeout(2000);
+            await p.goto(BASE+'/chart', { waitUntil: 'networkidle', timeout: 30000 });
+            await p.waitForTimeout(2000);
             await ss('ss_01_chart_form.png');
             
-            // Fill form
-            const selects = page.locator('select');
-            const sc = await selects.count();
+            // Fill form selects
+            const sels = p.locator('select');
+            const sc = await sels.count();
             console.log('Selects:', sc);
             if (sc >= 5) {
-              await selects.nth(0).selectOption('1');
-              await selects.nth(1).selectOption('3');
-              await selects.nth(2).selectOption('1959');
-              await selects.nth(3).selectOption('6');
-              await selects.nth(4).selectOption('0');
-              if (sc >= 6) await selects.nth(5).selectOption('AM');
+              await sels.nth(0).selectOption('1');
+              await sels.nth(1).selectOption('3');
+              await sels.nth(2).selectOption('1959');
+              await sels.nth(3).selectOption('6');
+              await sels.nth(4).selectOption('0');
+              if (sc >= 6) await sels.nth(5).selectOption('AM');
             }
-            const allInputs = page.locator('input');
-            const ic = await allInputs.count();
+            // City input
+            const inputs = p.locator('input');
+            const ic = await inputs.count();
+            console.log('Inputs:', ic);
             for (let i = ic-1; i >= 0; i--) {
-              const ph = (await allInputs.nth(i).getAttribute('placeholder')) || '';
-              if (ph.toLowerCase().includes('city') || ph.toLowerCase().includes('place') || ph.toLowerCase().includes('type') || ph.toLowerCase().includes('birth')) {
-                await allInputs.nth(i).fill('Chennai, India');
-                console.log('City input at', i, ph);
-                await page.waitForTimeout(2000);
-                const drop = page.locator('[style*="position: absolute"] button, [style*="z-index"] button').first();
-                if (await drop.count()) { await drop.click({ force: true }); console.log('Clicked dropdown'); }
+              const ph = (await inputs.nth(i).getAttribute('placeholder')) || '';
+              if (ph.match(/city|place|type|birth/i)) {
+                await inputs.nth(i).fill('Chennai, India');
+                await p.waitForTimeout(2500);
+                const d = p.locator('[style*="absolute"] button, [style*="z-index: 9"] button').first();
+                if (await d.count()) { await d.click({ force: true }); }
+                console.log('City filled');
                 break;
               }
             }
             await ss('ss_02_form_filled.png');
             
-            // Generate
-            const gen = page.locator('button').filter({ hasText: /Generate/i }).first();
-            if (await gen.count()) { await gen.click(); await page.waitForTimeout(8000); }
+            const gen = p.locator('button').filter({ hasText: /Generate/i }).first();
+            if (await gen.count()) { await gen.click(); await p.waitForTimeout(9000); }
             await ss('ss_03_rasi_chart.png');
             
-            // Shadbala
-            const sh = page.locator('button').filter({ hasText: /shadbala/i }).first();
-            if (await sh.count()) { await sh.click(); await page.waitForTimeout(3000); }
+            const sh = p.locator('button').filter({ hasText: /shadbala/i }).first();
+            if (await sh.count()) { await sh.click(); await p.waitForTimeout(4000); }
             await ss('ss_04_shadbala.png');
             
-            // Ashtakavarga
-            const av = page.locator('button').filter({ hasText: /ashtak/i }).first();
-            if (await av.count()) { await av.click(); await page.waitForTimeout(4000); }
+            const av = p.locator('button').filter({ hasText: /ashtak/i }).first();
+            if (await av.count()) { await av.click(); await p.waitForTimeout(5000); }
             await ss('ss_05_ashtakavarga.png');
             
-            // Dosha
-            const dsh = page.locator('button').filter({ hasText: /dosha/i }).first();
-            if (await dsh.count()) { await dsh.click(); await page.waitForTimeout(2000); }
+            const dsh = p.locator('button').filter({ hasText: /dosha/i }).first();
+            if (await dsh.count()) { await dsh.click(); await p.waitForTimeout(2000); }
             await ss('ss_06_doshas.png');
             
-            // Match page
-            await page.goto(BASE+'/match', { waitUntil: 'networkidle', timeout: 30000 });
-            await page.waitForTimeout(2000);
+            await p.goto(BASE+'/match', { waitUntil: 'networkidle', timeout: 30000 });
+            await p.waitForTimeout(2000);
             await ss('ss_07_match.png');
             
-            await browser.close();
-            console.log('ALL DONE');
-          })().catch(e => { console.error('ERR:', e.message); process.exit(0); });
+            await b.close();
+          })().catch(e => { console.error('ERR:', e.message); });
           SCRIPT
-          node pw_test.js
-      - name: Commit screenshots
+      - name: Push screenshots via API
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           git config user.email "ci@vedichora.com"
           git config user.name "CI Bot"
+          git pull --rebase origin main || true
           for f in ss_*.png; do
-            [ -f "$f" ] && git add "$f" && echo "Added $f"
+            [ -f "$f" ] || continue
+            git add "$f"
           done
-          git diff --staged --quiet || (git commit -m "ci: screenshots [skip ci]" && git push)
-      - name: Upload as artifact
-        uses: actions/upload-artifact@v4
+          git diff --staged --quiet || git commit -m "ci: screenshots from Playwright [skip ci]"
+          git push origin main || true
+      - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: screenshots
+          name: vedichora-screenshots
           path: ss_*.png
+          retention-days: 7
