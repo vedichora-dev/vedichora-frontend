@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="{{LANG}}">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{TITLE}}</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap');
+  :root{
+    --crim:#3D0808; --crim2:#5C0A0A; --gold:#B7862C; --gold2:#C8A96A; --parch:#FAF6F0;
+    --parch2:#FDF6EE; --bd:#E8D8C0; --tx:#1a1a1a; --txm:#6B4C2A; --good:#15803D;
+    --bad:#DC2626; --warn:#B45309;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'EB Garamond',Georgia,serif;background:#fff;color:var(--tx);font-size:11.5pt;line-height:1.6;}
+  @media print{
+    body{background:#fff;}
+    @page{margin:12mm 14mm;size:A4;}
+    .no-print{display:none!important;}
+    .page-break{page-break-before:always;}
+  }
+  /* ── Cover ── */
+  .cover{background:linear-gradient(160deg,var(--crim2) 0%,var(--crim) 100%);padding:60px 40px 50px;text-align:center;position:relative;}
+  .cover::after{content:'';position:absolute;bottom:0;left:0;right:0;height:4px;background:linear-gradient(90deg,transparent,var(--gold2),transparent);}
+  .logo-mark{font-family:'Cinzel',serif;font-size:10px;color:var(--gold2);letter-spacing:.3em;text-transform:uppercase;margin-bottom:6px;}
+  .cover-om{font-size:40px;color:var(--gold2);line-height:1;margin-bottom:8px;}
+  .cover-title-main{font-family:'Cinzel',serif;font-size:26px;font-weight:700;color:#fff;margin-bottom:4px;}
+  .cover-sub{font-size:12px;color:var(--gold2);margin-bottom:28px;letter-spacing:.05em;}
+  .cover-names{font-family:'Cinzel',serif;font-size:20px;font-weight:600;color:#fff;margin-bottom:6px;}
+  .cover-date{font-size:10px;color:rgba(255,255,255,.5);margin-bottom:40px;}
+  .cover-tagline{font-size:10px;color:var(--gold2);letter-spacing:.08em;text-transform:uppercase;}
+  /* ── Page layout ── */
+  .page{padding:32px 36px 28px;max-width:800px;margin:0 auto;}
+  /* ── Section heading ── */
+  .sec-hd{display:flex;align-items:center;gap:12px;margin:28px 0 12px;}
+  .sec-hd-line{flex:1;height:1px;background:linear-gradient(90deg,var(--gold2),transparent);}
+  .sec-hd-line.r{background:linear-gradient(270deg,var(--gold2),transparent);}
+  .sec-hd-text{font-family:'Cinzel',serif;font-size:10px;font-weight:700;color:var(--crim);text-transform:uppercase;letter-spacing:.1em;white-space:nowrap;}
+  /* ── Birth detail cards ── */
+  .birth-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--gold2);border:1.5px solid var(--gold2);border-radius:8px;overflow:hidden;margin-bottom:20px;}
+  .birth-card{background:var(--parch);padding:16px 18px;}
+  .birth-card-hd{font-family:'Cinzel',serif;font-size:9px;font-weight:700;color:var(--crim);text-transform:uppercase;letter-spacing:.12em;border-bottom:1px solid var(--bd);padding-bottom:7px;margin-bottom:10px;}
+  .birth-name{font-family:'Cinzel',serif;font-size:15px;font-weight:700;color:var(--crim);margin-bottom:8px;}
+  .birth-row{display:flex;justify-content:space-between;font-size:10px;padding:2px 0;}
+  .birth-label{color:var(--txm);font-weight:600;}
+  .birth-val{color:var(--tx);}
+  /* ── Score band ── */
+  .score-band{background:var(--crim);display:flex;justify-content:space-around;align-items:center;padding:16px 24px;margin-bottom:20px;border-radius:0 0 6px 6px;flex-wrap:wrap;gap:16px;}
+  .score-item{text-align:center;}
+  .score-num{font-family:'Cinzel',serif;font-size:24px;font-weight:900;line-height:1;}
+  .score-label{font-size:8px;color:var(--gold2);text-transform:uppercase;letter-spacing:.08em;margin-top:3px;}
+  .score-sub{font-size:9px;font-weight:700;margin-top:1px;}
+  .score-good{color:#86EFAC;}
+  .score-warn{color:#FDE68A;}
+  .score-bad{color:#FCA5A5;}
+  /* ── Tables ── */
+  table{width:100%;border-collapse:collapse;font-size:10px;margin-bottom:20px;}
+  thead tr{background:var(--crim);}
+  thead th{padding:7px 10px;color:var(--gold2);text-align:left;font-family:'Cinzel',serif;font-size:8px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;}
+  tbody tr:nth-child(even){background:var(--parch2);}
+  tbody tr{border-bottom:1px solid var(--bd);}
+  tbody td{padding:7px 10px;vertical-align:top;}
+  tfoot tr{background:var(--crim);}
+  tfoot td{padding:8px 10px;color:var(--gold2);font-family:'Cinzel',serif;font-size:10px;font-weight:700;}
+  .td-name{font-family:'Cinzel',serif;font-weight:700;color:var(--crim);font-size:10.5px;}
+  .td-sub{font-size:8.5px;color:var(--txm);font-style:italic;margin-top:2px;}
+  .td-score{font-weight:900;font-size:13px;}
+  .td-pass{color:var(--good);}
+  .td-fail{color:var(--bad);}
+  .pill{display:inline-block;padding:2px 8px;border-radius:10px;font-size:8.5px;font-weight:700;}
+  .pill-pass{background:#DCFCE7;color:var(--good);}
+  .pill-fail{background:#FEE2E2;color:var(--bad);}
+  .pill-neutral{background:#FEF3C7;color:var(--warn);}
+  /* ── Verdict box ── */
+  .verdict{border-radius:10px;padding:18px 22px;text-align:center;margin:20px 0;}
+  .verdict-good{background:#F0FDF4;border:2px solid #16A34A;}
+  .verdict-warn{background:#FFFBEB;border:2px solid #D97706;}
+  .verdict-bad{background:#FEF2F2;border:2px solid #DC2626;}
+  .verdict-icon{font-size:24px;margin-bottom:4px;}
+  .verdict-title{font-family:'Cinzel',serif;font-size:14px;font-weight:700;margin-bottom:4px;}
+  .verdict-body{font-size:10px;color:var(--txm);line-height:1.6;}
+  /* ── Alert box ── */
+  .alert-box{background:#FEF2F2;border:1px solid #FCA5A5;border-left:3px solid var(--bad);border-radius:6px;padding:8px 12px;font-size:9.5px;color:var(--bad);margin-bottom:10px;font-weight:600;}
+  .info-box{background:var(--parch2);border:1px solid var(--bd);border-left:3px solid var(--gold);border-radius:6px;padding:8px 12px;font-size:9.5px;color:var(--txm);margin-bottom:10px;}
+  .critical-badge{display:inline-block;font-size:7.5px;color:var(--gold);margin-left:4px;}
+  /* ── Strengths section ── */
+  .strength-item{margin-bottom:10px;padding:10px 14px;border-radius:6px;border-left:3px solid;}
+  .strength-pass{border-color:var(--good);background:#F0FDF4;}
+  .strength-fail{border-color:var(--bad);background:#FEF2F2;}
+  .strength-neutral{border-color:var(--gold);background:var(--parch2);}
+  .strength-name{font-family:'Cinzel',serif;font-weight:700;font-size:10.5px;color:var(--crim);}
+  .strength-body{font-size:9.5px;color:var(--txm);margin-top:3px;line-height:1.5;}
+  /* ── Footer ── */
+  .footer{text-align:center;margin-top:32px;padding-top:12px;border-top:1px solid var(--bd);font-size:8px;color:var(--txm);letter-spacing:.05em;}
+  /* ── Download button (no-print) ── */
+  .dl-btn{position:fixed;top:16px;right:16px;background:var(--crim);color:#fff;border:none;padding:10px 20px;font-family:'Cinzel',serif;font-size:11px;border-radius:6px;cursor:pointer;z-index:9999;box-shadow:0 4px 16px rgba(0,0,0,.3);}
+  .dl-btn:hover{background:var(--crim2);}
+  /* ── Language bar (no-print) ── */
+  .lang-bar{background:var(--crim);padding:6px 20px;display:flex;gap:8px;justify-content:center;}
+  .lang-btn{background:transparent;border:1px solid rgba(255,255,255,.3);color:rgba(255,255,255,.7);padding:3px 12px;border-radius:20px;cursor:pointer;font-size:10px;}
+  .lang-btn.active{background:var(--gold2);border-color:var(--gold2);color:#000;font-weight:700;}
+</style>
+</head>
+<body>
+<button class="dl-btn no-print" onclick="window.print()">⬇ Download PDF</button>
+
+<!-- Page 1: Cover + Birth Details + Scores -->
+<div class="cover">
+  <div class="logo-mark">ॐ &nbsp; VedicHora &nbsp; ॐ</div>
+  <div class="cover-om">ॐ</div>
+  <div class="cover-title-main" id="cover-title">Vivaha Porutham Report</div>
+  <div class="cover-sub">Pathu Porutham · Ashta Koota · Mangal Dosha · Best Muhurtha Dates</div>
+  <div class="cover-names" id="cover-names">{{NAME1}} &amp; {{NAME2}}</div>
+  <div class="cover-date" id="cover-date">{{DATE1}} · {{DATE2}}</div>
+  <div class="cover-tagline">World's Most Accurate Vedic Astrology Predictions</div>
+</div>
+
+<!-- Birth Details -->
+<div class="page">
+  <div class="birth-grid">
+    <div class="birth-card">
+      <div class="birth-card-hd" id="lbl-bride">🤵 Groom</div>
+      <div class="birth-name" id="name1">{{NAME1}}</div>
+      <div class="birth-row"><span class="birth-label" id="lbl-dob">Date of Birth</span><span class="birth-val" id="dob1">{{DOB1}}</span></div>
+      <div class="birth-row"><span class="birth-label" id="lbl-nak">Nakshatra</span><span class="birth-val" id="nak1">{{NAK1}}</span></div>
+      <div class="birth-row"><span class="birth-label" id="lbl-rasi">Rasi (Moon Sign)</span><span class="birth-val" id="rasi1">{{RASI1}}</span></div>
+      <div class="birth-row"><span class="birth-label" id="lbl-lagna">Lagna</span><span class="birth-val" id="lagna1">{{LAGNA1}}</span></div>
+      <div class="birth-row"><span class="birth-label" id="lbl-nadi">Nadi</span><span class="birth-val" id="nadi1">{{NADI1}}</span></div>
+      <div class="birth-row"><span class="birth-label" id="lbl-rajju">Rajju</span><span class="birth-val" id="rajju1">{{RAJJU1}}</span></div>
+    </div>
+    <div class="birth-card">
+      <div class="birth-card-hd" id="lbl-groom">👰 Bride</div>
+      <div class="birth-name" id="name2">{{NAME2}}</div>
+      <div class="birth-row"><span class="birth-label">Date of Birth</span><span class="birth-val" id="dob2">{{DOB2}}</span></div>
+      <div class="birth-row"><span class="birth-label">Nakshatra</span><span class="birth-val" id="nak2">{{NAK2}}</span></div>
+      <div class="birth-row"><span class="birth-label">Rasi (Moon Sign)</span><span class="birth-val" id="rasi2">{{RASI2}}</span></div>
+      <div class="birth-row"><span class="birth-label">Lagna</span><span class="birth-val" id="lagna2">{{LAGNA2}}</span></div>
+      <div class="birth-row"><span class="birth-label">Nadi</span><span class="birth-val" id="nadi2">{{NADI2}}</span></div>
+      <div class="birth-row"><span class="birth-label">Rajju</span><span class="birth-val" id="rajju2">{{RAJJU2}}</span></div>
+    </div>
+  </div>
+
+  <!-- Score band -->
+  <div class="score-band">
+    <div class="score-item">
+      <div class="score-num" id="sc-pathu-val">{{PATHU_SCORE}}/{{PATHU_TOTAL}}</div>
+      <div class="score-label" id="lbl-pathu">Pathu Porutham</div>
+      <div class="score-sub" id="sc-pathu-pct" style="color:var(--gold2)">{{PATHU_PCT}}%</div>
+    </div>
+    <div class="score-item">
+      <div class="score-num" id="sc-ashta-val">{{ASHTA_SCORE}}/{{ASHTA_TOTAL}}</div>
+      <div class="score-label" id="lbl-ashta">Ashta Koota</div>
+      <div class="score-sub" id="sc-ashta-pct" style="color:var(--gold2)">{{ASHTA_PCT}}%</div>
+    </div>
+    <div class="score-item">
+      <div class="score-num" id="sc-dosha-val">{{DOSHA_COUNT}}</div>
+      <div class="score-label" id="lbl-dosha">Blocking Doshas</div>
+      <div class="score-sub" id="sc-dosha-sub" style="color:var(--gold2)">{{DOSHA_STATUS}}</div>
+    </div>
+  </div>
+
+  <!-- Rajju / critical warnings -->
+  <div id="rajju-warning" style="display:none" class="alert-box">
+    ⚠ <span id="rajju-warning-text"></span>
+  </div>
+
+  <!-- Page 1: Pathu Porutham table -->
+  <div class="sec-hd">
+    <div class="sec-hd-line"></div>
+    <div class="sec-hd-text" id="lbl-pathu-sec">Pathu Porutham — Detailed Table</div>
+    <div class="sec-hd-line r"></div>
+  </div>
+  <div class="info-box" id="pathu-note">Minimum 5 of 10 required. Rajju and Vedha are critical — failure in either requires Muhurtha correction.</div>
+  
+  <table id="pathu-table">
+    <thead><tr>
+      <th>#</th>
+      <th id="th-porutham">Porutham</th>
+      <th id="th-calc">Calculation & Explanation</th>
+      <th id="th-result">Result</th>
+    </tr></thead>
+    <tbody id="pathu-tbody"><!-- filled by JS --></tbody>
+    <tfoot><tr>
+      <td colspan="3" id="lbl-total">Total</td>
+      <td id="pathu-total-cell"></td>
+    </tr></tfoot>
+  </table>
+
+  <!-- Page 2: Ashta Koota table -->
+  <div class="page-break"></div>
+  <div class="sec-hd">
+    <div class="sec-hd-line"></div>
+    <div class="sec-hd-text" id="lbl-ashta-sec">Ashta Koota — Detailed Breakdown</div>
+    <div class="sec-hd-line r"></div>
+  </div>
+
+  <table id="ashta-table">
+    <thead><tr>
+      <th id="th-koota">Koota</th>
+      <th id="th-max">Max</th>
+      <th id="th-score">Score</th>
+      <th id="th-status">Status</th>
+      <th id="th-meaning">What it measures</th>
+    </tr></thead>
+    <tbody id="ashta-tbody"><!-- filled by JS --></tbody>
+    <tfoot><tr>
+      <td colspan="2" id="lbl-total2">Total</td>
+      <td id="ashta-total-score"></td>
+      <td colspan="2" id="ashta-total-pct"></td>
+    </tr></tfoot>
+  </table>
+
+  <!-- Strengths section -->
+  <div class="sec-hd">
+    <div class="sec-hd-line"></div>
+    <div class="sec-hd-text" id="lbl-strengths">Key Findings</div>
+    <div class="sec-hd-line r"></div>
+  </div>
+  <div id="strengths-list"><!-- filled by JS --></div>
+
+  <!-- Overall verdict -->
+  <div id="verdict-box" class="verdict verdict-good">
+    <div class="verdict-icon" id="verdict-icon">🌟</div>
+    <div class="verdict-title" id="verdict-title">Recommended</div>
+    <div class="verdict-body" id="verdict-body"></div>
+  </div>
+
+  <!-- Page 3: Remedies & Muhurtha -->
+  <div class="page-break"></div>
+  <div class="sec-hd">
+    <div class="sec-hd-line"></div>
+    <div class="sec-hd-text" id="lbl-muhurtha">Marriage Muhurtha — What to Do</div>
+    <div class="sec-hd-line r"></div>
+  </div>
+  <div class="info-box" id="muhurtha-note">
+    Per BV Raman (Ch XVIII): "Through a proper marriage Muhurtha, many doshas can be neutralised." Selection of an auspicious Muhurtha is the primary remedy for incompatible poruthams.
+  </div>
+  <div id="remedies-list"><!-- filled by JS --></div>
+
+  <div class="footer">
+    ॐ VedicHora · www.vedichora.com · World's Most Accurate Vedic Astrology Predictions<br>
+    <span id="footer-date"></span>
+  </div>
+</div>
+
+<script>
+// ── Data injected by caller ────────────────────────────────────────────────
+const DATA = window.__VH_DATA || {};
+
+// ── Multilingual labels ───────────────────────────────────────────────────
+const LANG = DATA.lang || 'en';
+
+const T = {
+  en: {
+    title: 'Vivaha Porutham Report',
+    pathu: 'Pathu Porutham', ashta: 'Ashta Koota', doshas: 'Blocking Doshas',
+    pathuSec: 'Pathu Porutham — Detailed Table',
+    ashtaSec: 'Ashta Koota — Detailed Breakdown',
+    strengths: 'Key Findings', muhurtha: 'Marriage Muhurtha',
+    porutham: 'Porutham', calc: 'Calculation & Explanation', result: 'Result',
+    koota: 'Koota', max: 'Max', score: 'Score', status: 'Status', meaning: 'What it measures',
+    total: 'Total', dob: 'Date of Birth', nak: 'Nakshatra', rasi: 'Rasi (Moon Sign)',
+    lagna: 'Lagna', nadi: 'Nadi', rajju: 'Rajju', groom: '🤵 Groom', bride: '👰 Bride',
+    pass: 'Pass', fail: 'Fail', compatible: 'Compatible', incompatible: 'Incompatible',
+    recommended: 'Recommended ✓', needsReview: 'Needs Consideration',
+    excellent: 'Excellent match', good: 'Good match', average: 'Average', poor: 'Needs review',
+    note: 'Minimum 5 of 10 required. Rajju and Vedha are critical.',
+    muhurthaNote: 'Per BV Raman (Ch XVIII): Many doshas can be neutralised through a proper marriage Muhurtha.',
+    noDosha: 'None', dosha: 'Present',
+  },
+  ta: {
+    title: 'திருமண பொருத்த அறிக்கை',
+    pathu: 'பத்து பொருத்தம்', ashta: 'அஷ்டகூட குணங்கள்', doshas: 'கடுமையான தோஷங்கள்',
+    pathuSec: 'பத்து பொருத்தம் — விரிவான அட்டவணை',
+    ashtaSec: 'அஷ்டகூட விரிவான அட்டவணை',
+    strengths: 'முக்கிய கண்டுபிடிப்புகள்', muhurtha: 'திருமண முகூர்த்தம்',
+    porutham: 'பொருத்தம்', calc: 'கணக்கீடு & விளக்கம்', result: 'முடிவு',
+    koota: 'கூட்டம்', max: 'அதிகபட்சம்', score: 'மதிப்பு', status: 'நிலை', meaning: 'பொருள்',
+    total: 'மொத்தம்', dob: 'பிறந்த தேதி', nak: 'நட்சத்திரம்', rasi: 'ராசி',
+    lagna: 'லக்னம்', nadi: 'நாடி', rajju: 'ரஜ்ஜு', groom: '🤵 மணமகன்', bride: '👰 மணமகள்',
+    pass: 'உண்டு', fail: 'இல்லை', compatible: 'பொருத்தம்', incompatible: 'பொருத்தமில்லை',
+    recommended: 'பரிந்துரைக்கப்படுகிறது ✓', needsReview: 'கவனிக்கவும்',
+    excellent: 'சிறந்த பொருத்தம்', good: 'நல்ல பொருத்தம்', average: 'சராசரி', poor: 'ஆய்வு தேவை',
+    note: 'குறைந்தது 5 பொருத்தங்கள் தேவை. ரஜ்ஜு மற்றும் வேதா முக்கியமானவை.',
+    muhurthaNote: 'BV ராமன் (அத்தியாயம் XVIII): முகூர்த்தம் மூலம் பல தோஷங்களை நீக்கலாம்.',
+    noDosha: 'இல்லை', dosha: 'உண்டு',
+  },
+  hi: {
+    title: 'विवाह पोरुथम रिपोर्ट',
+    pathu: 'पत्तु पोरुथम', ashta: 'अष्ट कूट', doshas: 'गंभीर दोष',
+    pathuSec: 'पत्तु पोरुथम — विस्तृत तालिका',
+    ashtaSec: 'अष्ट कूट — विस्तृत विवरण',
+    strengths: 'मुख्य निष्कर्ष', muhurtha: 'विवाह मुहूर्त',
+    porutham: 'पोरुथम', calc: 'गणना और व्याख्या', result: 'परिणाम',
+    koota: 'कूट', max: 'अधिकतम', score: 'अंक', status: 'स्थिति', meaning: 'महत्व',
+    total: 'कुल', dob: 'जन्म तिथि', nak: 'नक्षत्र', rasi: 'राशि',
+    lagna: 'लग्न', nadi: 'नाड़ी', rajju: 'राजू', groom: '🤵 वर', bride: '👰 वधू',
+    pass: 'हाँ', fail: 'नहीं', compatible: 'अनुकूल', incompatible: 'प्रतिकूल',
+    recommended: 'अनुशंसित ✓', needsReview: 'समीक्षा आवश्यक',
+    excellent: 'उत्कृष्ट मिलान', good: 'अच्छा मिलान', average: 'औसत', poor: 'समीक्षा आवश्यक',
+    note: 'न्यूनतम 5 पोरुथम आवश्यक। राजू और वेधा महत्वपूर्ण हैं।',
+    muhurthaNote: 'BV रमण (अध्याय XVIII): उचित मुहूर्त से अनेक दोष निवारण होते हैं।',
+    noDosha: 'नहीं', dosha: 'उपस्थित',
+  },
+};
+const L = T[LANG] || T.en;
+
+// ── Porutham definitions ──────────────────────────────────────────────────
+const PORUTHAM_DEF = {
+  'Dina': {
+    en: { name:'Dinam (தினம்)', meaning:'Birth star health & longevity', explanation:'Counts the nakshatra distance from bride to groom. Must be 2nd, 4th, 6th, 8th, or divisible by 3. Governs health, wellbeing and longevity of the couple.' },
+    ta: { name:'திணம் (Dina)', meaning:'நட்சத்திர தூரம் — ஆரோக்கியம் & ஆயுள்', explanation:'மணமகளின் நட்சத்திரத்திலிருந்து மணமகனின் நட்சத்திரம் வரை எண்ணுக. 2, 4, 6, 8 அல்லது 3ஆல் வகுபட வேண்டும். தம்பதியின் ஆரோக்கியம் மற்றும் ஆயுளை குறிக்கிறது.' },
+    hi: { name:'दिनम् (Dina)', meaning:'नक्षत्र दूरी — स्वास्थ्य और दीर्घायु', explanation:'दुल्हन से दूल्हे के नक्षत्र तक की गिनती करें। 2, 4, 6, 8 या 3 का गुणज होना चाहिए।' },
+  },
+  'Gana': {
+    en: { name:'Ganam (கணம்)', meaning:'Nature & temperament compatibility', explanation:'Three ganas: Deva (divine, calm), Manushya (human, balanced), Rakshasa (assertive, intense). Same gana = full points. Deva+Manushya = partial. Rakshasa + any other = incompatible.' },
+    ta: { name:'கணம் (Gana)', meaning:'குணம் & இயல்பு பொருத்தம்', explanation:'மூன்று கணங்கள்: தேவ (அமைதி), மனுஷ்ய (சமநிலை), ராக்ஷஸ (வலிமை). ஒரே கணம் = முழு மதிப்பெண். தேவ+மனுஷ்ய = பகுதி. ராக்ஷஸ + வேறு = பொருத்தமில்லை.' },
+    hi: { name:'गणम् (Gana)', meaning:'स्वभाव और प्रकृति', explanation:'तीन गण: देव, मनुष्य, राक्षस। एक ही गण = पूर्ण अंक। देव+मनुष्य = आंशिक। राक्षस + अन्य = अनुकूल नहीं।' },
+  },
+  'Mahendra': {
+    en: { name:'Mahendram (மகேந்திரம்)', meaning:'Prosperity & children — wealth & progeny', explanation:'Counts from bride\'s star to groom\'s. Must fall on 4th, 7th, 10th, 13th, 16th, 19th, 22nd or 25th position. Blesses the couple with prosperity and children.' },
+    ta: { name:'மஹேந்திரம் (Mahendra)', meaning:'செல்வம் & குழந்தை வரம்', explanation:'மணமகளின் நட்சத்திரத்திலிருந்து மணமகனின் நட்சத்திரம் 4, 7, 10, 13, 16, 19, 22, 25வது இடத்தில் விழ வேண்டும். செல்வம் மற்றும் குழந்தை பாக்கியத்தை அளிக்கும்.' },
+    hi: { name:'महेंद्रम् (Mahendra)', meaning:'समृद्धि और संतान', explanation:'दुल्हन से दूल्हे का नक्षत्र 4, 7, 10, 13, 16, 19, 22 या 25वें स्थान पर होना चाहिए।' },
+  },
+  'Sthree Dheerga': {
+    en: { name:'Sthree Dheerga (ஸ்த்ரீ தீர்க்கம்)', meaning:'Long & prosperous marriage — wife\'s longevity', explanation:'Counts from bride\'s star to groom\'s. Minimum 9 stars distance required. If 14+ stars, exceptionally auspicious for wife\'s health and long married life. Also improves when Rasi compatibility is strong.' },
+    ta: { name:'ஸ்த்ரீ தீர்க்கம் (Sthree Dheerga)', meaning:'மனைவியின் நலன் — நீண்ட திருமண வாழ்க்கை', explanation:'மணமகளின் நட்சத்திரத்திலிருந்து மணமகன் நட்சத்திரம் குறைந்தது 9 இடைவெளி தேவை. 14+ ஆனால் மிக சிறப்பு. மனைவியின் ஆரோக்கியம் மற்றும் நீண்ட திருமண வாழ்க்கையை குறிக்கிறது.' },
+    hi: { name:'स्त्री दीर्घ (Sthree Dheerga)', meaning:'दीर्घ और समृद्ध विवाह', explanation:'दुल्हन से दूल्हे के नक्षत्र तक न्यूनतम 9 की दूरी आवश्यक।' },
+  },
+  'Yoni': {
+    en: { name:'Yoni (யோனி)', meaning:'Physical & intimate compatibility — sexual harmony', explanation:'Each nakshatra belongs to an animal class. Compatible animal pairs score full points. Neutral pairs score partial. Enemy pairs are incompatible. This measures natural physical and intimate compatibility.' },
+    ta: { name:'யோனி (Yoni)', meaning:'உடல் பொருத்தம் — நெருக்கமான இணக்கம்', explanation:'ஒவ்வொரு நட்சத்திரமும் ஒரு விலங்கின் வகையைச் சேரும். நட்பு ஜோடி = முழு மதிப்பெண். பகை ஜோடி = பொருத்தமில்லை. உடல் மற்றும் இல்லற பொருத்தத்தை குறிக்கிறது.' },
+    hi: { name:'योनि (Yoni)', meaning:'शारीरिक और आंतरिक अनुकूलता', explanation:'हर नक्षत्र एक पशु वर्ग से संबंधित है। मित्र पशु = पूर्ण अंक। शत्रु पशु = अनुकूल नहीं।' },
+  },
+  'Rasi': {
+    en: { name:'Rasi (ராசி)', meaning:'Moon sign compatibility — family harmony & health', explanation:'Based on the relative position of Moon signs. 7th sign distance is highly auspicious (full marks). Specific combinations like Aries-Cancer, Leo-Scorpio score well. Bad combinations reduce family harmony.' },
+    ta: { name:'ராசி (Rasi)', meaning:'ராசி இணக்கம் — குடும்ப நல்லிணக்கம்', explanation:'சந்திர ராசிகளின் ஒப்பீட்டு நிலையை அடிப்படையாகக் கொண்டது. 7ம் இட ராசி = மிக சிறப்பான மதிப்பெண். குடும்ப நல்லிணக்கம் மற்றும் ஆரோக்கியத்தை குறிக்கிறது.' },
+    hi: { name:'राशि (Rasi)', meaning:'राशि अनुकूलता — पारिवारिक सामंजस्य', explanation:'चंद्र राशियों की सापेक्ष स्थिति पर आधारित। 7वीं राशि की दूरी अत्यंत शुभ है।' },
+  },
+  'Rasyadhipa': {
+    en: { name:'Rasyadhipa (ராசியாதிபதி)', meaning:'Moon lord friendship — mental & emotional harmony', explanation:'Checks if the lords of both Moon signs are friends, neutral, or enemies. Friends = full score. Neutral = partial. Enemies = incompatible. Per BV Raman: "If lords are in 1-7 position from each other, no enmity applies." Governs mental compatibility and emotional understanding.' },
+    ta: { name:'ராசியாதிபதி (Rasyadhipa)', meaning:'கிரக நட்பு — மன பொருத்தம்', explanation:'இரு ராசிகளின் அதிபதிகள் நட்பு, நடுவர், அல்லது பகை என்று அறிக. BV ராமன்: "1-7 இடத்தில் இருந்தால் பகை பொருந்தாது." மன பொருத்தம் மற்றும் உணர்வு புரிதலை குறிக்கிறது.' },
+    hi: { name:'राश्याधिप (Rasyadhipa)', meaning:'ग्रह मैत्री — मानसिक सामंजस्य', explanation:'दोनों चंद्र राशियों के स्वामियों की मित्रता जाँचें। BV रमण: "1-7 स्थान पर हों तो शत्रुता लागू नहीं।"' },
+  },
+  'Vasiya': {
+    en: { name:'Vasiyam (வசியம்)', meaning:'Mutual attraction & attachment — affection between couple', explanation:'Checks if one Moon sign is subordinate to (attracted to) the other. Based on classical lists of vasiya pairs. Governs the natural attraction, affection and bonding between the couple.' },
+    ta: { name:'வசியம் (Vasiya)', meaning:'பரஸ்பர ஈர்ப்பு — தம்பதிகளிடையே அன்பு', explanation:'ஒரு ராசி மற்றதை வசியப்படுத்துகிறதா என்று பார்க்கும். இயற்கையான ஈர்ப்பு, அன்பு மற்றும் பிணைப்பை குறிக்கிறது.' },
+    hi: { name:'वश्यम् (Vasiya)', meaning:'परस्पर आकर्षण और लगाव', explanation:'एक राशि दूसरे के वश में है या नहीं जाँचें। दंपति के बीच प्राकृतिक आकर्षण और स्नेह को दर्शाता है।' },
+  },
+  'Rajju': {
+    en: { name:'Rajju (ரஜ்ஜு) ★ Critical', meaning:'Husband\'s longevity — MOST CRITICAL of all poruthams', explanation:'Each nakshatra belongs to a Rajju group: Paada (feet), Kati (waist), Nabhi (navel), Kantha (neck), Siro (head). Same Rajju = DOSHA (inauspicious). Different Rajju groups = compatible. Per BV Raman: this is the most important porutham — failure here indicates harm to the husband\'s longevity.' },
+    ta: { name:'ரஜ்ஜு (Rajju) ★ மிக முக்கியம்', meaning:'கணவன் ஆயுள் — அனைத்திலும் மிக முக்கியமான பொருத்தம்', explanation:'ஒவ்வொரு நட்சத்திரமும் ரஜ்ஜு குழுவைச் சேரும்: பாத, கடி, நாபி, கண்ட, சிரோ. ஒரே குழு = ரஜ்ஜு தோஷம். BV ராமன்: இது மிக முக்கியமான பொருத்தம் — தோஷம் இருந்தால் கணவனின் ஆயுளுக்கு பாதிப்பு ஏற்படும். முகூர்த்தம் மூலம் சரிசெய்யலாம்.' },
+    hi: { name:'राजू (Rajju) ★ अत्यंत महत्वपूर्ण', meaning:'पति की दीर्घायु — सबसे महत्वपूर्ण पोरुथम', explanation:'हर नक्षत्र एक राजू समूह का है: पाद, कटि, नाभि, कण्ठ, शिरो। एक ही समूह = राजू दोष। BV रमण: यह सबसे महत्वपूर्ण पोरुथम है।' },
+  },
+  'Vedha': {
+    en: { name:'Vedha (வேதம்)', meaning:'Absence of affliction — removes negative influences between stars', explanation:'Certain nakshatra pairs afflict each other (vedha). If bride and groom\'s stars form a vedha pair, it creates obstacles. No vedha = full marks. Vedha present = inauspicious. Can be remedied through Muhurtha selection.' },
+    ta: { name:'வேதம் (Vedha)', meaning:'தடையின்மை — கெடுதல் நட்சத்திர இணையற்ற நிலை', explanation:'சில நட்சத்திர ஜோடிகள் ஒன்றையொன்று தாக்கும் (வேதம்). மணமகள் மற்றும் மணமகனின் நட்சத்திரங்கள் வேதம் ஜோடியாக இருந்தால் தடைகள் ஏற்படும். வேதமில்லாமல் = முழு மதிப்பெண். முகூர்த்தம் மூலம் சரிசெய்யலாம்.' },
+    hi: { name:'वेधा (Vedha)', meaning:'बाधा का अभाव — दोषों को दूर करता है', explanation:'कुछ नक्षत्र जोड़े एक दूसरे को पीड़ित करते हैं। बिना वेधा = पूर्ण अंक। वेधा उपस्थित = अशुभ। मुहूर्त से सुधार संभव।' },
+  },
+};
+
+// ── Ashta Koota meanings ──────────────────────────────────────────────────
+const KOOTA_DEF = {
+  'Varna':        { en:'Spiritual evolution & work compatibility', ta:'ஆன்மீக வளர்ச்சி & தொழில் பொருத்தம்', hi:'आध्यात्मिक विकास और कार्य अनुकूलता' },
+  'Vashya':       { en:'Dominance, control & mutual attraction',   ta:'ஆதிக்கம், கட்டுப்பாடு & ஈர்ப்பு',      hi:'प्रभुत्व और परस्पर आकर्षण' },
+  'Tara':         { en:'Birth star harmony — health & prosperity', ta:'நட்சத்திர இணக்கம் — ஆரோக்கியம்',         hi:'जन्म नक्षत्र सामंजस्य' },
+  'Yoni':         { en:'Physical & intimate compatibility',        ta:'உடல் & நெருக்கமான பொருத்தம்',            hi:'शारीरिक और अंतरंग अनुकूलता' },
+  'Graha Maitri': { en:'Mental & emotional bonding — friendship of Moon lords', ta:'மன & உணர்வு பிணைப்பு — கிரக நட்பு', hi:'मानसिक और भावनात्मक बंधन' },
+  'Gana':         { en:'Temperament & nature — Deva/Manushya/Rakshasa compatibility', ta:'குணம் & இயல்பு — தேவ/மனுஷ்ய/ராக்ஷஸ', hi:'स्वभाव और प्रकृति मिलान' },
+  'Bhakoota':     { en:'Financial & family harmony — Moon sign relationship', ta:'பொருளாதார & குடும்ப நல்லிணக்கம்',      hi:'वित्तीय और पारिवारिक सामंजस्य' },
+  'Nadi':         { en:'Genetic & health compatibility — Nadi energy (most important in Ashta Koota)', ta:'மரபணு & உடல் நலன் — நாடி சக்தி (மிக முக்கியம்)', hi:'आनुवंशिक और स्वास्थ्य अनुकूलता — नाड़ी ऊर्जा' },
+};
+
+// ── Render functions ──────────────────────────────────────────────────────
+function pct(n, d) { return d > 0 ? Math.round(n/d*100) : 0; }
+function scoreClass(p) { return p >= 60 ? 'score-good' : p >= 40 ? 'score-warn' : 'score-bad'; }
+
+function applyLabels() {
+  document.getElementById('cover-title').textContent = L.title;
+  document.getElementById('lbl-pathu').textContent = L.pathu;
+  document.getElementById('lbl-ashta').textContent = L.ashta;
+  document.getElementById('lbl-dosha').textContent = L.doshas;
+  document.getElementById('lbl-pathu-sec').textContent = L.pathuSec;
+  document.getElementById('lbl-ashta-sec').textContent = L.ashtaSec;
+  document.getElementById('lbl-strengths').textContent = L.strengths;
+  document.getElementById('lbl-muhurtha').textContent = L.muhurtha;
+  document.getElementById('th-porutham').textContent = L.porutham;
+  document.getElementById('th-calc').textContent = L.calc;
+  document.getElementById('th-result').textContent = L.result;
+  document.getElementById('th-koota').textContent = L.koota;
+  document.getElementById('th-max').textContent = L.max;
+  document.getElementById('th-score').textContent = L.score;
+  document.getElementById('th-status').textContent = L.status;
+  document.getElementById('th-meaning').textContent = L.meaning;
+  document.getElementById('lbl-total').textContent = L.total;
+  document.getElementById('lbl-total2').textContent = L.total;
+  document.getElementById('lbl-dob').textContent = L.dob;
+  document.getElementById('lbl-nak').textContent = L.nak;
+  document.getElementById('lbl-rasi').textContent = L.rasi;
+  document.getElementById('lbl-lagna').textContent = L.lagna;
+  document.getElementById('lbl-nadi').textContent = L.nadi;
+  document.getElementById('lbl-rajju').textContent = L.rajju;
+  document.getElementById('lbl-groom').textContent = L.groom;
+  document.getElementById('lbl-bride').textContent = L.bride;
+  document.getElementById('pathu-note').textContent = L.note;
+  document.getElementById('muhurtha-note').textContent = L.muhurthaNote;
+  document.getElementById('footer-date').textContent = 'Generated: ' + new Date().toLocaleDateString();
+}
+
+function renderPathu(poruthams) {
+  const tbody = document.getElementById('pathu-tbody');
+  let pass = 0, total = 0;
+  tbody.innerHTML = '';
+  poruthams.forEach((p, i) => {
+    const key = p.KootaName || p.kootaName || '';
+    const def = PORUTHAM_DEF[key];
+    const isPass = p.Verdict === 'Compatible' || p.pass || p.Pass;
+    const isCritical = key === 'Rajju' || key === 'Vedha';
+    const name = def ? (def[LANG]?.name || def.en.name) : key;
+    const meaning = def ? (def[LANG]?.meaning || def.en.meaning) : '';
+    const explanation = def ? (def[LANG]?.explanation || def.en.explanation) : '';
+    const score = p.Score ?? 0;
+    const maxScore = p.MaxScore ?? 1;
+    if (isPass) pass += score;
+    total += maxScore;
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td style="text-align:center;color:var(--txm);font-size:9px">${i+1}</td>
+      <td>
+        <div class="td-name">${name}${isCritical ? '<span class="critical-badge">★ critical</span>' : ''}</div>
+        <div class="td-sub">${meaning}</div>
+      </td>
+      <td style="font-size:9px;color:var(--txm);line-height:1.5">${explanation}</td>
+      <td>
+        <span class="pill ${isPass ? 'pill-pass' : 'pill-fail'}">${isPass ? '✓ ' + L.pass : '✗ ' + L.fail}</span>
+        ${score > 0 ? `<div style="font-size:8px;color:var(--txm);margin-top:2px">${score}/${maxScore}</div>` : ''}
+      </td>`;
+    tbody.appendChild(tr);
+  });
+  const pathuScore = DATA.PathuPoruthamScore ?? DATA.pathuPoruthamScore ?? pass;
+  const pathuTotal = DATA.PathuPoruthamTotal ?? DATA.pathuPoruthamTotal ?? total;
+  document.getElementById('pathu-total-cell').innerHTML =
+    `<span class="pill ${pct(pathuScore,pathuTotal)>=50?'pill-pass':'pill-fail'}">${pathuScore}/${pathuTotal}</span>`;
+}
+
+function renderAshta(kootas) {
+  const tbody = document.getElementById('ashta-tbody');
+  tbody.innerHTML = '';
+  let totalScore = 0, totalMax = 0;
+  kootas.forEach(k => {
+    const key = k.KootaName || k.kootaName || '';
+    const meaning = KOOTA_DEF[key] ? (KOOTA_DEF[key][LANG] || KOOTA_DEF[key].en) : key;
+    const score = k.Score ?? k.score ?? 0;
+    const max = k.MaxScore ?? k.maxScore ?? 1;
+    const ok = score >= max * 0.5;
+    totalScore += score;
+    totalMax += max;
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td>
+        <div class="td-name">${key === 'Nadi' ? key + ' ★' : key}</div>
+      </td>
+      <td style="text-align:center;color:var(--txm)">${max}</td>
+      <td style="text-align:center">
+        <span class="td-score ${ok ? 'td-pass' : 'td-fail'}">${score}</span>
+      </td>
+      <td><span class="pill ${ok ? 'pill-pass' : 'pill-fail'}">${ok ? '✓ ' + L.compatible : '✗ ' + L.incompatible}</span></td>
+      <td style="font-size:9px;color:var(--txm);font-style:italic">${meaning}</td>`;
+    tbody.appendChild(tr);
+  });
+  const p = pct(totalScore, totalMax);
+  document.getElementById('ashta-total-score').innerHTML =
+    `<span class="td-score ${p>=60?'td-pass':p>=40?'':'td-fail'}" style="font-size:16px">${totalScore}</span>`;
+  document.getElementById('ashta-total-pct').textContent =
+    `/ ${totalMax} · ${p}% · ${p>=70?L.excellent:p>=50?L.good:p>=35?L.average:L.poor}`;
+}
+
+function renderScoreBand() {
+  const ashtaScore = DATA.AshtaKootaScore ?? DATA.ashtaKootaScore ?? 0;
+  const ashtaTotal = DATA.AshtaKootaTotal ?? DATA.ashtaKootaTotal ?? 36;
+  const pathuScore = DATA.PathuPoruthamScore ?? DATA.pathuPoruthamScore ?? 0;
+  const pathuTotal = DATA.PathuPoruthamTotal ?? DATA.pathuPoruthamTotal ?? 10;
+  const doshaCount = (DATA.MangalDosha ? 1 : 0);
+
+  const ap = pct(ashtaScore, ashtaTotal);
+  const pp = pct(pathuScore, pathuTotal);
+
+  document.getElementById('sc-ashta-val').textContent = `${ashtaScore}/${ashtaTotal}`;
+  document.getElementById('sc-ashta-val').className = 'score-num ' + scoreClass(ap);
+  document.getElementById('sc-ashta-pct').textContent = `${ap}%`;
+
+  document.getElementById('sc-pathu-val').textContent = `${pathuScore}/${pathuTotal}`;
+  document.getElementById('sc-pathu-val').className = 'score-num ' + scoreClass(pp);
+  document.getElementById('sc-pathu-pct').textContent = `${pp}%`;
+
+  document.getElementById('sc-dosha-val').textContent = String(doshaCount);
+  document.getElementById('sc-dosha-val').className = 'score-num ' + (doshaCount === 0 ? 'score-good' : 'score-bad');
+  document.getElementById('sc-dosha-sub').textContent = doshaCount === 0 ? L.noDosha : L.dosha;
+}
+
+function renderVerdict() {
+  const isRec = DATA.IsRecommended ?? DATA.isRecommended ?? false;
+  const summary = DATA.Summary ?? DATA.summary ?? '';
+  const box = document.getElementById('verdict-box');
+  box.className = 'verdict ' + (isRec ? 'verdict-good' : 'verdict-warn');
+  document.getElementById('verdict-icon').textContent = isRec ? '🌟' : '⚠️';
+  document.getElementById('verdict-title').textContent = isRec ? L.recommended : L.needsReview;
+  document.getElementById('verdict-body').textContent = summary;
+}
+
+function renderStrengths(poruthams, kootas) {
+  const list = document.getElementById('strengths-list');
+  list.innerHTML = '';
+  // Key findings
+  const rajju = poruthams.find(p => (p.KootaName||p.kootaName) === 'Rajju');
+  const nadi = kootas.find(k => (k.KootaName||k.kootaName) === 'Nadi');
+  const vedha = poruthams.find(p => (p.KootaName||p.kootaName) === 'Vedha');
+  const gana = poruthams.find(p => (p.KootaName||p.kootaName) === 'Gana');
+
+  const findings = [];
+  if (rajju) {
+    const pass = rajju.Verdict === 'Compatible';
+    findings.push({ pass, cls: pass?'pass':'fail',
+      name: 'Rajju — ' + (pass ? 'No Dosha ✓' : 'Dosha Present ✗'),
+      body: pass ? 'Bride and groom are in different Rajju groups. No harm to husband\'s longevity.'
+                 : (DATA.RajjuWarning || DATA.rajjuWarning || 'Rajju Dosha present. Select a marriage Muhurtha to mitigate.')
+    });
+  }
+  if (vedha) {
+    const pass = vedha.Verdict === 'Compatible';
+    findings.push({ pass, cls: pass?'pass':'fail',
+      name: 'Vedha — ' + (pass ? 'No Affliction ✓' : 'Affliction Present ✗'),
+      body: pass ? 'No Vedha affliction between the nakshatra pair. Auspicious.' : 'Vedha affliction present. Proper Muhurtha selection can neutralise this.'
+    });
+  }
+  const nadiScore = nadi?.Score ?? nadi?.score ?? 0;
+  const nadiMax = nadi?.MaxScore ?? nadi?.maxScore ?? 8;
+  findings.push({ pass: nadiScore >= nadiMax, cls: nadiScore >= nadiMax ? 'pass':'fail',
+    name: 'Nadi — ' + (nadiScore >= nadiMax ? 'Compatible ✓' : 'Nadi Dosha ✗'),
+    body: nadiScore >= nadiMax
+      ? `Score ${nadiScore}/${nadiMax}. Different Nadi energies — healthy for progeny and genetic compatibility.`
+      : `Score ${nadiScore}/${nadiMax}. Same Nadi energy — may affect progeny. Remediation through Nadi Nivarana puja recommended.`
+  });
+  findings.forEach(f => {
+    const div = document.createElement('div');
+    div.className = `strength-item strength-${f.cls}`;
+    div.innerHTML = `<div class="strength-name">${f.name}</div><div class="strength-body">${f.body}</div>`;
+    list.appendChild(div);
+  });
+}
+
+function renderRemedies(poruthams) {
+  const list = document.getElementById('remedies-list');
+  list.innerHTML = '';
+  const failed = poruthams.filter(p => p.Verdict !== 'Compatible');
+  if (failed.length === 0) {
+    list.innerHTML = '<div class="info-box">✓ All poruthams are compatible. Standard auspicious Muhurtha selection is sufficient.</div>';
+    return;
+  }
+  const remedies = {
+    'Dina':           'Select a marriage Muhurtha with Moon in an auspicious nakshatra. Navagraha Homam before the wedding is beneficial.',
+    'Mahendra':       'Conduct a Santana Gopala puja for blessings of children. Muhurtha correction can offset this.',
+    'Sthree Dheerga': 'Rasi Koota compatibility can partially compensate. Select Muhurtha carefully with the Lagna in a strong position.',
+    'Yoni':           'Perform a Yoni Nivarana puja. Marriage during an auspicious planetary transit can mitigate.',
+    'Rasi':           'Strong Muhurtha with favourable Moon position can offset Rasi incompatibility.',
+    'Rasyadhipa':     'Per BV Raman: if Moon lords are in 1-7 from each other, enmity is cancelled. Check with your astrologer.',
+    'Vasiya':         'Muhurtha correction and Navagraha puja are recommended.',
+    'Rajju':          'Critical: Mandatory Muhurtha correction required. Marriage Nakshatra must be chosen from a compatible Rajju group. Perform Rajju Dosha Nivarana Homam.',
+    'Vedha':          'Select a Muhurtha where neither the marriage Nakshatra nor the Lagna nakshatra is in Vedha with bride or groom\'s nakshatra.',
+  };
+  failed.forEach(p => {
+    const key = p.KootaName || p.kootaName || '';
+    const def = PORUTHAM_DEF[key];
+    const name = def ? (def[LANG]?.name || def.en.name) : key;
+    const remedy = remedies[key] || 'Consult a qualified astrologer for specific remediation guidance.';
+    const div = document.createElement('div');
+    div.className = 'strength-item strength-fail';
+    div.innerHTML = `<div class="strength-name">❌ ${name} — Remedy Required</div><div class="strength-body">${remedy}</div>`;
+    list.appendChild(div);
+  });
+}
+
+function renderBirthDetails() {
+  document.getElementById('name1').textContent = DATA.name1 || '';
+  document.getElementById('name2').textContent = DATA.name2 || '';
+  document.getElementById('cover-names').textContent = (DATA.name1 || 'Person 1') + ' & ' + (DATA.name2 || 'Person 2');
+  document.getElementById('dob1').textContent = DATA.dob1 || '';
+  document.getElementById('dob2').textContent = DATA.dob2 || '';
+  document.getElementById('nak1').textContent = DATA.groomNakshatra || '';
+  document.getElementById('nak2').textContent = DATA.brideNakshatra || '';
+  document.getElementById('rasi1').textContent = DATA.groomRasi || '';
+  document.getElementById('rasi2').textContent = DATA.brideRasi || '';
+  document.getElementById('lagna1').textContent = DATA.groomLagna || '';
+  document.getElementById('lagna2').textContent = DATA.brideLagna || '';
+  document.getElementById('nadi1').textContent = DATA.groomNadi || '';
+  document.getElementById('nadi2').textContent = DATA.brideNadi || '';
+  document.getElementById('rajju1').textContent = DATA.groomRajju || '';
+  document.getElementById('rajju2').textContent = DATA.brideRajju || '';
+  document.getElementById('cover-date').textContent = [DATA.dob1, DATA.dob2].filter(Boolean).join(' · ');
+
+  const warn = DATA.RajjuWarning || DATA.rajjuWarning;
+  if (warn) {
+    document.getElementById('rajju-warning').style.display = '';
+    document.getElementById('rajju-warning-text').textContent = warn;
+  }
+}
+
+// ── Init ──────────────────────────────────────────────────────────────────
+function init() {
+  applyLabels();
+  renderBirthDetails();
+  renderScoreBand();
+  const poruthams = DATA.Poruthams || DATA.poruthams || [];
+  const kootas = DATA.KootaDetails || DATA.kootaDetails || [];
+  renderPathu(poruthams);
+  renderAshta(kootas);
+  renderStrengths(poruthams, kootas);
+  renderVerdict();
+  renderRemedies(poruthams);
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', init);
+} else { init(); }
+</script>
+</body>
+</html>
