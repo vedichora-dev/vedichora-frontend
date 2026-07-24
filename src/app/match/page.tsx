@@ -840,7 +840,31 @@ export default function MatchPage() {
             </div>
           </div>
 
-
+          {/* PDF Download — works for everyone, no login required */}
+          <div style={{ background:'var(--bg2)', border:'1px solid var(--bd)', borderRadius:'12px', padding:'18px 20px' }}>
+            <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', flexWrap:'wrap', gap:'12px' }}>
+              <div>
+                <div style={{ fontFamily:'Cinzel,serif', fontWeight:700, fontSize:'13px', color:'var(--acc)', marginBottom:'3px' }}>
+                  📄 Download Full Report
+                </div>
+                <div style={{ fontSize:'11px', color:'var(--txm)' }}>
+                  Complete Vivaha Porutham · All 10 Poruthams with meanings · Ashta Koota · Remedies
+                </div>
+              </div>
+              <div style={{ display:'flex', gap:'8px', flexWrap:'wrap' }}>
+                {(['en','ta','hi'] as const).map(l => (
+                  <button key={l} onClick={() => downloadPdf(l)} disabled={pdfLoading==='gen'}
+                    style={{ padding:'8px 16px', borderRadius:'8px', border:'none', cursor:'pointer',
+                      background: pdfLoading==='gen' ? 'var(--bd)' : 'var(--acc)', color:'#fff',
+                      fontSize:'12px', fontWeight:700, display:'flex', alignItems:'center', gap:'6px',
+                      opacity: pdfLoading==='gen' ? 0.6 : 1 }}>
+                    <Download style={{ width:'12px', height:'12px' }} />
+                    {l==='en' ? '🇬🇧 English' : l==='ta' ? '🇮🇳 தமிழ்' : '🇮🇳 हिन्दी'}
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
 
         </div>
       )}
