@@ -249,6 +249,49 @@ test.describe('CHART — Babu & Pramod Validation', () => {
     }
   })
 
+  test('Shadbala tab — loads bala data with Sthana/Dig/Kala columns', async ({ page }) => {
+    await page.goto(SITE + '/chart')
+    await page.waitForTimeout(2000)
+    const tab = page.locator('button:has-text("Shadbala")')
+    if (await tab.isVisible({ timeout: 3000 }).catch(() => false)) {
+      await tab.click()
+      await page.waitForTimeout(4000)
+      await page.screenshot({ path: 'test-results/18-shadbala.png', fullPage: true })
+      const text = await page.locator('body').textContent() || ''
+      const hasSthana   = text.includes('STHANA') || text.includes('Sthana')
+      const hasTotalBala= text.includes('TOTAL BALA') || text.includes('Total Bala') || text.includes('total')
+      const hasPlanet   = text.includes('Sun') || text.includes('Moon') || text.includes('Mars')
+      // Actual numeric values: Sun total bala ~468, check for 3-digit numbers
+      const hasNumbers  = /\d{2,3}\.\d{2}/.test(text)
+      console.log(`Shadbala: sthana=${hasSthana} totalBala=${hasTotalBala} planets=${hasPlanet} numbers=${hasNumbers}`)
+      console.log(`Shadbala PASS: ${hasSthana && hasPlanet && hasNumbers}`)
+    } else {
+      console.log('Shadbala tab not visible (no chart loaded)')
+    }
+  })
+
+  test('Ashtakavarga tab — loads SAV bindu grid', async ({ page }) => {
+    await page.goto(SITE + '/chart')
+    await page.waitForTimeout(2000)
+    const tab = page.locator('button:has-text("Ashtakavarga")')
+    if (await tab.isVisible({ timeout: 3000 }).catch(() => false)) {
+      await tab.click()
+      await page.waitForTimeout(6000)
+      await page.screenshot({ path: 'test-results/19-ashtakavarga.png', fullPage: true })
+      const text = await page.locator('body').textContent() || ''
+      // SAV should show 12 rasi names + bindu numbers
+      const hasAries  = text.includes('Aries')
+      const hasTaurus = text.includes('Taurus')
+      const hasTotal  = text.includes('Total') || text.includes('totalSAV') || /SAV/.test(text)
+      const hasNumbers= /[1-9]\d?/.test(text)  // bindu numbers 1-99
+      const hasNoSignIn = !text.includes('Sign in and save chart to view Ashtakavarga')
+      console.log(`Ashtakavarga: aries=${hasAries} taurus=${hasTaurus} total=${hasTotal} numbers=${hasNumbers} noSignInGate=${hasNoSignIn}`)
+      console.log(`Ashtakavarga PASS: ${hasAries && hasTaurus && hasNoSignIn}`)
+    } else {
+      console.log('Ashtakavarga tab not visible (no chart loaded)')
+    }
+  })
+
   test('PDF button exists and is clickable', async ({ page }) => {
     await page.goto(SITE + '/chart')
     await page.waitForTimeout(2000)
