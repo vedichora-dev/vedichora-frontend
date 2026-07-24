@@ -677,242 +677,183 @@ export default function MatchPage() {
       {result && (
         <div ref={resultsRef} style={{ display: 'flex', flexDirection: 'column', gap: '16px', scrollMarginTop: '20px' }}>
 
-          {/* Language selector */}
-          <div style={{ display: 'flex', gap: '8px', justifyContent: 'flex-end', alignItems: 'center' }}>
-            <span style={{ fontSize: '11px', color: 'var(--txm)' }}>Report language:</span>
-            {(['en','ta','hi'] as const).map(l => (
-              <button key={l} onClick={() => setLang(l)}
-                style={{ padding: '4px 12px', borderRadius: '20px', border: '1px solid var(--acc)',
-                  background: lang === l ? 'var(--acc)' : 'transparent',
-                  color: lang === l ? '#fff' : 'var(--acc)',
-                  fontSize: '11px', fontWeight: 600, cursor: 'pointer' }}>
-                {l === 'en' ? 'English' : l === 'ta' ? 'தமிழ்' : 'हिन्दी'}
-              </button>
+          {/* ── Language toggle ── */}
+          <div style={{display:'flex',gap:'8px',justifyContent:'flex-end',alignItems:'center',marginBottom:'4px'}}>
+            <span style={{fontSize:'11px',color:'var(--txm)'}}>Language:</span>
+            {(['en','ta','hi'] as const).map(l=>(
+              <button key={l} onClick={()=>setLang(l)} style={{
+                padding:'3px 12px',borderRadius:'20px',
+                border:'1px solid #8B2020',
+                background:lang===l?'#8B2020':'transparent',
+                color:lang===l?'#fff':'#8B2020',
+                fontSize:'11px',fontWeight:600,cursor:'pointer'
+              }}>{l==='en'?'English':l==='ta'?'தமிழ்':'हिन्दी'}</button>
             ))}
           </div>
 
-          {/* ── REPORT CARD — styled like PDF ── */}
-          <div style={{
-            background: '#FAF6F0', border: '1px solid #C8A96A',
-            borderRadius: '12px', overflow: 'hidden',
-            boxShadow: '0 4px 32px rgba(61,8,8,.10)'
-          }}>
-            {/* Header — crimson band */}
-            <div style={{ background: '#3D0808', padding: '28px 24px', textAlign: 'center' }}>
-              <div style={{ fontFamily: 'Cinzel,serif', fontSize: '11px', color: '#C8A96A',
-                letterSpacing: '.15em', textTransform: 'uppercase', marginBottom: '6px' }}>
-                ॐ VedicHora
-              </div>
-              <div style={{ fontFamily: 'Cinzel,serif', fontSize: '22px', color: '#fff',
-                fontWeight: 700, marginBottom: '4px' }}>
-                {L.reportTitle[lang]}
-              </div>
-              <div style={{ fontSize: '13px', color: '#C8A96A' }}>
-                {result.name1} & {result.name2}
-              </div>
+          {/* ── PDF-matching report card ── */}
+          <div style={{background:'#FAF6F0',border:'1.5px solid #C8A96A',borderRadius:'10px',overflow:'hidden',boxShadow:'0 6px 32px rgba(0,0,0,.12)'}}>
+
+            {/* Maroon header */}
+            <div style={{background:'linear-gradient(135deg,#5C0A0A 0%,#3D0808 100%)',padding:'22px 20px 18px',textAlign:'center'}}>
+              <div style={{fontSize:'26px',color:'#C8A96A',lineHeight:1,marginBottom:'2px'}}>ॐ</div>
+              <div style={{fontFamily:'Georgia,serif',fontSize:'9px',color:'#C8A96A',letterSpacing:'.25em',textTransform:'uppercase',marginBottom:'5px'}}>VedicHora</div>
+              <div style={{fontFamily:'Georgia,serif',fontSize:'17px',fontWeight:700,color:'#fff',marginBottom:'2px'}}>{L.reportTitle[lang]}</div>
+              <div style={{fontSize:'11px',color:'#E8C87A',marginBottom:'14px'}}>World's Most Accurate Vedic Astrology Predictions</div>
+              <div style={{height:'2px',background:'linear-gradient(90deg,transparent,#C8A96A,transparent)',borderRadius:'2px',margin:'0 20px'}} />
+              <div style={{fontFamily:'Georgia,serif',fontSize:'14px',color:'#E8C87A',marginTop:'12px',fontWeight:600}}>{result.name1} & {result.name2}</div>
             </div>
 
-            {/* Score band */}
-            <div style={{ background: '#fff8f0', borderBottom: '1px solid #e8d8c0',
-              padding: '20px 24px', display: 'flex', justifyContent: 'center',
-              gap: '40px', flexWrap: 'wrap', textAlign: 'center' }}>
-              {[
-                { val: `${score}/${total}`, label: L.ashtaKoota[lang], sub: `${pct}%`, color: pct>=60?'#16A34A':'#DC2626' },
-                { val: `${pScore}/${pTotal}`, label: L.pathuPorutham[lang], sub: pScore>=5?L.pass[lang]:L.fail[lang], color: pScore>=5?'#16A34A':'#DC2626' },
-                { val: result.IsRecommended ? '✓' : '—', label: L.recommended[lang], sub: result.IsRecommended ? L.yes[lang] : L.needsReview[lang], color: result.IsRecommended?'#16A34A':'#B7862C' },
-              ].map(({ val, label, sub, color }) => (
-                <div key={label}>
-                  <div style={{ fontFamily: 'Cinzel,serif', fontSize: '32px', fontWeight: 900, color, lineHeight: 1 }}>{val}</div>
-                  <div style={{ fontSize: '10px', color: '#6B4C2A', fontWeight: 700, textTransform: 'uppercase',
-                    letterSpacing: '.08em', margin: '4px 0 2px' }}>{label}</div>
-                  <div style={{ fontSize: '12px', color, fontWeight: 600 }}>{sub}</div>
+            {/* Birth details — 2 columns */}
+            <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:'1px',background:'#C8A96A',borderBottom:'1.5px solid #C8A96A'}}>
+              {[{label:'👨 '+(result.name1||'Groom'),chart:result.chart1},{label:'👩 '+(result.name2||'Bride'),chart:result.chart2}].map(({label,chart})=>(
+                <div key={label} style={{background:'#FFF8F0',padding:'12px 14px'}}>
+                  <div style={{fontFamily:'Georgia,serif',fontSize:'11px',fontWeight:700,color:'#3D0808',marginBottom:'7px',borderBottom:'1px solid #E8D8C0',paddingBottom:'5px'}}>{label}</div>
+                  {[
+                    ['Nakshatra', chart?.moonNakshatra||chart?.MoonNakshatra||chart?.nakshatra||chart?.Nakshatra||'—'],
+                    ['Rasi',      chart?.moonRasi||chart?.MoonRasi||chart?.rasi||chart?.Rasi||'—'],
+                    ['Lagna',     chart?.ascendantName||chart?.AscendantName||chart?.lagna||chart?.Lagna||'—'],
+                  ].map(([k,v])=>(
+                    <div key={k} style={{display:'flex',justifyContent:'space-between',fontSize:'10.5px',padding:'1.5px 0'}}>
+                      <span style={{color:'#6B4C2A',fontWeight:600}}>{k}</span>
+                      <span style={{color:'#1a1a1a',fontFamily:'Georgia,serif'}}>{String(v)}</span>
+                    </div>
+                  ))}
                 </div>
               ))}
             </div>
 
-            <div style={{ padding: '0 24px 24px' }}>
-
-              {/* Ashta Koota table */}
-              <div style={{ marginTop: '24px' }}>
-                <div style={{ fontFamily: 'Cinzel,serif', fontSize: '13px', fontWeight: 700,
-                  color: '#3D0808', borderBottom: '2px solid #C8A96A', paddingBottom: '6px',
-                  marginBottom: '12px', textTransform: 'uppercase', letterSpacing: '.06em' }}>
-                  {L.ashtaKootaDetail[lang]}
+            {/* Score strip */}
+            <div style={{background:'#3D0808',padding:'10px 20px',display:'flex',justifyContent:'space-around',flexWrap:'wrap',gap:'6px'}}>
+              {[
+                {val:`${score}/${total}`,sub:`${pct}%`,label:L.ashtaKoota[lang],ok:pct>=60},
+                {val:`${pScore}/${pTotal}`,sub:pScore>=5?L.pass[lang]:L.fail[lang],label:L.pathuPorutham[lang],ok:pScore>=5},
+              ].map(({val,sub,label,ok})=>(
+                <div key={label} style={{textAlign:'center'}}>
+                  <div style={{fontFamily:'Georgia,serif',fontSize:'20px',fontWeight:900,color:ok?'#86EFAC':'#FCA5A5',lineHeight:1}}>{val}</div>
+                  <div style={{fontSize:'9px',color:'#C8A96A',marginTop:'2px',textTransform:'uppercase',letterSpacing:'.06em'}}>{label}</div>
+                  <div style={{fontSize:'10px',fontWeight:700,color:ok?'#86EFAC':'#FCA5A5'}}>{sub}</div>
                 </div>
-                <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '12px' }}>
+              ))}
+            </div>
+
+            <div style={{padding:'18px'}}>
+
+              {/* Ashta Koota heading */}
+              <div style={{fontFamily:'Georgia,serif',fontSize:'11px',fontWeight:700,color:'#3D0808',textTransform:'uppercase',letterSpacing:'.08em',marginBottom:'7px',display:'flex',alignItems:'center',gap:'8px'}}>
+                <div style={{flex:1,height:'1px',background:'linear-gradient(90deg,#C8A96A,transparent)'}}/>
+                {L.ashtaKootaDetail[lang]}
+                <div style={{flex:1,height:'1px',background:'linear-gradient(270deg,#C8A96A,transparent)'}}/>
+              </div>
+
+              <table style={{width:'100%',borderCollapse:'collapse',fontSize:'11px',marginBottom:'18px'}}>
+                <thead>
+                  <tr style={{background:'#3D0808'}}>
+                    {[L.koota[lang],L.max[lang],L.score[lang],'Status',L.meaning[lang]].map(h=>(
+                      <th key={h} style={{padding:'6px 8px',color:'#C8A96A',textAlign:'left',fontSize:'8.5px',fontWeight:700,textTransform:'uppercase',letterSpacing:'.04em'}}>{h}</th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  {kuta.map((k:any,i:number)=>{
+                    const ks=k.Score??k.score??0
+                    const km=k.MaxScore??k.maxScore??1
+                    const ok=ks>0
+                    const name=k.KootaName||k.kootaName||''
+                    return (
+                      <tr key={i} style={{background:i%2===0?'#fff':'#FDF6EE',borderBottom:'1px solid #EDE0CC'}}>
+                        <td style={{padding:'6px 8px',fontWeight:700,color:'#3D0808',fontFamily:'Georgia,serif',fontSize:'11px'}}>
+                          {(L.kootaNames as any)[name]?.[lang]||name}
+                        </td>
+                        <td style={{padding:'6px 8px',color:'#8B6340',textAlign:'center'}}>{km}</td>
+                        <td style={{padding:'6px 8px',textAlign:'center',fontWeight:900,fontSize:'14px',color:ks===km?'#15803D':ks>0?'#B45309':'#DC2626'}}>{ks}</td>
+                        <td style={{padding:'6px 8px'}}>
+                          <span style={{fontSize:'9.5px',fontWeight:700,padding:'2px 6px',borderRadius:'10px',background:ok?'#DCFCE7':'#FEE2E2',color:ok?'#15803D':'#DC2626'}}>
+                            {ok?'✓ '+L.pass[lang]:'✗ '+L.fail[lang]}
+                          </span>
+                        </td>
+                        <td style={{padding:'6px 8px',fontSize:'9.5px',color:'#6B4C2A',fontStyle:'italic'}}>
+                          {(KOOTA_MEANING_LANG as any)[name]?.[lang]||''}
+                        </td>
+                      </tr>
+                    )
+                  })}
+                  <tr style={{background:'#3D0808'}}>
+                    <td colSpan={2} style={{padding:'7px 8px',color:'#C8A96A',fontWeight:700,fontFamily:'Georgia,serif',fontSize:'11px'}}>{L.total[lang]}</td>
+                    <td style={{padding:'7px 8px',textAlign:'center',fontWeight:900,fontSize:'16px',color:pct>=60?'#86EFAC':'#FCA5A5'}}>{score}</td>
+                    <td colSpan={2} style={{padding:'7px 8px',color:'#E8C87A',fontSize:'10.5px'}}>
+                      / {total} · {pct}% · <strong style={{color:pct>=70?'#86EFAC':pct>=50?'#FDE68A':'#FCA5A5'}}>{pct>=70?L.excellent[lang]:pct>=50?L.good[lang]:L.needsReview[lang]}</strong>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+
+              {/* Pathu Porutham */}
+              {result.Poruthams&&result.Poruthams.length>0&&(<>
+                <div style={{fontFamily:'Georgia,serif',fontSize:'11px',fontWeight:700,color:'#3D0808',textTransform:'uppercase',letterSpacing:'.08em',marginBottom:'7px',display:'flex',alignItems:'center',gap:'8px'}}>
+                  <div style={{flex:1,height:'1px',background:'linear-gradient(90deg,#C8A96A,transparent)'}}/>
+                  {L.pathuPoruthamDetail[lang]}
+                  <div style={{flex:1,height:'1px',background:'linear-gradient(270deg,#C8A96A,transparent)'}}/>
+                </div>
+                {result.RajjuWarning&&(
+                  <div style={{background:'#FEF2F2',border:'1px solid #FCA5A5',borderRadius:'7px',padding:'8px 12px',fontSize:'10.5px',color:'#DC2626',marginBottom:'8px',fontWeight:600}}>
+                    ⚠ {result.RajjuWarning}
+                  </div>
+                )}
+                <table style={{width:'100%',borderCollapse:'collapse',fontSize:'11px',marginBottom:'14px'}}>
                   <thead>
-                    <tr style={{ background: '#3D0808' }}>
-                      {[L.koota[lang], L.max[lang], L.score[lang], L.result[lang], L.meaning[lang]].map(h => (
-                        <th key={h} style={{ padding: '8px 10px', color: '#fff', textAlign: 'left',
-                          fontSize: '9px', fontWeight: 700, textTransform: 'uppercase' }}>{h}</th>
+                    <tr style={{background:'#3D0808'}}>
+                      {['#',L.porutham[lang],'Status',L.meaning[lang]].map(h=>(
+                        <th key={h} style={{padding:'6px 8px',color:'#C8A96A',textAlign:'left',fontSize:'8.5px',fontWeight:700,textTransform:'uppercase',letterSpacing:'.04em'}}>{h}</th>
                       ))}
                     </tr>
                   </thead>
                   <tbody>
-                    {kuta.map((k: any, i: number) => {
-                      const ks = k.Score ?? k.score ?? 0
-                      const km = k.MaxScore ?? k.maxScore ?? 1
-                      const ok = ks >= km * 0.5
-                      const name = k.KootaName || k.kootaName || ''
+                    {result.Poruthams.map((p:any,i:number)=>{
+                      const pass=p.Verdict==='Compatible'||p.pass||p.Pass
+                      const name=p.KootaName||p.name||p.Name||`Porutham ${i+1}`
+                      const crit=name==='Rajju'||name==='Vedha'
                       return (
-                        <tr key={i} style={{ background: i%2 ? '#FDF6EE' : '#fff',
-                          borderBottom: '1px solid #E8D8C0' }}>
-                          <td style={{ padding: '8px 10px', fontWeight: 700, color: '#3D0808',
-                            fontFamily: 'Cinzel,serif', fontSize: '11px' }}>
-                            {(L.kootaNames as any)[name]?.[lang] || name}
+                        <tr key={i} style={{background:i%2===0?'#fff':'#FDF6EE',borderBottom:'1px solid #EDE0CC'}}>
+                          <td style={{padding:'6px 8px',color:'#8B6340',textAlign:'center',fontWeight:700,fontSize:'9.5px'}}>{i+1}</td>
+                          <td style={{padding:'6px 8px',fontWeight:700,color:'#3D0808',fontFamily:'Georgia,serif',fontSize:'11px'}}>
+                            {(L.poruthamNames as any)[name]?.[lang]||name}
+                            {crit&&<span style={{marginLeft:'5px',fontSize:'8.5px',color:'#B7862C'}}>★</span>}
                           </td>
-                          <td style={{ padding: '8px 10px', color: '#6B4C2A', textAlign: 'center' }}>{km}</td>
-                          <td style={{ padding: '8px 10px', fontWeight: 800, textAlign: 'center',
-                            color: ok ? '#16A34A' : '#DC2626', fontSize: '14px' }}>{ks}</td>
-                          <td style={{ padding: '8px 10px', fontSize: '11px',
-                            color: ok ? '#16A34A' : '#DC2626', fontWeight: 600 }}>
-                            {ok ? '✓' : '✗'}
+                          <td style={{padding:'6px 8px'}}>
+                            <span style={{fontSize:'9.5px',fontWeight:700,padding:'2px 6px',borderRadius:'10px',background:pass?'#DCFCE7':'#FEE2E2',color:pass?'#15803D':'#DC2626'}}>
+                              {pass?'✓':'✗'}
+                            </span>
                           </td>
-                          <td style={{ padding: '8px 10px', fontSize: '10px',
-                            color: '#6B4C2A', fontStyle: 'italic' }}>
-                            {(KOOTA_MEANING_LANG as any)[name]?.[lang] || KOOTA_MEANING[name] || ''}
+                          <td style={{padding:'6px 8px',fontSize:'9.5px',color:'#6B4C2A',fontStyle:'italic'}}>
+                            {(PORUTHAM_MEANING_LANG as any)[name]?.[lang]||''}
                           </td>
                         </tr>
                       )
                     })}
-                    <tr style={{ background: '#3D0808' }}>
-                      <td colSpan={2} style={{ padding: '8px 10px', color: '#C8A96A',
-                        fontWeight: 700, fontFamily: 'Cinzel,serif', fontSize: '11px' }}>
-                        {L.total[lang]}
-                      </td>
-                      <td style={{ padding: '8px 10px', color: pct>=60?'#86EFAC':'#FCA5A5',
-                        fontWeight: 900, fontSize: '16px', textAlign: 'center' }}>{score}</td>
-                      <td colSpan={2} style={{ padding: '8px 10px', color: '#C8A96A', fontSize: '11px' }}>
-                        / {total} · {pct}% · {pct>=70?L.excellent[lang]:pct>=50?L.good[lang]:L.needsReview[lang]}
-                      </td>
-                    </tr>
                   </tbody>
                 </table>
-              </div>
 
-              {/* Pathu Porutham table */}
-              {result.Poruthams && result.Poruthams.length > 0 && (
-                <div style={{ marginTop: '28px' }}>
-                  <div style={{ fontFamily: 'Cinzel,serif', fontSize: '13px', fontWeight: 700,
-                    color: '#3D0808', borderBottom: '2px solid #C8A96A', paddingBottom: '6px',
-                    marginBottom: '12px', textTransform: 'uppercase', letterSpacing: '.06em' }}>
-                    {L.pathuPoruthamDetail[lang]}
+                {/* Verdict box */}
+                <div style={{background:result.IsRecommended?'#F0FDF4':'#FFFBEB',border:`2px solid ${result.IsRecommended?'#16A34A':'#D97706'}`,borderRadius:'10px',padding:'14px 18px',textAlign:'center',marginBottom:'12px'}}>
+                  <div style={{fontSize:'20px',marginBottom:'3px'}}>{result.IsRecommended?'🌟':'⚠️'}</div>
+                  <div style={{fontFamily:'Georgia,serif',fontSize:'14px',fontWeight:700,color:result.IsRecommended?'#15803D':'#B45309'}}>
+                    {result.IsRecommended?L.yes[lang]:L.needsReview[lang]}
                   </div>
-                  {result.RajjuWarning && (
-                    <div style={{ background: '#FEF2F2', border: '1px solid #FCA5A5',
-                      borderRadius: '8px', padding: '10px 14px', fontSize: '12px',
-                      color: '#DC2626', marginBottom: '12px' }}>
-                      ⚠ {result.RajjuWarning}
-                    </div>
-                  )}
-                  <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '12px' }}>
-                    <thead>
-                      <tr style={{ background: '#3D0808' }}>
-                        {['#', L.porutham[lang], L.result[lang], L.meaning[lang]].map(h => (
-                          <th key={h} style={{ padding: '8px 10px', color: '#fff', textAlign: 'left',
-                            fontSize: '9px', fontWeight: 700, textTransform: 'uppercase' }}>{h}</th>
-                        ))}
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {result.Poruthams.map((p: any, i: number) => {
-                        const pass = p.Verdict === 'Compatible' || p.pass || p.Pass
-                        const name = p.KootaName || p.name || p.Name || `Porutham ${i+1}`
-                        const isCritical = name === 'Rajju' || name === 'Vedha'
-                        return (
-                          <tr key={i} style={{ background: i%2 ? '#FDF6EE' : '#fff',
-                            borderBottom: '1px solid #E8D8C0' }}>
-                            <td style={{ padding: '8px 10px', color: '#6B4C2A', fontSize: '11px',
-                              textAlign: 'center', fontWeight: 700 }}>{i+1}</td>
-                            <td style={{ padding: '8px 10px', fontWeight: 700, color: '#3D0808',
-                              fontFamily: 'Cinzel,serif', fontSize: '11px' }}>
-                              {(L.poruthamNames as any)[name]?.[lang] || name}
-                              {isCritical && <span style={{ marginLeft: '6px', fontSize: '9px',
-                                color: '#B7862C', fontFamily: 'sans-serif' }}>★ critical</span>}
-                            </td>
-                            <td style={{ padding: '8px 10px', fontWeight: 700,
-                              color: pass ? '#16A34A' : '#DC2626', fontSize: '12px' }}>
-                              {pass ? `✓ ${L.pass[lang]}` : `✗ ${L.fail[lang]}`}
-                            </td>
-                            <td style={{ padding: '8px 10px', fontSize: '10px',
-                              color: '#6B4C2A', fontStyle: 'italic' }}>
-                              {(PORUTHAM_MEANING_LANG as any)[name]?.[lang] || PORUTHAM_MEANING[name] || ''}
-                            </td>
-                          </tr>
-                        )
-                      })}
-                    </tbody>
-                  </table>
-                  <div style={{ fontSize: '10px', color: '#6B4C2A', marginTop: '10px',
-                    padding: '8px 12px', background: '#FDF6EE', borderRadius: '6px',
-                    border: '1px solid #E8D8C0' }}>
-                    ★ {L.rajjuNote[lang]}
-                    {result.PathuPoruthamScore !== undefined && (
-                      <span> · {L.score[lang]}: <strong>{result.PathuPoruthamScore}/{result.PathuPoruthamTotal || 10}</strong></span>
-                    )}
-                  </div>
+                  {result.Summary&&<div style={{fontSize:'10.5px',color:'#4B5563',marginTop:'5px',lineHeight:1.6}}>{result.Summary}</div>}
                 </div>
-              )}
-
-              {/* Warnings */}
-              {result.VedhaPresent && (
-                <div style={{ marginTop: '16px', padding: '12px 14px',
-                  background: '#FFFBEB', border: '1px solid #F59E0B',
-                  borderRadius: '8px', fontSize: '12px', color: '#92400E' }}>
-                  ⚠ Vedha present — an inauspicious star combination exists. A proper Muhurtha selection can mitigate this.
+                <div style={{fontSize:'9.5px',color:'#6B4C2A',padding:'7px 10px',background:'#FDF6EE',borderRadius:'6px',border:'1px solid #E8D8C0'}}>
+                  ★ {L.rajjuNote[lang]}
                 </div>
-              )}
+              </>)}
 
-              {/* Footer band */}
-              <div style={{ marginTop: '24px', paddingTop: '16px',
-                borderTop: '1px solid #E8D8C0', textAlign: 'center',
-                fontSize: '10px', color: '#6B4C2A' }}>
+              <div style={{marginTop:'18px',paddingTop:'10px',borderTop:'1px solid #E8D8C0',textAlign:'center',fontSize:'8.5px',color:'#8B6340',letterSpacing:'.05em'}}>
                 www.vedichora.com · {L.footer[lang]}
               </div>
             </div>
           </div>
 
 
-          {/* PDF Download */}
-          <div className="card" style={{ padding: '20px' }}>
-            <div className="card-hd" style={{ marginBottom: '12px' }}>
-              <span className="card-title">Download Report</span>
-            </div>
-            <p style={{ fontSize: '12px', color: 'var(--txm)', marginBottom: '14px' }}>
-              {token ? 'Download a detailed compatibility report as a printable PDF.' : '🔒 Sign in to download PDF reports.'}
-            </p>
-            <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
-              {[
-                { type: 'english', label: 'English Narrative', desc: 'Plain-language 10-year timeline' },
-                { type: 'vedic',   label: 'Vedic Porutham',    desc: 'Ashta Koota · Pathu Porutham · Doshas' },
-                { type: 'both',    label: 'Complete Report',   desc: 'Both reports combined' },
-              ].map(({ type, label, desc }) => (
-                <button key={type}
-                  onClick={() => downloadPdf(type as any)}
-                  disabled={!token || pdfLoading === type}
-                  style={{
-                    display: 'flex', alignItems: 'center', gap: '8px',
-                    padding: '10px 16px', borderRadius: '10px', border: '1.5px solid var(--acc)',
-                    background: pdfLoading === type ? 'var(--acc)' : 'transparent',
-                    color: pdfLoading === type ? '#fff' : 'var(--acc)',
-                    cursor: !token ? 'not-allowed' : 'pointer', fontSize: '12px', fontWeight: 600,
-                    opacity: !token ? 0.5 : 1,
-                  }}>
-                  <Download style={{ width: '13px', height: '13px' }} />
-                  <div style={{ textAlign: 'left' }}>
-                    <div>{pdfLoading === type ? 'Generating…' : label}</div>
-                    <div style={{ fontWeight: 400, fontSize: '10px', color: pdfLoading === type ? 'rgba(255,255,255,.8)' : 'var(--txm)' }}>{desc}</div>
-                  </div>
-                </button>
-              ))}
-            </div>
-            {!token && (
-              <p style={{ fontSize: '11px', color: 'var(--txm)', marginTop: '10px' }}>
-                <a href="/signin" style={{ color: 'var(--acc)', fontWeight: 600 }}>Sign in</a> to download PDF reports.
-              </p>
-            )}
-          </div>
-        </div>
       )}
     </div>
   )
