@@ -682,6 +682,8 @@ export default function MatchPage() {
           : <>Check Compatibility <ChevronRight style={{ width: '16px', height: '16px' }} /></>
         }
       </button>
+      </>
+      )}{/* end !collapsed */}
 
       {/* ── RESULTS ── */}
       {result && (
