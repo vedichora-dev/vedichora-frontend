@@ -1,21 +1,136 @@
 
 Running 2 tests using 2 workers
 
-CITY1_NO_DROPDOWN
-CITY1_NO_DROPDOWN
-CITY2_NO_DROPDOWN
-CITY2_NO_DROPDOWN
-CALC_CLICKED
-MATCH_RESPONSE:{"success":true,"data":{"ashtaKootaScore":27,"ashtaKootaTotal":36,"ashtaKootaPct":75,"kootaDetails":[{"kootaName":"Varna","score":1,"maxScore":1},{"kootaName":"Vashya","score":0.5,"maxScore":2},{"kootaName":"Tara","score":1.5,"maxScore":3},{"kootaName":"Yoni","score":3,"maxScore":4},{"kootaName":"Graha Maitri","score":0,"maxScore":5},{"kootaName":"Gana","score":6,"maxScore":6},{"kootaName":"Bhakoota","score":7,"maxScore":7},{"kootaName":"Nadi","score":8,"maxScore":8}],"pathuPoruthamScore":15,"pathuPoruthamTotal":24,"pathuPoruthamPct":62.5,"poruthams":[{"kootaName":"Dinam","score":3,"maxScore":3,"verdict":"Compatible","pass":true,"description":"Count 14 (mod 9 = 5) — Auspicious. Good for health and prosperity."},{"kootaName":"Ganam","score":5,"maxScore":5,"verdict":"Compatible","pass":true,"description":"Bride: Rakshasa Gana, Groom: Rakshasa Gana. Same Gana — excellent temperament match."},{"kootaName":"Mahendram","score":0,"maxScore":1,"verdict":"Incompatible","pass":false,"description":"Mahendram not present"},{"kootaName":"Sthree Dheerga","score":3,"maxScore":3,"verdict":"Compatible","pass":true,"description":"Groom's rasi is 7 signs from bride's. Good — longevity of wife indicated."},{"kootaName":"Yoni","score":3,"maxScore":4,"verdict":"Compatible","pass":true,"description":"Bride: Buffalo, Groom: Buffalo. Score: 3/4."},{"kootaName":"Rasi","score":1,"maxScore":2,"verdict":"Compatible","pass":true,"description":"Bride: Aquarius, Groom: Leo. Friendly rasis."},{"kootaName":"R
-CALC_CLICKED
-MATCH_RESPONSE:{"success":true,"data":{"ashtaKootaScore":27,"ashtaKootaTotal":36,"ashtaKootaPct":75,"kootaDetails":[{"kootaName":"Varna","score":1,"maxScore":1},{"kootaName":"Vashya","score":0.5,"maxScore":2},{"kootaName":"Tara","score":1.5,"maxScore":3},{"kootaName":"Yoni","score":3,"maxScore":4},{"kootaName":"Graha Maitri","score":0,"maxScore":5},{"kootaName":"Gana","score":6,"maxScore":6},{"kootaName":"Bhakoota","score":7,"maxScore":7},{"kootaName":"Nadi","score":8,"maxScore":8}],"pathuPoruthamScore":15,"pathuPoruthamTotal":24,"pathuPoruthamPct":62.5,"poruthams":[{"kootaName":"Dinam","score":3,"maxScore":3,"verdict":"Compatible","pass":true,"description":"Count 14 (mod 9 = 5) — Auspicious. Good for health and prosperity."},{"kootaName":"Ganam","score":5,"maxScore":5,"verdict":"Compatible","pass":true,"description":"Bride: Rakshasa Gana, Groom: Rakshasa Gana. Same Gana — excellent temperament match."},{"kootaName":"Mahendram","score":0,"maxScore":1,"verdict":"Incompatible","pass":false,"description":"Mahendram not present"},{"kootaName":"Sthree Dheerga","score":3,"maxScore":3,"verdict":"Compatible","pass":true,"description":"Groom's rasi is 7 signs from bride's. Good — longevity of wife indicated."},{"kootaName":"Yoni","score":3,"maxScore":4,"verdict":"Compatible","pass":true,"description":"Bride: Buffalo, Groom: Buffalo. Score: 3/4."},{"kootaName":"Rasi","score":1,"maxScore":2,"verdict":"Compatible","pass":true,"description":"Bride: Aquarius, Groom: Leo. Friendly rasis."},{"kootaName":"R
-SS02_FULL_DONE
-SS02_FULL_DONE
-ALL_SS_DONE
-BODY_LINES:Ashta Koota · Pathu Porutham · Mangal Dosha · Traditional Vedic Matching | 🔒 Guest mode — Sign in to use saved charts | How to use: Fill in the date of birth, type a city and click the city suggestion from the dropdown — then click Check Compatibility. | ✎ Edit birth details | Report language: | English | தமிழ் | हिन्दी | ॐ VEDICHORA | Vivaha Porutham Report | Ganapathy & Shreya | 27/36 | ASHTA KOOTA | 15/24 | PATHU PORUTHAM | Pass | RECOMMENDATION | Recommended | ASHTA KOOTA BREAKDOWN | KOOTA	MAX	SCORE	RESULT	SIGNIFICANCE | Varna	1	1	✓	Spiritual & work compatibility | Vashya	2	0.5	✗	Mutual attraction & control | Tara	3	1.5	✓	Birth star harmony & health | Yoni	4	3	✓	Physical & intimate compatibility | Graha Maitri	5	0	✗	Mental & emotional bonding | Gana	6	6	✓	Temperament & nature match | Bhakoota	7	7	✓	Financial & family harmony | Nadi	8	8	✓	Genetic & health compatibility | Total	27	/ 36 · 75% · Excellent match | PATHU PORUTHAM | #	PORUTHAM	RESULT	SIGNIFICANCE | 1	Porutham 1	✓ Pass | 2	Porutham 2	✓ Pass | 3	Porutham 3	✗ Fail | 4	Porutham 4	✓ Pass | 5	Porutham 5	✓ Pass | 6	Porutham 6	✓ Pass | 7	Porutham 7	✗ Fail | 8	Porutham 8	✗ Fail | ★ Rajju & Vedha are critical — failure requires Muhurtha correction. · Score: 15/24 | www.vedichora.com · World's Most Accurate Vedic Astrology Predictions | 📄 Download Full Report | Complete Vivaha Porutham · All 10 Poruthams with meanings · Ashta Koota · Remedies | 🇬🇧 English | 🇮🇳 தமிழ் | 🇮🇳 हिन्दी | Accessibility | Customise your reading experience | TEXT SIZE | A+++ | FONT | Standard | OpenDyslexic | MOTION | Normal | LINE SPACING | Normal | Wide | Wider | Reset to defaults
-  ✓  1 [chromium] › e2e/screenshot.spec.js:5:1 › full match page after calculate (19.0s)
-ALL_SS_DONE
-BODY_LINES:Ashta Koota · Pathu Porutham · Mangal Dosha · Traditional Vedic Matching | 🔒 Guest mode — Sign in to use saved charts | How to use: Fill in the date of birth, type a city and click the city suggestion from the dropdown — then click Check Compatibility. | ✎ Edit birth details | Report language: | English | தமிழ் | हिन्दी | ॐ VEDICHORA | Vivaha Porutham Report | Ganapathy & Shreya | 27/36 | ASHTA KOOTA | 15/24 | PATHU PORUTHAM | Pass | RECOMMENDATION | Recommended | ASHTA KOOTA BREAKDOWN | KOOTA	MAX	SCORE	RESULT	SIGNIFICANCE | Varna	1	1	✓	Spiritual & work compatibility | Vashya	2	0.5	✗	Mutual attraction & control | Tara	3	1.5	✓	Birth star harmony & health | Yoni	4	3	✓	Physical & intimate compatibility | Graha Maitri	5	0	✗	Mental & emotional bonding | Gana	6	6	✓	Temperament & nature match | Bhakoota	7	7	✓	Financial & family harmony | Nadi	8	8	✓	Genetic & health compatibility | Total	27	/ 36 · 75% · Excellent match | PATHU PORUTHAM | #	PORUTHAM	RESULT	SIGNIFICANCE | 1	Porutham 1	✓ Pass | 2	Porutham 2	✓ Pass | 3	Porutham 3	✗ Fail | 4	Porutham 4	✓ Pass | 5	Porutham 5	✓ Pass | 6	Porutham 6	✓ Pass | 7	Porutham 7	✗ Fail | 8	Porutham 8	✗ Fail | ★ Rajju & Vedha are critical — failure requires Muhurtha correction. · Score: 15/24 | www.vedichora.com · World's Most Accurate Vedic Astrology Predictions | 📄 Download Full Report | Complete Vivaha Porutham · All 10 Poruthams with meanings · Ashta Koota · Remedies | 🇬🇧 English | 🇮🇳 தமிழ் | 🇮🇳 हिन्दी | Accessibility | Customise your reading experience | TEXT SIZE | A+++ | FONT | Standard | OpenDyslexic | MOTION | Normal | LINE SPACING | Normal | Wide | Wider | Reset to defaults
-  ✓  2 [mobile] › e2e/screenshot.spec.js:5:1 › full match page after calculate (21.6s)
+SS01 match result taken
+SS01 match result taken
+NO_POPUP_OPENED
+  ✘  1 [chromium] › e2e/screenshot.spec.js:4:1 › PDF report renders correctly (2.0m)
+NO_POPUP_OPENED
+  ✘  2 [mobile] › e2e/screenshot.spec.js:4:1 › PDF report renders correctly (2.0m)
+SS01 match result taken
+SS01 match result taken
+NO_POPUP_OPENED
+NO_POPUP_OPENED
+  ✘  3 [chromium] › e2e/screenshot.spec.js:4:1 › PDF report renders correctly (retry #1) (2.0m)
+  ✘  4 [mobile] › e2e/screenshot.spec.js:4:1 › PDF report renders correctly (retry #1) (2.0m)
 
-  2 passed (24.7s)
+
+  1) [chromium] › e2e/screenshot.spec.js:4:1 › PDF report renders correctly ────────────────────────
+
+    Test timeout of 120000ms exceeded.
+
+    Error: locator.allTextContents: Target page, context or browser has been closed
+
+      73 |     console.log('NO_POPUP_OPENED')
+      74 |     // Try clicking the button differently
+    > 75 |     const btns = await page.locator('button').allTextContents()
+         |                                               ^
+      76 |     console.log('BUTTONS:' + btns.join(' | '))
+      77 |   }
+      78 | })
+        at /home/runner/work/vedichora-frontend/vedichora-frontend/e2e/screenshot.spec.js:75:47
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/screenshot-PDF-report-renders-correctly-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/screenshot-PDF-report-renders-correctly-chromium/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/screenshot-PDF-report-renders-correctly-chromium/error-context.md
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Test timeout of 120000ms exceeded.
+
+    Error: locator.allTextContents: Target page, context or browser has been closed
+
+      73 |     console.log('NO_POPUP_OPENED')
+      74 |     // Try clicking the button differently
+    > 75 |     const btns = await page.locator('button').allTextContents()
+         |                                               ^
+      76 |     console.log('BUTTONS:' + btns.join(' | '))
+      77 |   }
+      78 | })
+        at /home/runner/work/vedichora-frontend/vedichora-frontend/e2e/screenshot.spec.js:75:47
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/screenshot-PDF-report-renders-correctly-chromium-retry1/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/screenshot-PDF-report-renders-correctly-chromium-retry1/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/screenshot-PDF-report-renders-correctly-chromium-retry1/error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/screenshot-PDF-report-renders-correctly-chromium-retry1/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/screenshot-PDF-report-renders-correctly-chromium-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) [mobile] › e2e/screenshot.spec.js:4:1 › PDF report renders correctly ──────────────────────────
+
+    Test timeout of 120000ms exceeded.
+
+    Error: locator.allTextContents: Target page, context or browser has been closed
+
+      73 |     console.log('NO_POPUP_OPENED')
+      74 |     // Try clicking the button differently
+    > 75 |     const btns = await page.locator('button').allTextContents()
+         |                                               ^
+      76 |     console.log('BUTTONS:' + btns.join(' | '))
+      77 |   }
+      78 | })
+        at /home/runner/work/vedichora-frontend/vedichora-frontend/e2e/screenshot.spec.js:75:47
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/screenshot-PDF-report-renders-correctly-mobile/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/screenshot-PDF-report-renders-correctly-mobile/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/screenshot-PDF-report-renders-correctly-mobile/error-context.md
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Test timeout of 120000ms exceeded.
+
+    Error: locator.allTextContents: Target page, context or browser has been closed
+
+      73 |     console.log('NO_POPUP_OPENED')
+      74 |     // Try clicking the button differently
+    > 75 |     const btns = await page.locator('button').allTextContents()
+         |                                               ^
+      76 |     console.log('BUTTONS:' + btns.join(' | '))
+      77 |   }
+      78 | })
+        at /home/runner/work/vedichora-frontend/vedichora-frontend/e2e/screenshot.spec.js:75:47
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/screenshot-PDF-report-renders-correctly-mobile-retry1/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/screenshot-PDF-report-renders-correctly-mobile-retry1/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/screenshot-PDF-report-renders-correctly-mobile-retry1/error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/screenshot-PDF-report-renders-correctly-mobile-retry1/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/screenshot-PDF-report-renders-correctly-mobile-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2 failed
+    [chromium] › e2e/screenshot.spec.js:4:1 › PDF report renders correctly ─────────────────────────
+    [mobile] › e2e/screenshot.spec.js:4:1 › PDF report renders correctly ───────────────────────────
