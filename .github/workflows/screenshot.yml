@@ -1,17 +1,12 @@
 name: VedicHora Screenshot Tests
-
 on:
   workflow_dispatch:
-
 jobs:
   screenshot:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     permissions:
       contents: write
-    env:
-      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      REPO: ${{ github.repository }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -25,52 +20,9 @@ jobs:
         continue-on-error: true
         env:
           BASE_URL: https://vedichora-frontend-orcin.vercel.app
-      - name: Upload screenshots via GitHub API
+      - name: Upload screenshots
         if: always()
-        run: |
-          # Upload each screenshot PNG via GitHub API
-          for f in screenshots/*.png; do
-            [ -f "$f" ] || continue
-            name=$(basename "$f")
-            B64=$(base64 -w 0 "$f")
-            echo "Uploading $name ($(wc -c < $f) bytes)..."
-            
-            # Check if file exists
-            EXISTING=$(curl -s -o /dev/null -w "%{http_code}" \
-              -H "Authorization: token $GH_TOKEN" \
-              "https://api.github.com/repos/$REPO/contents/test-screenshots/$name")
-            
-            if [ "$EXISTING" = "200" ]; then
-              SHA=$(curl -s \
-                -H "Authorization: token $GH_TOKEN" \
-                "https://api.github.com/repos/$REPO/contents/test-screenshots/$name" | jq -r '.sha')
-              curl -s -X PUT \
-                -H "Authorization: token $GH_TOKEN" \
-                -H "Content-Type: application/json" \
-                -d "{\"message\":\"ci: screenshot $name [skip ci]\",\"content\":\"$B64\",\"sha\":\"$SHA\"}" \
-                "https://api.github.com/repos/$REPO/contents/test-screenshots/$name" | jq -r '.commit.message // .message'
-            else
-              curl -s -X PUT \
-                -H "Authorization: token $GH_TOKEN" \
-                -H "Content-Type: application/json" \
-                -d "{\"message\":\"ci: screenshot $name [skip ci]\",\"content\":\"$B64\"}" \
-                "https://api.github.com/repos/$REPO/contents/test-screenshots/$name" | jq -r '.commit.message // .message'
-            fi
-          done
-          
-          # Also upload API test output
-          OUT=$(base64 -w 0 /tmp/ss-output.txt)
-          EXISTING=$(curl -s -o /dev/null -w "%{http_code}" \
-            -H "Authorization: token $GH_TOKEN" \
-            "https://api.github.com/repos/$REPO/contents/test-screenshots/output.txt")
-          if [ "$EXISTING" = "200" ]; then
-            SHA=$(curl -s -H "Authorization: token $GH_TOKEN" "https://api.github.com/repos/$REPO/contents/test-screenshots/output.txt" | jq -r '.sha')
-            curl -s -X PUT -H "Authorization: token $GH_TOKEN" -H "Content-Type: application/json" \
-              -d "{\"message\":\"ci: test output [skip ci]\",\"content\":\"$OUT\",\"sha\":\"$SHA\"}" \
-              "https://api.github.com/repos/$REPO/contents/test-screenshots/output.txt" > /dev/null
-          else
-            curl -s -X PUT -H "Authorization: token $GH_TOKEN" -H "Content-Type: application/json" \
-              -d "{\"message\":\"ci: test output [skip ci]\",\"content\":\"$OUT\"}" \
-              "https://api.github.com/repos/$REPO/contents/test-screenshots/output.txt" > /dev/null
-          fi
-          echo "All uploads done"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO: ${{ github.repository }}
+        run: python3 scripts/upload_screenshots.py
