@@ -2,90 +2,134 @@ const { test } = require('@playwright/test')
 const BASE = 'https://vedichora-frontend-orcin.vercel.app'
 const CHART_URL = 'https://enchanting-dedication-production.up.railway.app'
 
-async function setSelect(page, index, value) {
-  return page.evaluate(({index, value}) => {
-    const selects = document.querySelectorAll('select')
-    const sel = selects[index]
-    if (!sel) return false
-    const nativeInputValueSetter = Object.getOwnPropertyDescriptor(window.HTMLSelectElement.prototype, 'value').set
-    nativeInputValueSetter.call(sel, value)
-    sel.dispatchEvent(new Event('change', { bubbles: true }))
-    return true
-  }, {index, value})
-}
-
-test('result UI screenshot', async ({ page }) => {
+test('full result UI', async ({ page }) => {
   test.setTimeout(120000)
   await page.setViewportSize({ width: 1280, height: 900 })
+  
+  // Intercept Nominatim geocode to return Chennai coords immediately
+  await page.route('**nominatim**', route => {
+    route.fulfill({
+      status: 200,
+      contentType: 'application/json',
+      body: JSON.stringify([{ lat: '13.0827', lon: '80.2707', display_name: 'Chennai' }])
+    })
+  })
+
+  // Also intercept any geocode calls
+  await page.route('**/search*', route => {
+    if (route.request().url().includes('nominatim')) {
+      route.fulfill({
+        status: 200,
+        contentType: 'application/json', 
+        body: JSON.stringify([{ lat: '13.0827', lon: '80.2707', display_name: 'Chennai, Tamil Nadu, India' }])
+      })
+    } else {
+      route.continue()
+    }
+  })
+
   await page.goto(BASE + '/match', { waitUntil: 'networkidle', timeout: 30000 })
   await page.waitForTimeout(2000)
 
-  // Use React's native event system to set all select values
+  // Set date selects via React native events
   await page.evaluate(() => {
-    function setReactSelect(select, value) {
-      const nativeInputValueSetter = Object.getOwnPropertyDescriptor(window.HTMLSelectElement.prototype, 'value').set
-      nativeInputValueSetter.call(select, value)
-      select.dispatchEvent(new Event('change', { bubbles: true }))
+    function setNative(el, value) {
+      const setter = Object.getOwnPropertyDescriptor(window.HTMLSelectElement.prototype, 'value').set
+      setter.call(el, value)
+      el.dispatchEvent(new Event('input', { bubbles: true }))
+      el.dispatchEvent(new Event('change', { bubbles: true }))
     }
     const sels = document.querySelectorAll('select')
-    // Person 1: sel[0]=day, sel[1]=month, sel[2]=year, sel[3]=hour, sel[4]=minute, sel[5]=AMPM
-    // Person 2: sel[6]=day, sel[7]=month, sel[8]=year, sel[9]=hour, sel[10]=minute, sel[11]=AMPM
-    setReactSelect(sels[0], '22')   // day 22
-    setReactSelect(sels[1], '8')    // August
-    setReactSelect(sels[2], '1998') // year 1998
-    setReactSelect(sels[6], '17')   // day 17
-    setReactSelect(sels[7], '10')   // October
-    setReactSelect(sels[8], '2002') // year 2002
-    console.log('Dates set via React events')
+    // P1: day=22, month=8(Aug), year=1998
+    setNative(sels[0], '22')
+    setNative(sels[1], '8')
+    setNative(sels[2], '1998')
+    // P2: day=17, month=10(Oct), year=2002
+    setNative(sels[6], '17')
+    setNative(sels[7], '10')
+    setNative(sels[8], '2002')
   })
-  await page.waitForTimeout(500)
+  await page.waitForTimeout(300)
 
-  // Fill city for person 1
-  const cityInp1 = page.locator('input[placeholder*="city" i], input[placeholder*="Type and select"]').first()
-  await cityInp1.fill('Chennai')
-  await page.waitForTimeout(1500)
-  // Try clicking the first suggestion
-  const suggestion = page.locator('li, [class*="suggestion"], [class*="option"], [class*="item"]').first()
-  if (await suggestion.isVisible({ timeout: 2000 }).catch(() => false)) {
-    await suggestion.click()
-    console.log('City 1 dropdown clicked')
-  } else {
-    // Simulate selecting directly
-    await page.evaluate(() => {
-      const inputs = document.querySelectorAll('input')
-      for (const inp of inputs) {
-        if (inp.placeholder && (inp.placeholder.includes('city') || inp.placeholder.includes('City') || inp.placeholder.includes('Type'))) {
-          inp.dispatchEvent(new Event('blur', { bubbles: true }))
-          break
+  // Fill city fields
+  const cityInputs = page.locator('input[placeholder*="city" i], input[placeholder*="Type and select"]')
+  const cityCount = await cityInputs.count()
+  console.log('City inputs:', cityCount)
+
+  for (let i = 0; i < cityCount; i++) {
+    await cityInputs.nth(i).fill('Chennai')
+    await page.waitForTimeout(800)
+    // Click the first suggestion that appears
+    const suggestions = page.locator('[class*="suggestion"], [class*="city"], li, [role="option"]')
+    if (await suggestions.count() > 0 && await suggestions.first().isVisible({ timeout: 1000 }).catch(() => false)) {
+      await suggestions.first().click()
+      console.log('City', i+1, 'suggestion clicked')
+    } else {
+      // No suggestion - set lat/lng directly in the React state via window
+      await page.evaluate((idx) => {
+        // Find all inputs and set data attributes
+        const inputs = document.querySelectorAll('input')
+        let cityInputCount = 0
+        for (const inp of inputs) {
+          const ph = inp.placeholder || ''
+          if (ph.includes('city') || ph.includes('City') || ph.includes('Type and select')) {
+            if (cityInputCount === idx) {
+              // Simulate having selected a city by triggering the blur
+              inp.dispatchEvent(new Event('blur', { bubbles: true }))
+            }
+            cityInputCount++
+          }
         }
-      }
-    })
-    console.log('City 1 - no suggestion visible')
+      }, i)
+      console.log('City', i+1, 'set via blur fallback')
+    }
+    await page.waitForTimeout(300)
   }
 
-  await page.screenshot({ path: 'screenshots/01_form_filled.png' })
-  console.log('SS01 taken')
+  // Set lat/lng directly in window state so geocode is not needed
+  await page.evaluate(() => {
+    // Override the geocode function if accessible
+    window.__lat1 = 13.0827; window.__lng1 = 80.2707
+    window.__lat2 = 13.0827; window.__lng2 = 80.2707
+    // Store in sessionStorage for the page to use
+    sessionStorage.setItem('__test_geo', JSON.stringify({
+      lat1: 13.0827, lng1: 80.2707, lat2: 13.0827, lng2: 80.2707
+    }))
+  })
+
+  await page.screenshot({ path: 'screenshots/01_form_ready.png' })
+  console.log('SS01: form ready')
 
   // Click Calculate
   const calcBtn = page.locator('button').filter({ hasText: /Check Compatibility/i }).first()
-  await calcBtn.click()
-  console.log('Calculate clicked')
-  await page.waitForTimeout(6000) // wait for API
+  const btnVisible = await calcBtn.isVisible({ timeout: 3000 }).catch(() => false)
+  console.log('Calc button visible:', btnVisible)
+  
+  if (btnVisible) {
+    await calcBtn.click()
+    console.log('Clicked calculate')
+    // Wait for API call to complete and result to render
+    await page.waitForTimeout(8000)
+  }
 
-  await page.screenshot({ path: 'screenshots/02_after_calc.png' })
-  console.log('SS02 after calc taken')
-
-  // Scroll to see results
-  await page.evaluate(() => window.scrollTo(0, 600))
-  await page.waitForTimeout(300)
-  await page.screenshot({ path: 'screenshots/03_results_visible.png' })
-  console.log('SS03 results visible')
-
-  // Full page
-  await page.screenshot({ path: 'screenshots/04_full_page.png', fullPage: true })
-  console.log('SS04 full page taken')
+  await page.screenshot({ path: 'screenshots/02_after_click.png' })
+  console.log('SS02: after click')
 
   const bodyText = await page.locator('body').innerText()
-  const relevant = bodyText.split('\n').filter(l => l.trim() && !l.includes('  ')).slice(0,50).join(' | ')
-  console.log('BODY:', relevant.slice(0, 600))
+  console.log('Has crimson:', (await page.locator('[style*="3D0808"]').count()) > 0)
+  console.log('Has result:', bodyText.includes('Koota') || bodyText.includes('Porutham') || bodyText.includes('VedicHora') || bodyText.includes('Ashta'))
+  console.log('Error visible:', bodyText.includes('failed') || bodyText.includes('error'))
+  
+  // Log first 800 chars of page text
+  console.log('BODY:', bodyText.replace(/\n/g,' ').slice(0, 800))
+
+  // Scroll to results area
+  await page.evaluate(() => window.scrollBy(0, 600))
+  await page.waitForTimeout(300)
+  await page.screenshot({ path: 'screenshots/03_scrolled.png' })
+  console.log('SS03: scrolled')
+
+  // Full page
+  await page.screenshot({ path: 'screenshots/04_full.png', fullPage: true })
+  console.log('SS04: full page done')
 })
