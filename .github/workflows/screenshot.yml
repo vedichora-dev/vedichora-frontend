@@ -1,0 +1,26 @@
+name: VedicHora Screenshot Tests
+
+on:
+  workflow_dispatch:
+
+jobs:
+  screenshot:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      - run: npm ci
+      - run: npx playwright install chromium --with-deps
+      - run: mkdir -p screenshots
+      - run: npx playwright test e2e/screenshot.spec.js --reporter=list 2>&1 || true
+        env:
+          BASE_URL: https://vedichora-frontend-orcin.vercel.app
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: screenshots
+          path: screenshots/
+          retention-days: 1
