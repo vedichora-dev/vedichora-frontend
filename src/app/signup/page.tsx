@@ -66,7 +66,7 @@ export default function SignupPage() {
       }
 
       // Register account
-      const res  = await authRegister(name, email, pw)
+      const res  = await authRegister(email, pw, name)
       const data = res?.data?.data || res?.data
       if (data?.accessToken) {
         setAuth(data.accessToken, data.refreshToken || '', data.user || { displayName: name, email, plan: 'free' })
@@ -161,7 +161,7 @@ export default function SignupPage() {
                 Create Free Account
               </div>
               <div style={{fontSize:'12px',color:'var(--txm)'}}>
-                Verify your email to get started · Upgrade anytime
+                Verify email to start · Indian mobile OTP supported
               </div>
             </div>
 
