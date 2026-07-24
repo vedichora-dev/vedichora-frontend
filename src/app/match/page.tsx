@@ -596,7 +596,13 @@ export default function MatchPage() {
   const score  = result?.AshtaKootaScore  ?? result?.ashtaKootaScore  ?? 0
   const total  = result?.AshtaKootaTotal  ?? result?.ashtaKootaTotal  ?? 36
   const pScore = result?.PathuPoruthamScore ?? result?.pathuPoruthamScore ?? 0
-  const pTotal = result?.PathuPoruthamTotal ?? result?.pathuPoruthamTotal ?? 10
+  const pTotal = result?.PathuPoruthamTotal ?? result?.pathuPoruthamTotal
+  // Normalise camelCase API response fields to PascalCase for JSX
+  const poruthams   = result?.Poruthams   ?? result?.poruthams   ?? []
+  const isRec       = result?.IsRecommended ?? result?.isRecommended ?? false
+  const rajjuWarn   = result?.RajjuWarning  ?? result?.rajjuWarning  ?? ''
+  const vedhaPresent= result?.VedhaPresent  ?? result?.vedhaPresent  ?? false
+  const summary     = result?.Summary       ?? result?.summary       ?? '' ?? 10
   const kuta   = result?.KootaDetails || result?.kootaDetails || []
   const pct    = total > 0 ? Math.round((score / total) * 100) : 0
   const scoreColor = pct >= 70 ? '#16A34A' : pct >= 50 ? '#B45309' : '#DC2626'
@@ -731,7 +737,7 @@ export default function MatchPage() {
               {[
                 { val: `${score}/${total}`, label: L.ashtaKoota[lang], sub: `${pct}%`, color: pct>=60?'#16A34A':'#DC2626' },
                 { val: `${pScore}/${pTotal}`, label: L.pathuPorutham[lang], sub: pScore>=5?L.pass[lang]:L.fail[lang], color: pScore>=5?'#16A34A':'#DC2626' },
-                { val: result.IsRecommended ? '✓' : '—', label: L.recommended[lang], sub: result.IsRecommended ? L.yes[lang] : L.needsReview[lang], color: result.IsRecommended?'#16A34A':'#B7862C' },
+                { val: isRec ? '✓' : '—', label: L.recommended[lang], sub: isRec ? L.yes[lang] : L.needsReview[lang], color: isRec?'#16A34A':'#B7862C' },
               ].map(({ val, label, sub, color }) => (
                 <div key={label}>
                   <div style={{ fontFamily: 'Cinzel,serif', fontSize: '32px', fontWeight: 900, color, lineHeight: 1 }}>{val}</div>
@@ -803,18 +809,18 @@ export default function MatchPage() {
               </div>
 
               {/* Pathu Porutham table */}
-              {result.Poruthams && result.Poruthams.length > 0 && (
+              {poruthams.length > 0 && (
                 <div style={{ marginTop: '28px' }}>
                   <div style={{ fontFamily: 'Cinzel,serif', fontSize: '13px', fontWeight: 700,
                     color: '#3D0808', borderBottom: '2px solid #C8A96A', paddingBottom: '6px',
                     marginBottom: '12px', textTransform: 'uppercase', letterSpacing: '.06em' }}>
                     {L.pathuPoruthamDetail[lang]}
                   </div>
-                  {result.RajjuWarning && (
+                  {rajjuWarn && (
                     <div style={{ background: '#FEF2F2', border: '1px solid #FCA5A5',
                       borderRadius: '8px', padding: '10px 14px', fontSize: '12px',
                       color: '#DC2626', marginBottom: '12px' }}>
-                      ⚠ {result.RajjuWarning}
+                      ⚠ {rajjuWarn}
                     </div>
                   )}
                   <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '12px' }}>
@@ -827,7 +833,7 @@ export default function MatchPage() {
                       </tr>
                     </thead>
                     <tbody>
-                      {result.Poruthams.map((p: any, i: number) => {
+                      {poruthams.map((p: any, i: number) => {
                         const pass = p.Verdict === 'Compatible' || p.pass || p.Pass
                         const name = p.KootaName || p.name || p.Name || `Porutham ${i+1}`
                         const isCritical = name === 'Rajju' || name === 'Vedha'
@@ -859,15 +865,15 @@ export default function MatchPage() {
                     padding: '8px 12px', background: '#FDF6EE', borderRadius: '6px',
                     border: '1px solid #E8D8C0' }}>
                     ★ {L.rajjuNote[lang]}
-                    {result.PathuPoruthamScore !== undefined && (
-                      <span> · {L.score[lang]}: <strong>{result.PathuPoruthamScore}/{result.PathuPoruthamTotal || 10}</strong></span>
+                    {pScore > 0 && (
+                      <span> · {L.score[lang]}: <strong>{pScore}/{pTotal || 10}</strong></span>
                     )}
                   </div>
                 </div>
               )}
 
               {/* Warnings */}
-              {result.VedhaPresent && (
+              {vedhaPresent && (
                 <div style={{ marginTop: '16px', padding: '12px 14px',
                   background: '#FFFBEB', border: '1px solid #F59E0B',
                   borderRadius: '8px', fontSize: '12px', color: '#92400E' }}>
