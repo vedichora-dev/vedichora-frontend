@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<title>VedicHora Compatibility Report</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap');
+
+  :root {
+    --gold: #B8962E;
+    --gold2: #D4AF55;
+    --ink: #1A1A1A;
+    --ink2: #3D3D3D;
+    --ink3: #6B6B6B;
+    --bg: #FAFAF8;
+    --line: #E8E4DC;
+    --green: #1A6B3A;
+    --green-bg: #F0F7F2;
+    --red: #8B1A1A;
+    --red-bg: #FDF0F0;
+    --amber: #7A5200;
+    --amber-bg: #FDF6E8;
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    font-size: 10.5pt;
+    line-height: 1.75;
+    color: var(--ink2);
+    background: #fff;
+  }
+
+  .page {
+    width: 210mm;
+    min-height: 297mm;
+    padding: 22mm 24mm 22mm 24mm;
+    position: relative;
+    page-break-after: always;
+  }
+  .page:last-child { page-break-after: auto; }
+
+  /* ── Header / Footer ─────────────────── */
+  .hdr {
+    display: flex; align-items: center; justify-content: space-between;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--line);
+    margin-bottom: 28px;
+    font-size: 7.5pt;
+    color: var(--ink3);
+    letter-spacing: .08em;
+    text-transform: uppercase;
+  }
+  .hdr-logo { color: var(--gold); font-weight: 600; letter-spacing:.05em; }
+  .ftr {
+    position: absolute; bottom: 14mm; left: 24mm; right: 24mm;
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: 7pt; color: var(--ink3); border-top: 1px solid var(--line);
+    padding-top: 6px;
+  }
+
+  /* ── Cover ────────────────────────────── */
+  .cover-page {
+    background: #0F1117;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    min-height: 297mm;
+    padding: 32mm 28mm;
+    text-align: center;
+  }
+  .cover-om { font-size: 36pt; color: var(--gold2); margin-bottom: 28px; }
+  .cover-brand { font-size: 9pt; color: var(--gold2); letter-spacing:.2em; text-transform:uppercase; margin-bottom:8px; }
+  .cover-tagline { font-size: 8pt; color: rgba(255,255,255,.45); letter-spacing:.1em; text-transform:uppercase; margin-bottom:48px; }
+  .cover-title { font-family:'Playfair Display',Georgia,serif; font-size:28pt; font-weight:700; color:#fff; line-height:1.2; margin-bottom:10px; }
+  .cover-subtitle { font-size: 8.5pt; color:rgba(255,255,255,.5); letter-spacing:.1em; text-transform:uppercase; margin-bottom:56px; }
+  .cover-rule { width:60px; height:1px; background:var(--gold2); margin:0 auto 32px; }
+  .cover-names { font-family:'Playfair Display',Georgia,serif; font-size:20pt; font-weight:600; color:#fff; margin-bottom:8px; }
+  .cover-period { font-size:9pt; color:var(--gold2); letter-spacing:.08em; margin-bottom:56px; }
+  .cover-url { font-size:7.5pt; color:rgba(255,255,255,.3); letter-spacing:.12em; text-transform:uppercase; }
+
+  /* ── Typography ───────────────────────── */
+  .serif { font-family:'Playfair Display',Georgia,serif; }
+  h1.section { font-family:'Playfair Display',Georgia,serif; font-size:18pt; font-weight:700; color:var(--ink); margin-bottom:6px; line-height:1.2; }
+  h2.period { font-family:'Playfair Display',Georgia,serif; font-size:11pt; font-weight:600; color:var(--ink); margin:22px 0 8px; line-height:1.3; }
+  .period-meta { font-size:7.5pt; color:var(--ink3); letter-spacing:.06em; text-transform:uppercase; margin-bottom:12px; }
+  .gold-rule { width:40px; height:2px; background:var(--gold); margin:10px 0 20px; }
+  p { margin-bottom:13px; }
+  .lede { font-size:11.5pt; color:var(--ink); line-height:1.8; margin-bottom:20px; font-style:italic; font-family:'Playfair Display',serif; }
+
+  /* ── Pull quote / annotation ─────────── */
+  .annotation {
+    border-left: 2px solid var(--gold);
+    padding: 10px 16px;
+    margin: 16px 0;
+    font-size: 9pt;
+    color: var(--ink3);
+    line-height: 1.6;
+    background: var(--bg);
+  }
+  .annotation strong { color: var(--ink2); font-weight:600; display:block; margin-bottom:4px; font-size:8pt; letter-spacing:.04em; text-transform:uppercase; }
+
+  /* ── Status cards ─────────────────────── */
+  .card-good { background:var(--green-bg); border-left:3px solid var(--green); padding:14px 18px; border-radius:3px; margin:14px 0; }
+  .card-hard { background:var(--red-bg);   border-left:3px solid var(--red);   padding:14px 18px; border-radius:3px; margin:14px 0; }
+  .card-mod  { background:var(--amber-bg); border-left:3px solid var(--amber); padding:14px 18px; border-radius:3px; margin:14px 0; }
+  .card-label { font-size:7.5pt; font-weight:600; letter-spacing:.08em; text-transform:uppercase; margin-bottom:6px; }
+  .card-good .card-label { color:var(--green); }
+  .card-hard .card-label { color:var(--red); }
+  .card-mod  .card-label { color:var(--amber); }
+
+  /* ── Year timeline ────────────────────── */
+  .timeline { margin:20px 0; }
+  .timeline-row { display:flex; align-items:center; gap:10px; margin-bottom:6px; font-size:9pt; }
+  .timeline-year { width:36px; font-weight:600; color:var(--ink); flex-shrink:0; }
+  .timeline-bar-wrap { flex:1; height:16px; background:#F0EDEA; border-radius:2px; overflow:hidden; }
+  .timeline-bar { height:100%; border-radius:2px; }
+  .bar-good  { background:var(--green); }
+  .bar-hard  { background:var(--red); }
+  .bar-mod   { background:#D97706; }
+  .bar-mix   { background:#9CA3AF; }
+  .timeline-label { font-size:8pt; color:var(--ink3); width:120px; flex-shrink:0; }
+
+  /* ── About page ───────────────────────── */
+  .about-block { background:var(--bg); border:1px solid var(--line); border-radius:4px; padding:20px 22px; margin-bottom:18px; }
+  .about-label { font-size:7.5pt; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--gold); margin-bottom:8px; }
+
+  /* ── Final word ───────────────────────── */
+  .final-om { font-size:28pt; color:var(--gold); text-align:center; margin:32px 0 8px; }
+  .final-quote { text-align:center; font-family:'Playfair Display',serif; font-size:13pt; font-style:italic; color:var(--ink); line-height:1.7; margin-bottom:28px; max-width:340px; margin-left:auto; margin-right:auto; }
+
+  @media print {
+    .page { page-break-after: always; }
+    .page:last-child { page-break-after: auto; }
+    .no-print { display:none; }
+    body { -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ══ COVER ══════════════════════════════════════════════════════════ -->
+<div class="cover-page page" id="p-cover">
+  <div class="cover-om">ॐ</div>
+  <div class="cover-brand">VedicHora</div>
+  <div class="cover-tagline">Your Past, Present &amp; Future Decoded Through the Stars</div>
+  <div class="cover-title">Compatibility<br>Prediction Report</div>
+  <div class="cover-subtitle">World's Most Accurate Vedic Astrology Predictions</div>
+  <div class="cover-rule"></div>
+  <div style="font-size:8pt;color:rgba(255,255,255,.4);letter-spacing:.08em;text-transform:uppercase;margin-bottom:10px;">Prepared for</div>
+  <div class="cover-names" id="cv-names">Person 1 &amp; Person 2</div>
+  <div class="cover-period" id="cv-period">2025 – 2035</div>
+  <div class="cover-url">www.vedichora.com</div>
+</div>
+
+<!-- ══ PAGE 2: ABOUT ═══════════════════════════════════════════════════ -->
+<div class="page" id="p-about">
+  <div class="hdr"><span class="hdr-logo">ॐ VedicHora · Compatibility Prediction</span><span>www.vedichora.com · Compatibility Prediction · Page 2</span></div>
+
+  <div style="text-align:center;margin-bottom:32px;">
+    <div style="font-size:7.5pt;color:var(--gold);letter-spacing:.12em;text-transform:uppercase;margin-bottom:10px;">ॐ</div>
+    <h1 class="section">About VedicHora</h1>
+    <div class="gold-rule" style="margin:10px auto 0;"></div>
+  </div>
+
+  <div class="about-block">
+    <div class="about-label">Who We Are</div>
+    <p>VedicHora was built on one conviction: that the ancient science of Vedic astrology, when applied with mathematical precision and classical rigour, can illuminate the forces shaping a life with an accuracy that no other tradition matches. Every reading is computed from the exact moment and place of birth — not approximated, not generalised.</p>
+  </div>
+
+  <div class="about-block">
+    <div class="about-label">What This Report Covers</div>
+    <p>This report examines how the forces shaping each of your lives interact with each other across the period shown on the cover. It identifies the windows when both of you are moving in compatible directions — and the windows when specific energies create friction. Every observation is drawn directly from your birth data.</p>
+  </div>
+
+  <div class="about-block">
+    <div class="about-label">How to Read This Report</div>
+    <p>The report begins with a profile of each person — who they are and what forces drive them. It then describes how those forces interact, followed by a precise year-by-year account of when those interactions are easy, demanding, or somewhere in between. The final section identifies the most significant windows ahead.</p>
+    <p>The difficult periods described here are real — but they are also specific and finite. They pass. Knowing about them in advance is what allows them to be navigated rather than endured.</p>
+  </div>
+  <div class="ftr"><span>ॐ VedicHora · www.vedichora.com</span><span>World's Most Accurate Vedic Astrology Predictions</span></div>
+</div>
+
+<!-- ══ PAGE 3: PERSON 1 PROFILE ════════════════════════════════════════ -->
+<div class="page" id="p-p1">
+  <div class="hdr"><span class="hdr-logo">ॐ VedicHora · Compatibility Prediction</span><span>www.vedichora.com · Compatibility Prediction · Page 3</span></div>
+  <div style="text-align:center;margin-bottom:10px;font-size:8pt;color:var(--gold);letter-spacing:.1em;">ॐ</div>
+  <h1 class="section" id="p1-heading">The Male — Builder, Protector, and Quiet Force</h1>
+  <div class="gold-rule"></div>
+  <div class="lede" id="p1-lede"></div>
+  <div id="p1-body"></div>
+  <div class="ftr"><span>ॐ VedicHora · www.vedichora.com</span><span>World's Most Accurate Vedic Astrology Predictions</span></div>
+</div>
+
+<!-- ══ PAGE 4: PERSON 2 PROFILE ════════════════════════════════════════ -->
+<div class="page" id="p-p2">
+  <div class="hdr"><span class="hdr-logo">ॐ VedicHora · Compatibility Prediction</span><span>www.vedichora.com · Compatibility Prediction · Page 4</span></div>
+  <div style="text-align:center;margin-bottom:10px;font-size:8pt;color:var(--gold);letter-spacing:.1em;">ॐ</div>
+  <h1 class="section" id="p2-heading">The Female — Authority, Ambition, and Inner Wisdom</h1>
+  <div class="gold-rule"></div>
+  <div class="lede" id="p2-lede"></div>
+  <div id="p2-body"></div>
+  <div class="ftr"><span>ॐ VedicHora · www.vedichora.com</span><span>World's Most Accurate Vedic Astrology Predictions</span></div>
+</div>
+
+<!-- ══ PAGE 5: HOW THEY RELATE ═════════════════════════════════════════ -->
+<div class="page" id="p-rel">
+  <div class="hdr"><span class="hdr-logo">ॐ VedicHora · Compatibility Prediction</span><span>www.vedichora.com · Compatibility Prediction · Page 5</span></div>
+  <div style="text-align:center;margin-bottom:10px;font-size:8pt;color:var(--gold);letter-spacing:.1em;">ॐ</div>
+  <h1 class="section">How These Two Lives Relate to Each Other</h1>
+  <div class="gold-rule"></div>
+  <div id="rel-body"></div>
+
+  <!-- Year summary bar -->
+  <h2 class="period" style="margin-top:28px;">Year-by-Year Overview</h2>
+  <div id="year-timeline" class="timeline"></div>
+
+  <div class="ftr"><span>ॐ VedicHora · www.vedichora.com</span><span>World's Most Accurate Vedic Astrology Predictions</span></div>
+</div>
+
+<!-- ══ PAGE 6+: PERIODS (generated dynamically) ════════════════════════ -->
+<div id="p-periods"></div>
+
+<!-- ══ FINAL PAGE ════════════════════════════════════════════════════════ -->
+<div class="page" id="p-final">
+  <div class="hdr"><span class="hdr-logo">ॐ VedicHora · Compatibility Prediction</span><span>www.vedichora.com · Compatibility Prediction · Page <span id="final-pg">—</span></span></div>
+  <div class="final-om">ॐ</div>
+  <h1 class="section" style="text-align:center;margin-bottom:16px;">A Final Word</h1>
+  <div class="gold-rule" style="margin:0 auto 28px;"></div>
+  <div class="final-quote" id="final-quote"></div>
+  <div id="final-body"></div>
+  <div class="ftr"><span>ॐ VedicHora · www.vedichora.com</span><span>World's Most Accurate Vedic Astrology Predictions</span></div>
+</div>
+
+<script>
+// ── Data injected by caller ───────────────────────────────────────────────
+const DATA = window.__VH_DATA || {};
+
+// ── Helpers ───────────────────────────────────────────────────────────────
+const $ = id => document.getElementById(id);
+const pct = (a,b) => b>0 ? Math.round(a/b*100) : 0;
+const esc = s => (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;');
+
+function paras(text) {
+  return (text||'').split(/\n\n+/).filter(Boolean).map(t => `<p>${esc(t.trim())}</p>`).join('');
+}
+
+// ── Person profiles from deep.p1Influences / p2Influences ────────────────
+function buildProfile(influences, name, gender, lagna, nakshatra, rasi) {
+  if (!influences || influences.length === 0) {
+    return `<p>Profile not available — birth data required.</p>`;
+  }
+
+  // Categorise influences
+  const strong   = influences.filter(i => i.quality >= 0.4);
+  const moderate = influences.filter(i => i.quality >= 0 && i.quality < 0.4);
+  const weak     = influences.filter(i => i.quality < 0);
+
+  // Build plain-English narrative from house + funcNature + narrative
+  const house_themes = {
+    1:'identity and self-expression', 2:'family bonds and resources',
+    3:'communication, effort, and siblings', 4:'home, emotion, and inner life',
+    5:'creativity, intelligence, and children', 6:'discipline, health, and service',
+    7:'partnership and relationships', 8:'depth, transformation, and resilience',
+    9:'wisdom, fortune, and higher purpose', 10:'career, authority, and public standing',
+    11:'ambition, networks, and long-term goals', 12:'solitude, spirituality, and release',
+  };
+
+  let html = '';
+  const strengths = strong.map(i => house_themes[i.house] || `house ${i.house}`).filter(Boolean);
+  const tensions  = weak.map(i => house_themes[i.house] || `house ${i.house}`).filter(Boolean);
+
+  if (strengths.length > 0) {
+    html += `<p>The strongest forces in this life operate in the domains of <strong>${strengths.slice(0,3).join(', ')}</strong>. `;
+    html += `These are areas of natural capacity and accumulated strength — where this person's energy flows most freely and produces lasting results.</p>`;
+  }
+
+  if (tensions.length > 0) {
+    html += `<p>There are also areas of ongoing navigation: <strong>${tensions.slice(0,2).join(' and ')}</strong>. `;
+    html += `These are not weaknesses so much as domains where the work is more deliberate — where conscious effort produces results that, for others, come more easily.</p>`;
+  }
+
+  // Relationship-domain specific
+  const has7 = influences.find(i => i.house === 7);
+  if (has7) {
+    html += `<p>In the specific domain of partnership and relationship, this life carries `;
+    html += has7.quality >= 0.3
+      ? `strong and stable energy — the capacity to commit, to sustain, and to deepen over time. Partnership is a domain of genuine strength here.`
+      : has7.quality >= 0
+      ? `moderate complexity — partnership is meaningful but requires conscious tending. The capacity is real; the effort is also real.`
+      : `significant learning. The domain of relationship is one where growth comes through experience rather than instinct, and where time and awareness matter enormously.`;
+    html += `</p>`;
+  }
+
+  return html;
+}
+
+// ── Relationship narrative ────────────────────────────────────────────────
+function buildRelNarrative(deep, name1, name2) {
+  if (!deep) return `<p>Relationship analysis requires saved chart data.</p>`;
+
+  const score  = deep.deepCompatScore ?? 0;
+  const scoreN = Math.round((score + 1) / 2 * 100);
+  const best   = deep.bestYears || [];
+  const chal   = deep.challengingYears || [];
+
+  let html = `<p>The foundational question in any pairing is whether the deepest forces shaping each life are moving in the same direction or across each other's path. In the case of ${esc(name1)} and ${esc(name2)}, the answer — derived from the precise geometry of how each person's chart intersects with the other's — is one of genuine structural alignment.</p>`;
+
+  if (scoreN >= 65) {
+    html += `<p>The overall compatibility reads at <strong>${scoreN}%</strong> — a figure that reflects not surface agreement but the way the core energies of each life relate to the core of the other's. This level of alignment is not common.</p>`;
+  } else if (scoreN >= 45) {
+    html += `<p>The overall compatibility reads at <strong>${scoreN}%</strong> — a moderate alignment that carries real foundation but also genuine areas of friction that benefit from conscious attention.</p>`;
+  } else {
+    html += `<p>The overall compatibility reads at <strong>${scoreN}%</strong> — a figure that reflects meaningful differences in how the core energies of each life tend to move. These pairings can work well with awareness; they require more deliberate navigation than high-alignment pairs.</p>`;
+  }
+
+  if (best.length > 0) {
+    const b = best[0];
+    const bs = new Date(b.startDate).getFullYear();
+    const be = new Date(b.endDate).getFullYear();
+    html += `<p>The most significant alignment window within the analysis period falls between <strong>${bs} and ${be}</strong> — a stretch where both lives are simultaneously moving through phases that reinforce rather than friction each other. The details of this window are covered in the periods section.</p>`;
+  }
+
+  if (chal.length > 0) {
+    html += `<p>There are ${chal.length} concentrated periods of friction within the range examined. These are described precisely — with their timing, their nature, and what they call for — in the sections that follow. They are real but navigable, and knowing about them in advance is itself the most useful thing this report can offer.</p>`;
+  }
+
+  return html;
+}
+
+// ── Period cards ─────────────────────────────────────────────────────────
+function buildPeriods(deep, name1, name2) {
+  if (!deep) return '';
+  const cross = (deep.crossPredictions || []).filter(p => p.intensity === 'SEVERE' || p.intensity === 'POSITIVE');
+  const sep   = deep.separationWindows || [];
+  const best  = deep.bestYears || [];
+  const chal  = deep.challengingYears || [];
+  let html = '', pageNum = 6;
+
+  // Shared difficult periods (both hard at once)
+  const shared = sep.filter(w => w.riskLevel === 'HIGH' || w.riskLevel === 'CRITICAL');
+  if (shared.length > 0) {
+    html += `<div class="page"><div class="hdr"><span class="hdr-logo">ॐ VedicHora · Compatibility Prediction</span><span>www.vedichora.com · Compatibility Prediction · Page ${pageNum++}</span></div>`;
+    html += `<div style="text-align:center;margin-bottom:10px;font-size:8pt;color:var(--gold);letter-spacing:.1em;">ॐ</div>`;
+    html += `<h1 class="section">When Both Navigate Difficulty Together</h1><div class="gold-rule"></div>`;
+    html += `<p>The following window${shared.length>1?'s are':' is'} where both individuals face demanding conditions simultaneously — not because of anything between them, but because the broader forces active in each of their lives are themselves heavy. These periods are best navigated as a shared experience rather than interpreted as dissatisfaction with each other.</p>`;
+    shared.slice(0,3).forEach(w => {
+      const ys = new Date(w.startDate).getFullYear(), ye = new Date(w.endDate).getFullYear();
+      const dur = w.durationMonths;
+      html += `<div class="card-hard">
+        <div class="card-label">${ys === ye ? ys : `${ys}–${ye}`} · Shared Demanding Phase · ${w.riskLevel}</div>
+        <h2 class="period" style="margin:6px 0 8px;">What Is Happening</h2>
+        <p>${esc(w.description || 'Both individuals are simultaneously in challenging phases.')}</p>
+        <div class="annotation"><strong>Duration</strong>Approximately ${Math.round(dur)} months. Demanding but navigable.</div>
+      </div>`;
+    });
+    html += `<div class="ftr"><span>ॐ VedicHora · www.vedichora.com</span><span>World's Most Accurate Vedic Astrology Predictions</span></div></div>`;
+  }
+
+  // Friction periods (cross-impact SEVERE)
+  const friction = cross.filter(p => p.intensity === 'SEVERE').slice(0, 4);
+  if (friction.length > 0) {
+    html += `<div class="page"><div class="hdr"><span class="hdr-logo">ॐ VedicHora · Compatibility Prediction</span><span>www.vedichora.com · Compatibility Prediction · Page ${pageNum++}</span></div>`;
+    html += `<div style="text-align:center;margin-bottom:10px;font-size:8pt;color:var(--gold);letter-spacing:.1em;">ॐ</div>`;
+    html += `<h1 class="section">Periods Where Specific Energies Create Friction</h1><div class="gold-rule"></div>`;
+    html += `<p>These are the windows where one person's active energy, despite being positive or neutral for them personally, creates a degree of friction in a specific domain of the other's life. These windows are narrower and more specific than the shared difficult periods — and there are fewer of them than is typical in most pairings.</p>`;
+    friction.forEach(p => {
+      const ys = new Date(p.startDate).getFullYear(), ye = new Date(p.endDate).getFullYear();
+      html += `<div class="card-mod">
+        <div class="card-label">${ys === ye ? ys : `${ys}–${ye}`} · ${p.who}'s energy touches ${p.who === name1 ? name2 : name1}'s ${esc(p.domainInPartner||'private')} domain · ${p.intensity}</div>
+        <h2 class="period" style="margin:6px 0 8px;">What Is Happening</h2>
+        <p>${esc(p.fromTheirSide || '')}</p>
+        <h2 class="period" style="margin:8px 0 6px;">For ${p.who === name1 ? name2 : name1}</h2>
+        <p>${esc(p.fromPartnerSide || '')}</p>
+        <div class="annotation"><strong>Duration</strong>${ys === ye ? String(ys) : `${ys}–${ye}`}. Approximately ${Math.round((new Date(p.endDate)-new Date(p.startDate))/1000/60/60/24/30)} months.</div>
+      </div>`;
+    });
+    html += `<div class="ftr"><span>ॐ VedicHora · www.vedichora.com</span><span>World's Most Accurate Vedic Astrology Predictions</span></div></div>`;
+  }
+
+  // Alignment periods
+  const align = [...cross.filter(p => p.intensity === 'POSITIVE').slice(0,4), ...best.slice(0,3)];
+  if (align.length > 0) {
+    html += `<div class="page"><div class="hdr"><span class="hdr-logo">ॐ VedicHora · Compatibility Prediction</span><span>www.vedichora.com · Compatibility Prediction · Page ${pageNum++}</span></div>`;
+    html += `<div style="text-align:center;margin-bottom:10px;font-size:8pt;color:var(--gold);letter-spacing:.1em;">ॐ</div>`;
+    html += `<h1 class="section">Periods of Genuine Alignment</h1><div class="gold-rule"></div>`;
+    html += `<p>These are the windows when both lives are moving in compatible or mutually supportive directions. The dominant pattern of this pairing is alignment — the periods below are simply the most explicitly positive expressions of what runs throughout.</p>`;
+    const seen = new Set();
+    align.forEach(p => {
+      const ys = new Date(p.startDate).getFullYear(), ye = new Date(p.endDate).getFullYear();
+      const key = `${ys}-${ye}`;
+      if (seen.has(key)) return; seen.add(key);
+      const note = p.note || p.fromTheirSide || '';
+      html += `<div class="card-good">
+        <div class="card-label">${ys === ye ? ys : `${ys}–${ye}`} · ${p.label || 'Alignment Window'}</div>
+        <h2 class="period" style="margin:6px 0 8px;">What This Window Offers</h2>
+        <p>${esc(note.slice(0,300))}${note.length>300?'…':''}</p>
+        <div class="annotation"><strong>Duration</strong>Approximately ${Math.round((new Date(p.endDate)-new Date(p.startDate))/1000/60/60/24/30)} months.</div>
+      </div>`;
+    });
+    html += `<div class="ftr"><span>ॐ VedicHora · www.vedichora.com</span><span>World's Most Accurate Vedic Astrology Predictions</span></div></div>`;
+  }
+
+  return html;
+}
+
+// ── Year timeline ─────────────────────────────────────────────────────────
+function buildTimeline(yearSummary) {
+  if (!yearSummary || yearSummary.length === 0) return '';
+  const map = {Favourable:'bar-good', Difficult:'bar-hard', Challenging:'bar-mod', Mixed:'bar-mix'};
+  const labelMap = {Favourable:'Favourable', Difficult:'Difficult', Challenging:'Mixed/Challenging', Mixed:'Mixed'};
+  return yearSummary.map(y => `
+    <div class="timeline-row">
+      <span class="timeline-year">${y.year}</span>
+      <div class="timeline-bar-wrap" title="${esc(y.note||'')}">
+        <div class="timeline-bar ${map[y.verdict]||'bar-mix'}" style="width:100%;"></div>
+      </div>
+      <span class="timeline-label">${labelMap[y.verdict]||y.verdict}${y.isPast?' (past)':''}</span>
+    </div>`).join('');
+}
+
+// ── Main render ───────────────────────────────────────────────────────────
+(function render() {
+  const d    = DATA;
+  const deep = d.deep || {};
+  const n1   = d.name1 || 'Person 1';
+  const n2   = d.name2 || 'Person 2';
+  const from = d.fromYear || new Date().getFullYear();
+  const to   = d.toYear   || from + 12;
+  const p1i  = deep.p1Influences || [];
+  const p2i  = deep.p2Influences || [];
+  const g1   = d.gender1 || 'Male';
+  const g2   = d.gender2 || 'Female';
+
+  // Cover
+  $('cv-names').textContent  = `${n1} & ${n2}`;
+  $('cv-period').textContent = `${from} – ${to}`;
+
+  // Person 1
+  $('p1-heading').textContent = `The ${g1} — ${d.p1Headline || (g1==='Male' ? 'Builder, Protector, and Quiet Force' : 'Ambition, Clarity, and Inner Strength')}`;
+  $('p1-lede').textContent    = d.p1Lede || '';
+  $('p1-body').innerHTML      = paras(d.p1Body || '') || buildProfile(p1i, n1, g1, d.groomLagna, d.GroomNakshatra, d.GroomRasi);
+
+  // Person 2
+  $('p2-heading').textContent = `The ${g2} — ${d.p2Headline || (g2==='Female' ? 'Authority, Ambition, and Inner Wisdom' : 'Builder, Protector, and Quiet Force')}`;
+  $('p2-lede').textContent    = d.p2Lede || '';
+  $('p2-body').innerHTML      = paras(d.p2Body || '') || buildProfile(p2i, n2, g2, d.brideLagna, d.BrideNakshatra, d.BrideRasi);
+
+  // How they relate
+  $('rel-body').innerHTML   = paras(d.relBody || '') || buildRelNarrative(deep, n1, n2);
+  $('year-timeline').innerHTML = buildTimeline(deep.yearSummary);
+
+  // Period pages
+  $('p-periods').innerHTML  = buildPeriods(deep, n1, n2);
+
+  // Final word
+  $('final-quote').textContent = d.finalQuote || 'Every observation in this report is drawn from the precise forces at work in your lives. The knowledge is most useful when it is carried lightly — as context, not as verdict.';
+  $('final-body').innerHTML = paras(d.finalBody || `The picture that emerges from this analysis is one of a pairing with genuine structural depth. The forces at the core of each life are aligned in a way that is not common — and that alignment is not circumstantial. It is built into who each person is and what each person's life is oriented toward.
+
+The difficult windows described here are real and will require navigating with care. But they are few, they are specific, and they pass. The dominant pattern is one of mutual support, compatible direction, and a relationship whose best periods are not rare gifts but the natural expression of two lives oriented the same way.
+
+VedicHora exists to make this knowledge available with the precision it deserves. We hope this report serves you well.`);
+
+  $('final-pg').textContent = String(($('p-periods').querySelectorAll('.page').length) + 6);
+})();
+</script>
+
+<!-- Save as PDF button -->
+<div class="no-print" style="position:fixed;bottom:20px;right:20px;z-index:999;">
+  <button onclick="window.print()" style="background:#0F1117;color:#D4AF55;border:none;padding:12px 24px;border-radius:8px;cursor:pointer;font-family:Inter,sans-serif;font-size:13px;font-weight:600;box-shadow:0 4px 20px rgba(0,0,0,.3);">
+    ⬇ Save as PDF
+  </button>
+</div>
+
+</body>
+</html>
