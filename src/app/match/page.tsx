@@ -1036,7 +1036,10 @@ export default function MatchPage() {
                     <tbody>
                       {poruthams.map((p: any, i: number) => {
                         const pass = p.Verdict === 'Compatible' || p.pass || p.Pass
-                        const name = p.KootaName || p.name || p.Name || `Porutham ${i+1}`
+                        // Tamil porutham names in order (fallback if KootaName missing)
+                        const PATHU_NAMES = ['Dinam','Ganam','Mahendram','Sthree Dheerga','Yoni','Rasi','Rasiyathipati','Rajju']
+                        const rawName = p.KootaName || p.name || p.Name || ''
+                        const name = rawName || PATHU_NAMES[i] || `Porutham ${i+1}`
                         const isCritical = name === 'Rajju' || name === 'Vedha'
                         return (
                           <tr key={i} style={{ background: i%2 ? '#FDF6EE' : '#fff',
