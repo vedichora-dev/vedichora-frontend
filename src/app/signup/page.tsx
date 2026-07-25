@@ -27,7 +27,6 @@ export default function SignupPage() {
   const [err,      setErr]     = useState('')
   const [loading,  setLoading] = useState(false)
   const [verifyVia, setVerifyVia] = useState<'email'|'phone'>('email')
-  const turnstileRef = useRef<HTMLDivElement>(null)
 
   const api = (path: string, body: object) =>
     fetch(AUTH_URL + path, {
@@ -50,21 +49,6 @@ export default function SignupPage() {
 
     setLoading(true); setErr('')
     try {
-      // Get CAPTCHA token from Turnstile
-      let captchaToken = ''
-      if (typeof window !== 'undefined' && (window as any).turnstile) {
-        try {
-          captchaToken = await new Promise<string>((resolve, reject) => {
-            ;(window as any).turnstile.render(turnstileRef.current, {
-              sitekey: TURNSTILE_SITE_KEY,
-              callback: resolve,
-              'error-callback': reject,
-              'expired-callback': () => reject(new Error('CAPTCHA expired')),
-            })
-          })
-        } catch { /* non-blocking — server validates independently */ }
-      }
-
       // Register account
       const res  = await authRegister(email, pw, name)
       const data = res?.data?.data || res?.data
