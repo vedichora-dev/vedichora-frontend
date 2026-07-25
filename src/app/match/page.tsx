@@ -518,10 +518,12 @@ export default function MatchPage() {
       const r = result as any
       const data = {
         lang: reportLang,
-        name1: r.name1 || 'Person 1',
-        name2: r.name2 || 'Person 2',
-        dob1:  r.dob1  || '',
-        dob2:  r.dob2  || '',
+        // Names from form inputs (n1/n2) since API doesn't echo them back
+        name1: r.name1 || (typeof n1 !== 'undefined' ? n1 : '') || 'Person 1',
+        name2: r.name2 || (typeof n2 !== 'undefined' ? n2 : '') || 'Person 2',
+        // DOB from form date pickers
+        dob1: r.dob1 || (typeof d1 !== 'undefined' && d1?.yyyy ? `${d1.dd}/${d1.mm}/${d1.yyyy}` : '') || '',
+        dob2: r.dob2 || (typeof d2 !== 'undefined' && d2?.yyyy ? `${d2.dd}/${d2.mm}/${d2.yyyy}` : '') || '',
         // Ashta Koota
         AshtaKootaScore:  r.AshtaKootaScore  ?? r.ashtaKootaScore  ?? 0,
         AshtaKootaTotal:  r.AshtaKootaTotal  ?? r.ashtaKootaTotal  ?? 36,
@@ -549,12 +551,51 @@ export default function MatchPage() {
         BrideRajju:     r.BrideRajju     ?? r.brideRajju     ?? '',
         groomLagna:     r.groomLagna     ?? '',
         brideLagna:     r.brideLagna     ?? '',
-        groomNadi:      r.groomNadi      ?? '',
-        brideNadi:      r.brideNadi      ?? '',
+        groomNadi:      r.groomNadi  ?? r.GroomNadi  ?? '',
+        brideNadi:      r.brideNadi  ?? r.BrideNadi  ?? '',
+        groomLagna:     r.groomLagna ?? r.GroomLagna ?? '',
+        brideLagna:     r.brideLagna ?? r.BrideLagna ?? '',
+        groomPada:      r.groomPada  ?? r.GroomPada  ?? '',
+        bridePada:      r.bridePada  ?? r.BridePada  ?? '',
       }
 
-      // Inject data DIRECTLY into the HTML before writing to window
-      // This ensures window.__VH_DATA is set before any script runs
+      // Replace ALL {{placeholders}} directly in HTML string
+      // This works even if scripts don't execute in the popup
+      const r2 = result as any
+      const safe = (v: any) => String(v ?? '')
+      const pathuPct = data.PathuPoruthamTotal > 0
+        ? Math.round((data.PathuPoruthamScore / data.PathuPoruthamTotal) * 100) : 0
+      const ashtaPct = data.AshtaKootaTotal > 0
+        ? Math.round((data.AshtaKootaScore / data.AshtaKootaTotal) * 100) : 0
+      const doshaCount = (data.MangalDosha ? 1 : 0) + (data.VedhaPresent ? 1 : 0)
+      
+      // String replacements for all {{}} vars
+      tmpl = tmpl
+        .replaceAll('{{NAME1}}',       safe(data.name1))
+        .replaceAll('{{NAME2}}',       safe(data.name2))
+        .replaceAll('{{DOB1}}',        safe(data.dob1))
+        .replaceAll('{{DOB2}}',        safe(data.dob2))
+        .replaceAll('{{NAK1}}',        safe(data.GroomNakshatra))
+        .replaceAll('{{NAK2}}',        safe(data.BrideNakshatra))
+        .replaceAll('{{RASI1}}',       safe(data.GroomRasi))
+        .replaceAll('{{RASI2}}',       safe(data.BrideRasi))
+        .replaceAll('{{RAJJU1}}',      safe(data.GroomRajju))
+        .replaceAll('{{RAJJU2}}',      safe(data.BrideRajju))
+        .replaceAll('{{LAGNA1}}',      safe(data.groomLagna))
+        .replaceAll('{{LAGNA2}}',      safe(data.brideLagna))
+        .replaceAll('{{NADI1}}',       safe(data.groomNadi))
+        .replaceAll('{{NADI2}}',       safe(data.brideNadi))
+        .replaceAll('{{PATHU_SCORE}}', safe(data.PathuPoruthamScore))
+        .replaceAll('{{PATHU_TOTAL}}', safe(data.PathuPoruthamTotal))
+        .replaceAll('{{PATHU_PCT}}',   safe(pathuPct))
+        .replaceAll('{{ASHTA_SCORE}}', safe(data.AshtaKootaScore))
+        .replaceAll('{{ASHTA_TOTAL}}', safe(data.AshtaKootaTotal))
+        .replaceAll('{{ASHTA_PCT}}',   safe(ashtaPct))
+        .replaceAll('{{DOSHA_COUNT}}', safe(doshaCount))
+        .replaceAll('{{DOSHA_STATUS}}',doshaCount === 0 ? 'Clear' : 'Check remedies')
+        .replaceAll('{{LANG}}',        safe(reportLang))
+
+      // Also inject data for JS-rendered tables (poruthams, kootas)
       const dataScript = '<script>window.__VH_DATA = ' + JSON.stringify(data) + ';<\/script>'
       tmpl = tmpl.replace('</head>', dataScript + '</head>')
 
