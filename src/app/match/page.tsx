@@ -642,8 +642,8 @@ export default function MatchPage() {
       const data = {
         lang: reportLang,
         // Names from form inputs (n1/n2) since API doesn't echo them back
-        name1: r.name1 || gp1?.PersonName || (typeof n1 !== 'undefined' ? n1 : '') || (typeof g1 !== 'undefined' ? g1 : '') || 'Person 1',
-        name2: r.name2 || gp2?.PersonName || (typeof n2 !== 'undefined' ? n2 : '') || (typeof g2 !== 'undefined' ? g2 : '') || 'Person 2',
+        name1: (typeof n1 !== 'undefined' && n1) ? n1 : (r.name1 || gp1?.PersonName || 'Person 1'),
+        name2: (typeof n2 !== 'undefined' && n2) ? n2 : (r.name2 || gp2?.PersonName || 'Person 2'),
         // DOB from form date pickers
         dob1: r.dob1 || (typeof d1 !== 'undefined' && d1?.yyyy ? `${d1.dd}/${d1.mm}/${d1.yyyy}` : '') || '',
         dob2: r.dob2 || (typeof d2 !== 'undefined' && d2?.yyyy ? `${d2.dd}/${d2.mm}/${d2.yyyy}` : '') || '',
@@ -651,11 +651,23 @@ export default function MatchPage() {
         AshtaKootaScore:  r.AshtaKootaScore  ?? r.ashtaKootaScore  ?? 0,
         AshtaKootaTotal:  r.AshtaKootaTotal  ?? r.ashtaKootaTotal  ?? 36,
         AshtaKootaPct:    r.AshtaKootaPct    ?? r.ashtaKootaPct    ?? 0,
-        KootaDetails:     r.KootaDetails     ?? r.kootaDetails     ?? [],
+        KootaDetails:     (r.KootaDetails ?? r.kootaDetails ?? []).map((k: any) => ({
+          KootaName: k.KootaName || k.kootaName || '',
+          Score:     k.Score     ?? k.score     ?? 0,
+          MaxScore:  k.MaxScore  ?? k.maxScore  ?? 0,
+          Description: k.Description || k.description || '',
+        })),
         // Pathu Porutham
         PathuPoruthamScore: r.PathuPoruthamScore ?? r.pathuPoruthamScore ?? 0,
         PathuPoruthamTotal: r.PathuPoruthamTotal ?? r.pathuPoruthamTotal ?? 10,
-        Poruthams:          r.Poruthams ?? r.poruthams ?? [],
+        Poruthams:          (r.Poruthams ?? r.poruthams ?? []).map((p: any) => ({
+          KootaName:   p.KootaName   || p.kootaName   || '',
+          Score:       p.Score       ?? p.score       ?? 0,
+          MaxScore:    p.MaxScore    ?? p.maxScore     ?? 0,
+          Pass:        p.Pass        ?? p.pass         ?? false,
+          Verdict:     p.Verdict     || p.verdict      || '',
+          Description: p.Description || p.description  || '',
+        })),
         // Flags
         IsRecommended:    r.IsRecommended    ?? r.isRecommended    ?? false,
         RajjuPass:        r.RajjuPass        ?? r.rajjuPass        ?? true,
@@ -1195,7 +1207,7 @@ export default function MatchPage() {
                   <tbody>
                     {kuta.map((k: any, i: number) => {
                       const ks = k.Score ?? k.score ?? 0
-                      const km = k.MaxScore ?? k.maxScore ?? 1
+                      const km = k.MaxScore ?? k.maxScore ?? (ks > 0 ? ks * 2 : 1)
                       const ok = ks >= km * 0.5
                       const name = k.KootaName || k.kootaName || ''
                       return (
