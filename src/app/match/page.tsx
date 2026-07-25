@@ -343,7 +343,7 @@ function DashaMatchSection({ result, lang }: { result: any; lang: string }) {
       {/* Deep analysis — logged in + saved charts only */}
       {hasSaved && !loaded && (
         <div style={{marginBottom:'14px'}}>
-          {/* Relationship type */}
+          {/* Step 1: Relationship type */}
           <div style={{marginBottom:'10px'}}>
             <div style={{fontSize:'10px',fontWeight:700,color:'#3D0808',marginBottom:'6px'}}>
               {lang==='ta'?'உறவின் வகை:':'What is this relationship?'}
@@ -359,39 +359,63 @@ function DashaMatchSection({ result, lang }: { result: any; lang: string }) {
             </div>
           </div>
 
-          {/* Time window selector */}
-          <div style={{marginBottom:'10px'}}>
-            <div style={{fontSize:'10px',fontWeight:700,color:'#3D0808',marginBottom:'6px'}}>
-              {lang==='ta'?'எந்த காலகட்டம்?':'Which time period?'}
+          {/* Step 2: General compatibility OR specific time */}
+          <div style={{marginBottom:'10px',padding:'10px',background:'rgba(200,169,106,.08)',borderRadius:'8px',border:'1px solid #E8D8C0'}}>
+            <div style={{fontSize:'10px',fontWeight:700,color:'#3D0808',marginBottom:'8px'}}>
+              {lang==='ta'?'என்ன பார்க்க விரும்புகிறீர்கள்?':'What would you like to know?'}
             </div>
-            <div style={{display:'flex',gap:'6px',flexWrap:'wrap',marginBottom:'6px'}}>
-              {([
-                {v:'future', l: lang==='ta'?`அடுத்த 10 ஆண்டுகள் (${now}–${now+10})`:`Next 10 years (${now}–${now+10})`},
-                {v:'past',   l: lang==='ta'?`கடந்த 10 ஆண்டுகள் (${now-10}–${now})`:`Past 10 years (${now-10}–${now})`},
-                {v:'year',   l: lang==='ta'?'குறிப்பிட்ட ஆண்டு':'Specific year'},
-                {v:'full',   l: lang==='ta'?'முழு வாழ்க்கை (70 ஆண்டுகள்)':'Full lifetime (70 years) ★'},
-              ] as {v:string,l:string}[]).map(m=>(
-                <button key={m.v} onClick={()=>setMode(m.v as any)}
-                  style={{padding:'5px 12px',fontSize:'10px',borderRadius:'6px',cursor:'pointer',border:'none',
-                    background:mode===m.v?'#3D0808':'#E8D8C0',color:mode===m.v?'#C8A96A':'#3D0808',fontWeight:mode===m.v?700:400}}>
-                  {m.l}
+            <div style={{display:'flex',flexDirection:'column',gap:'6px'}}>
+              <button onClick={()=>{setMode('future');loadDeep()}} disabled={loading}
+                style={{padding:'9px 12px',background:'#3D0808',color:'#C8A96A',border:'none',borderRadius:'7px',cursor:'pointer',fontSize:'10.5px',fontWeight:700,textAlign:'left'}}>
+                🌟 {lang==='ta'?`பொது பொருத்தம் — அடுத்த 10 ஆண்டுகள் (${now}–${now+10})`:`General compatibility & next 10 years (${now}–${now+10})`}
+              </button>
+              <button onClick={()=>{setMode('past');loadDeep()}} disabled={loading}
+                style={{padding:'9px 12px',background:'#6B4C2A',color:'#FFF8F0',border:'none',borderRadius:'7px',cursor:'pointer',fontSize:'10.5px',fontWeight:700,textAlign:'left'}}>
+                📜 {lang==='ta'?`கடந்த காலம் — கடந்த 10 ஆண்டுகள் (${now-10}–${now})`:`What happened — past 10 years (${now-10}–${now})`}
+              </button>
+              <div style={{display:'flex',gap:'6px',alignItems:'center'}}>
+                <input type="number" placeholder={`Year e.g. ${now-2}`}
+                  value={askYear} onChange={e=>setAskYear(e.target.value)}
+                  style={{flex:1,padding:'7px 10px',border:'1px solid #C8A96A',borderRadius:'7px',fontSize:'11px',background:'#FFF8F0'}}/>
+                <button onClick={()=>{setMode('year');loadDeep()}} disabled={loading||!askYear}
+                  style={{padding:'7px 14px',background:askYear?'#C8A96A':'#E8D8C0',color:askYear?'#3D0808':'#9CA3AF',border:'none',borderRadius:'7px',cursor:askYear?'pointer':'default',fontSize:'10px',fontWeight:700,whiteSpace:'nowrap'}}>
+                  {lang==='ta'?'அந்த ஆண்டு →':'That year →'}
                 </button>
-              ))}
+              </div>
+              <button onClick={()=>{setMode('full');loadDeep()}} disabled={loading}
+                style={{padding:'9px 12px',background:'linear-gradient(135deg,#3D0808,#6B4C2A)',color:'#C8A96A',border:'none',borderRadius:'7px',cursor:'pointer',fontSize:'10.5px',fontWeight:700,textAlign:'left'}}>
+                ★ {lang==='ta'?'முழு வாழ்க்கை — 70 ஆண்டு அறிக்கை (பிரீமியம்)':'Full lifetime — 70-year report (Premium)'}
+              </button>
             </div>
-            {mode==='year' && (
-              <input type="number" placeholder={`e.g. ${now-3}`}
-                value={askYear} onChange={e=>setAskYear(e.target.value)}
-                style={{padding:'6px 10px',border:'1px solid #C8A96A',borderRadius:'6px',fontSize:'11px',width:'120px',background:'#FFF8F0'}}/>
-            )}
           </div>
 
-          <button onClick={loadDeep} disabled={loading}
-            style={{width:'100%',padding:'10px',background:'#3D0808',color:'#C8A96A',border:'none',borderRadius:'8px',
-              cursor:'pointer',fontFamily:'Georgia,serif',fontSize:'11px',fontWeight:700}}>
-            {loading
-              ? (lang==='ta'?'ஆராய்கிறோம்…':'Analysing compatibility…')
-              : (lang==='ta'?'ஆழமான இணக்க பகுப்பாய்வு →':'Analyse Deep Compatibility →')}
-          </button>
+          {loading && <div style={{textAlign:'center',fontSize:'11px',color:'#6B4C2A',padding:'8px'}}>
+            {lang==='ta'?'ஆராய்கிறோம்…':'Analysing compatibility…'}
+          </div>}
+        </div>
+      )}
+
+      {/* Re-run with different time window after loading */}
+      {hasSaved && loaded && (
+        <div style={{marginBottom:'10px',display:'flex',gap:'6px',flexWrap:'wrap'}}>
+          {([
+            {v:'future',l:`${now}–${now+10}`},
+            {v:'past',l:`${now-10}–${now}`},
+            {v:'full',l:'70yr ★'},
+          ] as {v:string,l:string}[]).map(m=>(
+            <button key={m.v} onClick={()=>{setMode(m.v as any);setLoaded(false);setTimeout(()=>loadDeep(),50)}}
+              style={{padding:'4px 10px',fontSize:'9px',borderRadius:'5px',cursor:'pointer',border:'none',
+                background:mode===m.v?'#3D0808':'#E8D8C0',color:mode===m.v?'#C8A96A':'#3D0808',fontWeight:mode===m.v?700:400}}>
+              {m.l}
+            </button>
+          ))}
+          <input type="number" placeholder={`Year`}
+            value={askYear} onChange={e=>setAskYear(e.target.value)}
+            style={{width:'70px',padding:'4px 6px',border:'1px solid #C8A96A',borderRadius:'5px',fontSize:'9px',background:'#FFF8F0'}}/>
+          {askYear && <button onClick={()=>{setMode('year');setLoaded(false);setTimeout(()=>loadDeep(),50)}}
+            style={{padding:'4px 10px',fontSize:'9px',borderRadius:'5px',cursor:'pointer',border:'none',background:'#C8A96A',color:'#3D0808',fontWeight:700}}>
+            Go
+          </button>}
         </div>
       )}
 
