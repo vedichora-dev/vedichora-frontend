@@ -390,6 +390,39 @@ function WesternDashaSection({
   )
 }
 
+// ── Download western PDF ──────────────────────────────────────────────────
+async function downloadWesternPdf(
+  compatResult: any, deep: any, n1: string, n2: string,
+  d1: any, d2: any, g1: string, g2: string
+) {
+  try {
+    const tmpl = await fetch('/western-report.html').then(r => r.text())
+    const now = new Date().getFullYear()
+    const data = {
+      name1: n1 || 'Person 1',
+      name2: n2 || 'Person 2',
+      gender1: g1 || 'Male',
+      gender2: g2 || 'Female',
+      dob1: d1?.yyyy ? `${d1.dd}/${d1.mm}/${d1.yyyy}` : '',
+      dob2: d2?.yyyy ? `${d2.dd}/${d2.mm}/${d2.yyyy}` : '',
+      fromYear: now,
+      toYear:   now + 12,
+      // From guest-match result
+      GroomNakshatra: compatResult?.GroomNakshatra || '',
+      BrideNakshatra: compatResult?.BrideNakshatra || '',
+      GroomRasi:      compatResult?.GroomRasi || '',
+      BrideRasi:      compatResult?.BrideRasi || '',
+      groomLagna:     deep?.groomLagna || '',
+      brideLagna:     deep?.brideLagna || '',
+      // Deep analysis
+      deep: deep || null,
+    }
+    const injected = tmpl.replace('</head>', `<script>window.__VH_DATA=${JSON.stringify(data)}<\/script></head>`)
+    const w = window.open('', '_blank')
+    if (w) { w.document.write(injected); w.document.close(); setTimeout(() => w.print(), 800) }
+  } catch(e) { console.error('PDF error', e) }
+}
+
 export default function WesternPage(){
   const [tab,setTab]=useState<Tab>('horoscope')
   const [themeKey,setThemeKey]=useState('cream')
@@ -870,6 +903,19 @@ export default function WesternPage(){
             {compatResult && (
               <div style={{marginTop:'20px'}}>
                 <WesternDashaSection compatResult={compatResult} name1={n1||'Person 1'} name2={n2||'Person 2'} scoreColor={scoreColor} />
+                {/* Download western PDF */}
+                {deep && (
+                  <div style={{textAlign:'center',marginTop:'24px'}}>
+                    <button
+                      onClick={()=>downloadWesternPdf(compatResult, deep, n1||'Person 1', n2||'Person 2', d1, d2, g1, g2)}
+                      style={{padding:'12px 28px',background:'#0F1117',color:'#D4AF55',border:'none',borderRadius:'10px',cursor:'pointer',fontFamily:"'Playfair Display',Georgia,serif",fontSize:'13px',fontWeight:600,boxShadow:'0 4px 20px rgba(0,0,0,.15)'}}>
+                      ⬇ Download Compatibility Report PDF
+                    </button>
+                    <div style={{fontSize:'11px',color:'var(--w-tx2)',marginTop:'8px'}}>
+                      Requires "Analyse Deep Compatibility" to be loaded first
+                    </div>
+                  </div>
+                )}
               </div>
             )}
 
