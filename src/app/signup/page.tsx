@@ -127,10 +127,22 @@ export default function SignupPage() {
   }
 
   const resendOtp = async () => {
+    setErr('')
+    setLoading(true)
     try {
-      if (step === 'verify-email') await api('/api/auth/otp/email/send', { email })
-      else                          await api('/api/auth/otp/send', { phone })
-    } catch { /* silent */ }
+      if (step === 'verify-email') {
+        await api('/api/auth/otp/email/send', { email })
+        setErr('✓ New code sent to ' + email + '. Check spam too.')
+      } else {
+        await api('/api/auth/otp/send', { phone })
+        setErr('✓ New code sent via SMS.')
+      }
+      setOtp('')
+    } catch (e: any) {
+      const msg = e?.message || 'Failed to resend'
+      setErr(msg.includes('Too many') ? 'Too many attempts. Please wait 10 minutes.' : msg)
+    }
+    setLoading(false)
   }
 
   const card: React.CSSProperties = { padding:'28px', display:'flex', flexDirection:'column', gap:'16px' }
@@ -277,15 +289,15 @@ export default function SignupPage() {
                 Resend code
               </button>
               <span style={{color:'var(--bd)'}}> · </span>
-              <button type="button" onClick={goToApp}
+              <button type="button" onClick={() => router.push('/signin')}
                 style={{background:'none',border:'none',cursor:'pointer',
                   fontSize:'12px',color:'var(--txm)',fontFamily:'inherit'}}>
-                Skip for now
+                Verify later — sign in
               </button>
             </div>
 
             <div style={{fontSize:'11px',color:'var(--txm)',textAlign:'center'}}>
-              Your account is active. Email verification unlocks higher limits.
+              Account created. Verify your email to unlock all features.
             </div>
           </form>
         )}
@@ -328,10 +340,10 @@ export default function SignupPage() {
                 Resend SMS
               </button>
               <span style={{color:'var(--bd)'}}> · </span>
-              <button type="button" onClick={goToApp}
+              <button type="button" onClick={() => router.push('/chart')}
                 style={{background:'none',border:'none',cursor:'pointer',
                   fontSize:'12px',color:'var(--txm)',fontFamily:'inherit'}}>
-                Skip
+                Skip phone verification
               </button>
             </div>
           </form>
