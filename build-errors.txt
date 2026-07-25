@@ -1,17 +1,17 @@
 === CURRENT e2e FILES ===
 total 80
-drwxr-xr-x  2 runner runner  4096 Jul 25 16:01 .
-drwxr-xr-x 10 runner runner  4096 Jul 25 16:01 ..
--rw-r--r--  1 runner runner  4428 Jul 25 16:01 01-auth.spec.js
--rw-r--r--  1 runner runner 13487 Jul 25 16:01 02-chart.spec.js
--rw-r--r--  1 runner runner  2851 Jul 25 16:01 03-match.spec.js
--rw-r--r--  1 runner runner  2685 Jul 25 16:01 04-horoscope.spec.js
--rw-r--r--  1 runner runner  3485 Jul 25 16:01 05-deployment.spec.js
--rw-r--r--  1 runner runner  5636 Jul 25 16:01 06-match-10.spec.js
--rw-r--r--  1 runner runner  8626 Jul 25 16:01 functional-test.spec.js
--rw-r--r--  1 runner runner  2685 Jul 25 16:01 helpers.js
--rw-r--r--  1 runner runner  3335 Jul 25 16:01 screenshot.spec.js
--rw-r--r--  1 runner runner  6794 Jul 25 16:01 tab-screenshots.spec.js
+drwxr-xr-x  2 runner runner  4096 Jul 25 16:02 .
+drwxr-xr-x 10 runner runner  4096 Jul 25 16:02 ..
+-rw-r--r--  1 runner runner  4428 Jul 25 16:02 01-auth.spec.js
+-rw-r--r--  1 runner runner 13487 Jul 25 16:02 02-chart.spec.js
+-rw-r--r--  1 runner runner  2851 Jul 25 16:02 03-match.spec.js
+-rw-r--r--  1 runner runner  2685 Jul 25 16:02 04-horoscope.spec.js
+-rw-r--r--  1 runner runner  3485 Jul 25 16:02 05-deployment.spec.js
+-rw-r--r--  1 runner runner  5636 Jul 25 16:02 06-match-10.spec.js
+-rw-r--r--  1 runner runner  8626 Jul 25 16:02 functional-test.spec.js
+-rw-r--r--  1 runner runner  2685 Jul 25 16:02 helpers.js
+-rw-r--r--  1 runner runner  3335 Jul 25 16:02 screenshot.spec.js
+-rw-r--r--  1 runner runner  6794 Jul 25 16:02 tab-screenshots.spec.js
 
 === BUILD OUTPUT ===
 > vedichora@1.0.0 build
