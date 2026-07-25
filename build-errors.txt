@@ -1,17 +1,17 @@
 === CURRENT e2e FILES ===
 total 80
-drwxr-xr-x  2 runner runner  4096 Jul 25 14:41 .
-drwxr-xr-x 10 runner runner  4096 Jul 25 14:42 ..
--rw-r--r--  1 runner runner  4428 Jul 25 14:41 01-auth.spec.js
--rw-r--r--  1 runner runner 13487 Jul 25 14:41 02-chart.spec.js
--rw-r--r--  1 runner runner  2851 Jul 25 14:41 03-match.spec.js
--rw-r--r--  1 runner runner  2685 Jul 25 14:41 04-horoscope.spec.js
--rw-r--r--  1 runner runner  3485 Jul 25 14:41 05-deployment.spec.js
--rw-r--r--  1 runner runner  5636 Jul 25 14:41 06-match-10.spec.js
--rw-r--r--  1 runner runner  8626 Jul 25 14:41 functional-test.spec.js
--rw-r--r--  1 runner runner  2685 Jul 25 14:41 helpers.js
--rw-r--r--  1 runner runner  3335 Jul 25 14:41 screenshot.spec.js
--rw-r--r--  1 runner runner  6794 Jul 25 14:41 tab-screenshots.spec.js
+drwxr-xr-x  2 runner runner  4096 Jul 25 15:16 .
+drwxr-xr-x 10 runner runner  4096 Jul 25 15:16 ..
+-rw-r--r--  1 runner runner  4428 Jul 25 15:16 01-auth.spec.js
+-rw-r--r--  1 runner runner 13487 Jul 25 15:16 02-chart.spec.js
+-rw-r--r--  1 runner runner  2851 Jul 25 15:16 03-match.spec.js
+-rw-r--r--  1 runner runner  2685 Jul 25 15:16 04-horoscope.spec.js
+-rw-r--r--  1 runner runner  3485 Jul 25 15:16 05-deployment.spec.js
+-rw-r--r--  1 runner runner  5636 Jul 25 15:16 06-match-10.spec.js
+-rw-r--r--  1 runner runner  8626 Jul 25 15:16 functional-test.spec.js
+-rw-r--r--  1 runner runner  2685 Jul 25 15:16 helpers.js
+-rw-r--r--  1 runner runner  3335 Jul 25 15:16 screenshot.spec.js
+-rw-r--r--  1 runner runner  6794 Jul 25 15:16 tab-screenshots.spec.js
 
 === BUILD OUTPUT ===
 > vedichora@1.0.0 build
@@ -33,8 +33,8 @@ https://nextjs.org/telemetry
    Linting ...
    Collecting page data ...
    Generating static pages (0/25) ...
-   Generating static pages (6/25) 
  ⚠ Entire page /checkout deopted into client-side rendering. https://nextjs.org/docs/messages/deopted-into-client-rendering /checkout
+   Generating static pages (6/25) 
    Generating static pages (12/25) 
    Generating static pages (18/25) 
  ✓ Generating static pages (25/25) 
