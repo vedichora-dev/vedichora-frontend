@@ -161,9 +161,10 @@
   </div>
 
   <!-- Rajju / critical warnings -->
-  <div id="rajju-warning" style="display:none" class="alert-box">
-    ⚠ <span id="rajju-warning-text"></span>
-  </div>
+  {{RAJJU_WARN}}
+
+    <!-- Dosha warnings -->
+  {{DOSHA_HTML}}
 
   <!-- Page 1: Pathu Porutham table -->
   <div class="sec-hd">
@@ -180,7 +181,7 @@
       <th id="th-calc">Calculation & Explanation</th>
       <th id="th-result">Result</th>
     </tr></thead>
-    <tbody id="pathu-tbody"><!-- filled by JS --></tbody>
+    <tbody id="pathu-tbody">{{PATHU_ROWS}}</tbody>
     <tfoot><tr>
       <td colspan="3" id="lbl-total">Total</td>
       <td id="pathu-total-cell"></td>
@@ -203,7 +204,7 @@
       <th id="th-status">Status</th>
       <th id="th-meaning">What it measures</th>
     </tr></thead>
-    <tbody id="ashta-tbody"><!-- filled by JS --></tbody>
+    <tbody id="ashta-tbody">{{ASHTA_ROWS}}</tbody>
     <tfoot><tr>
       <td colspan="2" id="lbl-total2">Total</td>
       <td id="ashta-total-score"></td>
