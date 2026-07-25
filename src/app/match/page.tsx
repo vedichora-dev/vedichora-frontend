@@ -642,8 +642,8 @@ export default function MatchPage() {
       const data = {
         lang: reportLang,
         // Names from form inputs (n1/n2) since API doesn't echo them back
-        name1: r.name1 || (typeof n1 !== 'undefined' ? n1 : '') || 'Person 1',
-        name2: r.name2 || (typeof n2 !== 'undefined' ? n2 : '') || 'Person 2',
+        name1: r.name1 || gp1?.PersonName || (typeof n1 !== 'undefined' ? n1 : '') || (typeof g1 !== 'undefined' ? g1 : '') || 'Person 1',
+        name2: r.name2 || gp2?.PersonName || (typeof n2 !== 'undefined' ? n2 : '') || (typeof g2 !== 'undefined' ? g2 : '') || 'Person 2',
         // DOB from form date pickers
         dob1: r.dob1 || (typeof d1 !== 'undefined' && d1?.yyyy ? `${d1.dd}/${d1.mm}/${d1.yyyy}` : '') || '',
         dob2: r.dob2 || (typeof d2 !== 'undefined' && d2?.yyyy ? `${d2.dd}/${d2.mm}/${d2.yyyy}` : '') || '',
@@ -664,6 +664,7 @@ export default function MatchPage() {
         VedhaWarning:     r.VedhaWarning     ?? r.vedhaWarning     ?? '',
         MahendramPresent: r.MahendramPresent ?? r.mahendramPresent ?? false,
         MangalDosha:      r.MangalDosha      ?? r.mangalDosha      ?? false,
+        MangalNote:       r.MangalNote       ?? r.mangalNote       ?? '',
         Summary:          r.Summary          ?? r.summary          ?? '',
         // Birth details
         GroomNakshatra: r.GroomNakshatra ?? r.groomNakshatra ?? '',
@@ -766,6 +767,7 @@ export default function MatchPage() {
 
       // Dosha section inline HTML
       const doshas: string[] = []
+      if (data.MangalDosha && data.MangalNote && !data.MangalNote.includes('cancels'))  doshas.push(L==='ta' ? '⚠️ மாங்கலிக தோஷம் — ' + data.MangalNote : '⚠️ Mangal Dosha — ' + data.MangalNote)
       if (data.VedhaPresent)  doshas.push(L==='ta' ? '⚠️ வேதை தோஷம் உளது — முகூர்த்த திருத்தம் தேவை' : '⚠️ Vedha Dosha present — Muhurtha correction required')
       if (data.MangalDosha)   doshas.push(L==='ta' ? '⚠️ மாங்கலிக தோஷம் உளது' : '⚠️ Mangal Dosha present')
       if (!data.RajjuPass)    doshas.push(L==='ta' ? '⚠️ ரஜ்ஜு பொருத்தமில்லை — திருமணம் பரிந்துரைக்கப்படவில்லை' : '⚠️ Rajju mismatch — marriage not recommended')
