@@ -627,34 +627,34 @@ function renderRemedies(poruthams) {
 function renderBirthDetails() {
   const n1 = DATA.name1 || 'Person 1';
   const n2 = DATA.name2 || 'Person 2';
-  document.getElementById('name1').textContent = n1;
-  document.getElementById('name2').textContent = n2;
-  document.getElementById('cover-names').textContent = n1 + ' & ' + n2;
-  document.getElementById('dob1').textContent = DATA.dob1 || '';
-  document.getElementById('dob2').textContent = DATA.dob2 || '';
-  document.getElementById('nak1').textContent  = DATA.GroomNakshatra || DATA.groomNakshatra || '';
-  document.getElementById('nak2').textContent  = DATA.BrideNakshatra || DATA.brideNakshatra || '';
-  document.getElementById('rasi1').textContent = DATA.GroomRasi || DATA.groomRasi || '';
-  document.getElementById('rasi2').textContent = DATA.BrideRasi || DATA.brideRasi || '';
-  document.getElementById('lagna1').textContent = DATA.groomLagna || '';
-  document.getElementById('lagna2').textContent = DATA.brideLagna || '';
-  document.getElementById('nadi1').textContent  = DATA.groomNadi || '';
-  document.getElementById('pada1').textContent = DATA.groomPada || DATA.GroomPada || '';
-  document.getElementById('pada2').textContent = DATA.bridePada || DATA.BridePada || '';
-  document.getElementById('nadi2').textContent  = DATA.brideNadi || '';
-  document.getElementById('rajju1').textContent = DATA.GroomRajju || DATA.groomRajju || '';
-  document.getElementById('rajju2').textContent = DATA.BrideRajju || DATA.brideRajju || '';
+  { const _el_name1 = document.getElementById('name1'); if(_el_name1) _el_name1.textContent = n1; }
+  { const _el_name2 = document.getElementById('name2'); if(_el_name2) _el_name2.textContent = n2; }
+  { const _el_cover_names = document.getElementById('cover-names'); if(_el_cover_names) _el_cover_names.textContent = n1 + ' & ' + n2; }
+  { const _el_dob1 = document.getElementById('dob1'); if(_el_dob1) _el_dob1.textContent = DATA.dob1 || ''; }
+  { const _el_dob2 = document.getElementById('dob2'); if(_el_dob2) _el_dob2.textContent = DATA.dob2 || ''; }
+  { const _el_nak1 = document.getElementById('nak1'); if(_el_nak1) _el_nak1.textContent = DATA.GroomNakshatra || DATA.groomNakshatra || ''; }
+  { const _el_nak2 = document.getElementById('nak2'); if(_el_nak2) _el_nak2.textContent = DATA.BrideNakshatra || DATA.brideNakshatra || ''; }
+  { const _el_rasi1 = document.getElementById('rasi1'); if(_el_rasi1) _el_rasi1.textContent = DATA.GroomRasi || DATA.groomRasi || ''; }
+  { const _el_rasi2 = document.getElementById('rasi2'); if(_el_rasi2) _el_rasi2.textContent = DATA.BrideRasi || DATA.brideRasi || ''; }
+  { const _el_lagna1 = document.getElementById('lagna1'); if(_el_lagna1) _el_lagna1.textContent = DATA.groomLagna || ''; }
+  { const _el_lagna2 = document.getElementById('lagna2'); if(_el_lagna2) _el_lagna2.textContent = DATA.brideLagna || ''; }
+  { const _el_nadi1 = document.getElementById('nadi1'); if(_el_nadi1) _el_nadi1.textContent = DATA.groomNadi || ''; }
+  { const _el_pada1 = document.getElementById('pada1'); if(_el_pada1) _el_pada1.textContent = DATA.groomPada || DATA.GroomPada || ''; }
+  { const _el_pada2 = document.getElementById('pada2'); if(_el_pada2) _el_pada2.textContent = DATA.bridePada || DATA.BridePada || ''; }
+  { const _el_nadi2 = document.getElementById('nadi2'); if(_el_nadi2) _el_nadi2.textContent = DATA.brideNadi || ''; }
+  { const _el_rajju1 = document.getElementById('rajju1'); if(_el_rajju1) _el_rajju1.textContent = DATA.GroomRajju || DATA.groomRajju || ''; }
+  { const _el_rajju2 = document.getElementById('rajju2'); if(_el_rajju2) _el_rajju2.textContent = DATA.BrideRajju || DATA.brideRajju || ''; }
   // Pada from planet positions if available
   const groomPada = DATA.groomPada || (DATA.chart1?.planets?.find(p=>p.planet==='Moon')?.nakshatraPada) || '';
   const bridePada = DATA.bridePada || (DATA.chart2?.planets?.find(p=>p.planet==='Moon')?.nakshatraPada) || '';
   const el1 = document.getElementById('pada1'); if(el1) el1.textContent = groomPada ? groomPada + '/4' : '';
   const el2 = document.getElementById('pada2'); if(el2) el2.textContent = bridePada ? bridePada + '/4' : '';
-  document.getElementById('cover-date').textContent = [DATA.dob1, DATA.dob2].filter(Boolean).join(' · ');
+  const cdEl = document.getElementById('cover-date'); if(cdEl) cdEl.textContent = [DATA.dob1, DATA.dob2].filter(Boolean).join(' · ');
 
   const warn = DATA.RajjuWarning || DATA.rajjuWarning;
   if (warn) {
-    document.getElementById('rajju-warning').style.display = '';
-    document.getElementById('rajju-warning-text').textContent = warn;
+    const rwEl = document.getElementById('rajju-warning'); if(rwEl) rwEl.style.display = '';
+    const rwtEl = document.getElementById('rajju-warning-text'); if(rwtEl) rwtEl.textContent = warn;
   }
 }
 
