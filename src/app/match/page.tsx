@@ -255,199 +255,298 @@ const PORUTHAM_MEANING_LANG: Record<string, Record<string,string>> = {
 }
 
 
-// ── VedicHora Layered Dasha Matching Section ─────────────────────────────
+// ── VedicHora Layered Matching Section ─────────────────────────────────────
+// Uses /api/matchmaking/deep — dual narrative, time window, year summary
 function DashaMatchSection({ result, lang }: { result: any; lang: string }) {
-  const [deep, setDeep] = React.useState<any>(null)
-  const [dashaYears, setDashaYears] = React.useState<any[]>([])
+  const [deep, setDeep]       = React.useState<any>(null)
   const [loading, setLoading] = React.useState(false)
-  const [loaded, setLoaded] = React.useState(false)
+  const [loaded, setLoaded]   = React.useState(false)
+  const [relType, setRelType] = React.useState('Other')
+  const [askYear, setAskYear] = React.useState('')
+  const [mode, setMode]       = React.useState<'future'|'past'|'year'|'full'>('future')
 
-  const L: Record<string,string> = {
-    en: 'VedicHora Layered Matching', ta: 'வேதிக்ஹோரா அடுக்கு பொருத்தம்', hi: 'वेदिकहोरा परतदार मिलान',
-  }
-  const title = L[lang] || L.en
+  const CHART_URL = process.env.NEXT_PUBLIC_CHART_URL || 'https://enchanting-dedication-production.up.railway.app'
 
-  const load = async () => {
-    const hid1 = result?.hid1 || result?.horoscopeId1
-    const hid2 = result?.hid2 || result?.horoscopeId2
-    if (!hid1 || !hid2) return  // only for saved charts
+  const relTypes = [
+    { v:'Marriage',   l: lang==='ta'?'திருமணம்':'Marriage' },
+    { v:'Business',   l: lang==='ta'?'தொழில்':'Business' },
+    { v:'Sibling',    l: lang==='ta'?'உடன்பிறப்பு':'Sibling' },
+    { v:'Friendship', l: lang==='ta'?'நட்பு':'Friendship' },
+    { v:'Other',      l: lang==='ta'?'பிற':'Other' },
+  ]
 
+  const hid1 = result?.hid1 || result?.horoscopeId1
+  const hid2 = result?.hid2 || result?.horoscopeId2
+
+  const loadDeep = async () => {
+    if (!hid1 || !hid2) return
     setLoading(true)
     try {
       const { chartApi } = await import('@/api/client')
-      // Call /api/compat/score for combined score + BestYears/ChallengingYears
-      const [scoreRes, syncRes] = await Promise.all([
-        chartApi.post('/api/compat/score', { HoroscopeIdA: hid1, HoroscopeIdB: hid2 }).catch(() => null),
-        chartApi.post('/api/compat/dasha-sync', { HoroscopeIdA: hid1, HoroscopeIdB: hid2 }, { params: { years: 15 } }).catch(() => null),
-      ])
-      const score = scoreRes?.data?.data ?? scoreRes?.data
-      const sync  = syncRes?.data?.data  ?? syncRes?.data
-      setDeep(score)
-      setDashaYears(sync?.years ?? [])
+      const now = new Date().getFullYear()
+      const body: any = {
+        GroomId: hid1, BrideId: hid2,
+        RelationshipType: relType,
+        GroomName: result?.name1 || 'Person 1',
+        BrideName: result?.name2 || 'Person 2',
+      }
+      if (mode === 'past')   { body.FromYear = now - 10; body.ToYear = now }
+      if (mode === 'future') { body.FromYear = now; body.ToYear = now + 10 }
+      if (mode === 'year' && askYear) { body.FromYear = parseInt(askYear); body.ToYear = parseInt(askYear) }
+      if (mode === 'full')   { body.FullRange = true }
+
+      const res = await chartApi.post('/api/matchmaking/deep', body).catch(() => null)
+      const d = res?.data?.data ?? res?.data
+      setDeep(d)
     } catch {}
-    setLoading(false)
-    setLoaded(true)
+    setLoading(false); setLoaded(true)
   }
 
-  // Score from guest-match for non-saved-chart users
-  const ashta = result?.AshtaKootaScore ?? result?.ashtaKootaScore ?? 0
-  const pathu = result?.PathuPoruthamScore ?? result?.pathuPoruthamScore ?? 0
-  const isRec = result?.IsRecommended ?? result?.isRecommended ?? false
-  const rajjuOk = result?.RajjuPass ?? result?.rajjuPass ?? true
-  const hasSavedCharts = !!(result?.hid1 || result?.horoscopeId1)
+  const ashta   = result?.AshtaKootaScore  ?? result?.ashtaKootaScore  ?? 0
+  const pathu   = result?.PathuPoruthamScore ?? result?.pathuPoruthamScore ?? 0
+  const isRec   = result?.IsRecommended ?? result?.isRecommended ?? false
+  const hasSaved = !!(hid1 && hid2)
+  const now     = new Date().getFullYear()
 
-  // Best years from deep engine OR estimate from scores
-  const bestYears: string[] = deep?.combined?.bestYears ?? []
-  const badYears: string[]  = deep?.combined?.challengingYears ?? []
-  const combined = deep?.combined
-
-  // Year-by-year table from dasha-sync
-  const now = new Date().getFullYear()
-  const syncTable = dashaYears.filter(y => y.year >= now && y.year <= now + 12)
-
-  const catColor = (cat: string) => {
-    if (!cat) return '#6B4C2A'
-    const c = cat.toUpperCase()
-    if (c.includes('EXCELLENT') || c.includes('POSITIVE') || c.includes('BOTH')) return '#15803D'
-    if (c.includes('CHALLENGING') || c.includes('DIFFICULT')) return '#DC2626'
+  const verdictColor = (v: string) => {
+    if (!v) return '#6B4C2A'
+    const u = v.toUpperCase()
+    if (u.includes('FAVOURABLE') || u.includes('POSITIVE')) return '#15803D'
+    if (u.includes('CHALLENG') || u.includes('DIFFICULT') || u.includes('CRITICAL')) return '#DC2626'
     return '#B45309'
   }
 
   return (
     <div style={{marginTop:'20px',padding:'18px',background:'linear-gradient(135deg,#FAF6F0,#FFF8F0)',border:'1.5px solid #C8A96A',borderRadius:'10px'}}>
 
-      {/* Section title */}
+      {/* Title */}
       <div style={{fontFamily:'Georgia,serif',fontSize:'12px',fontWeight:700,color:'#3D0808',marginBottom:'14px',display:'flex',alignItems:'center',gap:'8px'}}>
         <div style={{flex:1,height:'1px',background:'linear-gradient(90deg,#C8A96A,transparent)'}}/>
-        {title}
+        {lang==='ta'?'வேதிக்ஹோரா — ஆழமான இணக்கம்':'VedicHora — Deep Compatibility Analysis'}
         <div style={{flex:1,height:'1px',background:'linear-gradient(270deg,#C8A96A,transparent)'}}/>
       </div>
 
-      {/* Summary row from guest-match scores */}
+      {/* Quick score summary */}
       <div style={{display:'grid',gridTemplateColumns:'repeat(3,1fr)',gap:'8px',marginBottom:'14px'}}>
         {[
-          { label: lang==='ta'?'அஷ்டகூட':'Ashta Koota', val:`${ashta}/36`, pct:`${Math.round(ashta/36*100)}%`, ok: ashta>=21 },
-          { label: lang==='ta'?'பத்து பொருத்தம்':'Pathu Porutham', val:`${pathu}/24`, pct:`${Math.round(pathu/24*100)}%`, ok: pathu>=12 },
-          { label: lang==='ta'?'ரஜ்ஜு & வேதம்':'Rajju & Vedha', val: (isRec&&rajjuOk)?'✓ Clear':'⚠ Check', pct:'', ok: isRec&&rajjuOk },
-        ].map(({label,val,pct,ok})=>(
+          {label: lang==='ta'?'அஷ்டகூட':'Ashta Koota', val:`${ashta}/36`, ok:ashta>=21},
+          {label: lang==='ta'?'பத்து பொருத்தம்':'Pathu Porutham', val:`${pathu}/24`, ok:pathu>=12},
+          {label: lang==='ta'?'மொத்த பொருத்தம்':'Overall', val:isRec?'✓ Match':'⚠ Review', ok:isRec},
+        ].map(({label,val,ok})=>(
           <div key={label} style={{background:ok?'#F0FDF4':'#FEF9F0',border:`1px solid ${ok?'#16A34A':'#D97706'}`,borderRadius:'8px',padding:'10px',textAlign:'center'}}>
-            <div style={{fontFamily:'Georgia,serif',fontSize:'16px',fontWeight:900,color:ok?'#15803D':'#B45309'}}>{val}</div>
-            <div style={{fontSize:'8.5px',color:'#6B4C2A',textTransform:'uppercase',letterSpacing:'.06em',margin:'3px 0 1px'}}>{label}</div>
-            {pct && <div style={{fontSize:'10px',color:ok?'#15803D':'#B45309',fontWeight:700}}>{pct}</div>}
+            <div style={{fontFamily:'Georgia,serif',fontSize:'18px',fontWeight:900,color:ok?'#15803D':'#B45309'}}>{val}</div>
+            <div style={{fontSize:'8.5px',color:'#6B4C2A',textTransform:'uppercase',letterSpacing:'.05em',marginTop:'3px'}}>{label}</div>
           </div>
         ))}
       </div>
 
-      {/* For saved charts: load deep analysis */}
-      {hasSavedCharts && !loaded && (
-        <button onClick={load} disabled={loading}
-          style={{width:'100%',padding:'10px',background:'#3D0808',color:'#C8A96A',border:'none',borderRadius:'8px',cursor:'pointer',fontFamily:'Georgia,serif',fontSize:'11px',fontWeight:700,marginBottom:'12px'}}>
-          {loading
-            ? (lang==='ta'?'தசை காலங்களை ஆராய்கிறோம்…':'Analysing Dasha periods…')
-            : (lang==='ta'?'தசை பொருத்தம் & ஆழமான பகுப்பாய்வு →':'Load Full Layered Analysis (Dasha Sync + Deep) →')}
-        </button>
-      )}
-
-      {/* Deep score summary */}
-      {combined && (
-        <div style={{marginBottom:'12px',padding:'10px 12px',background:'#FFF8F0',borderRadius:'8px',border:'1px solid #E8D8C0'}}>
-          <div style={{fontFamily:'Georgia,serif',fontWeight:700,fontSize:'12px',color:'#3D0808',marginBottom:'6px'}}>
-            VedicHora Combined Score: <span style={{color:combined.score>=70?'#15803D':combined.score>=50?'#B45309':'#DC2626'}}>{combined.score}% — {combined.label}</span>
+      {/* Deep analysis — logged in + saved charts only */}
+      {hasSaved && !loaded && (
+        <div style={{marginBottom:'14px'}}>
+          {/* Relationship type */}
+          <div style={{marginBottom:'10px'}}>
+            <div style={{fontSize:'10px',fontWeight:700,color:'#3D0808',marginBottom:'6px'}}>
+              {lang==='ta'?'உறவின் வகை:':'What is this relationship?'}
+            </div>
+            <div style={{display:'flex',gap:'6px',flexWrap:'wrap'}}>
+              {relTypes.map(r=>(
+                <button key={r.v} onClick={()=>setRelType(r.v)}
+                  style={{padding:'5px 12px',fontSize:'10px',borderRadius:'6px',cursor:'pointer',border:'none',
+                    background:relType===r.v?'#3D0808':'#E8D8C0',color:relType===r.v?'#C8A96A':'#3D0808',fontWeight:relType===r.v?700:400}}>
+                  {r.l}
+                </button>
+              ))}
+            </div>
           </div>
-          {combined.mainStrengths?.length > 0 && (
-            <div style={{fontSize:'10px',color:'#15803D',marginBottom:'4px'}}>✓ {combined.mainStrengths.slice(0,3).join(' · ')}</div>
-          )}
-          {combined.mainChallenges?.length > 0 && (
-            <div style={{fontSize:'10px',color:'#DC2626'}}>⚠ {combined.mainChallenges.slice(0,2).join(' · ')}</div>
-          )}
+
+          {/* Time window selector */}
+          <div style={{marginBottom:'10px'}}>
+            <div style={{fontSize:'10px',fontWeight:700,color:'#3D0808',marginBottom:'6px'}}>
+              {lang==='ta'?'எந்த காலகட்டம்?':'Which time period?'}
+            </div>
+            <div style={{display:'flex',gap:'6px',flexWrap:'wrap',marginBottom:'6px'}}>
+              {([
+                {v:'future', l: lang==='ta'?`அடுத்த 10 ஆண்டுகள் (${now}–${now+10})`:`Next 10 years (${now}–${now+10})`},
+                {v:'past',   l: lang==='ta'?`கடந்த 10 ஆண்டுகள் (${now-10}–${now})`:`Past 10 years (${now-10}–${now})`},
+                {v:'year',   l: lang==='ta'?'குறிப்பிட்ட ஆண்டு':'Specific year'},
+                {v:'full',   l: lang==='ta'?'முழு வாழ்க்கை (70 ஆண்டுகள்)':'Full lifetime (70 years) ★'},
+              ] as {v:string,l:string}[]).map(m=>(
+                <button key={m.v} onClick={()=>setMode(m.v as any)}
+                  style={{padding:'5px 12px',fontSize:'10px',borderRadius:'6px',cursor:'pointer',border:'none',
+                    background:mode===m.v?'#3D0808':'#E8D8C0',color:mode===m.v?'#C8A96A':'#3D0808',fontWeight:mode===m.v?700:400}}>
+                  {m.l}
+                </button>
+              ))}
+            </div>
+            {mode==='year' && (
+              <input type="number" placeholder={`e.g. ${now-3}`}
+                value={askYear} onChange={e=>setAskYear(e.target.value)}
+                style={{padding:'6px 10px',border:'1px solid #C8A96A',borderRadius:'6px',fontSize:'11px',width:'120px',background:'#FFF8F0'}}/>
+            )}
+          </div>
+
+          <button onClick={loadDeep} disabled={loading}
+            style={{width:'100%',padding:'10px',background:'#3D0808',color:'#C8A96A',border:'none',borderRadius:'8px',
+              cursor:'pointer',fontFamily:'Georgia,serif',fontSize:'11px',fontWeight:700}}>
+            {loading
+              ? (lang==='ta'?'ஆராய்கிறோம்…':'Analysing compatibility…')
+              : (lang==='ta'?'ஆழமான இணக்க பகுப்பாய்வு →':'Analyse Deep Compatibility →')}
+          </button>
         </div>
       )}
 
-      {/* Best & Challenging years */}
-      {(bestYears.length > 0 || badYears.length > 0) && (
-        <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:'8px',marginBottom:'12px'}}>
-          {bestYears.length > 0 && (
-            <div style={{background:'#F0FDF4',border:'1px solid #16A34A',borderRadius:'8px',padding:'10px'}}>
-              <div style={{fontSize:'9px',fontWeight:700,color:'#15803D',textTransform:'uppercase',letterSpacing:'.06em',marginBottom:'5px'}}>
-                🌟 {lang==='ta'?'சிறந்த காலங்கள்':'Best Years'}
-              </div>
-              {bestYears.slice(0,4).map((y:string) => (
-                <div key={y} style={{fontSize:'10px',color:'#15803D',fontWeight:600}}>{y}</div>
-              ))}
-            </div>
-          )}
-          {badYears.length > 0 && (
-            <div style={{background:'#FEF2F2',border:'1px solid #FCA5A5',borderRadius:'8px',padding:'10px'}}>
-              <div style={{fontSize:'9px',fontWeight:700,color:'#DC2626',textTransform:'uppercase',letterSpacing:'.06em',marginBottom:'5px'}}>
-                ⚠ {lang==='ta'?'சவாலான காலங்கள்':'Challenging Years'}
-              </div>
-              {badYears.slice(0,4).map((y:string) => (
-                <div key={y} style={{fontSize:'10px',color:'#DC2626',fontWeight:600}}>{y}</div>
-              ))}
-            </div>
-          )}
-        </div>
-      )}
+      {/* Results */}
+      {deep && (
+        <div style={{display:'flex',flexDirection:'column',gap:'14px'}}>
 
-      {/* Year-by-year dasha sync table */}
-      {syncTable.length > 0 && (
-        <div style={{marginBottom:'12px'}}>
-          <div style={{fontSize:'10px',fontWeight:700,color:'#3D0808',marginBottom:'6px',fontFamily:'Georgia,serif'}}>
-            {lang==='ta'?'ஆண்டுவாரி தசை இணக்கம்':'Year-by-Year Dasha Compatibility'}
-          </div>
-          <div style={{overflowX:'auto'}}>
-            <table style={{width:'100%',borderCollapse:'collapse',fontSize:'9.5px'}}>
-              <thead>
-                <tr style={{background:'#3D0808'}}>
-                  {['Year','Person 1 Dasha','Person 2 Dasha','Combined','Verdict'].map(h=>(
-                    <th key={h} style={{padding:'5px 8px',color:'#C8A96A',textAlign:'left',fontFamily:'Georgia,serif',fontSize:'8px',textTransform:'uppercase'}}>{h}</th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
-                {syncTable.map((y:any,i:number) => (
-                  <tr key={y.year} style={{background:i%2?'#FDF6EE':'#fff',borderBottom:'1px solid #EDE0CC'}}>
-                    <td style={{padding:'5px 8px',fontWeight:700,color:'#3D0808'}}>{y.year}</td>
-                    <td style={{padding:'5px 8px',color:'#6B4C2A'}}>{y.personA?.dasha || y.personA?.Dasha || '—'}</td>
-                    <td style={{padding:'5px 8px',color:'#6B4C2A'}}>{y.personB?.dasha || y.personB?.Dasha || '—'}</td>
-                    <td style={{padding:'5px 8px',color:catColor(y.combined || y.combinedCategory || '')}}>
-                      {y.combined || y.combinedCategory || '—'}
-                    </td>
-                    <td style={{padding:'5px 8px',fontSize:'9px',color:catColor(y.combined||'')}}>
-                      {y.syncLabel || y.recommendation || ''}
-                    </td>
-                  </tr>
+          {/* Year timeline bar */}
+          {deep.yearSummary?.length > 0 && (
+            <div>
+              <div style={{fontSize:'10px',fontWeight:700,color:'#3D0808',marginBottom:'8px',fontFamily:'Georgia,serif'}}>
+                {deep.fromYear}–{deep.toYear} — {lang==='ta'?'ஆண்டுவாரி இணக்கம்':'Year-by-Year Compatibility'}
+              </div>
+              <div style={{display:'flex',gap:'2px',flexWrap:'wrap'}}>
+                {deep.yearSummary.map((y: any)=>(
+                  <div key={y.year} title={y.note}
+                    style={{
+                      width:'28px',height:'28px',borderRadius:'4px',display:'flex',flexDirection:'column',
+                      alignItems:'center',justifyContent:'center',cursor:'default',fontSize:'8px',fontWeight:600,
+                      background: y.verdict==='Favourable'?'#BBF7D0'
+                                : y.verdict==='Difficult'?'#FECACA'
+                                : y.verdict==='Challenging'?'#FED7AA'
+                                : '#E5E7EB',
+                      color: y.verdict==='Favourable'?'#15803D'
+                           : y.verdict==='Difficult'?'#DC2626'
+                           : y.verdict==='Challenging'?'#B45309'
+                           : '#6B7280',
+                      border: y.isPast?'1px dashed #9CA3AF':'1px solid transparent',
+                      opacity: y.isPast ? 0.7 : 1,
+                    }}>
+                    <span>{y.year.toString().slice(2)}</span>
+                  </div>
                 ))}
-              </tbody>
-            </table>
-          </div>
+              </div>
+              <div style={{display:'flex',gap:'12px',marginTop:'6px',fontSize:'8.5px',color:'#6B4C2A'}}>
+                {[['#BBF7D0','#15803D','Favourable'],['#FED7AA','#B45309','Mixed'],['#FECACA','#DC2626','Difficult']].map(([bg,c,l])=>(
+                  <div key={l} style={{display:'flex',alignItems:'center',gap:'3px'}}>
+                    <div style={{width:'10px',height:'10px',borderRadius:'2px',background:bg}}/>
+                    <span style={{color:c}}>{l}</span>
+                  </div>
+                ))}
+                <span style={{color:'#9CA3AF'}}>Dashed = past</span>
+              </div>
+            </div>
+          )}
+
+          {/* Marriage continuation (if marriage) */}
+          {(deep.p1MarriageContinuation || deep.p2MarriageContinuation) && (
+            <div style={{background:'#FFF8F0',border:'1px solid #E8D8C0',borderRadius:'8px',padding:'12px'}}>
+              <div style={{fontSize:'10px',fontWeight:700,color:'#3D0808',marginBottom:'8px',fontFamily:'Georgia,serif'}}>
+                {lang==='ta'?'திருமண ஆயுள் பலம்':'Marriage Durability'}
+              </div>
+              {[deep.p1MarriageContinuation, deep.p2MarriageContinuation].filter(Boolean).map((cont:any, i:number)=>(
+                <div key={i} style={{marginBottom:'6px',padding:'8px',background:cont.continuationScore>=0?'#F0FDF4':'#FEF2F2',borderRadius:'6px',border:`1px solid ${cont.continuationScore>=0?'#16A34A':'#FCA5A5'}`}}>
+                  <div style={{fontSize:'10px',fontWeight:600,color:cont.continuationScore>=0?'#15803D':'#DC2626'}}>
+                    {i===0?deep.groomName:deep.brideName}: {cont.outlook}
+                  </div>
+                  <div style={{fontSize:'9px',color:'#6B4C2A',marginTop:'2px'}}>
+                    {cont.seventhAfflicted && `⚠ Partnership area under pressure from ${cont.afflictingPlanets?.join(', ')}. `}
+                    {lang==='ta'?'குடும்ப பலம்':'Family bond'}: {cont.lord2Quality>=0?'Stable':'Weak'} · {lang==='ta'?'துணை இணைப்பு':'Partnership link'}: {cont.lord7Quality>=0?'Strong':'Vulnerable'}
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {/* Challenging periods */}
+          {deep.challengingYears?.length > 0 && (
+            <div style={{background:'#FEF2F2',border:'1px solid #FCA5A5',borderRadius:'8px',padding:'12px'}}>
+              <div style={{fontSize:'10px',fontWeight:700,color:'#DC2626',marginBottom:'8px'}}>
+                ⚠ {lang==='ta'?'சவாலான காலங்கள்':'Challenging Periods'}
+              </div>
+              {deep.challengingYears.slice(0,4).map((y:any,i:number)=>(
+                <div key={i} style={{marginBottom:'6px',borderBottom:'1px solid #FECACA',paddingBottom:'6px'}}>
+                  <div style={{fontSize:'10px',fontWeight:600,color:'#DC2626'}}>
+                    {new Date(y.startDate).getFullYear()}–{new Date(y.endDate).getFullYear()} · {y.label}
+                  </div>
+                  <div style={{fontSize:'9px',color:'#6B4C2A',lineHeight:1.4,marginTop:'2px'}}>{y.note?.slice(0,150)}</div>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {/* Best periods */}
+          {deep.bestYears?.length > 0 && (
+            <div style={{background:'#F0FDF4',border:'1px solid #16A34A',borderRadius:'8px',padding:'12px'}}>
+              <div style={{fontSize:'10px',fontWeight:700,color:'#15803D',marginBottom:'8px'}}>
+                🌟 {lang==='ta'?'சிறந்த காலங்கள்':'Best Periods'}
+              </div>
+              {deep.bestYears.slice(0,4).map((y:any,i:number)=>(
+                <div key={i} style={{marginBottom:'4px',fontSize:'10px',color:'#15803D',fontWeight:600}}>
+                  {new Date(y.startDate).getFullYear()}–{new Date(y.endDate).getFullYear()}: {y.note?.slice(0,100)}
+                </div>
+              ))}
+            </div>
+          )}
+
+          {/* Dual-narrative cross-predictions */}
+          {deep.crossPredictions?.filter((p:any)=>p.intensity==='SEVERE'||p.intensity==='POSITIVE').slice(0,8).map((p:any,i:number)=>(
+            <div key={i} style={{
+              border:`1px solid ${p.intensity==='POSITIVE'?'#16A34A':p.intensity==='SEVERE'?'#DC2626':'#E8D8C0'}`,
+              borderRadius:'8px',padding:'12px',
+              background:p.intensity==='POSITIVE'?'#F0FDF4':p.intensity==='SEVERE'?'#FEF2F2':'#FFF8F0'
+            }}>
+              <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:'6px'}}>
+                <div style={{fontSize:'10px',fontWeight:700,color:p.intensity==='POSITIVE'?'#15803D':'#DC2626'}}>
+                  {p.intensity==='POSITIVE'?'🌟':'⚠'} {p.yearRange} · {p.intensity}
+                  {p.isCurrent && <span style={{marginLeft:'6px',fontSize:'9px',background:'#3D0808',color:'#C8A96A',padding:'1px 5px',borderRadius:'3px'}}>NOW</span>}
+                  {p.isPast && <span style={{marginLeft:'6px',fontSize:'9px',color:'#9CA3AF'}}>(past)</span>}
+                </div>
+                <div style={{fontSize:'9px',color:'#6B4C2A'}}>{p.who}</div>
+              </div>
+              {p.fromTheirSide && (
+                <div style={{fontSize:'9.5px',color:'#374151',lineHeight:1.5,marginBottom:'4px'}}>
+                  <strong style={{color:'#3D0808'}}>{p.who}:</strong> {p.fromTheirSide}
+                </div>
+              )}
+              {p.fromPartnerSide && (
+                <div style={{fontSize:'9.5px',color:'#6B4C2A',lineHeight:1.5,fontStyle:'italic'}}>
+                  {p.fromPartnerSide}
+                </div>
+              )}
+            </div>
+          ))}
+
+          {/* Full range upsell */}
+          {!deep.isFullRange && (
+            <div style={{fontSize:'10px',color:'#6B4C2A',padding:'10px',background:'rgba(200,169,106,.1)',borderRadius:'6px',borderLeft:'3px solid #C8A96A',textAlign:'center'}}>
+              {lang==='ta'
+                ? 'முழு 70 ஆண்டு ஆழமான இணக்க அறிக்கை — பிரீமியம் திட்டம்'
+                : 'Full 70-year deep compatibility report available with Premium plan'}
+              <a href="/pricing" style={{color:'var(--acc)',fontWeight:700,marginLeft:'6px'}}>Upgrade →</a>
+            </div>
+          )}
+
+          {/* Guest sign-in prompt */}
         </div>
       )}
 
-      {/* Guest: show sign-in prompt for deep analysis */}
-      {!hasSavedCharts && (
-        <div style={{fontSize:'10px',color:'#6B4C2A',padding:'8px 10px',background:'rgba(200,169,106,.1)',borderRadius:'6px',borderLeft:'3px solid #C8A96A'}}>
+      {/* Guest: sign in prompt */}
+      {!hasSaved && (
+        <div style={{fontSize:'10px',color:'#6B4C2A',padding:'10px',background:'rgba(200,169,106,.1)',borderRadius:'6px',borderLeft:'3px solid #C8A96A'}}>
           <strong style={{color:'#3D0808'}}>
-            {lang==='ta'?'ஆழமான பகுப்பாய்வு:':'Deep Layered Analysis:'}
-          </strong>
-          {' '}{lang==='ta'
-            ? 'உள்நுழைந்து வரைபடங்களை சேமிக்கவும் — தசை ஒத்திசைவு, சிறந்த திருமண காலம், ஆண்டுவாரி பலன் காண்க.'
-            : 'Sign in and save charts to unlock Dasha Sync year-by-year, Best Marriage Window, Overlay Analysis, and AI Report.'}
-          <a href="/signin" style={{color:'var(--acc)',fontWeight:700,marginLeft:'4px',display:'inline-block',marginTop:'4px'}}>
-            Sign in →
-          </a>
-        </div>
-      )}
-
-      {/* Summary note */}
-      {result?.Summary && (
-        <div style={{marginTop:'8px',fontSize:'10px',color:'#6B4C2A',fontStyle:'italic',lineHeight:1.5,borderTop:'1px solid #E8D8C0',paddingTop:'8px'}}>
-          {result.Summary}
+            {lang==='ta'?'ஆழமான பகுப்பாய்வு:':'Deep Compatibility Analysis:'}
+          </strong>{' '}
+          {lang==='ta'
+            ? 'உள்நுழைந்து வரைபடங்களை சேமிக்கவும் — ஆண்டுவாரி இணக்கம், சிறந்த திருமண காலம், இரண்டு பக்க கதை காண்க.'
+            : 'Sign in and save charts to unlock year-by-year timeline, best periods, challenging windows, and dual perspective analysis.'}
+          <a href="/signin" style={{color:'var(--acc)',fontWeight:700,marginLeft:'4px'}}>Sign in →</a>
         </div>
       )}
     </div>
   )
 }
+
 
 export default function MatchPage() {
   const { token } = useStore()
