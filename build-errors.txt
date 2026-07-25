@@ -1,17 +1,17 @@
 === CURRENT e2e FILES ===
 total 80
-drwxr-xr-x  2 runner runner  4096 Jul 24 15:40 .
-drwxr-xr-x 10 runner runner  4096 Jul 24 15:40 ..
--rw-r--r--  1 runner runner  4428 Jul 24 15:40 01-auth.spec.js
--rw-r--r--  1 runner runner 13487 Jul 24 15:40 02-chart.spec.js
--rw-r--r--  1 runner runner  2851 Jul 24 15:40 03-match.spec.js
--rw-r--r--  1 runner runner  2685 Jul 24 15:40 04-horoscope.spec.js
--rw-r--r--  1 runner runner  3485 Jul 24 15:40 05-deployment.spec.js
--rw-r--r--  1 runner runner  5636 Jul 24 15:40 06-match-10.spec.js
--rw-r--r--  1 runner runner  8626 Jul 24 15:40 functional-test.spec.js
--rw-r--r--  1 runner runner  2685 Jul 24 15:40 helpers.js
--rw-r--r--  1 runner runner  3335 Jul 24 15:40 screenshot.spec.js
--rw-r--r--  1 runner runner  6794 Jul 24 15:40 tab-screenshots.spec.js
+drwxr-xr-x  2 runner runner  4096 Jul 25 02:30 .
+drwxr-xr-x 10 runner runner  4096 Jul 25 02:30 ..
+-rw-r--r--  1 runner runner  4428 Jul 25 02:30 01-auth.spec.js
+-rw-r--r--  1 runner runner 13487 Jul 25 02:30 02-chart.spec.js
+-rw-r--r--  1 runner runner  2851 Jul 25 02:30 03-match.spec.js
+-rw-r--r--  1 runner runner  2685 Jul 25 02:30 04-horoscope.spec.js
+-rw-r--r--  1 runner runner  3485 Jul 25 02:30 05-deployment.spec.js
+-rw-r--r--  1 runner runner  5636 Jul 25 02:30 06-match-10.spec.js
+-rw-r--r--  1 runner runner  8626 Jul 25 02:30 functional-test.spec.js
+-rw-r--r--  1 runner runner  2685 Jul 25 02:30 helpers.js
+-rw-r--r--  1 runner runner  3335 Jul 25 02:30 screenshot.spec.js
+-rw-r--r--  1 runner runner  6794 Jul 25 02:30 tab-screenshots.spec.js
 
 === BUILD OUTPUT ===
 > vedichora@1.0.0 build
@@ -60,7 +60,7 @@ Route (app)                              Size     First Load JS
 ├ ○ /remedies                            1.85 kB        83.8 kB
 ├ ○ /shop                                2.09 kB         114 kB
 ├ ○ /signin                              2.93 kB         122 kB
-├ ○ /signup                              3.29 kB         122 kB
+├ ○ /signup                              3.4 kB          122 kB
 ├ ○ /transits                            4.09 kB        86.1 kB
 ├ ○ /varshaphal                          1.89 kB         114 kB
 ├ ○ /western                             14.5 kB         103 kB
