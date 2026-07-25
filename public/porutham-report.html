@@ -358,7 +358,21 @@ const PORUTHAM_DEF = {
     ta: { name:'வேதம் (Vedha)', meaning:'தடையின்மை — கெடுதல் நட்சத்திர இணையற்ற நிலை', explanation:'சில நட்சத்திர ஜோடிகள் ஒன்றையொன்று தாக்கும் (வேதம்). மணமகள் மற்றும் மணமகனின் நட்சத்திரங்கள் வேதம் ஜோடியாக இருந்தால் தடைகள் ஏற்படும். வேதமில்லாமல் = முழு மதிப்பெண். முகூர்த்தம் மூலம் சரிசெய்யலாம்.' },
     hi: { name:'वेधा (Vedha)', meaning:'बाधा का अभाव — दोषों को दूर करता है', explanation:'कुछ नक्षत्र जोड़े एक दूसरे को पीड़ित करते हैं। बिना वेधा = पूर्ण अंक। वेधा उपस्थित = अशुभ। मुहूर्त से सुधार संभव।' },
   },
+
+  // Engine name aliases
+  'Dinam':          null, // will be resolved below
+  'Ganam':          null,
+  'Mahendram':      null,
+  'Sthree Dheerga': null,
+  'Rasiyathipati':  null,
 };
+// Resolve engine name aliases to proper definitions
+PORUTHAM_DEF['Dinam']          = PORUTHAM_DEF['Dina'];
+PORUTHAM_DEF['Ganam']          = PORUTHAM_DEF['Gana'];
+PORUTHAM_DEF['Mahendram']      = PORUTHAM_DEF['Mahendra'];
+PORUTHAM_DEF['Sthree Dheerga'] = PORUTHAM_DEF['Stree Deerga'] || PORUTHAM_DEF['Sthree Dheerga'];
+PORUTHAM_DEF['Rasiyathipati']  = PORUTHAM_DEF['Rasyadhipa'];
+
 
 // ── Ashta Koota meanings ──────────────────────────────────────────────────
 const KOOTA_DEF = {
@@ -626,6 +640,8 @@ function renderBirthDetails() {
   document.getElementById('lagna1').textContent = DATA.groomLagna || '';
   document.getElementById('lagna2').textContent = DATA.brideLagna || '';
   document.getElementById('nadi1').textContent  = DATA.groomNadi || '';
+  document.getElementById('pada1').textContent = DATA.groomPada || DATA.GroomPada || '';
+  document.getElementById('pada2').textContent = DATA.bridePada || DATA.BridePada || '';
   document.getElementById('nadi2').textContent  = DATA.brideNadi || '';
   document.getElementById('rajju1').textContent = DATA.GroomRajju || DATA.groomRajju || '';
   document.getElementById('rajju2').textContent = DATA.BrideRajju || DATA.brideRajju || '';
