@@ -152,8 +152,10 @@ export default function SignupPage() {
     <div style={{minHeight:'100vh',display:'flex',alignItems:'center',
       justifyContent:'center',padding:'20px',background:'var(--bg)'}}>
 
-      {/* Cloudflare Turnstile script */}
-      <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer />
+      {/* Cloudflare Turnstile — add NEXT_PUBLIC_TURNSTILE_SITE_KEY to Vercel env to activate */}
+      {TURNSTILE_SITE_KEY && TURNSTILE_SITE_KEY !== '1x00000000000000000000AA' && (
+        <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer />
+      )}
 
       <div style={{width:'100%',maxWidth:'420px'}}>
 
@@ -215,9 +217,11 @@ export default function SignupPage() {
               </div>
             </div>
 
-            {/* Cloudflare Turnstile CAPTCHA widget */}
-            <div ref={turnstileRef} data-sitekey={TURNSTILE_SITE_KEY}
-              className="cf-turnstile" style={{minHeight:'65px'}} />
+            {/* CAPTCHA: add NEXT_PUBLIC_TURNSTILE_SITE_KEY env var to enable */}
+            {TURNSTILE_SITE_KEY && TURNSTILE_SITE_KEY !== '1x00000000000000000000AA' && (
+              <div ref={turnstileRef} data-sitekey={TURNSTILE_SITE_KEY}
+                className="cf-turnstile" style={{minHeight:'65px'}} />
+            )}
 
             {err && (
               <div style={{fontSize:'12px',color:'var(--bad,#7A1F1F)',
