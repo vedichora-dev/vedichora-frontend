@@ -405,6 +405,8 @@ export default function WesternPage(){
   const [n2,setN2]=useState('')
   const [t1,setT1]=useState({hr:12,mi:0,ap:'AM'})
   const [t2,setT2]=useState({hr:12,mi:0,ap:'AM'})
+  const [place1,setPlace1]=useState(''); const [lat1c,setLat1c]=useState<number|undefined>(undefined); const [lng1c,setLng1c]=useState<number|undefined>(undefined)
+  const [place2,setPlace2]=useState(''); const [lat2c,setLat2c]=useState<number|undefined>(undefined); const [lng2c,setLng2c]=useState<number|undefined>(undefined)
   const [loveResult,setLoveResult]=useState<any>(null)
   const [m1,setM1]=useState<number|null>(null)
   const [m2,setM2]=useState<number|null>(null)
@@ -488,22 +490,52 @@ export default function WesternPage(){
       }
       const tm1=to24(t1.hr,t1.mi,t1.ap)
       const tm2=to24(t2.hr,t2.mi,t2.ap)
+      // Geocode places to get lat/lng/UTC offset
+      const geocode = async (place: string, lat?: number, lng?: number) => {
+        if (lat && lng) return { lat, lng, utc: 0 }
+        if (!place.trim()) return { lat: 0, lng: 0, utc: 0 }
+        try {
+          const r = await fetch('https://nominatim.openstreetmap.org/search?q='+encodeURIComponent(place)+'&format=json&limit=1',
+            { headers: {'User-Agent':'VedicHora/1.0'} })
+          const j = await r.json()
+          if (j[0]) {
+            const la=parseFloat(j[0].lat), lo=parseFloat(j[0].lon)
+            // UTC offset from longitude (rough): lng/15
+            const utc = Math.round(lo / 15 * 2) / 2
+            return { lat: la, lng: lo, utc }
+          }
+        } catch {}
+        return { lat: 0, lng: 0, utc: 0 }
+      }
+      const [geo1, geo2] = await Promise.all([
+        geocode(place1, lat1c, lng1c),
+        geocode(place2, lat2c, lng2c),
+      ])
+
       const p1 = {
         PersonName: n1 || 'Person 1',
         Year: d1.yyyy, Month: d1.mm||1, Day: d1.dd||1,
         Hour: tm1.hour, Minute: tm1.minute, Second: 0,
-        PlaceName: 'Chennai, India', UtcOffsetHours: 5.5, AyanamsaType: 'Lahiri'
+        PlaceName: place1 || 'Unknown', Latitude: geo1.lat, Longitude: geo1.lng,
+        UtcOffsetHours: geo1.utc || 0, AyanamsaType: 'Lahiri',
+        BirthTimeKnown: true,
       }
       const p2 = {
         PersonName: n2 || 'Person 2',
         Year: d2.yyyy, Month: d2.mm||1, Day: d2.dd||1,
         Hour: tm2.hour, Minute: tm2.minute, Second: 0,
-        PlaceName: 'Chennai, India', UtcOffsetHours: 5.5, AyanamsaType: 'Lahiri'
+        PlaceName: place2 || 'Unknown', Latitude: geo2.lat, Longitude: geo2.lng,
+        UtcOffsetHours: geo2.utc || 0, AyanamsaType: 'Lahiri',
+        BirthTimeKnown: true,
       }
-      // Calculate both charts via guest endpoint
+      // Calculate charts — save to DB if logged in, otherwise guest
+      const token = useStore.getState().token
+      const chartHeaders: any = { 'Content-Type': 'application/json' }
+      if (token) chartHeaders['Authorization'] = `Bearer ${token}`
+      const calcEndpoint = token ? `${CHART_URL}/api/chart/calculate` : `${CHART_URL}/api/chart/guest`
       const [r1, r2] = await Promise.all([
-        fetch(`${CHART_URL}/api/chart/guest`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(p1)}).then(r=>r.json()),
-        fetch(`${CHART_URL}/api/chart/guest`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(p2)}).then(r=>r.json()),
+        fetch(calcEndpoint, {method:'POST', headers:chartHeaders, body:JSON.stringify(p1)}).then(r=>r.json()),
+        fetch(calcEndpoint, {method:'POST', headers:chartHeaders, body:JSON.stringify(p2)}).then(r=>r.json()),
       ])
       const c1 = r1?.data?.data ?? r1?.data ?? r1
       const c2 = r2?.data?.data ?? r2?.data ?? r2
