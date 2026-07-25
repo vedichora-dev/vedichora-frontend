@@ -27,6 +27,7 @@ export default function SignupPage() {
   const [err,      setErr]     = useState('')
   const [loading,  setLoading] = useState(false)
   const [verifyVia, setVerifyVia] = useState<'email'|'phone'>('email')
+  const [alreadyExists, setAlreadyExists] = useState(false)
 
   const api = (path: string, body: object) =>
     fetch(AUTH_URL + path, {
@@ -63,8 +64,16 @@ export default function SignupPage() {
       await api('/api/auth/otp/email/send', { email })
       setStep('verify-email')
     } catch (e: any) {
-      const msg = e?.response?.data?.message || e?.message || 'Registration failed'
-      setErr(msg.includes('already') ? 'This email is already registered.' : msg)
+      const d = e?.response?.data
+      // Show first specific error from errors[] array, then message, then fallback
+      const specific = d?.errors?.[0] || d?.message || e?.message || 'Registration failed'
+      if (specific.toLowerCase().includes('already') || specific.toLowerCase().includes('registered')) {
+        setErr('This email is already registered.')
+        setAlreadyExists(true)
+      } else {
+        setErr(specific)
+        setAlreadyExists(false)
+      }
     }
     setLoading(false)
   }
@@ -171,7 +180,7 @@ export default function SignupPage() {
 
             <div>
               <label className="label">Email address *</label>
-              <input {...inp} type="email" value={email} onChange={e => setEmail(e.target.value)}
+              <input {...inp} type="email" value={email} onChange={e => { setEmail(e.target.value); setAlreadyExists(false); setErr('') }}
                 placeholder="you@example.com" />
             </div>
 
@@ -208,12 +217,16 @@ export default function SignupPage() {
             )}
 
             {err && (
-              <div style={{fontSize:'12px',color:'var(--bad,#7A1F1F)',
-                background:'rgba(122,31,31,.08)',padding:'10px',borderRadius:'8px'}}>
+              <div style={{fontSize:'12px',
+                color: err.startsWith('✓') ? '#15803D' : 'var(--bad,#7A1F1F)',
+                background: err.startsWith('✓') ? 'rgba(21,128,61,.08)' : 'rgba(122,31,31,.08)',
+                padding:'10px',borderRadius:'8px',lineHeight:1.6}}>
                 {err}
-                {err.includes('already') && (
-                  <Link href="/signin" style={{marginLeft:'4px',color:'var(--acc)',
-                    fontWeight:600,textDecoration:'none'}}>Sign in →</Link>
+                {alreadyExists && (
+                  <div style={{marginTop:'6px'}}>
+                    <Link href="/signin" style={{color:'var(--acc)',fontWeight:700,
+                      textDecoration:'none',fontSize:'13px'}}>→ Sign in with this email</Link>
+                  </div>
                 )}
               </div>
             )}
