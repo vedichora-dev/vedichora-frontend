@@ -676,6 +676,15 @@ export default function WesternPage(){
                   <div style={{flex:1}}>
                     <div style={{fontSize:'10px',color:'var(--w-tx2)',fontWeight:700,textTransform:'uppercase',letterSpacing:'.06em',marginBottom:'5px'}}>AM/PM</div>
                     <Sel value={dob.ap} onChange={v=>setDob(d=>({...d,ap:v}))} placeholder="AM/PM" w="100%" opts={[{v:'AM',l:'AM'},{v:'PM',l:'PM'}]} />
+                  {/* Place of birth */}
+                  <input value={place1} onChange={e=>setPlace1(e.target.value)}
+                    onBlur={async()=>{
+                      if(place1&&!lat1c){
+                        try{const r=await fetch('https://nominatim.openstreetmap.org/search?q='+encodeURIComponent(place1)+'&format=json&limit=1',{headers:{'User-Agent':'VedicHora/1.0'}});const j=await r.json();if(j[0]){setLat1c(+j[0].lat);setLng1c(+j[0].lon)}}catch{}
+                      }
+                    }}
+                    placeholder="Place of birth (city, country)"
+                    style={{width:'100%',padding:'8px 10px',borderRadius:'8px',border:'1.5px solid var(--w-bd)',background:'var(--w-bg)',color:'var(--w-tx)',fontSize:'13px',marginTop:'6px',boxSizing:'border-box',fontFamily:'inherit'}} />
                   </div>
                 </div>
                 <div style={{textAlign:'center'}}>{btn('Reveal My Moon Sign ✦',()=>setMoonIdx(getMoon(dob.dd,dob.mm,dob.yyyy)),!dob.dd||!dob.mm||!dob.yyyy)}</div>
@@ -765,6 +774,15 @@ export default function WesternPage(){
                       opts={[0,5,10,15,20,25,30,35,40,45,50,55].map(m=>({v:m,l:m===0?'00':String(m)}))} />
                     <Sel value={t1.ap} onChange={v=>setT1(t=>({...t,ap:v}))} placeholder="AM/PM" w="33%"
                       opts={[{v:'AM',l:'AM'},{v:'PM',l:'PM'}]} />
+                  {/* Place of birth */}
+                  <input value={place2} onChange={e=>setPlace2(e.target.value)}
+                    onBlur={async()=>{
+                      if(place2&&!lat2c){
+                        try{const r=await fetch('https://nominatim.openstreetmap.org/search?q='+encodeURIComponent(place2)+'&format=json&limit=1',{headers:{'User-Agent':'VedicHora/1.0'}});const j=await r.json();if(j[0]){setLat2c(+j[0].lat);setLng2c(+j[0].lon)}}catch{}
+                      }
+                    }}
+                    placeholder="Place of birth (city, country)"
+                    style={{width:'100%',padding:'8px 10px',borderRadius:'8px',border:'1.5px solid var(--w-bd)',background:'var(--w-bg)',color:'var(--w-tx)',fontSize:'13px',marginTop:'6px',boxSizing:'border-box',fontFamily:'inherit'}} />
                   </div>
                   <div style={{fontSize:'10px',color:'var(--w-tx2)',marginTop:'3px',marginBottom:'6px'}}>Time of birth (optional — improves accuracy)</div>
                 </div>
