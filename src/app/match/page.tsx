@@ -901,7 +901,7 @@ export default function MatchPage() {
         <div class="remedy-hd"><div class="remedy-num">3</div>${ta('Nakshatra Devata Pooja','நட்சத்திர தேவதா பூஜை')}</div>
         <div class="remedy-body">
           <ul>
-            <li><strong>${ta('Bride','மணமகள')} — ${ta('Nakshatra Devata Varuna','நட்சத்திர தேவதை வருணன்')}: </strong>${ta('Perform Varuna Abhisheka at Varuna temple or Varuna shrine. Varuna protects longevity and health. This addresses any Dinam shortfall.','வருண பகவான் கோவிலில் அல்லது வருணேஸ்வரர் சன்னதியில் அபிஷேகம் செய்யவும். திணம் பொருத்தம் இல்லாத குறையை இந்த வழிபாடு சரிசெய்யும்.')}</li>
+            <li><strong>${ta('Bride','மணமகள்')} — ${ta('Nakshatra Devata Varuna','நட்சத்திர தேவதை வருணன்')}: </strong>${ta('Perform Varuna Abhisheka at Varuna temple or Varuna shrine. Varuna protects longevity and health. This addresses any Dinam shortfall.','வருண பகவான் கோவிலில் அல்லது வருணேஸ்வரர் சன்னதியில் அபிஷேகம் செய்யவும். திணம் பொருத்தம் இல்லாத குறையை இந்த வழிபாடு சரிசெய்யும்.')}</li>
             <li><strong>${ta('Groom','மணமகன்)} — ${ta('Nakshatra Devata Pitru (Magha)','நட்சத்திர தேவதை பித்ருக்கள் (மகம்)')}: </strong>${ta('Perform Pitru Tarpana at Rameshwaram or ancestral shrine. Pitru blessings strengthen children and longevity — addresses Mahendra shortfall.','ராமேஸ்வரம் அல்லது குல கேஷேத்திரத்தில் பித்ரு தர்ப்பணம் செய்யவும். மகேந்திர பொருத்தம் இல்லாத குறை சரிசெய்யும்.')}</li>
           </ul>
         </div>
@@ -998,15 +998,18 @@ export default function MatchPage() {
       }
 
             // Also inject data for JS-rendered tables (poruthams, kootas)
-      const dataScript = '<script>window.__VH_DATA = ' + JSON.stringify(data) + ';<\/script>'
-      tmpl = tmpl.replace('</head>', dataScript + '</head>')
-
-      const win = window.open('', '_blank')
-      if (!win) { alert('Please allow popups for PDF download'); setPdfLoading(null); return }
-      win.document.write(tmpl)
-      win.document.close()
-      // Print after render
-      setTimeout(() => { try { win.print() } catch {} }, 800)
+      // data: URI avoids blank popup and JS re-injection
+      const uri = 'data:text/html;charset=utf-8,' + encodeURIComponent(tmpl)
+      const win = window.open(uri, '_blank')
+      if (!win) {
+        const blob = new Blob([tmpl], {type:'text/html;charset=utf-8'})
+        const url = URL.createObjectURL(blob)
+        const a = document.createElement('a')
+        a.href = url; a.download = 'Porutham_Report.html'
+        document.body.appendChild(a); a.click()
+        document.body.removeChild(a)
+        setTimeout(() => URL.revokeObjectURL(url), 1000)
+      }
     } catch(e) { alert('Report failed: ' + String(e)) }
     setPdfLoading(null)
   }
