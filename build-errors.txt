@@ -1,77 +1,66 @@
 === CURRENT e2e FILES ===
 total 88
-drwxr-xr-x  2 runner runner  4096 Jul 26 03:21 .
-drwxr-xr-x 11 runner runner  4096 Jul 26 03:21 ..
--rw-r--r--  1 runner runner  4428 Jul 26 03:21 01-auth.spec.js
--rw-r--r--  1 runner runner 13487 Jul 26 03:21 02-chart.spec.js
--rw-r--r--  1 runner runner  2851 Jul 26 03:21 03-match.spec.js
--rw-r--r--  1 runner runner  2685 Jul 26 03:21 04-horoscope.spec.js
--rw-r--r--  1 runner runner  3485 Jul 26 03:21 05-deployment.spec.js
--rw-r--r--  1 runner runner  5636 Jul 26 03:21 06-match-10.spec.js
--rw-r--r--  1 runner runner  4744 Jul 26 03:21 07-western.spec.js
--rw-r--r--  1 runner runner  8626 Jul 26 03:21 functional-test.spec.js
--rw-r--r--  1 runner runner  2685 Jul 26 03:21 helpers.js
--rw-r--r--  1 runner runner  3335 Jul 26 03:21 screenshot.spec.js
--rw-r--r--  1 runner runner  6794 Jul 26 03:21 tab-screenshots.spec.js
+drwxr-xr-x  2 runner runner  4096 Jul 26 03:27 .
+drwxr-xr-x 11 runner runner  4096 Jul 26 03:28 ..
+-rw-r--r--  1 runner runner  4428 Jul 26 03:27 01-auth.spec.js
+-rw-r--r--  1 runner runner 13487 Jul 26 03:27 02-chart.spec.js
+-rw-r--r--  1 runner runner  2851 Jul 26 03:27 03-match.spec.js
+-rw-r--r--  1 runner runner  2685 Jul 26 03:27 04-horoscope.spec.js
+-rw-r--r--  1 runner runner  3485 Jul 26 03:27 05-deployment.spec.js
+-rw-r--r--  1 runner runner  5636 Jul 26 03:27 06-match-10.spec.js
+-rw-r--r--  1 runner runner  4744 Jul 26 03:27 07-western.spec.js
+-rw-r--r--  1 runner runner  8626 Jul 26 03:27 functional-test.spec.js
+-rw-r--r--  1 runner runner  2685 Jul 26 03:27 helpers.js
+-rw-r--r--  1 runner runner  3335 Jul 26 03:27 screenshot.spec.js
+-rw-r--r--  1 runner runner  6794 Jul 26 03:27 tab-screenshots.spec.js
 
 === BUILD OUTPUT ===
- [2m487[0m |     '--w-tx2':theme.tx2,'--w-acc':theme.acc,'--w-gold':theme.gold,'--w-bd':theme.bd,
- [2m488[0m |   } as React.CSSProperties
- [2m489[0m | 
- [2m490[0m |   const moon=moonIdx!==null?MOON_SIGNS[moonIdx]:null
- [2m491[0m |   const compat=m1!==null&&m2!==null?getCompat(m1,m2):null
- [2m492[0m |   const ms1=m1!==null?MOON_SIGNS[m1]:null
- [2m493[0m |   const ms2=m2!==null?MOON_SIGNS[m2]:null
- [2m494[0m | 
- [2m495[0m |   const generateChart=async()=>{
- [2m496[0m |     if(!chartDay||!chartMon||!chartYr){setChartErr('Enter date of birth');return}
- [2m497[0m |     setChartLoading(true);setChartErr('');setChartResult(null)
- [2m498[0m |     try{
- [2m499[0m |       const CHART_URL='https://enchanting-dedication-production.up.railway.app'
- [2m500[0m |       // Convert 12hr to 24hr
- [2m501[0m |       let hr24=chartHr||12
- [2m502[0m |       if(chartAp==='PM'&&hr24!==12) hr24+=12
- [2m503[0m |       if(chartAp==='AM'&&hr24===12) hr24=0
- [2m504[0m |       const payload={
- [2m505[0m |         PersonName:chartName||'Guest',
- [2m506[0m |         Year:chartYr,Month:chartMon,Day:chartDay,
- [2m507[0m |         Hour:hr24,Minute:chartMi,Second:0,
- [2m508[0m |         PlaceName:chartPlace||'Chennai, India',
- [2m509[0m |         UtcOffsetHours:5.5,AyanamsaType:'Lahiri',
- [2m510[0m |       }
- [2m511[0m |       // Geocode if place entered
- [2m512[0m |       if(chartPlace){
- [2m513[0m |         try{
- [2m514[0m |           const geo=await fetch(`https://photon.komoot.io/api/?q=${encodeURIComponent(chartPlace)}&limit=1&lang=en`).then(r=>r.json())
- [2m515[0m |           const f=geo?.features?.[0]
- [2m516[0m |           if(f){(payload as any).Latitude=f.geometry.coordinates[1];(payload as any).Longitude=f.geometry.coordinates[0]}
- [2m517[0m |         }catch{}
- [2m518[0m |       }
- [2m519[0m |       const res=await fetch(`${CHART_URL}/api/chart/guest`,{
- [2m520[0m |         method:'POST',headers:{'Content-Type':'application/json'},
- [2m521[0m |         body:JSON.stringify(payload)
- [2m522[0m |       }).then(r=>r.json())
- [2m523[0m |       const data=res?.data?.data??res?.data??res
- [2m524[0m |       if(data?.ascendantName||data?.AscendantName){
- [2m525[0m |         setChartResult(data)
- [2m526[0m |       }else{
- [2m527[0m |         setChartErr(res?.message||res?.data?.message||'Chart calculation failed')
- [2m528[0m |       }
- [2m529[0m |     }catch(e:any){setChartErr(e?.message||'Connection failed')}
- [2m530[0m |     setChartLoading(false)
- [2m531[0m |   }
- [2m532[0m | 
- [2m533[0m |   // Load saved charts when logged in
- [2m534[0m |   const { token } = useStore()
-     : [33;1m          ^^|^^[0m
-     :             [33;1m`-- [33;1m`token` redefined here[0m[0m
- [2m535[0m |   useEffect(() => {
- [2m536[0m |     if (token) {
- [2m537[0m |       listCharts().then(res => {
-     `----
+
+> vedichora@1.0.0 prebuild
+> node -e "const fs=require('fs');const t=JSON.parse(fs.readFileSync('tsconfig.json','utf8'));t.exclude=['node_modules','e2e','e2e/**','playwright.config.ts','**/*.spec.ts','**/*.spec.js'];t.include=['next-env.d.ts','src/**/*.ts','src/**/*.tsx','.next/types/**/*.ts'];fs.writeFileSync('tsconfig.json',JSON.stringify(t,null,2))"
+
+
+> vedichora@1.0.0 build
+> next build
+
+⚠ No build cache found. Please configure build caching for faster rebuilds. Read more: https://nextjs.org/docs/messages/no-cache
+Attention: Next.js now collects completely anonymous telemetry regarding usage.
+This information is used to shape Next.js' roadmap and prioritize features.
+You can learn more, including how to opt-out if you'd not like to participate in this anonymous program, by visiting the following URL:
+https://nextjs.org/telemetry
+
+   ▲ Next.js 14.0.4
+   - Environments: .env.local
+
+   Creating an optimized production build ...
+   Using tsconfig file: ./tsconfig.json
+Failed to compile.
+
+./src/app/match/page.tsx
+Error: 
+  [31mx[0m Expected a semicolon
+      ,-[[36;1;4m/home/runner/work/vedichora-frontend/vedichora-frontend/src/app/match/page.tsx[0m:1014:1]
+ [2m1014[0m |     setPdfLoading(null)
+ [2m1015[0m |   }
+ [2m1016[0m | 
+ [2m1017[0m |   useEffect
+      : [31;1m  ^[0m
+      `----
+
+  [31mx[0m Expected '}', got '<eof>'
+      ,-[[36;1;4m/home/runner/work/vedichora-frontend/vedichora-frontend/src/app/match/page.tsx[0m:1014:1]
+ [2m1014[0m |     setPdfLoading(null)
+ [2m1015[0m |   }
+ [2m1016[0m | 
+ [2m1017[0m |   useEffect
+      : [31;1m  ^^^^^^^^^[0m
+      `----
+
+Caused by:
+    Syntax Error
 
 Import trace for requested module:
-./src/app/western/page.tsx
+./src/app/match/page.tsx
 
 
 > Build failed because of webpack errors
