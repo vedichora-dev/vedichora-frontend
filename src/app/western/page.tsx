@@ -577,7 +577,7 @@ export default function WesternPage(){
     setChartLoading(false)
   }
 
-  // Load saved charts when logged in (v2)
+  // Load saved charts when logged in (v3)
   useEffect(() => {
     if (token) {
       listCharts().then((res: any) => {
