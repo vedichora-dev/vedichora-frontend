@@ -533,14 +533,9 @@ export default function WesternPage(){
     setCompatLoading(true); setCompatErr(''); setLoveResult(null)
     try {
       const CHART_URL = 'https://enchanting-dedication-production.up.railway.app'
-      const to24=(hr:number,mi:number,ap:string)=>{
-        let h=hr||12
-        if(ap==='PM'&&h!==12) h+=12
-        if(ap==='AM'&&h===12) h=0
-        return {hour:h,minute:mi||0}
-      }
-      const tm1=to24(t1.hr,t1.mi,t1.ap)
-      const tm2=to24(t2.hr,t2.mi,t2.ap)
+      // DatePicker gives d1.hour, d1.minute directly (from showUnknownTime)
+      const tm1 = d1.unknownTime ? {hour:12,minute:0} : {hour:d1.hour||0,minute:d1.minute||0}
+      const tm2 = d2.unknownTime ? {hour:12,minute:0} : {hour:d2.hour||0,minute:d2.minute||0}
       // Geocode places to get lat/lng/UTC offset
       const geocode = async (place: string, lat?: number, lng?: number) => {
         if (lat && lng) return { lat, lng, utc: 0 }
@@ -803,32 +798,15 @@ export default function WesternPage(){
                 {/* Person 1 */}
                 <div>
                   <div style={{fontSize:'11px',color:'var(--w-acc)',fontWeight:700,textTransform:'uppercase',letterSpacing:'.08em',marginBottom:'12px'}}>♥ Person 1</div>
-                  <input value={n1} onChange={e=>setN1(e.target.value)} placeholder="Name (optional)"
+                  <input value={n1} onChange={e=>setN1(e.target.value)} placeholder="Name"
                     style={{width:'100%',padding:'10px 12px',borderRadius:'10px',border:'1.5px solid var(--w-bd)',background:'var(--w-bg)',color:'var(--w-tx)',fontSize:'14px',marginBottom:'8px',boxSizing:'border-box',fontFamily:'inherit',outline:'none'}} />
-                  {(['dd','mm','yyyy'] as const).map(f=>(
-                    <div key={f} style={{marginBottom:'8px'}}>
-                      <Sel value={d1[f]||''} onChange={v=>setD1(d=>({...d,[f]:+v}))} placeholder={f==='dd'?'Day':f==='mm'?'Month':'Year'} w="100%"
-                        opts={f==='dd'?DAYS.map(d=>({v:d,l:String(d)})):f==='mm'?MONTHS.map((m,i)=>({v:i+1,l:m})):YEARS_100.map(y=>({v:y,l:String(y)}))} />
-                    </div>
-                  ))}
-                  <div style={{display:'flex',gap:'6px',marginTop:'4px'}}>
-                    <Sel value={t1.hr} onChange={v=>setT1(t=>({...t,hr:+v}))} placeholder="Hr" w="34%"
-                      opts={[12,1,2,3,4,5,6,7,8,9,10,11].map(h=>({v:h,l:String(h)}))} />
-                    <Sel value={t1.mi} onChange={v=>setT1(t=>({...t,mi:+v}))} placeholder="Min" w="33%"
-                      opts={[0,5,10,15,20,25,30,35,40,45,50,55].map(m=>({v:m,l:m===0?'00':String(m)}))} />
-                    <Sel value={t1.ap} onChange={v=>setT1(t=>({...t,ap:v}))} placeholder="AM/PM" w="33%"
-                      opts={[{v:'AM',l:'AM'},{v:'PM',l:'PM'}]} />
-                  {/* Place of birth */}
-                  <input value={place2} onChange={e=>setPlace2(e.target.value)}
-                    onBlur={async()=>{
-                      if(place2&&!lat2c){
-                        try{const r=await fetch('https://nominatim.openstreetmap.org/search?q='+encodeURIComponent(place2)+'&format=json&limit=1',{headers:{'User-Agent':'VedicHora/1.0'}});const j=await r.json();if(j[0]){setLat2c(+j[0].lat);setLng2c(+j[0].lon)}}catch{}
-                      }
-                    }}
-                    placeholder="Place of birth (city, country)"
-                    style={{width:'100%',padding:'8px 10px',borderRadius:'8px',border:'1.5px solid var(--w-bd)',background:'var(--w-bg)',color:'var(--w-tx)',fontSize:'13px',marginTop:'6px',boxSizing:'border-box',fontFamily:'inherit'}} />
-                  </div>
-                  <div style={{fontSize:'10px',color:'var(--w-tx2)',marginTop:'3px',marginBottom:'6px'}}>Time of birth (optional — improves accuracy)</div>
+                  <DatePicker value={d1} onChange={setD1}
+                    showUnknownTime={true}
+                    style={{marginBottom:'8px'}} />
+                  <CityAutocomplete
+                    value={place1} onChange={setPlace1}
+                    onSelect={(p,lat,lng)=>{setPlace1(p);setLat1c(lat);setLng1c(lng)}}
+                    placeholder="Place of birth" />
                 </div>
                 <div style={{textAlign:'center',paddingTop:'60px',fontSize:'24px',color:'#EF4444'}}>♥</div>
                 {/* Person 2 */}
@@ -836,17 +814,10 @@ export default function WesternPage(){
                   <div style={{fontSize:'11px',color:'var(--w-acc)',fontWeight:700,textTransform:'uppercase',letterSpacing:'.08em',marginBottom:'12px'}}>♥ Person 2</div>
                   <input value={n2} onChange={e=>setN2(e.target.value)} placeholder="Name (optional)"
                     style={{width:'100%',padding:'10px 12px',borderRadius:'10px',border:'1.5px solid var(--w-bd)',background:'var(--w-bg)',color:'var(--w-tx)',fontSize:'14px',marginBottom:'8px',boxSizing:'border-box',fontFamily:'inherit',outline:'none'}} />
-                  {(['dd','mm','yyyy'] as const).map(f=>(
-                    <div key={f} style={{marginBottom:'8px'}}>
-                      <Sel value={d2[f]||''} onChange={v=>setD2(d=>({...d,[f]:+v}))} placeholder={f==='dd'?'Day':f==='mm'?'Month':'Year'} w="100%"
-                        opts={f==='dd'?DAYS.map(d=>({v:d,l:String(d)})):f==='mm'?MONTHS.map((m,i)=>({v:i+1,l:m})):YEARS_100.map(y=>({v:y,l:String(y)}))} />
-                    </div>
-                  ))}
-                  <div style={{display:'flex',gap:'6px',marginTop:'4px'}}>
-                    <Sel value={t2.hr} onChange={v=>setT2(t=>({...t,hr:+v}))} placeholder="Hr" w="34%"
-                      opts={[12,1,2,3,4,5,6,7,8,9,10,11].map(h=>({v:h,l:String(h)}))} />
-                    <Sel value={t2.mi} onChange={v=>setT2(t=>({...t,mi:+v}))} placeholder="Min" w="33%"
-                      opts={[0,5,10,15,20,25,30,35,40,45,50,55].map(m=>({v:m,l:m===0?'00':String(m)}))} />
+                  <DatePicker value={d2} onChange={setD2}
+                    showUnknownTime={true}
+                    style={{marginBottom:'8px'}} />
+                  <div style={{display:'none'}}>
                     <Sel value={t2.ap} onChange={v=>setT2(t=>({...t,ap:v}))} placeholder="AM/PM" w="33%"
                       opts={[{v:'AM',l:'AM'},{v:'PM',l:'PM'}]} />
                   </div>
