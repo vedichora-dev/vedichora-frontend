@@ -1,18 +1,18 @@
 === CURRENT e2e FILES ===
 total 88
-drwxr-xr-x  2 runner runner  4096 Jul 26 03:33 .
-drwxr-xr-x 11 runner runner  4096 Jul 26 03:34 ..
--rw-r--r--  1 runner runner  4428 Jul 26 03:33 01-auth.spec.js
--rw-r--r--  1 runner runner 13487 Jul 26 03:33 02-chart.spec.js
--rw-r--r--  1 runner runner  2851 Jul 26 03:33 03-match.spec.js
--rw-r--r--  1 runner runner  2685 Jul 26 03:33 04-horoscope.spec.js
--rw-r--r--  1 runner runner  3485 Jul 26 03:33 05-deployment.spec.js
--rw-r--r--  1 runner runner  5636 Jul 26 03:33 06-match-10.spec.js
--rw-r--r--  1 runner runner  4744 Jul 26 03:33 07-western.spec.js
--rw-r--r--  1 runner runner  8626 Jul 26 03:33 functional-test.spec.js
--rw-r--r--  1 runner runner  2685 Jul 26 03:33 helpers.js
--rw-r--r--  1 runner runner  3335 Jul 26 03:33 screenshot.spec.js
--rw-r--r--  1 runner runner  6794 Jul 26 03:33 tab-screenshots.spec.js
+drwxr-xr-x  2 runner runner  4096 Jul 26 03:36 .
+drwxr-xr-x 11 runner runner  4096 Jul 26 03:36 ..
+-rw-r--r--  1 runner runner  4428 Jul 26 03:36 01-auth.spec.js
+-rw-r--r--  1 runner runner 13487 Jul 26 03:36 02-chart.spec.js
+-rw-r--r--  1 runner runner  2851 Jul 26 03:36 03-match.spec.js
+-rw-r--r--  1 runner runner  2685 Jul 26 03:36 04-horoscope.spec.js
+-rw-r--r--  1 runner runner  3485 Jul 26 03:36 05-deployment.spec.js
+-rw-r--r--  1 runner runner  5636 Jul 26 03:36 06-match-10.spec.js
+-rw-r--r--  1 runner runner  4744 Jul 26 03:36 07-western.spec.js
+-rw-r--r--  1 runner runner  8626 Jul 26 03:36 functional-test.spec.js
+-rw-r--r--  1 runner runner  2685 Jul 26 03:36 helpers.js
+-rw-r--r--  1 runner runner  3335 Jul 26 03:36 screenshot.spec.js
+-rw-r--r--  1 runner runner  6794 Jul 26 03:36 tab-screenshots.spec.js
 
 === BUILD OUTPUT ===
 
@@ -38,16 +38,16 @@ Failed to compile.
 
 ./src/app/match/page.tsx
 Error: 
-  [31mx[0m Expected ',', got 'Nakshatra'
-     ,-[[36;1;4m/home/runner/work/vedichora-frontend/vedichora-frontend/src/app/match/page.tsx[0m:902:1]
- [2m902[0m |         <div class="remedy-body">
- [2m903[0m |           <ul>
- [2m904[0m |             <li><strong>${ta('Bride','மணமகள்')} — ${ta('Nakshatra Devata Varuna','நட்சத்திர தேவதை வருணன்')}: </strong>${ta('Perform Varuna Abhisheka at Varuna temple or Varuna shrine. Varuna protects longevity and health. This addresses any Dinam shortfall.','வருண பகவான் கோவிலில் அல்லது வருணேஸ்வரர் சன்னதியில் அபிஷேகம் செய்யவும். திணம் பொருத்தம் இல்லாத குறையை இந்த வழிபாடு சரிசெய்யும்.')}</li>
- [2m905[0m |             <li><strong>${ta('Groom','மணமகன்)} — ${ta('Nakshatra Devata Pitru (Magha)','நட்சத்திர தேவதை பித்ருக்கள் (மகம்)')}: </strong>${ta('Perform Pitru Tarpana at Rameshwaram or ancestral shrine. Pitru blessings strengthen children and longevity — addresses Mahendra shortfall.','ராமேஸ்வரம் அல்லது குல கேஷேத்திரத்தில் பித்ரு தர்ப்பணம் செய்யவும். மகேந்திர பொருத்தம் இல்லாத குறை சரிசெய்யும்.')}</li>
-     : [31;1m                                                                     ^^^^^^^^^[0m
- [2m906[0m |           </ul>
- [2m907[0m |         </div>
- [2m908[0m |       </div>`
+  [31mx[0m Expected '}', got 'சிறந்தவை'
+     ,-[[36;1;4m/home/runner/work/vedichora-frontend/vedichora-frontend/src/app/match/page.tsx[0m:875:1]
+ [2m875[0m |           <ul>
+ [2m876[0m |             <li><strong>${ta('Wedding Nakshatra','திருமண நட்சத்திரம்')}: </strong>${ta('Rohini, Mrigasira, Uttara Phalguni, Hasta, Swati, Anuradha, Uttara Ashadha or Revati','ரோஹிணி, மிருகசீர்ஷம், உத்திர பல்குணி, ஹஸ்தம், சுவாதி, அனுராதா, உத்திராடம் அல்லது ரேவதி')} — ${ta('especially if Shatabhisha/Magha are to be avoided','சதயம் மற்றும் மகம் நட்சத்திரங்களை தவிர்க்கவும்')}</li>
+ [2m877[0m |             <li><strong>${ta('Tara Bala','தாரா பலம்')}: </strong>${ta('Count 2nd, 4th, 6th or 8th Nakshatra from either partner','இருவரிடமிருந்தும் 2வது, 4வது, 6வது அல்லது 8வது நட்சத்திரத்தில் சந்திரன் இருக்கக்கூடாது')}</li>
+ [2m878[0m |             <li><strong>${ta('Lagna','லக்னம்')}: </strong>${ta('Female signs (Taurus, Virgo, Scorpio, Aquarius) preferred. Avoid Gemini and Pisces Lagna (8th from Leo).','பெண் ராசிகள் (ரிஷபம், கன்னி, விருச்சிகம், கும்பம்') சிறந்தவை')}</li>
+     : [31;1m                                                                                                                                                                                                                                                                                                                           ^^^^^^^^^^^^^^^^^^^^^^^^[0m
+ [2m879[0m |             <li><strong>${ta('Jupiter position','குரு நிலை')}: </strong>${ta('Jupiter in kendra (1,4,7,10) or trikona (5,9) from Muhurtha Lagna eliminates many minor doshas','முகூர்த்த லக்னத்திலிருந்து குரு கேந்திரம் (1, 4, 7, 10') அல்லது திரிகோணம் (5, 9') இல் இருக்க வேண்டும்')}</li>
+ [2m880[0m |           </ul>
+ [2m881[0m |         </div>
      `----
 
 Caused by:
