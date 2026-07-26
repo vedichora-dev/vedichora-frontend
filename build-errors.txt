@@ -1,19 +1,24 @@
 === CURRENT e2e FILES ===
 total 80
-drwxr-xr-x  2 runner runner  4096 Jul 26 01:30 .
-drwxr-xr-x 10 runner runner  4096 Jul 26 01:30 ..
--rw-r--r--  1 runner runner  4428 Jul 26 01:30 01-auth.spec.js
--rw-r--r--  1 runner runner 13487 Jul 26 01:30 02-chart.spec.js
--rw-r--r--  1 runner runner  2851 Jul 26 01:30 03-match.spec.js
--rw-r--r--  1 runner runner  2685 Jul 26 01:30 04-horoscope.spec.js
--rw-r--r--  1 runner runner  3485 Jul 26 01:30 05-deployment.spec.js
--rw-r--r--  1 runner runner  5636 Jul 26 01:30 06-match-10.spec.js
--rw-r--r--  1 runner runner  8626 Jul 26 01:30 functional-test.spec.js
--rw-r--r--  1 runner runner  2685 Jul 26 01:30 helpers.js
--rw-r--r--  1 runner runner  3335 Jul 26 01:30 screenshot.spec.js
--rw-r--r--  1 runner runner  6794 Jul 26 01:30 tab-screenshots.spec.js
+drwxr-xr-x  2 runner runner  4096 Jul 26 01:42 .
+drwxr-xr-x 10 runner runner  4096 Jul 26 01:43 ..
+-rw-r--r--  1 runner runner  4428 Jul 26 01:42 01-auth.spec.js
+-rw-r--r--  1 runner runner 13487 Jul 26 01:42 02-chart.spec.js
+-rw-r--r--  1 runner runner  2851 Jul 26 01:42 03-match.spec.js
+-rw-r--r--  1 runner runner  2685 Jul 26 01:42 04-horoscope.spec.js
+-rw-r--r--  1 runner runner  3485 Jul 26 01:42 05-deployment.spec.js
+-rw-r--r--  1 runner runner  5636 Jul 26 01:42 06-match-10.spec.js
+-rw-r--r--  1 runner runner  8626 Jul 26 01:42 functional-test.spec.js
+-rw-r--r--  1 runner runner  2685 Jul 26 01:42 helpers.js
+-rw-r--r--  1 runner runner  3335 Jul 26 01:42 screenshot.spec.js
+-rw-r--r--  1 runner runner  6794 Jul 26 01:42 tab-screenshots.spec.js
 
 === BUILD OUTPUT ===
+
+> vedichora@1.0.0 prebuild
+> node -e "const fs=require('fs');const t=JSON.parse(fs.readFileSync('tsconfig.json','utf8'));t.exclude=['node_modules','e2e','e2e/**','playwright.config.ts','**/*.spec.ts','**/*.spec.js'];t.include=['next-env.d.ts','src/**/*.ts','src/**/*.tsx','.next/types/**/*.ts'];fs.writeFileSync('tsconfig.json',JSON.stringify(t,null,2))"
+
+
 > vedichora@1.0.0 build
 > next build
 
@@ -37,40 +42,31 @@ https://nextjs.org/telemetry
    Generating static pages (6/25) 
    Generating static pages (12/25) 
    Generating static pages (18/25) 
+ReferenceError: useStore is not defined
+    at y (/home/runner/work/vedichora-frontend/vedichora-frontend/.next/server/app/western/page.js:1:23865)
+    at nP (/home/runner/work/vedichora-frontend/vedichora-frontend/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:45321)
+    at n$ (/home/runner/work/vedichora-frontend/vedichora-frontend/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:61978)
+    at nE (/home/runner/work/vedichora-frontend/vedichora-frontend/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:44877)
+    at nP (/home/runner/work/vedichora-frontend/vedichora-frontend/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:45472)
+    at nP (/home/runner/work/vedichora-frontend/vedichora-frontend/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:59120)
+    at n$ (/home/runner/work/vedichora-frontend/vedichora-frontend/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:61978)
+    at nj (/home/runner/work/vedichora-frontend/vedichora-frontend/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:64628)
+    at nO (/home/runner/work/vedichora-frontend/vedichora-frontend/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:64035)
+    at n$ (/home/runner/work/vedichora-frontend/vedichora-frontend/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:62224)
+
+Error occurred prerendering page "/western". Read more: https://nextjs.org/docs/messages/prerender-error
+ReferenceError: useStore is not defined
+    at y (/home/runner/work/vedichora-frontend/vedichora-frontend/.next/server/app/western/page.js:1:23865)
+    at nP (/home/runner/work/vedichora-frontend/vedichora-frontend/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:45321)
+    at n$ (/home/runner/work/vedichora-frontend/vedichora-frontend/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:61978)
+    at nE (/home/runner/work/vedichora-frontend/vedichora-frontend/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:44877)
+    at nP (/home/runner/work/vedichora-frontend/vedichora-frontend/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:45472)
+    at nP (/home/runner/work/vedichora-frontend/vedichora-frontend/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:59120)
+    at n$ (/home/runner/work/vedichora-frontend/vedichora-frontend/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:61978)
+    at nj (/home/runner/work/vedichora-frontend/vedichora-frontend/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:64628)
+    at nO (/home/runner/work/vedichora-frontend/vedichora-frontend/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:64035)
+    at n$ (/home/runner/work/vedichora-frontend/vedichora-frontend/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:62224)
  ✓ Generating static pages (25/25) 
-   Finalizing page optimization ...
-   Collecting build traces ...
 
-Route (app)                              Size     First Load JS
-┌ ○ /                                    5.02 kB         124 kB
-├ ○ /_not-found                          869 B          82.8 kB
-├ ○ /about                               2.46 kB        84.4 kB
-├ ○ /admin                               5.37 kB         117 kB
-├ ○ /api-docs                            1.87 kB        86.8 kB
-├ ○ /chart                               20.2 kB         139 kB
-├ ○ /checkout                            5.07 kB          90 kB
-├ ○ /consult                             5.5 kB         90.4 kB
-├ ○ /dashboard                           3.37 kB         115 kB
-├ ○ /jyoti                               5.91 kB         118 kB
-├ ○ /learn                               2.52 kB        84.4 kB
-├ ○ /match                               16.2 kB         128 kB
-├ ○ /muhurta                             2.58 kB         115 kB
-├ ○ /numerology                          3.73 kB         113 kB
-├ ○ /phone-login                         2.14 kB         121 kB
-├ ○ /remedies                            1.85 kB        83.8 kB
-├ ○ /shop                                2.09 kB         114 kB
-├ ○ /signin                              2.93 kB         122 kB
-├ ○ /signup                              3.46 kB         122 kB
-├ ○ /transits                            4.09 kB          86 kB
-├ ○ /varshaphal                          1.89 kB         114 kB
-├ ○ /western                             14.5 kB         103 kB
-└ ○ /yogas                               1.78 kB        86.7 kB
-+ First Load JS shared by all            81.9 kB
-  ├ chunks/938-cac2006256170abd.js       26.7 kB
-  ├ chunks/fd9d1056-591193791e59a9f8.js  53.3 kB
-  ├ chunks/main-app-b4533ec2e702cf2a.js  220 B
-  └ chunks/webpack-39c204afb6cf78af.js   1.74 kB
-
-
-○  (Static)  prerendered as static content
-
+> Export encountered errors on following paths:
+	/western/page: /western
