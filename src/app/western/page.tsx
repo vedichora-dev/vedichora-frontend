@@ -189,7 +189,7 @@ function WesternDashaSection({
 
   // Use overlay engine deepCompatScore if available (−1 to +1 → 0 to 100)
   // Otherwise fall back to Ashta Koota + Pathu blend
-  const rawDeep = r?.deepResult?.deepCompatScore
+  const rawDeep = r?.deepResult?.deepCompatScore ?? r?.deepResult?.deepScore
   const score   = rawDeep !== undefined && rawDeep !== null
     ? Math.round((rawDeep + 1) / 2 * 100)  // −1..+1 → 0..100
     : Math.round((ashta / aTotal * 0.55 + pathu / pTotal * 0.35 + (rajjuOk ? 0.10 : 0)) * 100)
