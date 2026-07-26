@@ -864,48 +864,24 @@ export default function MatchPage() {
           return lbl ? (L==='ta' ? lbl.ta : lbl.en) : key
         }).join(', ')
 
-      const remediesHtml = `
-      <div class="remedy-card">
-        <div class="remedy-hd"><div class="remedy-num">1</div>${ta('Muhurtha Selection — Most Important Remedy','முகூர்த்த தேர்வு — மிக முக்கியமான பரிகாரம்')}</div>
-        <div class="remedy-body">
-          <p>${ta(
-            'Selecting an auspicious Muhurtha (wedding date/time) is the primary remedy. BV Raman (Ch XVIII): "Many doshas in a horoscope can be neutralised through proper Muhurtha."',
-            'சரியான திருமண முகூர்த்தம் தேர்வு செய்வதே பிரதான பரிகாரம். BV ராமன் (அத்தியாயம் XVIII): "திருமண முகூர்த்தம் மூலம் ராசிகளிலுள்ள பல தோஷங்களை நிவர்த்தி செய்யலாம்."'
-          )}</p>
-          <ul>
-            <li><strong>${ta('Wedding Nakshatra','திருமண நட்சத்திரம்')}: </strong>${ta('Rohini, Mrigasira, Uttara Phalguni, Hasta, Swati, Anuradha, Uttara Ashadha or Revati','ரோஹிணி, மிருகசீர்ஷம், உத்திர பல்குணி, ஹஸ்தம், சுவாதி, அனுராதா, உத்திராடம் அல்லது ரேவதி')} — ${ta('especially if Shatabhisha/Magha are to be avoided','சதயம் மற்றும் மகம் நட்சத்திரங்களை தவிர்க்கவும்')}</li>
-            <li><strong>${ta('Tara Bala','தாரா பலம்')}: </strong>${ta('Count 2nd, 4th, 6th or 8th Nakshatra from either partner','இருவரிடமிருந்தும் 2வது, 4வது, 6வது அல்லது 8வது நட்சத்திரத்தில் சந்திரன் இருக்கக்கூடாது')}</li>
-            <li><strong>${ta('Lagna','லக்னம்')}: </strong>${ta('Female signs (Taurus, Virgo, Scorpio, Aquarius) preferred. Avoid Gemini and Pisces Lagna (8th from Leo).','பெண் ராசிகள் (ரிஷபம், கன்னி, விருச்சிகம், கும்பம்) சிறந்தவை')}</li>
-            <li><strong>${ta('Jupiter position','குரு நிலை')}: </strong>${ta('Jupiter in kendra (1,4,7,10) or trikona (5,9) from Muhurtha Lagna eliminates many minor doshas','முகூர்த்த லக்னத்திலிருந்து குரு கேந்திரம் (1, 4, 7, 10') அல்லது திரிகோணம் (5, 9') இல் இருக்க வேண்டும்')}</li>
-          </ul>
-        </div>
-      </div>
-
-      <div class="remedy-card">
-        <div class="remedy-hd"><div class="remedy-num">2</div>${ta('Navagraha Shanti Homam','நவக்கிரக சாந்தி ஹோமம்')}</div>
-        <div class="remedy-body">
-          <p>${ta(
-            'Sun-Saturn Rasi conflict (lord relationship) may cause friction, but performing Navagraha Shanti Homam before the wedding is highly recommended.',
-            'சூரியன்-சனி ராசியதிபதி பகை விதிவிலக்கால் ரத்தாகிறது என்றாலும், முன்னெச்சரிக்கையாக திருமணத்திற்கு முன் நவக்கிரக சாந்தி ஹோமம் செய்வது மிகவும் நல்லது.'
-          )}</p>
-          <ul>
-            <li><strong>${ta('Special Ahuti','சிறப்பு ஆஹுதி')}: </strong>${ta('Separate special Ahuti for Sun (Groom\'s Rasi lord) and Saturn (Bride\'s Rasi lord)','சூரியனுக்கும் (மணமகன் ராசியதிபதி) சனிக்கும் (மணமகள் ராசியதிபதி) தனியாக சிறப்பு ஆஹுதி கொடுக்கவும்')}</li>
-            <li><strong>${ta('Best time','உத்தம நேரம்')}: </strong>${ta('Sunday morning (Surya Hora) or Saturday morning (Shani Hora) in Pushyami or Uttara Ashadha Nakshatra','ஞாயிற்றுக்கிழமை (சூரிய ஹோரை') அல்லது சனிக்கிழமை (சனி ஹோரை') — புஷ்யமி அல்லது உத்திராடம் நட்சத்திரத்தில் செய்வது சிறந்தது')}</li>
-            <li><strong>${ta('Location','இடம்')}: </strong>${ta('Family temple or any Navagraha shrine with Shiva/Vishnu','குல தெய்வ கோவில் அல்லது நவக்கிரக சன்னதி உள்ள சிவன்/விஷ்ணு கோவில்')}</li>
-            <li><strong>${ta('When','எப்போது')}: </strong>${ta('At least one month before the wedding','திருமணத்திற்கு குறைந்தது ஒரு மாதத்திற்கு முன்')}</li>
-          </ul>
-        </div>
-      </div>
-
-      <div class="remedy-card">
-        <div class="remedy-hd"><div class="remedy-num">3</div>${ta('Nakshatra Devata Pooja','நட்சத்திர தேவதா பூஜை')}</div>
-        <div class="remedy-body">
-          <ul>
-            <li><strong>${ta('Bride','மணமகள்')} — ${ta('Nakshatra Devata Varuna','நட்சத்திர தேவதை வருணன்')}: </strong>${ta('Perform Varuna Abhisheka at Varuna temple or Varuna shrine. Varuna protects longevity and health. This addresses any Dinam shortfall.','வருண பகவான் கோவிலில் அல்லது வருணேஸ்வரர் சன்னதியில் அபிஷேகம் செய்யவும். திணம் பொருத்தம் இல்லாத குறையை இந்த வழிபாடு சரிசெய்யும்.')}</li>
-            <li><strong>${ta('Groom','மணமகன்')} — ${ta('Nakshatra Devata Pitru (Magha)','நட்சத்திர தேவதை பித்ருக்கள் (மகம்)')}: </strong>${ta('Perform Pitru Tarpana at Rameshwaram or ancestral shrine. Pitru blessings strengthen children and longevity — addresses Mahendra shortfall.','ராமேஸ்வரம் அல்லது குல கேஷேத்திரத்தில் பித்ரு தர்ப்பணம் செய்யவும். மகேந்திர பொருத்தம் இல்லாத குறை சரிசெய்யும்.')}</li>
-          </ul>
-        </div>
-      </div>`
+      const remediesHtml = (() => {
+        const isTa = L === 'ta'
+        const r1title = isTa ? 'முகூர்த்த தேர்வு — மிக முக்கியமான பரிகாரம்' : 'Muhurtha Selection — Most Important Remedy'
+        const r1body = isTa
+          ? '<p>சரியான திருமண முகூர்த்தம் தேர்வு செய்வதே பிரதான பரிகாரம். சரியான திருமண முகூர்த்தம் மூலம் பெரும்பாலான தோஷங்களை நிவர்த்தி செய்யலாம்.</p><ul><li><strong>திருமண நட்சத்திரம்:</strong> ரோஹிணி, மிருகசீர்ஷம், உத்திர பல்குணி, ஹஸ்தம், சுவாதி, அனுராதா, உத்திராடம் அல்லது ரேவதி — சதயம் மற்றும் மகம் தவிர்க்கவும்</li><li><strong>தாரா பலம்:</strong> இருவரிடமிருந்தும் 2, 4, 6, 8வது நட்சத்திரத்தில் சந்திரன் இல்லாமல் இருக்க வேண்டும்</li><li><strong>லக்னம்:</strong> பெண் ராசிகள் (ரிஷபம், கன்னி, விருச்சிகம், கும்பம்) சிறந்தவை</li><li><strong>குரு நிலை:</strong> முகூர்த்த லக்னத்திலிருந்து குரு கேந்திரம் (1, 4, 7, 10) அல்லது திரிகோணம் (5, 9) இல் இருக்க வேண்டும்</li></ul>'
+          : '<p>Selecting the right wedding date and time (Muhurtha) is the most powerful remedy — it neutralises most compatibility doshas.</p><ul><li><strong>Wedding Nakshatra:</strong> Rohini, Mrigasira, Uttara Phalguni, Hasta, Swati, Anuradha, Uttara Ashadha or Revati — avoid Shatabhisha and Magha</li><li><strong>Tara Bala:</strong> Moon should not be in 2nd, 4th, 6th or 8th Nakshatra from either partner</li><li><strong>Lagna:</strong> Female signs (Taurus, Virgo, Scorpio, Aquarius) preferred</li><li><strong>Jupiter:</strong> Should be in kendra (1,4,7,10) or trikona (5,9) from Muhurtha Lagna</li></ul>'
+        const r2title = isTa ? 'நவக்கிரக சாந்தி ஹோமம்' : 'Navagraha Shanti Homam'
+        const r2body = isTa
+          ? '<p>திருமணத்திற்கு முன் நவக்கிரக சாந்தி ஹோமம் செய்வது மிகவும் நல்லது.</p><ul><li><strong>சிறப்பு ஆஹுதி:</strong> சூரியனுக்கும் சனிக்கும் தனியாக சிறப்பு ஆஹுதி கொடுக்கவும்</li><li><strong>உத்தம நேரம்:</strong> ஞாயிற்றுக்கிழமை அல்லது சனிக்கிழமை — புஷ்யமி அல்லது உத்திராடம் நட்சத்திரத்தில் செய்வது சிறந்தது</li><li><strong>இடம்:</strong> குல தெய்வ கோவில் அல்லது நவக்கிரக சன்னதி உள்ள சிவன் அல்லது விஷ்ணு கோவில்</li><li><strong>எப்போது:</strong> திருமணத்திற்கு குறைந்தது ஒரு மாதத்திற்கு முன்</li></ul>'
+          : '<p>Performing Navagraha Shanti Homam before the wedding is strongly recommended.</p><ul><li><strong>Special Ahuti:</strong> Separate special Ahuti for Sun (Groom Rasi lord) and Saturn (Bride Rasi lord)</li><li><strong>Best time:</strong> Sunday morning (Surya Hora) or Saturday morning (Shani Hora) in Pushyami or Uttara Ashadha Nakshatra</li><li><strong>Location:</strong> Family temple or any Navagraha shrine</li><li><strong>When:</strong> At least one month before the wedding</li></ul>'
+        const r3title = isTa ? 'நட்சத்திர தேவதா பூஜை' : 'Nakshatra Devata Pooja'
+        const r3body = isTa
+          ? '<ul><li><strong>மணமகள் — நட்சத்திர தேவதை வருணன்:</strong> வருண பகவான் கோவிலில் அபிஷேகம் செய்யவும். திணம் பொருத்தம் இல்லாத குறையை இந்த வழிபாடு சரிசெய்யும்.</li><li><strong>மணமகன் — நட்சத்திர தேவதை பித்ருக்கள் (மகம்):</strong> ராமேஸ்வரம் அல்லது குல கேஷேத்திரத்தில் பித்ரு தர்ப்பணம் செய்யவும். மகேந்திர பொருத்தம் இல்லாத குறை சரிசெய்யும்.</li></ul>'
+          : '<ul><li><strong>Bride — Nakshatra Devata Varuna:</strong> Perform Varuna Abhisheka at Varuna temple. This addresses Dinam shortfall and protects longevity and health.</li><li><strong>Groom — Nakshatra Devata Pitru (Magha):</strong> Perform Pitru Tarpana at Rameshwaram or ancestral shrine. This addresses Mahendra shortfall and strengthens progeny and longevity.</li></ul>'
+        const card = (num, title, body) =>
+          '<div class="remedy-card"><div class="remedy-hd"><div class="remedy-num">' + num + '</div>' + title + '</div><div class="remedy-body">' + body + '</div></div>'
+        return card(1, r1title, r1body) + card(2, r2title, r2body) + card(3, r3title, r3body)
+      })()
 
       // ── Language-specific labels ──────────────────────────────────
       const labels: Record<string,string> = {
