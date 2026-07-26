@@ -1,7 +1,8 @@
 'use client'
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import CityAutocomplete from '@/components/ui/CityAutocomplete'
+import dynamic from 'next/dynamic'
+const CityAutocomplete = dynamic(() => import('@/components/ui/CityAutocomplete'), { ssr: false })
 import { calculateChart, calculateChartGuest, listCharts } from '@/api'
 import { useStore } from '@/store'
 
@@ -148,7 +149,7 @@ const THEMES=[
 
 type Tab='horoscope'|'compatibility'|'chart'
 const DAYS=Array.from({length:31},(_,i)=>i+1)
-const YEARS_100=Array.from({length:100},(_,i)=>new Date().getFullYear()-i)
+const YEARS_100=Array.from({length:100},(_,i)=>2025-i)
 
 function Sel({value,onChange,opts,placeholder,w}:{value:number|string,onChange:(v:string)=>void,opts:{v:number|string,l:string}[],placeholder:string,w?:string}){
   return(
@@ -221,7 +222,7 @@ function WesternDashaSection({
     setLoading(true)
     try {
       const CHART_URL = 'https://enchanting-dedication-production.up.railway.app'
-      const now = new Date().getFullYear()
+      const now = 2026
       const body: any = {
         GroomId: hid1, BrideId: hid2,
         RelationshipType: relType,
@@ -245,7 +246,7 @@ function WesternDashaSection({
   const bestYears: any[]   = deep?.bestYears ?? []
   const chalYears: any[]   = deep?.challengingYears ?? []
   const crossPreds: any[]  = deep?.crossPredictions ?? []
-  const now = new Date().getFullYear()
+  const now = 2026
 
   return (
     <div style={{display:'flex',flexDirection:'column',gap:'20px'}}>
@@ -452,7 +453,7 @@ async function downloadWesternPdf(
 ) {
   try {
     const tmpl = await fetch('/western-report.html').then(r => r.text())
-    const now = new Date().getFullYear()
+    const now = 2026
     const data = {
       name1: n1 || 'Person 1',
       name2: n2 || 'Person 2',
@@ -660,7 +661,7 @@ export default function WesternPage(){
           const authToken2 = useStore.getState().token
           const deepHdrs: any = { 'Content-Type': 'application/json' }
           if (authToken2) deepHdrs['Authorization'] = `Bearer ${authToken2}`
-          const now = new Date().getFullYear()
+          const now = 2026
           const dr = await fetch(`${CHART_URL}/api/matchmaking/deep`, {
             method: 'POST', headers: deepHdrs,
             body: JSON.stringify({
