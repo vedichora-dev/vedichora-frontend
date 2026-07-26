@@ -5,6 +5,5 @@
   "installCommand": "npm install --legacy-peer-deps",
   "env": {
     "NEXT_DISABLE_TELEMETRY": "1"
-  },
-  "_buildComment": "force-redeploy-2026-07-26-v2"
+  }
 }
