@@ -574,9 +574,9 @@ export default function WesternPage(){
   // Load saved charts when logged in (v2)
   useEffect(() => {
     if (token) {
-      listCharts().then(res => {
-        const c = res?.data?.data ?? res?.data ?? []
-        setSaved(Array.isArray(c) ? c : [])
+      listCharts().then((res: any) => {
+        const list = Array.isArray(res) ? res : (res?.data?.data ?? res?.data ?? [])
+        setSaved(Array.isArray(list) ? list : [])
       }).catch(() => {})
     }
   }, [token])
