@@ -817,7 +817,7 @@ export default function MatchPage() {
 
       // ── Rajju warning ─────────────────────────────────────────────
       const rajjuWarn = data.RajjuWarning
-        ? `<div class="alert-warn">🔔 <strong>${ta('Important','முக்கியக் குறிப்பு')}</strong> — ${safe(data.RajjuWarning)}</div>`
+        ? `<div style="margin:6px 0;padding:10px 14px;background:#FFFBEB;border-left:3px solid #B7862C;border-radius:4px;color:#7A4A00;font-size:12px"><strong>${ta('Important','முக்கியக் குறிப்பு')}</strong> — ${safe(data.RajjuWarning)}</div>`
         : (!data.RajjuPass
           ? `<div style="margin:6px 0;padding:10px 14px;background:#FFFBEB;border-left:3px solid #B7862C;border-radius:4px;color:#7A4A00;font-size:12px"><strong>${ta('Rajju Mismatch','ரஜ்ஜு பொருத்தமில்லை')}</strong> — ${safe(data.RajjuWarning) || ta('Same Rajju group — Muhurtha correction required','ஒரே ரஜ்ஜு குழு — முகூர்த்த திருத்தம் தேவை')}</div>`
           : '')
@@ -973,19 +973,28 @@ export default function MatchPage() {
       }
 
             // Also inject data for JS-rendered tables (poruthams, kootas)
-      // data: URI avoids blank popup and JS re-injection
-      const uri = 'data:text/html;charset=utf-8,' + encodeURIComponent(tmpl)
-      const win = window.open(uri, '_blank')
-      if (!win) {
-        const blob = new Blob([tmpl], {type:'text/html;charset=utf-8'})
+      // Strip all scripts so no old JS overrides our static HTML
+      tmpl = tmpl.replace(/<script[\s\S]*?<\/script>/gi, '')
+      // Try window.open + document.write (works in all browsers)
+      const win = window.open('', '_blank')
+      if (win) {
+        win.document.open()
+        win.document.write(tmpl)
+        win.document.close()
+        setTimeout(() => { try { win.focus() } catch {} }, 500)
+      } else {
+        // Popup blocked — auto-download as HTML file
+        const blob = new Blob([tmpl], {type: 'text/html;charset=utf-8'})
         const url = URL.createObjectURL(blob)
         const a = document.createElement('a')
-        a.href = url; a.download = 'Porutham_Report.html'
+        a.href = url
+        a.download = 'Porutham_Report.html'
         document.body.appendChild(a); a.click()
         document.body.removeChild(a)
-        setTimeout(() => URL.revokeObjectURL(url), 1000)
+        setTimeout(() => URL.revokeObjectURL(url), 2000)
+        alert('Report downloaded as Porutham_Report.html — open it in your browser and print to PDF')
       }
-    } catch(e) { alert('Report failed: ' + String(e)) }
+          } catch(e) { alert('Report failed: ' + String(e)) }
     setPdfLoading(null)
   }
 
