@@ -678,8 +678,6 @@ export default function MatchPage() {
         MangalDosha:      r.MangalDosha      ?? r.mangalDosha      ?? false,
         MangalNote:       r.MangalNote       ?? r.mangalNote       ?? '',
         Summary:          r.Summary          ?? r.summary          ?? '',
-        // Deep analysis — from /api/matchmaking/deep (if loaded)
-        deep: deep || null,
         // Birth details
         GroomNakshatra: r.GroomNakshatra ?? r.groomNakshatra ?? '',
         BrideNakshatra: r.BrideNakshatra ?? r.brideNakshatra ?? '',
