@@ -1,12 +1,8 @@
 'use client'
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import DatePicker, { DateValue } from '@/components/ui/DatePicker'
-import CityAutocomplete from '@/components/ui/CityAutocomplete'
 import { calculateChart, calculateChartGuest, listCharts } from '@/api'
 import { useStore } from '@/store'
-
-const EMPTY: DateValue = { dd: 0, mm: 0, yyyy: 0 }
 
 const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December']
 
@@ -451,9 +447,9 @@ export default function WesternPage(){
   const [moonIdx,setMoonIdx]=useState<number|null>(null)
   const [domain,setDomain]=useState('Love')
   // Compat
-  const EMPTY: DateValue = { dd: 0, mm: 0, yyyy: 0 }
-  const [d1,setD1]=useState<DateValue>(EMPTY)
-  const [d2,setD2]=useState<DateValue>(EMPTY)
+  const EMPTY: any = { dd: 0, mm: 0, yyyy: 0 }
+  const [d1,setD1]=useState({dd:0,mm:0,yyyy:0,hr:12,mi:0,ap:'AM' as 'AM'|'PM',unknownTime:false})
+  const [d2,setD2]=useState({dd:0,mm:0,yyyy:0,hr:12,mi:0,ap:'AM' as 'AM'|'PM',unknownTime:false})
   const [n1,setN1]=useState('')
   const [n2,setN2]=useState('')
   const [g1,setG1]=useState<'Male'|'Female'>('Male')
@@ -550,15 +546,14 @@ export default function WesternPage(){
     setCompatLoading(true); setCompatErr(''); setLoveResult(null)
     try {
       const CHART_URL = 'https://enchanting-dedication-production.up.railway.app'
-      // DatePicker stores time inside DateValue: d1.hr, d1.mi, d1.ap
-      const to24 = (hr:number|undefined, mi:number|undefined, ap:string|undefined) => {
+      const to24 = (hr:number, mi:number, ap:string) => {
         let h = hr || 12
         if (ap === 'PM' && h !== 12) h += 12
         if (ap === 'AM' && h === 12) h = 0
         return { hour: h, minute: mi || 0 }
       }
-      const tm1 = (d1.unknownTime) ? {hour:12,minute:0} : to24(d1.hr, d1.mi, d1.ap)
-      const tm2 = (d2.unknownTime) ? {hour:12,minute:0} : to24(d2.hr, d2.mi, d2.ap)
+      const tm1 = d1.unknownTime ? {hour:12,minute:0} : to24(d1.hr||12, d1.mi||0, d1.ap||'AM')
+      const tm2 = d2.unknownTime ? {hour:12,minute:0} : to24(d2.hr||12, d2.mi||0, d2.ap||'AM')
       // Geocode places to get lat/lng/UTC offset
       const geocode = async (place: string, lat?: number, lng?: number) => {
         if (lat !== undefined && lng !== undefined && lat !== 0 && lng !== 0) return { lat, lng, utc: Math.round(lng / 15 * 2) / 2 }
@@ -583,7 +578,7 @@ export default function WesternPage(){
 
       const p1 = {
         PersonName: n1 || 'Person 1',
-        Year: d1.yyyy, Month: d1.mm||1, Day: d1.dd||1,
+        Year: d1.yyyy||0, Month: d1.mm||1, Day: d1.dd||1,
         Hour: tm1.hour, Minute: tm1.minute, Second: 0,
         PlaceName: place1 || 'Unknown', Latitude: geo1.lat, Longitude: geo1.lng,
         UtcOffsetHours: geo1.utc || 0, AyanamsaType: 'Lahiri',
@@ -591,7 +586,7 @@ export default function WesternPage(){
       }
       const p2 = {
         PersonName: n2 || 'Person 2',
-        Year: d2.yyyy, Month: d2.mm||1, Day: d2.dd||1,
+        Year: d2.yyyy||0, Month: d2.mm||1, Day: d2.dd||1,
         Hour: tm2.hour, Minute: tm2.minute, Second: 0,
         PlaceName: place2 || 'Unknown', Latitude: geo2.lat, Longitude: geo2.lng,
         UtcOffsetHours: geo2.utc || 0, AyanamsaType: 'Lahiri',
@@ -823,11 +818,43 @@ export default function WesternPage(){
                   <div style={{fontSize:'11px',color:'var(--w-acc)',fontWeight:700,textTransform:'uppercase',letterSpacing:'.08em',marginBottom:'12px'}}>♥ Person 1</div>
                   <input value={n1} onChange={e=>setN1(e.target.value)} placeholder="Name"
                     style={{width:'100%',padding:'10px 12px',borderRadius:'10px',border:'1.5px solid var(--w-bd)',background:'var(--w-bg)',color:'var(--w-tx)',fontSize:'14px',marginBottom:'8px',boxSizing:'border-box',fontFamily:'inherit',outline:'none'}} />
-                  <DatePicker value={d1} onChange={setD1} showTime showUnknown />
-                  <CityAutocomplete
-                    value={place1}
-                    onChange={(city,la,ln)=>{setPlace1(city);setLat1c(la);setLng1c(ln)}}
-                    placeholder="Place of birth" />
+                  {/* DOB */}
+                  <div style={{display:'flex',gap:'6px',marginBottom:'8px'}}>
+                    <Sel value={d1.dd||''} onChange={v=>setD1(d=>({...d,dd:+v}))} placeholder="Day" w="30%"
+                      opts={DAYS.map(d=>({v:d,l:String(d)}))} />
+                    <Sel value={d1.mm||''} onChange={v=>setD1(d=>({...d,mm:+v}))} placeholder="Month" w="40%"
+                      opts={MONTHS.map((m,i)=>({v:i+1,l:m}))} />
+                    <Sel value={d1.yyyy||''} onChange={v=>setD1(d=>({...d,yyyy:+v}))} placeholder="Year" w="30%"
+                      opts={YEARS_100.map(y=>({v:y,l:String(y)}))} />
+                  </div>
+                  {/* Time */}
+                  <div style={{display:'flex',gap:'6px',marginBottom:'8px',opacity:d1.unknownTime?0.4:1}}>
+                    <Sel value={d1.hr} onChange={v=>setD1(d=>({...d,hr:+v}))} placeholder="Hr" w="28%"
+                      opts={[12,1,2,3,4,5,6,7,8,9,10,11].map(h=>({v:h,l:String(h)}))} />
+                    <Sel value={d1.mi} onChange={v=>setD1(d=>({...d,mi:+v}))} placeholder="Min" w="28%"
+                      opts={Array.from({length:60},(_,i)=>({v:i,l:String(i).padStart(2,'0')}))} />
+                    <Sel value={d1.ap} onChange={v=>setD1(d=>({...d,ap:v as 'AM'|'PM'}))} placeholder="AM/PM" w="28%"
+                      opts={[{v:'AM',l:'AM'},{v:'PM',l:'PM'}]} />
+                    <label style={{display:'flex',alignItems:'center',gap:'4px',fontSize:'11px',color:'var(--w-tx2)',cursor:'pointer',flexShrink:0}}>
+                      <input type="checkbox" checked={d1.unknownTime} onChange={e=>setD1(d=>({...d,unknownTime:e.target.checked}))} />
+                      Unknown
+                    </label>
+                  </div>
+                  {/* City */}
+                  <input value={place1} onChange={e=>setPlace1(e.target.value)}
+                    onBlur={async()=>{
+                      if(!place1.trim()||lat1c) return
+                      try {
+                        const r=await fetch('https://photon.komoot.io/api/?q='+encodeURIComponent(place1)+'&limit=1')
+                        const j=await r.json()
+                        const f=j?.features?.[0]
+                        if(f){setLat1c(f.geometry.coordinates[1]);setLng1c(f.geometry.coordinates[0])}
+                      } catch {}
+                    }}
+                    placeholder="Place of birth (city, country)"
+                    style={{width:'100%',padding:'10px 12px',borderRadius:'10px',border:'1.5px solid var(--w-bd)',
+                      background:'var(--w-bg)',color:'var(--w-tx)',fontSize:'14px',
+                      boxSizing:'border-box',fontFamily:'inherit',outline:'none'}} />
                 </div>
                 <div style={{textAlign:'center',paddingTop:'60px',fontSize:'24px',color:'#EF4444'}}>♥</div>
                 {/* Person 2 */}
@@ -835,11 +862,43 @@ export default function WesternPage(){
                   <div style={{fontSize:'11px',color:'var(--w-acc)',fontWeight:700,textTransform:'uppercase',letterSpacing:'.08em',marginBottom:'12px'}}>♥ Person 2</div>
                   <input value={n2} onChange={e=>setN2(e.target.value)} placeholder="Name (optional)"
                     style={{width:'100%',padding:'10px 12px',borderRadius:'10px',border:'1.5px solid var(--w-bd)',background:'var(--w-bg)',color:'var(--w-tx)',fontSize:'14px',marginBottom:'8px',boxSizing:'border-box',fontFamily:'inherit',outline:'none'}} />
-                  <DatePicker value={d2} onChange={setD2} showTime showUnknown />
-                  <CityAutocomplete
-                    value={place2}
-                    onChange={(city,la,ln)=>{setPlace2(city);setLat2c(la);setLng2c(ln)}}
-                    placeholder="Place of birth" />
+                  {/* DOB */}
+                  <div style={{display:'flex',gap:'6px',marginBottom:'8px'}}>
+                    <Sel value={d2.dd||''} onChange={v=>setD2(d=>({...d,dd:+v}))} placeholder="Day" w="30%"
+                      opts={DAYS.map(d=>({v:d,l:String(d)}))} />
+                    <Sel value={d2.mm||''} onChange={v=>setD2(d=>({...d,mm:+v}))} placeholder="Month" w="40%"
+                      opts={MONTHS.map((m,i)=>({v:i+1,l:m}))} />
+                    <Sel value={d2.yyyy||''} onChange={v=>setD2(d=>({...d,yyyy:+v}))} placeholder="Year" w="30%"
+                      opts={YEARS_100.map(y=>({v:y,l:String(y)}))} />
+                  </div>
+                  {/* Time */}
+                  <div style={{display:'flex',gap:'6px',marginBottom:'8px',opacity:d2.unknownTime?0.4:1}}>
+                    <Sel value={d2.hr} onChange={v=>setD2(d=>({...d,hr:+v}))} placeholder="Hr" w="28%"
+                      opts={[12,1,2,3,4,5,6,7,8,9,10,11].map(h=>({v:h,l:String(h)}))} />
+                    <Sel value={d2.mi} onChange={v=>setD2(d=>({...d,mi:+v}))} placeholder="Min" w="28%"
+                      opts={Array.from({length:60},(_,i)=>({v:i,l:String(i).padStart(2,'0')}))} />
+                    <Sel value={d2.ap} onChange={v=>setD2(d=>({...d,ap:v as 'AM'|'PM'}))} placeholder="AM/PM" w="28%"
+                      opts={[{v:'AM',l:'AM'},{v:'PM',l:'PM'}]} />
+                    <label style={{display:'flex',alignItems:'center',gap:'4px',fontSize:'11px',color:'var(--w-tx2)',cursor:'pointer',flexShrink:0}}>
+                      <input type="checkbox" checked={d2.unknownTime} onChange={e=>setD2(d=>({...d,unknownTime:e.target.checked}))} />
+                      Unknown
+                    </label>
+                  </div>
+                  {/* City */}
+                  <input value={place2} onChange={e=>setPlace2(e.target.value)}
+                    onBlur={async()=>{
+                      if(!place2.trim()||lat2c) return
+                      try {
+                        const r=await fetch('https://photon.komoot.io/api/?q='+encodeURIComponent(place2)+'&limit=1')
+                        const j=await r.json()
+                        const f=j?.features?.[0]
+                        if(f){setLat2c(f.geometry.coordinates[1]);setLng2c(f.geometry.coordinates[0])}
+                      } catch {}
+                    }}
+                    placeholder="Place of birth (city, country)"
+                    style={{width:'100%',padding:'10px 12px',borderRadius:'10px',border:'1.5px solid var(--w-bd)',
+                      background:'var(--w-bg)',color:'var(--w-tx)',fontSize:'14px',
+                      boxSizing:'border-box',fontFamily:'inherit',outline:'none'}} />
                   <div style={{fontSize:'10px',color:'var(--w-tx2)',marginTop:'3px',marginBottom:'6px'}}>Time of birth (optional — improves accuracy)</div>
                 </div>
               </div>
