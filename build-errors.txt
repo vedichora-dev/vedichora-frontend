@@ -1,17 +1,17 @@
 === CURRENT e2e FILES ===
 total 80
-drwxr-xr-x  2 runner runner  4096 Jul 26 02:21 .
-drwxr-xr-x 10 runner runner  4096 Jul 26 02:22 ..
--rw-r--r--  1 runner runner  4428 Jul 26 02:21 01-auth.spec.js
--rw-r--r--  1 runner runner 13487 Jul 26 02:21 02-chart.spec.js
--rw-r--r--  1 runner runner  2851 Jul 26 02:21 03-match.spec.js
--rw-r--r--  1 runner runner  2685 Jul 26 02:21 04-horoscope.spec.js
--rw-r--r--  1 runner runner  3485 Jul 26 02:21 05-deployment.spec.js
--rw-r--r--  1 runner runner  5636 Jul 26 02:21 06-match-10.spec.js
--rw-r--r--  1 runner runner  8626 Jul 26 02:21 functional-test.spec.js
--rw-r--r--  1 runner runner  2685 Jul 26 02:21 helpers.js
--rw-r--r--  1 runner runner  3335 Jul 26 02:21 screenshot.spec.js
--rw-r--r--  1 runner runner  6794 Jul 26 02:21 tab-screenshots.spec.js
+drwxr-xr-x  2 runner runner  4096 Jul 26 02:32 .
+drwxr-xr-x 10 runner runner  4096 Jul 26 02:33 ..
+-rw-r--r--  1 runner runner  4428 Jul 26 02:32 01-auth.spec.js
+-rw-r--r--  1 runner runner 13487 Jul 26 02:32 02-chart.spec.js
+-rw-r--r--  1 runner runner  2851 Jul 26 02:32 03-match.spec.js
+-rw-r--r--  1 runner runner  2685 Jul 26 02:32 04-horoscope.spec.js
+-rw-r--r--  1 runner runner  3485 Jul 26 02:32 05-deployment.spec.js
+-rw-r--r--  1 runner runner  5636 Jul 26 02:32 06-match-10.spec.js
+-rw-r--r--  1 runner runner  8626 Jul 26 02:32 functional-test.spec.js
+-rw-r--r--  1 runner runner  2685 Jul 26 02:32 helpers.js
+-rw-r--r--  1 runner runner  3335 Jul 26 02:32 screenshot.spec.js
+-rw-r--r--  1 runner runner  6794 Jul 26 02:32 tab-screenshots.spec.js
 
 === BUILD OUTPUT ===
  [2m491[0m |     '--w-tx2':theme.tx2,'--w-acc':theme.acc,'--w-gold':theme.gold,'--w-bd':theme.bd,
