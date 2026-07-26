@@ -825,7 +825,7 @@ export default function WesternPage(){
                     style={{width:'100%',padding:'10px 12px',borderRadius:'10px',border:'1.5px solid var(--w-bd)',background:'var(--w-bg)',color:'var(--w-tx)',fontSize:'14px',marginBottom:'8px',boxSizing:'border-box',fontFamily:'inherit',outline:'none'}} />
                   <DatePicker value={d1} onChange={setD1} showTime showUnknown />
                   <CityAutocomplete
-                    value={place1} onChange={setPlace1}
+                    value={place1}
                     onChange={(city,la,ln)=>{setPlace1(city);setLat1c(la);setLng1c(ln)}}
                     placeholder="Place of birth" />
                 </div>
