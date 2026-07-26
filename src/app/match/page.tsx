@@ -828,9 +828,9 @@ export default function MatchPage() {
       const isMod  = ashtaScore2 >= 14 && pathuScore2 >= 8
       const verdictColor = isGood ? '#15803D' : (isMod ? '#B4530A' : '#DC2626')
       const verdictText  = isGood
-        ? `✓ ${ta('Marriage Recommended','திருமணம் பரிந்துரைக்கப்படுகிறது')}`
-        : (isMod ? `⚠ ${ta('Moderate Match — Check Muhurtha','நடுத்தர பொருத்தம் — முகூர்த்தம் அவசியம்')}`
-                 : `✗ ${ta('Not Recommended','பரிந்துரைக்கப்படவில்லை')}`)
+        ? `✦ ${ta('Marriage Recommended — Proceed with Auspicious Muhurtha','திருமணம் பரிந்துரைக்கப்படுகிறது — நல்ல முகூர்த்தம் பார்த்து திருமணம் நடத்தலாம்')}`
+        : (isMod ? ta('Moderate Match — Muhurtha & Remedies Advised','நடுத்தர பொருத்தம் — முகூர்த்தம் மற்றும் பரிகாரங்கள் அவசியம்')
+                 : ta('Marriage Not Recommended Without Remedies','பரிகாரங்கள் இல்லாமல் திருமணம் பரிந்துரைக்கப்படவில்லை'))
       const verdictBody = isGood
         ? ta(`Ashta Koota: ${ashtaScore2}/36 (${ashtaPct2}%) · Pathu Porutham: ${pathuScore2}/24 · Doshas: Clear`,
              `அஷ்டகூட: ${ashtaScore2}/36 (${ashtaPct2}%) · பத்து பொருத்தம்: ${pathuScore2}/24 · தோஷங்கள்: இல்லை`)
@@ -866,11 +866,11 @@ export default function MatchPage() {
 
       const remediesHtml = `
       <div class="remedy-card">
-        <div class="remedy-hd"><div class="remedy-num">1</div>${ta('Muhurtha Selection — Most Important Remedy','முகூர்த்த தேர்வு — மிக முக்கியமான பரிகாரம்')}</div>
+        <div class="remedy-hd"><div class="remedy-num">1</div>${ta('Muhurtha Selection — Most Important','முகூர்த்த தேர்வு — மிக முக்கியமான பரிகாரம்')}</div>
         <div class="remedy-body">
           <p>${ta(
-            'Selecting an auspicious Muhurtha (wedding date/time) is the primary remedy. BV Raman (Ch XVIII): "Many doshas in a horoscope can be neutralised through proper Muhurtha."',
-            'சரியான திருமண முகூர்த்தம் தேர்வு செய்வதே பிரதான பரிகாரம். BV ராமன் (அத்தியாயம் XVIII): "திருமண முகூர்த்தம் மூலம் ராசிகளிலுள்ள பல தோஷங்களை நிவர்த்தி செய்யலாம்."'
+            'Choosing the right wedding date and time (Muhurtha) is the single most powerful remedy. It neutralises most compatibility doshas.',
+            'சரியான திருமண முகூர்த்தம் தேர்வு செய்வதே மிக முக்கியமான பரிகாரம். இது பெரும்பாலான தோஷங்களை நிவர்த்தி செய்யும்.'
           )}</p>
           <ul>
             <li><strong>${ta('Wedding Nakshatra','திருமண நட்சத்திரம்')}: </strong>${ta('Rohini, Mrigasira, Uttara Phalguni, Hasta, Swati, Anuradha, Uttara Ashadha or Revati','ரோஹிணி, மிருகசீர்ஷம், உத்திர பல்குணி, ஹஸ்தம், சுவாதி, அனுராதா, உத்திராடம் அல்லது ரேவதி')} — ${ta('especially if Shatabhisha/Magha are to be avoided','சதயம் மற்றும் மகம் நட்சத்திரங்களை தவிர்க்கவும்')}</li>
