@@ -820,7 +820,7 @@ export default function MatchPage() {
       const rajjuWarn = data.RajjuWarning
         ? `<div class="alert-warn">🔔 <strong>${ta('Important','முக்கியக் குறிப்பு')}</strong> — ${safe(data.RajjuWarning)}</div>`
         : (!data.RajjuPass
-          ? `<div style="margin:6px 0;padding:10px 14px;background:#FFFBEB;border-left:3px solid #B7862C;border-radius:4px;color:#7A4A00;font-size:12px"><strong>${ta('Rajju Mismatch','ரஜ்ஜு பொருத்தமில்லை')}</strong> — ${safe(data.RajjuWarning) || ta('Same Rajju group — marriage not recommended without Muhurtha correction','ஒரே ரஜ்ஜு குழு — முகூர்த்த திருத்தம் தேவை')}</div>`
+          ? `<div style="margin:6px 0;padding:10px 14px;background:#FFFBEB;border-left:3px solid #B7862C;border-radius:4px;color:#7A4A00;font-size:12px"><strong>${ta('Rajju Mismatch','ரஜ்ஜு பொருத்தமில்லை')}</strong> — ${safe(data.RajjuWarning) || ta('Same Rajju group — Muhurtha correction required','ஒரே ரஜ்ஜு குழு — முகூர்த்த திருத்தம் தேவை')}</div>`
           : '')
 
       // ── Verdict ───────────────────────────────────────────────────
@@ -828,9 +828,9 @@ export default function MatchPage() {
       const isMod  = ashtaScore2 >= 14 && pathuScore2 >= 8
       const verdictColor = isGood ? '#15803D' : (isMod ? '#B4530A' : '#DC2626')
       const verdictText  = isGood
-        ? `✦ ${ta('Marriage Recommended — Proceed with Auspicious Muhurtha','திருமணம் பரிந்துரைக்கப்படுகிறது — நல்ல முகூர்த்தம் பார்த்து திருமணம் நடத்தலாம்')}`
-        : (isMod ? ta('Moderate Match — Muhurtha & Remedies Advised','நடுத்தர பொருத்தம் — முகூர்த்தம் மற்றும் பரிகாரங்கள் அவசியம்')
-                 : ta('Marriage Not Recommended Without Remedies','பரிகாரங்கள் இல்லாமல் திருமணம் பரிந்துரைக்கப்படவில்லை'))
+        ? `✓ ${ta('Marriage Recommended','திருமணம் பரிந்துரைக்கப்படுகிறது')}`
+        : (isMod ? `⚠ ${ta('Moderate Match — Check Muhurtha','நடுத்தர பொருத்தம் — முகூர்த்தம் அவசியம்')}`
+                 : `✗ ${ta('Not Recommended','பரிந்துரைக்கப்படவில்லை')}`)
       const verdictBody = isGood
         ? ta(`Ashta Koota: ${ashtaScore2}/36 (${ashtaPct2}%) · Pathu Porutham: ${pathuScore2}/24 · Doshas: Clear`,
              `அஷ்டகூட: ${ashtaScore2}/36 (${ashtaPct2}%) · பத்து பொருத்தம்: ${pathuScore2}/24 · தோஷங்கள்: இல்லை`)
@@ -866,11 +866,11 @@ export default function MatchPage() {
 
       const remediesHtml = `
       <div class="remedy-card">
-        <div class="remedy-hd"><div class="remedy-num">1</div>${ta('Muhurtha Selection — Most Important','முகூர்த்த தேர்வு — மிக முக்கியமான பரிகாரம்')}</div>
+        <div class="remedy-hd"><div class="remedy-num">1</div>${ta('Muhurtha Selection — Most Important Remedy','முகூர்த்த தேர்வு — மிக முக்கியமான பரிகாரம்')}</div>
         <div class="remedy-body">
           <p>${ta(
-            'Choosing the right wedding date and time (Muhurtha) is the single most powerful remedy. It neutralises most compatibility doshas.',
-            'சரியான திருமண முகூர்த்தம் தேர்வு செய்வதே மிக முக்கியமான பரிகாரம். இது பெரும்பாலான தோஷங்களை நிவர்த்தி செய்யும்.'
+            'Selecting an auspicious Muhurtha (wedding date/time) is the primary remedy. BV Raman (Ch XVIII): "Many doshas in a horoscope can be neutralised through proper Muhurtha."',
+            'சரியான திருமண முகூர்த்தம் தேர்வு செய்வதே பிரதான பரிகாரம். BV ராமன் (அத்தியாயம் XVIII): "திருமண முகூர்த்தம் மூலம் ராசிகளிலுள்ள பல தோஷங்களை நிவர்த்தி செய்யலாம்."'
           )}</p>
           <ul>
             <li><strong>${ta('Wedding Nakshatra','திருமண நட்சத்திரம்')}: </strong>${ta('Rohini, Mrigasira, Uttara Phalguni, Hasta, Swati, Anuradha, Uttara Ashadha or Revati','ரோஹிணி, மிருகசீர்ஷம், உத்திர பல்குணி, ஹஸ்தம், சுவாதி, அனுராதா, உத்திராடம் அல்லது ரேவதி')} — ${ta('especially if Shatabhisha/Magha are to be avoided','சதயம் மற்றும் மகம் நட்சத்திரங்களை தவிர்க்கவும்')}</li>
@@ -902,7 +902,7 @@ export default function MatchPage() {
         <div class="remedy-body">
           <ul>
             <li><strong>${ta('Bride','மணமகள')} — ${ta('Nakshatra Devata Varuna','நட்சத்திர தேவதை வருணன்')}: </strong>${ta('Perform Varuna Abhisheka at Varuna temple or Varuna shrine. Varuna protects longevity and health. This addresses any Dinam shortfall.','வருண பகவான் கோவிலில் அல்லது வருணேஸ்வரர் சன்னதியில் அபிஷேகம் செய்யவும். திணம் பொருத்தம் இல்லாத குறையை இந்த வழிபாடு சரிசெய்யும்.')}</li>
-            <li><strong>${ta('Groom','மணமகன்')} — ${ta('Nakshatra Devata Pitru (Magha)','நட்சத்திர தேவதை பித்ருக்கள் (மகம்)')}: </strong>${ta('Perform Pitru Tarpana at Rameshwaram or ancestral shrine. Pitru blessings strengthen children and longevity — addresses Mahendra shortfall.','ராமேஸ்வரம் அல்லது குல கேஷேத்திரத்தில் பித்ரு தர்ப்பணம் செய்யவும். மகேந்திர பொருத்தம் இல்லாத குறை சரிசெய்யும்.')}</li>
+            <li><strong>${ta('Groom','மணமகன்)} — ${ta('Nakshatra Devata Pitru (Magha)','நட்சத்திர தேவதை பித்ருக்கள் (மகம்)')}: </strong>${ta('Perform Pitru Tarpana at Rameshwaram or ancestral shrine. Pitru blessings strengthen children and longevity — addresses Mahendra shortfall.','ராமேஸ்வரம் அல்லது குல கேஷேத்திரத்தில் பித்ரு தர்ப்பணம் செய்யவும். மகேந்திர பொருத்தம் இல்லாத குறை சரிசெய்யும்.')}</li>
           </ul>
         </div>
       </div>`
@@ -998,20 +998,532 @@ export default function MatchPage() {
       }
 
             // Also inject data for JS-rendered tables (poruthams, kootas)
-      // Open as data: URI — no JS injection, static HTML only, no caching
-      const encoded = 'data:text/html;charset=utf-8,' + encodeURIComponent(tmpl)
-      const win = window.open(encoded, '_blank')
-      if (!win) {
-        const blob = new Blob([tmpl], { type: 'text/html;charset=utf-8' })
-        const url = URL.createObjectURL(blob)
-        const a = document.createElement('a')
-        a.href = url
-        a.download = `Porutham_${safe(data.name1)}_${safe(data.name2)}.html`
-        document.body.appendChild(a); a.click()
-        document.body.removeChild(a)
-        setTimeout(() => URL.revokeObjectURL(url), 1000)
-      }
+      const dataScript = '<script>window.__VH_DATA = ' + JSON.stringify(data) + ';<\/script>'
+      tmpl = tmpl.replace('</head>', dataScript + '</head>')
+
+      const win = window.open('', '_blank')
+      if (!win) { alert('Please allow popups for PDF download'); setPdfLoading(null); return }
+      win.document.write(tmpl)
+      win.document.close()
+      // Print after render
+      setTimeout(() => { try { win.print() } catch {} }, 800)
+    } catch(e) { alert('Report failed: ' + String(e)) }
     setPdfLoading(null)
   }
 
-  useEffect
+  useEffect(() => {
+    if (!token) return
+    listCharts().then((res: any) => {
+      const list = Array.isArray(res) ? res : (res?.data?.data ?? res?.data ?? [])
+      setSaved(list)
+    }).catch(() => {})
+  }, [token])
+
+  // ── Validate one person ────────────────────────────────────────────────────
+  const validatePerson = (
+    label: string, d: DateValue, p: string, lat?: number, lng?: number,
+    useSaved: boolean = false, selId: string = ''
+  ): string => {
+    if (useSaved && selId) return ''            // saved chart — always valid
+    if (!d.dd || !d.mm || !d.yyyy)
+      return `${label}: please select day, month and year`
+    if (!p.trim())
+      return `${label}: place of birth is required`
+    // lat/lng validated at runtime in calcChart with geocode fallback
+    if (!p.trim())
+      return label + ': place of birth is required'
+    return ''
+  }
+
+  // ── Calc one chart ─────────────────────────────────────────────────────────
+  const calcChart = async (
+    n: string, d: DateValue, p: string,
+    lat?: number, lng?: number, g?: string,
+    savedId?: string, savedChart?: any
+  ) => {
+    if (savedId && savedChart) return { chart: savedChart, id: savedId }
+    let rlat = lat, rlng = lng
+    if ((!rlat || !rlng) && p.trim()) {
+      // Use same Nominatim as CityAutocomplete for consistency
+      try {
+        const geoRes = await fetch(
+          'https://nominatim.openstreetmap.org/search?q=' + encodeURIComponent(p) + '&format=json&limit=1&accept-language=en',
+          { headers: { 'User-Agent': 'VedicHora/1.0' } }
+        ).then(r => r.json())
+        if (Array.isArray(geoRes) && geoRes[0]) {
+          rlat = parseFloat(geoRes[0].lat)
+          rlng = parseFloat(geoRes[0].lon)
+        }
+      } catch {}
+    }
+    if (!rlat || !rlng) throw new Error('Could not locate "' + p + '" — please select from the dropdown')
+    const fn = token ? calculateChart : calculateChartGuest
+    const r = await fn(buildPayload(n, d, p, rlat, rlng, g))
+    const chart = r?.data?.data ?? r?.data
+    if (!chart) throw new Error('Chart calculation failed — check date and location')
+    return { chart, id: chart.horoscopeId || chart.id || '' }
+  }
+
+  // ── Submit ─────────────────────────────────────────────────────────────────
+  const handle = async () => {
+    setErr(''); setErr1(''); setErr2(''); setResult(null)
+
+    // Validate both persons before any API call
+    const e1 = validatePerson('Person 1', d1, p1, lat1, lng1, useSaved1, selId1)
+    const e2 = validatePerson('Person 2', d2, p2, lat2, lng2, useSaved2, selId2)
+
+    if (e1) setErr1(e1.replace('Person 1: ', ''))
+    if (e2) setErr2(e2.replace('Person 2: ', ''))
+    if (e1 || e2) {
+      setErr(e1 && e2 ? 'Please fix the issues highlighted above for both persons.'
+        : e1 ? e1 : e2)
+      return
+    }
+
+    setLoading(true)
+    try {
+      const s1 = useSaved1 ? saved.find(c => (c.horoscopeId || c.HoroscopeId) === selId1) : null
+      const s2 = useSaved2 ? saved.find(c => (c.horoscopeId || c.HoroscopeId) === selId2) : null
+
+      // Geocode helper
+      const geocode = async (place: string, lat?: number, lng?: number) => {
+        if (lat && lng) return { lat, lng }
+        if (!place?.trim()) return { lat: 13.0827, lng: 80.2707 } // default Chennai
+        try {
+          const res = await fetch(
+            'https://nominatim.openstreetmap.org/search?q=' + encodeURIComponent(place) + '&format=json&limit=1',
+            { headers: { 'User-Agent': 'VedicHora/1.0' } }
+          ).then(r => r.json())
+          if (Array.isArray(res) && res[0]) return { lat: parseFloat(res[0].lat), lng: parseFloat(res[0].lon) }
+        } catch {}
+        return { lat: 13.0827, lng: 80.2707 } // fallback Chennai
+      }
+
+      const [geo1, geo2] = await Promise.all([
+        geocode(p1, lat1, lng1),
+        geocode(p2, lat2, lng2),
+      ])
+
+      // Dummy r1/r2 for name extraction (populated after match)
+      const r1 = s1 ? { chart: s1, id: selId1 } : null
+      const r2 = s2 ? { chart: s2, id: selId2 } : null
+
+      const CHART_URL = process.env.NEXT_PUBLIC_CHART_URL || 'https://enchanting-dedication-production.up.railway.app'
+      let mdata: any = null
+
+      // Build birth payload from either saved chart or entered form data
+      const makePayload = (chart: any, n: string, d: DateValue, geo: {lat:number,lng:number}, g?: string) => {
+        if (chart) {
+          const bdt = chart.birthDateTime || chart.BirthDateTime || ''
+          const dt  = bdt ? new Date(bdt) : null
+          return {
+            PersonName: chart.personName || chart.PersonName || n || 'Person',
+            Year:  dt ? dt.getFullYear() : (chart.year  || chart.Year  || d.yyyy || 2000),
+            Month: dt ? dt.getMonth()+1  : (chart.month || chart.Month || d.mm   || 1),
+            Day:   dt ? dt.getDate()     : (chart.day   || chart.Day   || d.dd   || 1),
+            Hour:  dt ? dt.getHours()    : 12,
+            Minute:dt ? dt.getMinutes()  : 0,
+            Second: 0,
+            PlaceName: chart.placeName || chart.PlaceName || 'Chennai, India',
+            Latitude:  chart.latitude  || chart.Latitude  || geo.lat,
+            Longitude: chart.longitude || chart.Longitude || geo.lng,
+            UtcOffsetHours: chart.utcOffset || chart.UtcOffset || 5.5,
+            AyanamsaType: 'Lahiri',
+          }
+        }
+        const tm = d.unknownTime ? {hour:12,minute:0} : to24Hour(d.hr||12, d.mi||0, d.ap||'AM')
+        return {
+          PersonName: n || 'Person',
+          Year: d.yyyy, Month: d.mm, Day: d.dd,
+          Hour: tm.hour, Minute: tm.minute, Second: 0,
+          PlaceName: 'Chennai, India',
+          Latitude: geo.lat, Longitude: geo.lng,
+          UtcOffsetHours: 5.5, AyanamsaType: 'Lahiri',
+        }
+      }
+
+      const gp1 = makePayload(s1, n1, d1, geo1, g1)
+      const gp2 = makePayload(s2, n2, d2, geo2, g2)
+
+      // Always use guest-match — returns complete data: Ashta Koota + Pathu Porutham + Rajju
+      if (true) {
+        const gresp = await fetch(`${CHART_URL}/api/chart/guest-match`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ Person1: gp1, Person2: gp2 })
+        })
+        const gtext = await gresp.text()
+        let gres: any = null
+        try { gres = JSON.parse(gtext) } catch {}
+        if (!gresp.ok) {
+          const msg = gres?.error || gres?.message || gres?.title || `Server error ${gresp.status}`
+          throw new Error(msg)
+        }
+        mdata = gres?.data?.data ?? gres?.data ?? gres
+      }
+
+
+      if (!mdata || (mdata?.AshtaKootaScore === undefined && mdata?.ashtaKootaScore === undefined)) {
+        throw new Error('Compatibility calculation failed — please try again')
+      }
+
+      const nm1 = n1 || s1?.personName || s1?.PersonName || g1 || 'Person 1'
+      const nm2 = n2 || s2?.personName || s2?.PersonName || g2 || 'Person 2'
+      // Attach horoscopeIds for PDF download (from saved charts or API response)
+      const hid1 = selId1 || mdata?.horoscopeId1 || mdata?.HoroscopeId1 || ''
+      const hid2 = selId2 || mdata?.horoscopeId2 || mdata?.HoroscopeId2 || ''
+      // Format dob strings for PDF report
+      const fmtDate = (d: DateValue) => d.yyyy ? `${d.dd || '?'}/${d.mm || '?'}/${d.yyyy}` : ''
+      setResult({
+        ...mdata,
+        name1: nm1, name2: nm2, chart1: s1, chart2: s2, hid1, hid2,
+        dob1: s1?.birthDateTime ? new Date(s1.birthDateTime || s1.BirthDateTime).toLocaleDateString() : fmtDate(d1),
+        dob2: s2?.birthDateTime ? new Date(s2.birthDateTime || s2.BirthDateTime).toLocaleDateString() : fmtDate(d2),
+        groomLagna: s1?.ascendantName || s1?.AscendantName || '',
+        brideLagna: s2?.ascendantName || s2?.AscendantName || '',
+      })
+      setCollapsed(true)
+      setTimeout(() => {
+        resultsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      }, 150)
+    } catch (e: any) {
+      const msg = e?.message || 'Calculation failed — please try again'
+      // Parse person-specific errors
+      if (msg.startsWith('Person 1:')) { setErr1(msg.replace('Person 1: ', '')); setErr(msg) }
+      else if (msg.startsWith('Person 2:')) { setErr2(msg.replace('Person 2: ', '')); setErr(msg) }
+      else setErr(msg)
+    }
+    setLoading(false)
+  }
+
+  const score  = result?.AshtaKootaScore  ?? result?.ashtaKootaScore  ?? 0
+  const total  = result?.AshtaKootaTotal  ?? result?.ashtaKootaTotal  ?? 36
+  const pScore = result?.PathuPoruthamScore ?? result?.pathuPoruthamScore ?? 0
+  const pTotal = result?.PathuPoruthamTotal ?? result?.pathuPoruthamTotal
+  // Normalise camelCase API response fields to PascalCase for JSX
+  const poruthams   = result?.Poruthams   ?? result?.poruthams   ?? []
+  const isRec       = result?.IsRecommended ?? result?.isRecommended ?? false
+  const rajjuWarn   = result?.RajjuWarning  ?? result?.rajjuWarning  ?? ''
+  const vedhaPresent= result?.VedhaPresent  ?? result?.vedhaPresent  ?? false
+  const summary     = result?.Summary       ?? result?.summary       ?? ''
+  const kuta   = result?.KootaDetails || result?.kootaDetails || []
+  const pct    = total > 0 ? Math.round((score / total) * 100) : 0
+  const scoreColor = pct >= 70 ? '#16A34A' : pct >= 50 ? '#B45309' : '#DC2626'
+
+  // Button disabled if obvious validation fails
+  const canSubmit = !loading  // button always clickable; validation is in handle()
+
+  return (
+    <div style={{ maxWidth: '1100px', margin: '0 auto', padding: '20px 16px' }}>
+      <div style={{ marginBottom: '20px' }}>
+        <h1 style={{ fontFamily: 'Cinzel,serif', fontWeight: 700, fontSize: '22px', color: 'var(--acc)' }}>
+          Compatibility Matching
+        </h1>
+        <p style={{ fontSize: '13px', color: 'var(--txm)', marginTop: '4px' }}>
+          Ashta Koota · Pathu Porutham · Mangal Dosha · Traditional Vedic Matching
+        </p>
+        {!token && (
+          <div style={{ marginTop: '8px', fontSize: '12px', color: '#9C6B14',
+            background: 'rgba(156,107,20,.07)', padding: '8px 12px', borderRadius: '8px', display: 'inline-block' }}>
+            🔒 Guest mode — <a href="/signin" style={{ color: 'var(--acc)', fontWeight: 600 }}>Sign in</a> to use saved charts
+          </div>
+        )}
+      </div>
+
+      {/* Instructions banner */}
+      <div style={{ marginBottom: '16px', padding: '10px 14px', borderRadius: '10px',
+        background: 'rgba(196,146,42,.07)', border: '1px solid rgba(196,146,42,.2)',
+        fontSize: '12px', color: 'var(--txm)', display: 'flex', alignItems: 'center', gap: '8px' }}>
+        <MapPin style={{ width: '13px', height: '13px', color: 'var(--gold)', flexShrink: 0 }} />
+        <span>
+          <strong style={{ color: 'var(--tx)' }}>How to use:</strong> Fill in the date of birth, type a city and
+          <strong style={{ color: 'var(--acc)' }}> click the city suggestion</strong> from the dropdown —
+          then click Check Compatibility.
+        </span>
+      </div>
+
+      {/* Edit button when collapsed */}
+      {collapsed && (
+        <button onClick={() => setCollapsed(false)} style={{
+          width: '100%', padding: '10px', borderRadius: '10px',
+          border: '1px solid var(--bd)', background: 'var(--bg2)',
+          color: 'var(--txm)', fontSize: '12px', cursor: 'pointer', marginBottom: '8px'
+        }}>✎ Edit birth details</button>
+      )}
+
+      {!collapsed && (
+      <>{/* Two person forms */}
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '16px' }}
+        className="match-grid">
+        <PersonCard num={1} gender={g1} setGender={setG1}
+          name={n1} setName={setN1} dob={d1} setDob={setD1}
+          place={p1} setPlace={setP1} lat={lat1} setLat={setLat1} lng={lng1} setLng={setLng1}
+          saved={saved} token={token}
+          useSaved={useSaved1} setUseSaved={setUseSaved1}
+          selId={selId1} setSelId={setSelId1}
+          error={err1} />
+        <PersonCard num={2} gender={g2} setGender={setG2}
+          name={n2} setName={setN2} dob={d2} setDob={setD2}
+          place={p2} setPlace={setP2} lat={lat2} setLat={setLat2} lng={lng2} setLng={setLng2}
+          saved={saved} token={token}
+          useSaved={useSaved2} setUseSaved={setUseSaved2}
+          selId={selId2} setSelId={setSelId2}
+          error={err2} />
+      </div>
+
+      {/* Global error */}
+      {err && (
+        <div style={{ display: 'flex', alignItems: 'flex-start', gap: '8px', padding: '12px 16px',
+          borderRadius: '10px', marginBottom: '16px',
+          background: 'rgba(220,38,38,.08)', border: '1px solid rgba(220,38,38,.2)',
+          fontSize: '13px', color: '#DC2626' }}>
+          <AlertCircle style={{ width: '16px', height: '16px', flexShrink: 0, marginTop: '1px' }} />
+          {err}
+        </div>
+      )}
+
+      <button onClick={handle} disabled={loading}
+        className="btn-primary"
+        style={{ width: '100%', padding: '14px', fontFamily: 'Cinzel,serif', fontSize: '15px',
+          display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px', marginBottom: '24px' }}>
+        {loading
+          ? <><RefreshCw style={{ width: '16px', height: '16px', animation: 'spin 1s linear infinite' }} /> Calculating...</>
+          : <>Check Compatibility <ChevronRight style={{ width: '16px', height: '16px' }} /></>
+        }
+      </button>
+      </>
+      )}{/* end !collapsed */}
+
+      {/* ── RESULTS ── */}
+      {result && (
+        <div ref={resultsRef} style={{ display: 'flex', flexDirection: 'column', gap: '16px', scrollMarginTop: '20px' }}>
+
+          {/* Language selector */}
+          <div style={{ display: 'flex', gap: '8px', justifyContent: 'flex-end', alignItems: 'center' }}>
+            <span style={{ fontSize: '11px', color: 'var(--txm)' }}>Report language:</span>
+            {(['en','ta','hi'] as const).map(l => (
+              <button key={l} onClick={() => setLang(l)}
+                style={{ padding: '4px 12px', borderRadius: '20px', border: '1px solid var(--acc)',
+                  background: lang === l ? 'var(--acc)' : 'transparent',
+                  color: lang === l ? '#fff' : 'var(--acc)',
+                  fontSize: '11px', fontWeight: 600, cursor: 'pointer' }}>
+                {l === 'en' ? 'English' : l === 'ta' ? 'தமிழ்' : 'हिन्दी'}
+              </button>
+            ))}
+          </div>
+
+          {/* ── REPORT CARD — styled like PDF ── */}
+          <div style={{
+            background: '#FAF6F0', border: '1px solid #C8A96A',
+            borderRadius: '12px', overflow: 'hidden',
+            boxShadow: '0 4px 32px rgba(61,8,8,.10)'
+          }}>
+            {/* Header — crimson band */}
+            <div style={{ background: '#3D0808', padding: '28px 24px', textAlign: 'center' }}>
+              <div style={{ fontFamily: 'Cinzel,serif', fontSize: '11px', color: '#C8A96A',
+                letterSpacing: '.15em', textTransform: 'uppercase', marginBottom: '6px' }}>
+                ॐ VedicHora
+              </div>
+              <div style={{ fontFamily: 'Cinzel,serif', fontSize: '22px', color: '#fff',
+                fontWeight: 700, marginBottom: '4px' }}>
+                {L.reportTitle[lang]}
+              </div>
+              <div style={{ fontSize: '13px', color: '#C8A96A' }}>
+                {result.name1} & {result.name2}
+              </div>
+            </div>
+
+            {/* Score band */}
+            <div style={{ background: '#fff8f0', borderBottom: '1px solid #e8d8c0',
+              padding: '20px 24px', display: 'flex', justifyContent: 'center',
+              gap: '40px', flexWrap: 'wrap', textAlign: 'center' }}>
+              {[
+                { val: `${score}/${total}`, label: L.ashtaKoota[lang], sub: `${pct}%`, color: pct>=60?'#16A34A':'#DC2626' },
+                { val: `${pScore}/${pTotal}`, label: L.pathuPorutham[lang], sub: pScore>=5?L.pass[lang]:L.fail[lang], color: pScore>=5?'#16A34A':'#DC2626' },
+                { val: isRec ? '✓' : '—', label: L.recommended[lang], sub: isRec ? L.yes[lang] : L.needsReview[lang], color: isRec?'#16A34A':'#B7862C' },
+              ].map(({ val, label, sub, color }) => (
+                <div key={label}>
+                  <div style={{ fontFamily: 'Cinzel,serif', fontSize: '32px', fontWeight: 900, color, lineHeight: 1 }}>{val}</div>
+                  <div style={{ fontSize: '10px', color: '#6B4C2A', fontWeight: 700, textTransform: 'uppercase',
+                    letterSpacing: '.08em', margin: '4px 0 2px' }}>{label}</div>
+                  <div style={{ fontSize: '12px', color, fontWeight: 600 }}>{sub}</div>
+                </div>
+              ))}
+            </div>
+
+            <div style={{ padding: '0 24px 24px' }}>
+
+              {/* Ashta Koota table */}
+              <div style={{ marginTop: '24px' }}>
+                <div style={{ fontFamily: 'Cinzel,serif', fontSize: '13px', fontWeight: 700,
+                  color: '#3D0808', borderBottom: '2px solid #C8A96A', paddingBottom: '6px',
+                  marginBottom: '12px', textTransform: 'uppercase', letterSpacing: '.06em' }}>
+                  {L.ashtaKootaDetail[lang]}
+                </div>
+                <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '12px' }}>
+                  <thead>
+                    <tr style={{ background: '#3D0808' }}>
+                      {[L.koota[lang], L.max[lang], L.score[lang], L.result[lang], L.meaning[lang]].map(h => (
+                        <th key={h} style={{ padding: '8px 10px', color: '#fff', textAlign: 'left',
+                          fontSize: '9px', fontWeight: 700, textTransform: 'uppercase' }}>{h}</th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {kuta.map((k: any, i: number) => {
+                      const ks = k.Score ?? k.score ?? 0
+                      const km = k.MaxScore ?? k.maxScore ?? (ks > 0 ? ks * 2 : 1)
+                      const ok = ks >= km * 0.5
+                      const name = k.KootaName || k.kootaName || ''
+                      return (
+                        <tr key={i} style={{ background: i%2 ? '#FDF6EE' : '#fff',
+                          borderBottom: '1px solid #E8D8C0' }}>
+                          <td style={{ padding: '8px 10px', fontWeight: 700, color: '#3D0808',
+                            fontFamily: 'Cinzel,serif', fontSize: '11px' }}>
+                            {(L.kootaNames as any)[name]?.[lang] || name}
+                          </td>
+                          <td style={{ padding: '8px 10px', color: '#6B4C2A', textAlign: 'center' }}>{km}</td>
+                          <td style={{ padding: '8px 10px', fontWeight: 800, textAlign: 'center',
+                            color: ok ? '#16A34A' : '#DC2626', fontSize: '14px' }}>{ks}</td>
+                          <td style={{ padding: '8px 10px', fontSize: '11px',
+                            color: ok ? '#16A34A' : '#DC2626', fontWeight: 600 }}>
+                            {ok ? '✓' : '✗'}
+                          </td>
+                          <td style={{ padding: '8px 10px', fontSize: '10px',
+                            color: '#6B4C2A', fontStyle: 'italic' }}>
+                            {(KOOTA_MEANING_LANG as any)[name]?.[lang] || KOOTA_MEANING[name] || ''}
+                          </td>
+                        </tr>
+                      )
+                    })}
+                    <tr style={{ background: '#3D0808' }}>
+                      <td colSpan={2} style={{ padding: '8px 10px', color: '#C8A96A',
+                        fontWeight: 700, fontFamily: 'Cinzel,serif', fontSize: '11px' }}>
+                        {L.total[lang]}
+                      </td>
+                      <td style={{ padding: '8px 10px', color: pct>=60?'#86EFAC':'#FCA5A5',
+                        fontWeight: 900, fontSize: '16px', textAlign: 'center' }}>{score}</td>
+                      <td colSpan={2} style={{ padding: '8px 10px', color: '#C8A96A', fontSize: '11px' }}>
+                        / {total} · {pct}% · {pct>=70?L.excellent[lang]:pct>=50?L.good[lang]:L.needsReview[lang]}
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              {/* Pathu Porutham table */}
+              {poruthams.length > 0 && (
+                <div style={{ marginTop: '28px' }}>
+                  <div style={{ fontFamily: 'Cinzel,serif', fontSize: '13px', fontWeight: 700,
+                    color: '#3D0808', borderBottom: '2px solid #C8A96A', paddingBottom: '6px',
+                    marginBottom: '12px', textTransform: 'uppercase', letterSpacing: '.06em' }}>
+                    {L.pathuPoruthamDetail[lang]}
+                  </div>
+                  {rajjuWarn && (
+                    <div style={{ background: '#FEF2F2', border: '1px solid #FCA5A5',
+                      borderRadius: '8px', padding: '10px 14px', fontSize: '12px',
+                      color: '#DC2626', marginBottom: '12px' }}>
+                      ⚠ {rajjuWarn}
+                    </div>
+                  )}
+                  <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '12px' }}>
+                    <thead>
+                      <tr style={{ background: '#3D0808' }}>
+                        {['#', L.porutham[lang], L.result[lang], L.meaning[lang]].map(h => (
+                          <th key={h} style={{ padding: '8px 10px', color: '#fff', textAlign: 'left',
+                            fontSize: '9px', fontWeight: 700, textTransform: 'uppercase' }}>{h}</th>
+                        ))}
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {poruthams.map((p: any, i: number) => {
+                        const pass = p.Verdict === 'Compatible' || p.pass || p.Pass
+                        // Tamil porutham names in order (fallback if KootaName missing)
+                        const PATHU_NAMES = ['Dinam','Ganam','Mahendram','Sthree Dheerga','Yoni','Rasi','Rasiyathipati','Rajju']
+                        const rawName = p.KootaName || p.name || p.Name || ''
+                        const name = rawName || PATHU_NAMES[i] || `Porutham ${i+1}`
+                        const isCritical = name === 'Rajju' || name === 'Vedha'
+                        return (
+                          <tr key={i} style={{ background: i%2 ? '#FDF6EE' : '#fff',
+                            borderBottom: '1px solid #E8D8C0' }}>
+                            <td style={{ padding: '8px 10px', color: '#6B4C2A', fontSize: '11px',
+                              textAlign: 'center', fontWeight: 700 }}>{i+1}</td>
+                            <td style={{ padding: '8px 10px', fontWeight: 700, color: '#3D0808',
+                              fontFamily: 'Cinzel,serif', fontSize: '11px' }}>
+                              {(L.poruthamNames as any)[name]?.[lang] || name}
+                              {isCritical && <span style={{ marginLeft: '6px', fontSize: '9px',
+                                color: '#B7862C', fontFamily: 'sans-serif' }}>★ critical</span>}
+                            </td>
+                            <td style={{ padding: '8px 10px', fontWeight: 700,
+                              color: pass ? '#16A34A' : '#DC2626', fontSize: '12px' }}>
+                              {pass ? `✓ ${L.pass[lang]}` : `✗ ${L.fail[lang]}`}
+                            </td>
+                            <td style={{ padding: '8px 10px', fontSize: '10px',
+                              color: '#6B4C2A', fontStyle: 'italic' }}>
+                              {(PORUTHAM_MEANING_LANG as any)[name]?.[lang] || PORUTHAM_MEANING[name] || ''}
+                            </td>
+                          </tr>
+                        )
+                      })}
+                    </tbody>
+                  </table>
+                  <div style={{ fontSize: '10px', color: '#6B4C2A', marginTop: '10px',
+                    padding: '8px 12px', background: '#FDF6EE', borderRadius: '6px',
+                    border: '1px solid #E8D8C0' }}>
+                    ★ {L.rajjuNote[lang]}
+                    {pScore > 0 && (
+                      <span> · {L.score[lang]}: <strong>{pScore}/{pTotal || 10}</strong></span>
+                    )}
+                  </div>
+                </div>
+              )}
+
+              {/* Warnings */}
+              {vedhaPresent && (
+                <div style={{ marginTop: '16px', padding: '12px 14px',
+                  background: '#FFFBEB', border: '1px solid #F59E0B',
+                  borderRadius: '8px', fontSize: '12px', color: '#92400E' }}>
+                  ⚠ Vedha present — an inauspicious star combination exists. A proper Muhurtha selection can mitigate this.
+                </div>
+              )}
+
+              {/* Footer band */}
+              <div style={{ marginTop: '24px', paddingTop: '16px',
+                borderTop: '1px solid #E8D8C0', textAlign: 'center',
+                fontSize: '10px', color: '#6B4C2A' }}>
+                www.vedichora.com · {L.footer[lang]}
+              </div>
+            </div>
+          </div>
+
+          {/* PDF Download — works for everyone, no login required */}
+          <div style={{ background:'var(--bg2)', border:'1px solid var(--bd)', borderRadius:'12px', padding:'18px 20px' }}>
+            <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', flexWrap:'wrap', gap:'12px' }}>
+              <div>
+                <div style={{ fontFamily:'Cinzel,serif', fontWeight:700, fontSize:'13px', color:'var(--acc)', marginBottom:'3px' }}>
+                  📄 Download Full Report
+                </div>
+                <div style={{ fontSize:'11px', color:'var(--txm)' }}>
+                  Complete Vivaha Porutham · All 10 Poruthams with meanings · Ashta Koota · Remedies
+                </div>
+              </div>
+              <div style={{ display:'flex', gap:'8px', flexWrap:'wrap' }}>
+                {(['en','ta','hi'] as const).map(l => (
+                  <button key={l} onClick={() => downloadPdf(l)} disabled={pdfLoading==='gen'}
+                    style={{ padding:'8px 16px', borderRadius:'8px', border:'none', cursor:'pointer',
+                      background: pdfLoading==='gen' ? 'var(--bd)' : 'var(--acc)', color:'#fff',
+                      fontSize:'12px', fontWeight:700, display:'flex', alignItems:'center', gap:'6px',
+                      opacity: pdfLoading==='gen' ? 0.6 : 1 }}>
+                    <Download style={{ width:'12px', height:'12px' }} />
+                    {l==='en' ? '🇬🇧 English' : l==='ta' ? '🇮🇳 தமிழ்' : '🇮🇳 हिन्दी'}
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+
+        </div>
+      )}
+    </div>
+  )
+}
