@@ -689,8 +689,14 @@ export default function MatchPage() {
         brideLagna:     r.brideLagna     ?? '',
         groomNadi:      r.groomNadi  ?? r.GroomNadi  ?? '',
         brideNadi:      r.brideNadi  ?? r.BrideNadi  ?? '',
-        groomLagna:     r.groomLagna ?? r.GroomLagna ?? '',
-        brideLagna:     r.brideLagna ?? r.BrideLagna ?? '',
+        groomLagna:     r.GroomLagna ?? r.groomLagna ?? '',
+        brideLagna:     r.BrideLagna ?? r.brideLagna ?? '',
+        groomNadi:      r.GroomNadi  ?? r.groomNadi  ?? '',
+        brideNadi:      r.BrideNadi  ?? r.brideNadi  ?? '',
+        groomGana:      r.GroomGana  ?? r.groomGana  ?? '',
+        brideGana:      r.BrideGana  ?? r.brideGana  ?? '',
+        groomPada:      r.GroomPada  ?? r.groomPada  ?? '',
+        bridePada:      r.BridePada  ?? r.bridePada  ?? '',
         groomPada:      r.groomPada  ?? r.GroomPada  ?? '',
         bridePada:      r.bridePada  ?? r.BridePada  ?? '',
       }
@@ -952,8 +958,10 @@ export default function MatchPage() {
         .replaceAll('{{LAGNA2}}',       safe(data.brideLagna))
         .replaceAll('{{NADI1}}',        safe(data.groomNadi))
         .replaceAll('{{NADI2}}',        safe(data.brideNadi))
-        .replaceAll('{{GANA1}}',        safe(data.groomGana  || ''))
-        .replaceAll('{{GANA2}}',        safe(data.brideGana  || ''))
+        .replaceAll('{{GANA1}}',        safe(data.groomGana))
+        .replaceAll('{{GANA2}}',        safe(data.brideGana))
+        .replaceAll('{{PADA1}}',        safe(data.groomPada))
+        .replaceAll('{{PADA2}}',        safe(data.bridePada))
         // Scores
         .replaceAll('{{PATHU_SCORE}}',  safe(pathuScore2))
         .replaceAll('{{PATHU_TOTAL}}',  safe(pathuTotal2))
