@@ -1,17 +1,17 @@
 === CURRENT e2e FILES ===
 total 80
-drwxr-xr-x  2 runner runner  4096 Jul 26 01:27 .
-drwxr-xr-x 10 runner runner  4096 Jul 26 01:28 ..
--rw-r--r--  1 runner runner  4428 Jul 26 01:27 01-auth.spec.js
--rw-r--r--  1 runner runner 13487 Jul 26 01:27 02-chart.spec.js
--rw-r--r--  1 runner runner  2851 Jul 26 01:27 03-match.spec.js
--rw-r--r--  1 runner runner  2685 Jul 26 01:27 04-horoscope.spec.js
--rw-r--r--  1 runner runner  3485 Jul 26 01:27 05-deployment.spec.js
--rw-r--r--  1 runner runner  5636 Jul 26 01:27 06-match-10.spec.js
--rw-r--r--  1 runner runner  8626 Jul 26 01:27 functional-test.spec.js
--rw-r--r--  1 runner runner  2685 Jul 26 01:27 helpers.js
--rw-r--r--  1 runner runner  3335 Jul 26 01:27 screenshot.spec.js
--rw-r--r--  1 runner runner  6794 Jul 26 01:27 tab-screenshots.spec.js
+drwxr-xr-x  2 runner runner  4096 Jul 26 01:30 .
+drwxr-xr-x 10 runner runner  4096 Jul 26 01:30 ..
+-rw-r--r--  1 runner runner  4428 Jul 26 01:30 01-auth.spec.js
+-rw-r--r--  1 runner runner 13487 Jul 26 01:30 02-chart.spec.js
+-rw-r--r--  1 runner runner  2851 Jul 26 01:30 03-match.spec.js
+-rw-r--r--  1 runner runner  2685 Jul 26 01:30 04-horoscope.spec.js
+-rw-r--r--  1 runner runner  3485 Jul 26 01:30 05-deployment.spec.js
+-rw-r--r--  1 runner runner  5636 Jul 26 01:30 06-match-10.spec.js
+-rw-r--r--  1 runner runner  8626 Jul 26 01:30 functional-test.spec.js
+-rw-r--r--  1 runner runner  2685 Jul 26 01:30 helpers.js
+-rw-r--r--  1 runner runner  3335 Jul 26 01:30 screenshot.spec.js
+-rw-r--r--  1 runner runner  6794 Jul 26 01:30 tab-screenshots.spec.js
 
 === BUILD OUTPUT ===
 > vedichora@1.0.0 build
@@ -49,10 +49,10 @@ Route (app)                              Size     First Load JS
 ├ ○ /api-docs                            1.87 kB        86.8 kB
 ├ ○ /chart                               20.2 kB         139 kB
 ├ ○ /checkout                            5.07 kB          90 kB
-├ ○ /consult                             5.5 kB         90.5 kB
+├ ○ /consult                             5.5 kB         90.4 kB
 ├ ○ /dashboard                           3.37 kB         115 kB
 ├ ○ /jyoti                               5.91 kB         118 kB
-├ ○ /learn                               2.52 kB        84.5 kB
+├ ○ /learn                               2.52 kB        84.4 kB
 ├ ○ /match                               16.2 kB         128 kB
 ├ ○ /muhurta                             2.58 kB         115 kB
 ├ ○ /numerology                          3.73 kB         113 kB
@@ -61,15 +61,15 @@ Route (app)                              Size     First Load JS
 ├ ○ /shop                                2.09 kB         114 kB
 ├ ○ /signin                              2.93 kB         122 kB
 ├ ○ /signup                              3.46 kB         122 kB
-├ ○ /transits                            4.09 kB        86.1 kB
+├ ○ /transits                            4.09 kB          86 kB
 ├ ○ /varshaphal                          1.89 kB         114 kB
-├ ○ /western                             15 kB           104 kB
+├ ○ /western                             14.5 kB         103 kB
 └ ○ /yogas                               1.78 kB        86.7 kB
-+ First Load JS shared by all            82 kB
++ First Load JS shared by all            81.9 kB
   ├ chunks/938-cac2006256170abd.js       26.7 kB
   ├ chunks/fd9d1056-591193791e59a9f8.js  53.3 kB
   ├ chunks/main-app-b4533ec2e702cf2a.js  220 B
-  └ chunks/webpack-b08c8810f1e763f1.js   1.8 kB
+  └ chunks/webpack-39c204afb6cf78af.js   1.74 kB
 
 
 ○  (Static)  prerendered as static content
