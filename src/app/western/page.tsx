@@ -165,34 +165,43 @@ function Sel({value,onChange,opts,placeholder,w}:{value:number|string,onChange:(
 
 // ── Western Layered Matching Section ─────────────────────────────────────
 function WesternDashaSection({
-  compatResult, name1, name2, scoreColor
+  compatResult, name1, name2, scoreColor, saved, token
 }: {
-  compatResult: any; name1: string; name2: string; scoreColor: (n:number)=>string
+  compatResult: any; name1: string; name2: string
+  scoreColor: (n:number)=>string; saved: any[]; token: string|null
 }) {
-  const [deep, setDeep] = useState<any>(null)
+  const [deep, setDeep]       = useState<any>(null)
   const [loading, setLoading] = useState(false)
-  const [loaded, setLoaded] = useState(false)
+  const [loaded, setLoaded]   = useState(false)
   const [relType, setRelType] = useState('Other')
-  const [mode, setMode] = useState<'future'|'past'|'full'>('future')
+  const [mode, setMode]       = useState<'future'|'past'|'full'>('future')
 
-  const r = compatResult as any
-  const ashta   = r?.AshtaKootaScore  ?? r?.ashtaKootaScore  ?? 0
-  const aTotal  = r?.AshtaKootaTotal  ?? r?.ashtaKootaTotal  ?? 36
-  const pathu   = r?.PathuPoruthamScore ?? r?.pathuPoruthamScore ?? 0
-  const pTotal  = r?.PathuPoruthamTotal ?? r?.pathuPoruthamTotal ?? 10
-  const isRec   = r?.IsRecommended ?? r?.isRecommended ?? false
+  const r       = compatResult as any
+  const ashta   = r?.AshtaKootaScore   ?? r?.ashtaKootaScore   ?? 0
+  const aTotal  = r?.AshtaKootaTotal   ?? r?.ashtaKootaTotal   ?? 36
+  const pathu   = r?.PathuPoruthamScore?? r?.pathuPoruthamScore?? 0
+  const pTotal  = 10
   const rajjuOk = r?.RajjuPass ?? r?.rajjuPass ?? true
-  const rajjuWarn = r?.RajjuWarning ?? r?.rajjuWarning ?? ''
-  const hid1 = r?.hid1 || r?.horoscopeId1
-  const hid2 = r?.hid2 || r?.horoscopeId2
-  const hasSaved = !!(hid1 && hid2)
+  const hid1    = r?.hid1 || r?.horoscopeId1
+  const hid2    = r?.hid2 || r?.horoscopeId2
+  const hasSaved= !!(hid1 && hid2)
 
-  // Overall score: blend ashta + pathu
-  const overallPct = Math.round((ashta/aTotal * 0.5 + pathu/pTotal * 0.5) * 100)
-  const overallLabel = overallPct >= 75 ? 'Excellent Match'
-    : overallPct >= 60 ? 'Good Match'
-    : overallPct >= 45 ? 'Average Match'
-    : 'Needs Consideration'
+  // Single plain score 0-100
+  const score   = Math.round((ashta / aTotal * 0.55 + pathu / pTotal * 0.35 + (rajjuOk ? 0.10 : 0)) * 100)
+  const label   = score >= 80 ? 'Exceptional Match'
+                : score >= 65 ? 'Strong Match'
+                : score >= 50 ? 'Good Match'
+                : score >= 38 ? 'Average Match'
+                : 'Needs Consideration'
+  const desc    = score >= 80
+    ? `${name1} and ${name2} show exceptional alignment across all major factors. The foundations here are genuinely strong.`
+    : score >= 65
+    ? `${name1} and ${name2} show strong compatibility. The relationship has solid foundations with a few areas worth conscious attention.`
+    : score >= 50
+    ? `${name1} and ${name2} show good compatibility overall. Some differences exist but the relationship can thrive with awareness.`
+    : score >= 38
+    ? `${name1} and ${name2} show average compatibility. Conscious effort in specific areas will make the difference.`
+    : `${name1} and ${name2} have significant differences in core areas. A meaningful relationship is possible with deliberate work.`
 
   const loadDeep = async () => {
     if (!hid1 || !hid2) return
@@ -209,91 +218,68 @@ function WesternDashaSection({
       if (mode === 'past')   { body.FromYear = now - 10; body.ToYear = now }
       if (mode === 'future') { body.FromYear = now; body.ToYear = now + 10 }
       if (mode === 'full')   { body.FullRange = true }
-      const token = typeof window !== 'undefined' ? localStorage.getItem('vh_token') : null
-      const headers: any = { 'Content-Type': 'application/json' }
-      if (token) headers['Authorization'] = `Bearer ${token}`
+      const hdrs: any = { 'Content-Type': 'application/json' }
+      if (token) hdrs['Authorization'] = `Bearer ${token}`
       const res = await fetch(`${CHART_URL}/api/matchmaking/deep`, {
-        method: 'POST', headers, body: JSON.stringify(body)
+        method: 'POST', headers: hdrs, body: JSON.stringify(body)
       }).then(r => r.json())
       setDeep(res?.data?.data ?? res?.data ?? res)
     } catch {}
     setLoading(false); setLoaded(true)
   }
 
-  // deep fields from /api/matchmaking/deep
   const yearSummary: any[] = deep?.yearSummary ?? []
   const bestYears: any[]   = deep?.bestYears ?? []
   const chalYears: any[]   = deep?.challengingYears ?? []
   const crossPreds: any[]  = deep?.crossPredictions ?? []
   const now = new Date().getFullYear()
 
-  const verdictColor = (v: string) => {
-    if (!v) return '#888'
-    const u = v.toUpperCase()
-    if (u.includes('FAVOUR') || u.includes('POSITIVE')) return '#16a34a'
-    if (u.includes('DIFFICULT') || u.includes('CHALLENG')) return '#dc2626'
-    return '#d97706'
-  }
-
   return (
-    <div style={{display:'flex',flexDirection:'column',gap:'16px'}}>
+    <div style={{display:'flex',flexDirection:'column',gap:'20px'}}>
 
-      {/* ── Compatibility score — plain English, no Indian terms ─────── */}
-      <div style={{background:'var(--w-surf)',border:'1px solid var(--w-bd)',borderRadius:'20px',padding:'28px',boxShadow:'0 4px 24px rgba(0,0,0,.06)'}}>
-        <div style={{textAlign:'center',marginBottom:'24px'}}>
-          <div style={{fontSize:'11px',fontWeight:700,letterSpacing:'.1em',textTransform:'uppercase',color:'var(--w-acc)',marginBottom:'10px'}}>
-            Compatibility Score
-          </div>
-          <div style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:'52px',fontWeight:800,color:scoreColor(overallPct),lineHeight:1}}>
-            {overallPct}%
-          </div>
-          <div style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:'18px',color:'var(--w-tx)',marginTop:'8px',fontWeight:600}}>
-            {overallLabel}
-          </div>
-          <div style={{fontSize:'13px',color:'var(--w-tx2)',marginTop:'6px'}}>
-            {name1} & {name2}
-          </div>
-        </div>
+      {/* ── Big score ─────────────────────────────────────────────────── */}
+      <div style={{background:'var(--w-surf)',border:'1px solid var(--w-bd)',borderRadius:'24px',
+        padding:'40px 32px',boxShadow:'0 4px 32px rgba(0,0,0,.07)',textAlign:'center'}}>
 
-        {/* 3 plain-English score boxes */}
-        <div style={{display:'grid',gridTemplateColumns:'repeat(3,1fr)',gap:'10px',marginBottom:'16px'}}>
-          {[
-            { label:'Star Harmony', val:`${ashta}/${aTotal}`, pct:Math.round(ashta/aTotal*100), ok: ashta >= aTotal*0.58 },
-            { label:'Life Compatibility', val:`${pathu}/${pTotal}`, pct:Math.round(pathu/pTotal*100), ok: pathu >= pTotal*0.5 },
-            { label:'Partnership Bond', val: rajjuOk ? '✓ Harmonious' : '⚠ Needs Care', pct: rajjuOk ? 100 : 30, ok: rajjuOk },
-          ].map(({label,val,pct,ok}) => (
-            <div key={label} style={{textAlign:'center',padding:'14px 8px',borderRadius:'12px',background:'var(--w-bg)',border:`1px solid ${ok?'#16a34a44':'#ef444444'}`}}>
-              <div style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:'18px',fontWeight:800,color:scoreColor(pct)}}>{val}</div>
-              <div style={{fontSize:'10px',color:'var(--w-tx2)',marginTop:'4px',textTransform:'uppercase',letterSpacing:'.04em'}}>{label}</div>
+        {/* Circular score */}
+        <div style={{position:'relative',width:'160px',height:'160px',margin:'0 auto 24px'}}>
+          <svg width="160" height="160" style={{transform:'rotate(-90deg)'}}>
+            <circle cx="80" cy="80" r="68" fill="none" stroke="var(--w-bd)" strokeWidth="10"/>
+            <circle cx="80" cy="80" r="68" fill="none"
+              stroke={scoreColor(score)} strokeWidth="10"
+              strokeDasharray={`${2*Math.PI*68*score/100} ${2*Math.PI*68*(1-score/100)}`}
+              strokeLinecap="round"/>
+          </svg>
+          <div style={{position:'absolute',inset:0,display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center'}}>
+            <div style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:'40px',fontWeight:800,color:scoreColor(score),lineHeight:1}}>
+              {score}
             </div>
-          ))}
+            <div style={{fontSize:'12px',color:'var(--w-tx2)',marginTop:'2px'}}>out of 100</div>
+          </div>
         </div>
 
-        {rajjuWarn && (
-          <div style={{background:'#fef2f2',border:'1px solid #fca5a5',borderRadius:'8px',padding:'10px 14px',fontSize:'12px',color:'#dc2626',marginBottom:'12px'}}>
-            ⚠ {rajjuWarn}
-          </div>
-        )}
-
-        <div style={{fontSize:'13px',color:'var(--w-tx2)',lineHeight:1.7,padding:'12px 14px',background:'var(--w-bg)',borderRadius:'8px',borderLeft:'3px solid var(--w-acc)'}}>
-          {overallPct >= 75
-            ? `${name1} and ${name2} show strong natural alignment across all major compatibility factors. The foundation for this relationship is genuinely solid.`
-            : overallPct >= 60
-            ? `${name1} and ${name2} show good compatibility with some areas requiring conscious attention. Overall the relationship has a strong foundation.`
-            : overallPct >= 45
-            ? `${name1} and ${name2} show average compatibility. The relationship can thrive with awareness and effort in specific areas.`
-            : `${name1} and ${name2} show significant differences in core compatibility areas. This does not preclude a meaningful relationship, but it calls for conscious navigation.`
-          }
+        <div style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:'22px',fontWeight:700,color:'var(--w-tx)',marginBottom:'6px'}}>
+          {label}
+        </div>
+        <div style={{fontSize:'13px',color:'var(--w-tx2)',marginBottom:'6px'}}>
+          {name1} & {name2}
+        </div>
+        <div style={{fontSize:'14px',color:'var(--w-tx)',lineHeight:1.7,maxWidth:'420px',margin:'16px auto 0',
+          padding:'14px',background:'var(--w-bg)',borderRadius:'10px',borderLeft:'3px solid var(--w-acc)'}}>
+          {desc}
         </div>
       </div>
 
-      {/* ── Deep compatibility — year-by-year ──────────────────────────── */}
-      <div style={{background:'var(--w-surf)',border:'1px solid var(--w-bd)',borderRadius:'20px',padding:'28px',boxShadow:'0 4px 24px rgba(0,0,0,.06)'}}>
-        <div style={{fontSize:'11px',fontWeight:700,letterSpacing:'.1em',textTransform:'uppercase',color:'var(--w-acc)',marginBottom:'16px',textAlign:'center'}}>
+      {/* ── Timeline ─────────────────────────────────────────────────── */}
+      <div style={{background:'var(--w-surf)',border:'1px solid var(--w-bd)',borderRadius:'24px',
+        padding:'28px 32px',boxShadow:'0 4px 32px rgba(0,0,0,.07)'}}>
+
+        <div style={{fontSize:'11px',fontWeight:700,letterSpacing:'.1em',textTransform:'uppercase',
+          color:'var(--w-acc)',marginBottom:'18px',textAlign:'center'}}>
           Compatibility Timeline
         </div>
 
-        {/* Relationship type + time window + load button */}
+        {/* Saved charts → load deep */}
         {hasSaved && !loaded && (
           <div>
             <div style={{display:'flex',gap:'6px',flexWrap:'wrap',marginBottom:'10px'}}>
@@ -307,7 +293,7 @@ function WesternDashaSection({
               ))}
             </div>
             <div style={{display:'flex',gap:'6px',flexWrap:'wrap',marginBottom:'14px'}}>
-              {([['future',`Next 10 years (${now}–${now+10})`],['past',`Past 10 years (${now-10}–${now})`],['full','Full lifetime ★']] as [string,string][]).map(([v,l])=>(
+              {([['future',`Next 10 years`],['past',`Past 10 years`],['full','Full lifetime ★']] as [string,string][]).map(([v,l])=>(
                 <button key={v} onClick={()=>setMode(v as any)}
                   style={{padding:'5px 12px',fontSize:'11px',borderRadius:'6px',cursor:'pointer',border:'none',
                     background:mode===v?'var(--w-acc)':'var(--w-bg)',
@@ -317,29 +303,31 @@ function WesternDashaSection({
               ))}
             </div>
             <button onClick={loadDeep} disabled={loading}
-              style={{width:'100%',padding:'12px',background:'var(--w-acc)',color:'#fff',border:'none',borderRadius:'10px',cursor:'pointer',fontSize:'13px',fontWeight:600}}>
-              {loading ? 'Analysing…' : 'Analyse Compatibility Timeline →'}
+              style={{width:'100%',padding:'13px',background:'var(--w-acc)',color:'#fff',border:'none',
+                borderRadius:'10px',cursor:'pointer',fontSize:'13px',fontWeight:600,
+                fontFamily:"'Playfair Display',Georgia,serif"}}>
+              {loading ? 'Analysing…' : 'See Year-by-Year Compatibility →'}
             </button>
           </div>
         )}
 
-        {/* After loaded — year timeline bar */}
+        {/* Year timeline */}
         {loaded && yearSummary.length > 0 && (
           <div style={{marginBottom:'20px'}}>
             <div style={{display:'flex',gap:'3px',flexWrap:'wrap',marginBottom:'8px'}}>
               {yearSummary.map((y:any)=>(
                 <div key={y.year} title={y.note||y.verdict}
-                  style={{width:'30px',height:'30px',borderRadius:'4px',display:'flex',flexDirection:'column',
-                    alignItems:'center',justifyContent:'center',fontSize:'8px',fontWeight:700,cursor:'default',
-                    background: y.verdict==='Favourable'?'#bbf7d0':y.verdict==='Difficult'?'#fecaca':y.verdict==='Challenging'?'#fed7aa':'#e5e7eb',
-                    color: y.verdict==='Favourable'?'#15803d':y.verdict==='Difficult'?'#dc2626':y.verdict==='Challenging'?'#b45309':'#6b7280',
-                    border: y.isPast?'1px dashed #9ca3af':'none',opacity:y.isPast?0.7:1}}>
+                  style={{width:'32px',height:'32px',borderRadius:'5px',display:'flex',alignItems:'center',
+                    justifyContent:'center',fontSize:'8.5px',fontWeight:700,cursor:'default',
+                    background:y.verdict==='Favourable'?'#bbf7d0':y.verdict==='Difficult'?'#fecaca':y.verdict==='Challenging'?'#fed7aa':'#e5e7eb',
+                    color:y.verdict==='Favourable'?'#15803d':y.verdict==='Difficult'?'#dc2626':y.verdict==='Challenging'?'#92400e':'#6b7280',
+                    border:y.isPast?'1px dashed #9ca3af':'none',opacity:y.isPast?0.7:1}}>
                   {String(y.year).slice(2)}
                 </div>
               ))}
             </div>
-            <div style={{display:'flex',gap:'12px',fontSize:'9px'}}>
-              {[['#bbf7d0','#15803d','Favourable'],['#fed7aa','#b45309','Mixed'],['#fecaca','#dc2626','Difficult']].map(([bg,c,l])=>(
+            <div style={{display:'flex',gap:'14px',fontSize:'9px',marginBottom:'16px'}}>
+              {[['#bbf7d0','#15803d','Favourable'],['#fed7aa','#92400e','Mixed'],['#fecaca','#dc2626','Difficult']].map(([bg,c,l])=>(
                 <div key={l} style={{display:'flex',alignItems:'center',gap:'3px'}}>
                   <div style={{width:'10px',height:'10px',borderRadius:'2px',background:bg}}/>
                   <span style={{color:c}}>{l}</span>
@@ -350,63 +338,68 @@ function WesternDashaSection({
           </div>
         )}
 
-        {/* Best years */}
+        {/* Best periods */}
         {bestYears.length > 0 && (
-          <div style={{marginBottom:'14px',padding:'14px',background:'#f0fdf4',border:'1px solid #16a34a55',borderRadius:'10px'}}>
-            <div style={{fontSize:'10px',fontWeight:700,color:'#15803d',marginBottom:'8px',textTransform:'uppercase'}}>🌟 Best Periods</div>
+          <div style={{marginBottom:'14px',padding:'16px',background:'#f0fdf4',border:'1px solid #86efac',borderRadius:'12px'}}>
+            <div style={{fontSize:'10px',fontWeight:700,color:'#15803d',marginBottom:'10px',textTransform:'uppercase',letterSpacing:'.06em'}}>
+              🌟 Best Periods Together
+            </div>
             {bestYears.slice(0,3).map((y:any,i:number)=>(
-              <div key={i} style={{marginBottom:'6px'}}>
-                <div style={{fontSize:'12px',fontWeight:700,color:'#15803d'}}>
-                  {new Date(y.startDate).getFullYear()}–{new Date(y.endDate).getFullYear()} · {y.label}
+              <div key={i} style={{marginBottom:'8px',paddingBottom:'8px',borderBottom:i<bestYears.slice(0,3).length-1?'1px solid #bbf7d0':'none'}}>
+                <div style={{fontSize:'13px',fontWeight:700,color:'#15803d'}}>
+                  {new Date(y.startDate).getFullYear()}–{new Date(y.endDate).getFullYear()}
                 </div>
-                {y.note && <div style={{fontSize:'11px',color:'#166534',marginTop:'2px',lineHeight:1.4}}>{y.note.slice(0,120)}</div>}
+                {y.note && <div style={{fontSize:'12px',color:'#166534',marginTop:'3px',lineHeight:1.5}}>{y.note.slice(0,150)}</div>}
               </div>
             ))}
           </div>
         )}
 
-        {/* Challenging years */}
+        {/* Challenging periods */}
         {chalYears.length > 0 && (
-          <div style={{marginBottom:'14px',padding:'14px',background:'#fef2f2',border:'1px solid #fca5a555',borderRadius:'10px'}}>
-            <div style={{fontSize:'10px',fontWeight:700,color:'#dc2626',marginBottom:'8px',textTransform:'uppercase'}}>⚠ Periods Requiring Awareness</div>
+          <div style={{marginBottom:'14px',padding:'16px',background:'#fef2f2',border:'1px solid #fca5a5',borderRadius:'12px'}}>
+            <div style={{fontSize:'10px',fontWeight:700,color:'#dc2626',marginBottom:'10px',textTransform:'uppercase',letterSpacing:'.06em'}}>
+              ⚠ Periods Requiring Awareness
+            </div>
             {chalYears.slice(0,3).map((y:any,i:number)=>(
-              <div key={i} style={{marginBottom:'6px'}}>
-                <div style={{fontSize:'12px',fontWeight:700,color:'#dc2626'}}>
-                  {new Date(y.startDate).getFullYear()}–{new Date(y.endDate).getFullYear()} · {y.label}
+              <div key={i} style={{marginBottom:'8px',paddingBottom:'8px',borderBottom:i<chalYears.slice(0,3).length-1?'1px solid #fecaca':'none'}}>
+                <div style={{fontSize:'13px',fontWeight:700,color:'#dc2626'}}>
+                  {new Date(y.startDate).getFullYear()}–{new Date(y.endDate).getFullYear()}
                 </div>
-                {y.note && <div style={{fontSize:'11px',color:'#991b1b',marginTop:'2px',lineHeight:1.4}}>{y.note.slice(0,120)}</div>}
+                {y.note && <div style={{fontSize:'12px',color:'#991b1b',marginTop:'3px',lineHeight:1.5}}>{y.note.slice(0,150)}</div>}
               </div>
             ))}
           </div>
         )}
 
-        {/* Cross predictions — dual narrative */}
+        {/* Dual narrative cards */}
         {crossPreds.filter((p:any)=>p.intensity==='SEVERE'||p.intensity==='POSITIVE').slice(0,4).map((p:any,i:number)=>(
-          <div key={i} style={{marginBottom:'10px',padding:'12px 14px',borderRadius:'10px',
+          <div key={i} style={{marginBottom:'10px',padding:'14px',borderRadius:'12px',
             background:p.intensity==='POSITIVE'?'#f0fdf4':'#fef2f2',
-            border:`1px solid ${p.intensity==='POSITIVE'?'#16a34a55':'#fca5a555'}`}}>
-            <div style={{fontSize:'10px',fontWeight:700,color:p.intensity==='POSITIVE'?'#15803d':'#dc2626',marginBottom:'6px',textTransform:'uppercase'}}>
+            border:`1px solid ${p.intensity==='POSITIVE'?'#86efac':'#fca5a5'}`}}>
+            <div style={{fontSize:'10px',fontWeight:700,
+              color:p.intensity==='POSITIVE'?'#15803d':'#dc2626',
+              marginBottom:'6px',textTransform:'uppercase',letterSpacing:'.05em'}}>
               {p.intensity==='POSITIVE'?'🌟':'⚠'} {p.yearRange} · {p.who}
               {p.isCurrent&&<span style={{marginLeft:'6px',fontSize:'9px',background:'var(--w-acc)',color:'#fff',padding:'1px 5px',borderRadius:'3px'}}>Now</span>}
             </div>
-            {p.fromTheirSide && <div style={{fontSize:'12px',color:'var(--w-tx)',lineHeight:1.5,marginBottom:'4px'}}>{p.fromTheirSide}</div>}
-            {p.fromPartnerSide && <div style={{fontSize:'11px',color:'var(--w-tx2)',lineHeight:1.5,fontStyle:'italic'}}>{p.fromPartnerSide}</div>}
+            {p.fromTheirSide&&<div style={{fontSize:'12px',color:'var(--w-tx)',lineHeight:1.6,marginBottom:'4px'}}>{p.fromTheirSide}</div>}
+            {p.fromPartnerSide&&<div style={{fontSize:'11px',color:'var(--w-tx2)',lineHeight:1.5,fontStyle:'italic'}}>{p.fromPartnerSide}</div>}
           </div>
         ))}
 
-        {/* Re-run switcher */}
+        {/* Re-run + PDF */}
         {loaded && (
-          <div style={{display:'flex',gap:'6px',flexWrap:'wrap',marginTop:'12px',alignItems:'center'}}>
+          <div style={{display:'flex',gap:'6px',flexWrap:'wrap',marginTop:'14px',alignItems:'center'}}>
             {(['future','past','full'] as const).map(m=>(
               <button key={m} onClick={()=>{setMode(m);setLoaded(false);setTimeout(loadDeep,50)}}
-                style={{padding:'4px 10px',fontSize:'9px',borderRadius:'5px',cursor:'pointer',border:'none',
+                style={{padding:'5px 10px',fontSize:'10px',borderRadius:'6px',cursor:'pointer',border:'none',
                   background:mode===m?'var(--w-acc)':'var(--w-bg)',
                   color:mode===m?'#fff':'var(--w-tx)',fontWeight:mode===m?700:400}}>
-                {m==='future'?`${now}+`:m==='past'?'Past 10yr':'70yr ★'}
+                {m==='future'?`${now}–${now+10}`:m==='past'?`${now-10}–${now}`:'Full 70yr ★'}
               </button>
             ))}
-            <button
-              onClick={()=>{
+            <button onClick={()=>{
                 fetch('/western-report.html').then(res=>res.text()).then(tmpl=>{
                   const d={name1:r?.name1||name1,name2:r?.name2||name2,
                     gender1:'Male',gender2:'Female',
@@ -417,16 +410,20 @@ function WesternDashaSection({
                   if(w){w.document.write(inj);w.document.close();setTimeout(()=>w.print(),800);}
                 });
               }}
-              style={{marginLeft:'auto',padding:'6px 14px',background:'#0F1117',color:'#D4AF55',border:'none',borderRadius:'7px',cursor:'pointer',fontFamily:"'Playfair Display',Georgia,serif",fontSize:'11px',fontWeight:600}}>
+              style={{marginLeft:'auto',padding:'7px 16px',background:'#0F1117',color:'#D4AF55',
+                border:'none',borderRadius:'8px',cursor:'pointer',
+                fontFamily:"'Playfair Display',Georgia,serif",fontSize:'11px',fontWeight:600}}>
               ⬇ Download PDF
             </button>
           </div>
         )}
 
+        {/* Guest prompt */}
         {!hasSaved && (
-          <div style={{padding:'14px',background:'var(--w-bg)',borderRadius:'10px',fontSize:'12px',color:'var(--w-tx2)',lineHeight:1.6,textAlign:'center'}}>
-            <strong style={{color:'var(--w-tx)'}}>Sign in & save charts</strong> to unlock year-by-year timeline, best periods, and deep compatibility analysis.{' '}
-            <a href="/signin" style={{color:'var(--w-acc)',fontWeight:600}}>Sign in →</a>
+          <div style={{padding:'16px',background:'var(--w-bg)',borderRadius:'12px',
+            fontSize:'13px',color:'var(--w-tx2)',lineHeight:1.7,textAlign:'center'}}>
+            <strong style={{color:'var(--w-tx)'}}>Sign in & save charts</strong> to unlock the year-by-year compatibility timeline, best periods for major decisions, and challenging windows to navigate carefully.{' '}
+            <a href="/signin" style={{color:'var(--w-acc)',fontWeight:700}}>Sign in →</a>
           </div>
         )}
       </div>
@@ -469,7 +466,7 @@ async function downloadWesternPdf(
 }
 
 export default function WesternPage(){
-  const [tab,setTab]=useState<Tab>('horoscope')
+  const [tab,setTab]=useState<Tab>('compatibility')
   const [themeKey,setThemeKey]=useState('cream')
   const [curr,setCurr]=useState({code:'USD',sym:'$'})
   // Horoscope
@@ -834,11 +831,64 @@ export default function WesternPage(){
         {/* ═══════ COMPATIBILITY ═══════ */}
         {tab==='compatibility' && (
           <div>
-            <div style={{textAlign:'center',marginBottom:'40px'}}>
-              <div style={{fontSize:'11px',color:'var(--w-gold)',fontWeight:700,letterSpacing:'.12em',textTransform:'uppercase',marginBottom:'12px'}}>Compatibility Analysis</div>
-              <h1 style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:'clamp(28px,4vw,44px)',fontWeight:700,color:'var(--w-tx)',lineHeight:1.15,marginBottom:'12px'}}>How Compatible Are You?</h1>
-              <p style={{fontSize:'15px',color:'var(--w-tx2)',maxWidth:'440px',margin:'0 auto',lineHeight:1.7}}>Enter both birth details below to reveal how your lives interact — the windows of alignment, friction, and shared direction.</p>
+            <div style={{textAlign:'center',marginBottom:'32px'}}>
+              <h1 style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:'clamp(24px,3.5vw,38px)',fontWeight:700,color:'var(--w-tx)',lineHeight:1.2,marginBottom:'10px'}}>How Compatible Are You?</h1>
+              <p style={{fontSize:'14px',color:'var(--w-tx2)',maxWidth:'400px',margin:'0 auto',lineHeight:1.7}}>Enter both birth details to reveal your compatibility score and year-by-year outlook.</p>
             </div>
+
+            {/* Saved chart selector */}
+            {token && saved.length > 0 && (
+              <div style={{background:'var(--w-surf)',border:'1px solid var(--w-bd)',borderRadius:'16px',padding:'20px',marginBottom:'24px',boxShadow:'0 2px 12px rgba(0,0,0,.05)'}}>
+                <div style={{fontSize:'11px',fontWeight:700,color:'var(--w-acc)',textTransform:'uppercase',letterSpacing:'.08em',marginBottom:'14px'}}>
+                  Use Saved Charts
+                </div>
+                <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:'12px'}}>
+                  {[{label:'Person 1',id:selId1,set:setSelId1},{label:'Person 2',id:selId2,set:setSelId2}].map(({label,id,set})=>(
+                    <div key={label}>
+                      <div style={{fontSize:'11px',color:'var(--w-tx2)',marginBottom:'6px'}}>{label}</div>
+                      <select value={id} onChange={e=>set(e.target.value)}
+                        style={{width:'100%',padding:'9px 12px',borderRadius:'8px',border:'1.5px solid var(--w-bd)',
+                          background:'var(--w-bg)',color:'var(--w-tx)',fontSize:'12px',cursor:'pointer'}}>
+                        <option value="">— Select chart —</option>
+                        {saved.map((c:any)=>{
+                          const cid=c.horoscopeId||c.HoroscopeId
+                          const nm=c.personName||c.PersonName||'Chart'
+                          const lg=c.ascendantName||c.AscendantName||''
+                          return <option key={cid} value={cid}>{nm}{lg?` — ${lg}`:''}</option>
+                        })}
+                      </select>
+                    </div>
+                  ))}
+                </div>
+                {selId1 && selId2 && (
+                  <button
+                    onClick={async()=>{
+                      setCompatLoading(true); setCompatErr(''); setCompatResult(null)
+                      try {
+                        const CHART_URL='https://enchanting-dedication-production.up.railway.app'
+                        const hdrs={'Content-Type':'application/json','Authorization':`Bearer ${token}`}
+                        const mres=await fetch(`${CHART_URL}/api/chart/guest-match`,{
+                          method:'POST',headers:{'Content-Type':'application/json'},
+                          body:JSON.stringify({
+                            Person1:{HoroscopeId:selId1},
+                            Person2:{HoroscopeId:selId2}
+                          })
+                        }).then(r=>r.json())
+                        const mdata=mres?.data?.data??mres?.data??mres
+                        setCompatResult({...mdata,hid1:selId1,hid2:selId2,
+                          name1:saved.find((c:any)=>(c.horoscopeId||c.HoroscopeId)===selId1)?.personName||'Person 1',
+                          name2:saved.find((c:any)=>(c.horoscopeId||c.HoroscopeId)===selId2)?.personName||'Person 2'})
+                      } catch(e:any){ setCompatErr(e?.message||'Failed') }
+                      setCompatLoading(false)
+                    }}
+                    style={{width:'100%',marginTop:'12px',padding:'11px',background:'var(--w-acc)',
+                      color:'#fff',border:'none',borderRadius:'10px',cursor:'pointer',
+                      fontSize:'13px',fontWeight:700,fontFamily:"'Playfair Display',Georgia,serif"}}>
+                    {compatLoading?'Calculating…':'Check Compatibility →'}
+                  </button>
+                )}
+              </div>
+            )}
 
             <div style={{background:'var(--w-surf)',border:'1px solid var(--w-bd)',borderRadius:'20px',padding:'36px',boxShadow:'0 4px 24px rgba(0,0,0,.06)',marginBottom:'28px'}}>
               <div style={{display:'grid',gridTemplateColumns:'1fr 48px 1fr',gap:'20px',alignItems:'start',marginBottom:'28px'}}>
@@ -991,7 +1041,7 @@ export default function WesternPage(){
             {/* ── VedicHora Layered Matching Results ── */}
             {compatResult && (
               <div style={{marginTop:'20px'}}>
-                <WesternDashaSection compatResult={compatResult} name1={n1||'Person 1'} name2={n2||'Person 2'} scoreColor={scoreColor} />
+                <WesternDashaSection compatResult={compatResult} name1={n1||'Person 1'} name2={n2||'Person 2'} scoreColor={scoreColor} saved={saved} token={token} />
               </div>
             )}
 
