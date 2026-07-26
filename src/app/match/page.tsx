@@ -811,16 +811,16 @@ export default function MatchPage() {
       // ── Dosha warnings ────────────────────────────────────────────
       const doshas: string[] = []
       if (data.MangalDosha && data.MangalNote && !data.MangalNote.includes('cancel'))
-        doshas.push(`<div class="alert-bad">⚠️ ${ta('Mangal Dosha','மாங்கலிக தோஷம்')} — ${safe(data.MangalNote)}</div>`)
+        doshas.push(`<div style="margin:6px 0;padding:10px 14px;background:#FFF5F5;border-left:3px solid #8B1A1A;border-radius:4px;color:#5C0A14;font-size:12px"><strong>${ta('Mangal Dosha','மாங்கலிக தோஷம்')}</strong> — ${safe(data.MangalNote)}</div>`)
       if (data.VedhaPresent)
-        doshas.push(`<div class="alert-bad">⚠️ ${ta('Vedha Dosha present — Muhurtha correction required','வேதை தோஷம் உளது — முகூர்த்த திருத்தம் தேவை')}</div>`)
+        doshas.push(`<div style="margin:6px 0;padding:10px 14px;background:#FFF5F5;border-left:3px solid #8B1A1A;border-radius:4px;color:#5C0A14;font-size:12px"><strong>${ta('Vedha Dosha','வேதை தோஷம்')}</strong> — ${ta('Muhurtha correction required','முகூர்த்த திருத்தம் தேவை')}</div>`)
       const doshaHtml = doshas.join('')
 
       // ── Rajju warning ─────────────────────────────────────────────
       const rajjuWarn = data.RajjuWarning
         ? `<div class="alert-warn">🔔 <strong>${ta('Important','முக்கியக் குறிப்பு')}</strong> — ${safe(data.RajjuWarning)}</div>`
         : (!data.RajjuPass
-          ? `<div class="alert-warn">⚠️ ${ta('Rajju mismatch — marriage not recommended without Muhurtha correction','ரஜ்ஜு பொருத்தமில்லை — முகூர்த்தம் இல்லாமல் திருமணம் பரிந்துரைக்கப்படவில்லை')}</div>`
+          ? `<div style="margin:6px 0;padding:10px 14px;background:#FFFBEB;border-left:3px solid #B7862C;border-radius:4px;color:#7A4A00;font-size:12px"><strong>${ta('Rajju Mismatch','ரஜ்ஜு பொருத்தமில்லை')}</strong> — ${safe(data.RajjuWarning) || ta('Same Rajju group — marriage not recommended without Muhurtha correction','ஒரே ரஜ்ஜு குழு — முகூர்த்த திருத்தம் தேவை')}</div>`
           : '')
 
       // ── Verdict ───────────────────────────────────────────────────
