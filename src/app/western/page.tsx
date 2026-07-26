@@ -531,7 +531,6 @@ export default function WesternPage(){
   }
 
   // Load saved charts when logged in
-  const { token } = useStore()
   useEffect(() => {
     if (token) {
       listCharts().then(res => {
@@ -593,10 +592,10 @@ export default function WesternPage(){
         BirthTimeKnown: true,
       }
       // Calculate charts — save to DB if logged in, otherwise guest
-      const token = useStore.getState().token
+      const authToken = useStore.getState().token
       const chartHeaders: any = { 'Content-Type': 'application/json' }
       if (token) chartHeaders['Authorization'] = `Bearer ${token}`
-      const calcEndpoint = token ? `${CHART_URL}/api/chart/calculate` : `${CHART_URL}/api/chart/guest`
+      const calcEndpoint = authToken ? `${CHART_URL}/api/chart/calculate` : `${CHART_URL}/api/chart/guest`
       const [r1, r2] = await Promise.all([
         fetch(calcEndpoint, {method:'POST', headers:chartHeaders, body:JSON.stringify(p1)}).then(r=>r.json()),
         fetch(calcEndpoint, {method:'POST', headers:chartHeaders, body:JSON.stringify(p2)}).then(r=>r.json()),
