@@ -170,9 +170,10 @@ function WesternDashaSection({
   compatResult: any; name1: string; name2: string
   scoreColor: (n:number)=>string; saved: any[]; token: string|null
 }) {
-  const [deep, setDeep]       = useState<any>(null)
+  const preloaded = r?.deepResult ?? null
+  const [deep, setDeep]       = useState<any>(preloaded)
   const [loading, setLoading] = useState(false)
-  const [loaded, setLoaded]   = useState(false)
+  const [loaded, setLoaded]   = useState<boolean>(preloaded !== null)
   const [relType, setRelType] = useState('Other')
   const [mode, setMode]       = useState<'future'|'past'|'full'>('future')
 
@@ -186,8 +187,12 @@ function WesternDashaSection({
   const hid2    = r?.hid2 || r?.horoscopeId2
   const hasSaved= !!(hid1 && hid2)
 
-  // Single plain score 0-100
-  const score   = Math.round((ashta / aTotal * 0.55 + pathu / pTotal * 0.35 + (rajjuOk ? 0.10 : 0)) * 100)
+  // Use overlay engine deepCompatScore if available (−1 to +1 → 0 to 100)
+  // Otherwise fall back to Ashta Koota + Pathu blend
+  const rawDeep = r?.deepResult?.deepCompatScore
+  const score   = rawDeep !== undefined && rawDeep !== null
+    ? Math.round((rawDeep + 1) / 2 * 100)  // −1..+1 → 0..100
+    : Math.round((ashta / aTotal * 0.55 + pathu / pTotal * 0.35 + (rajjuOk ? 0.10 : 0)) * 100)
   const label   = score >= 80 ? 'Exceptional Match'
                 : score >= 65 ? 'Strong Match'
                 : score >= 50 ? 'Good Match'
@@ -639,9 +644,33 @@ export default function WesternPage(){
       const h1 = c1?.horoscopeId || c1?.HoroscopeId
       const h2 = c2?.horoscopeId || c2?.HoroscopeId
       // Merge IDs into mdata so WesternDashaSection gets them
+      // Immediately run overlay engine to get the real compatibility score
+      // This is the same engine used for year-by-year — deepCompatScore is the truth
+      let deepResult: any = null
+      if (h1 && h2) {
+        try {
+          const authToken2 = useStore.getState().token
+          const deepHdrs: any = { 'Content-Type': 'application/json' }
+          if (authToken2) deepHdrs['Authorization'] = `Bearer ${authToken2}`
+          const now = new Date().getFullYear()
+          const dr = await fetch(`${CHART_URL}/api/matchmaking/deep`, {
+            method: 'POST', headers: deepHdrs,
+            body: JSON.stringify({
+              GroomId: h1, BrideId: h2,
+              GroomName: n1||'Person 1', BrideName: n2||'Person 2',
+              RelationshipType: 'Other',
+              FromYear: now, ToYear: now + 10,
+            })
+          }).then(r => r.json())
+          deepResult = dr?.data?.data ?? dr?.data ?? dr
+        } catch {}
+      }
       const enrichedResult = { ...mdata, hid1: h1, hid2: h2,
         name1: n1||'Person 1', name2: n2||'Person 2',
-        gender1: g1, gender2: g2 }
+        gender1: g1, gender2: g2,
+        // Pass deep result so score + timeline shown immediately without extra click
+        deepResult,
+      }
       setCompatResult(enrichedResult)
     } catch (e: any) {
       setCompatErr(e?.message || 'Calculation failed')
