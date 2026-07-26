@@ -875,8 +875,8 @@ export default function MatchPage() {
           <ul>
             <li><strong>${ta('Wedding Nakshatra','திருமண நட்சத்திரம்')}: </strong>${ta('Rohini, Mrigasira, Uttara Phalguni, Hasta, Swati, Anuradha, Uttara Ashadha or Revati','ரோஹிணி, மிருகசீர்ஷம், உத்திர பல்குணி, ஹஸ்தம், சுவாதி, அனுராதா, உத்திராடம் அல்லது ரேவதி')} — ${ta('especially if Shatabhisha/Magha are to be avoided','சதயம் மற்றும் மகம் நட்சத்திரங்களை தவிர்க்கவும்')}</li>
             <li><strong>${ta('Tara Bala','தாரா பலம்')}: </strong>${ta('Count 2nd, 4th, 6th or 8th Nakshatra from either partner','இருவரிடமிருந்தும் 2வது, 4வது, 6வது அல்லது 8வது நட்சத்திரத்தில் சந்திரன் இருக்கக்கூடாது')}</li>
-            <li><strong>${ta('Lagna','லக்னம்')}: </strong>${ta('Female signs (Taurus, Virgo, Scorpio, Aquarius) preferred. Avoid Gemini and Pisces Lagna (8th from Leo).','பெண் ராசிகள் (ரிஷபம், கன்னி, விருச்சிகம், கும்பம்) சிறந்தவை')}</li>
-            <li><strong>${ta('Jupiter position','குரு நிலை')}: </strong>${ta('Jupiter in kendra (1,4,7,10) or trikona (5,9) from Muhurtha Lagna eliminates many minor doshas','முகூர்த்த லக்னத்திலிருந்து குரு கேந்திரம் (1, 4, 7, 10) அல்லது திரிகோணம் (5, 9) இல் இருக்க வேண்டும்')}</li>
+            <li><strong>${ta('Lagna','லக்னம்')}: </strong>${ta('Female signs (Taurus, Virgo, Scorpio, Aquarius) preferred. Avoid Gemini and Pisces Lagna (8th from Leo).','பெண் ராசிகள் (ரிஷபம், கன்னி, விருச்சிகம், கும்பம்') சிறந்தவை')}</li>
+            <li><strong>${ta('Jupiter position','குரு நிலை')}: </strong>${ta('Jupiter in kendra (1,4,7,10) or trikona (5,9) from Muhurtha Lagna eliminates many minor doshas','முகூர்த்த லக்னத்திலிருந்து குரு கேந்திரம் (1, 4, 7, 10) அல்லது திரிகோணம் (5, 9') இல் இருக்க வேண்டும்')}</li>
           </ul>
         </div>
       </div>
@@ -889,8 +889,8 @@ export default function MatchPage() {
             'சூரியன்-சனி ராசியதிபதி பகை விதிவிலக்கால் ரத்தாகிறது என்றாலும், முன்னெச்சரிக்கையாக திருமணத்திற்கு முன் நவக்கிரக சாந்தி ஹோமம் செய்வது மிகவும் நல்லது.'
           )}</p>
           <ul>
-            <li><strong>${ta('Special Ahuti','சிறப்பு ஆஹுதி')}: </strong>${ta('Separate special Ahuti for Sun (Groom\'s Rasi lord) and Saturn (Bride\'s Rasi lord)','சூரியனுக்கும் (மணமகன் ராசியதிபதி) சனிக்கும் (மணமகள் ராசியதிபதி) தனியாக சிறப்பு ஆஹுதி கொடுக்கவும்')}</li>
-            <li><strong>${ta('Best time','உத்தம நேரம்')}: </strong>${ta('Sunday morning (Surya Hora) or Saturday morning (Shani Hora) in Pushyami or Uttara Ashadha Nakshatra','ஞாயிற்றுக்கிழமை (சூரிய ஹோரை) அல்லது சனிக்கிழமை (சனி ஹோரை) — புஷ்யமி அல்லது உத்திராடம் நட்சத்திரத்தில் செய்வது சிறந்தது')}</li>
+            <li><strong>${ta('Special Ahuti','சிறப்பு ஆஹுதி')}: </strong>${ta('Separate special Ahuti for Sun (Groom\'s Rasi lord) and Saturn (Bride\'s Rasi lord)','சூரியனுக்கும் (மணமகன் ராசியதிபதி) சனிக்கும் (மணமகள் ராசியதிபதி') தனியாக சிறப்பு ஆஹுதி கொடுக்கவும்')}</li>
+            <li><strong>${ta('Best time','உத்தம நேரம்')}: </strong>${ta('Sunday morning (Surya Hora) or Saturday morning (Shani Hora) in Pushyami or Uttara Ashadha Nakshatra','ஞாயிற்றுக்கிழமை (சூரிய ஹோரை) அல்லது சனிக்கிழமை (சனி ஹோரை') — புஷ்யமி அல்லது உத்திராடம் நட்சத்திரத்தில் செய்வது சிறந்தது')}</li>
             <li><strong>${ta('Location','இடம்')}: </strong>${ta('Family temple or any Navagraha shrine with Shiva/Vishnu','குல தெய்வ கோவில் அல்லது நவக்கிரக சன்னதி உள்ள சிவன்/விஷ்ணு கோவில்')}</li>
             <li><strong>${ta('When','எப்போது')}: </strong>${ta('At least one month before the wedding','திருமணத்திற்கு குறைந்தது ஒரு மாதத்திற்கு முன்')}</li>
           </ul>
@@ -902,7 +902,7 @@ export default function MatchPage() {
         <div class="remedy-body">
           <ul>
             <li><strong>${ta('Bride','மணமகள்')} — ${ta('Nakshatra Devata Varuna','நட்சத்திர தேவதை வருணன்')}: </strong>${ta('Perform Varuna Abhisheka at Varuna temple or Varuna shrine. Varuna protects longevity and health. This addresses any Dinam shortfall.','வருண பகவான் கோவிலில் அல்லது வருணேஸ்வரர் சன்னதியில் அபிஷேகம் செய்யவும். திணம் பொருத்தம் இல்லாத குறையை இந்த வழிபாடு சரிசெய்யும்.')}</li>
-            <li><strong>${ta('Groom','மணமகன்)} — ${ta('Nakshatra Devata Pitru (Magha)','நட்சத்திர தேவதை பித்ருக்கள் (மகம்)')}: </strong>${ta('Perform Pitru Tarpana at Rameshwaram or ancestral shrine. Pitru blessings strengthen children and longevity — addresses Mahendra shortfall.','ராமேஸ்வரம் அல்லது குல கேஷேத்திரத்தில் பித்ரு தர்ப்பணம் செய்யவும். மகேந்திர பொருத்தம் இல்லாத குறை சரிசெய்யும்.')}</li>
+            <li><strong>${ta('Groom','மணமகன்')} — ${ta('Nakshatra Devata Pitru (Magha)','நட்சத்திர தேவதை பித்ருக்கள் (மகம்')')}: </strong>${ta('Perform Pitru Tarpana at Rameshwaram or ancestral shrine. Pitru blessings strengthen children and longevity — addresses Mahendra shortfall.','ராமேஸ்வரம் அல்லது குல கேஷேத்திரத்தில் பித்ரு தர்ப்பணம் செய்யவும். மகேந்திர பொருத்தம் இல்லாத குறை சரிசெய்யும்.')}</li>
           </ul>
         </div>
       </div>`
@@ -923,7 +923,7 @@ export default function MatchPage() {
         ASHTA_LABEL:         ta('ASHTA KOOTA', 'அஷ்டகூட குணங்கள்'),
         DOSHA_LABEL:         ta('BLOCKING DOSHAS', 'கடுமையான தோஷங்கள்'),
         FAILED_LABEL:        ta('FAILED PORUTHAMS', 'இல்லாத பொருத்தங்கள்'),
-        FAILED_NOTE:         ta('(min 5 required)','(குறைந்தது 5 வேண்டும்)'),
+        FAILED_NOTE:         ta('(min 5 required)','(குறைந்தது 5 வேண்டும்')'),
         PATHU_TABLE_TITLE:   ta('Pathu Porutham — Detailed Table', 'பத்து பொருத்தம் — விரிவான அட்டவணை'),
         ASHTA_TABLE_TITLE:   ta('Ashta Koota — Detailed Breakdown', 'அஷ்டகூட — விரிவான பகுப்பாய்வு'),
         PORUTHAM_COL:        ta('Porutham', 'பொருத்தம்'),
