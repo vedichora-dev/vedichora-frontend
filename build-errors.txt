@@ -1,17 +1,17 @@
 === CURRENT e2e FILES ===
 total 80
-drwxr-xr-x  2 runner runner  4096 Jul 25 21:48 .
-drwxr-xr-x 10 runner runner  4096 Jul 25 21:49 ..
--rw-r--r--  1 runner runner  4428 Jul 25 21:48 01-auth.spec.js
--rw-r--r--  1 runner runner 13487 Jul 25 21:48 02-chart.spec.js
--rw-r--r--  1 runner runner  2851 Jul 25 21:48 03-match.spec.js
--rw-r--r--  1 runner runner  2685 Jul 25 21:48 04-horoscope.spec.js
--rw-r--r--  1 runner runner  3485 Jul 25 21:48 05-deployment.spec.js
--rw-r--r--  1 runner runner  5636 Jul 25 21:48 06-match-10.spec.js
--rw-r--r--  1 runner runner  8626 Jul 25 21:48 functional-test.spec.js
--rw-r--r--  1 runner runner  2685 Jul 25 21:48 helpers.js
--rw-r--r--  1 runner runner  3335 Jul 25 21:48 screenshot.spec.js
--rw-r--r--  1 runner runner  6794 Jul 25 21:48 tab-screenshots.spec.js
+drwxr-xr-x  2 runner runner  4096 Jul 26 01:27 .
+drwxr-xr-x 10 runner runner  4096 Jul 26 01:28 ..
+-rw-r--r--  1 runner runner  4428 Jul 26 01:27 01-auth.spec.js
+-rw-r--r--  1 runner runner 13487 Jul 26 01:27 02-chart.spec.js
+-rw-r--r--  1 runner runner  2851 Jul 26 01:27 03-match.spec.js
+-rw-r--r--  1 runner runner  2685 Jul 26 01:27 04-horoscope.spec.js
+-rw-r--r--  1 runner runner  3485 Jul 26 01:27 05-deployment.spec.js
+-rw-r--r--  1 runner runner  5636 Jul 26 01:27 06-match-10.spec.js
+-rw-r--r--  1 runner runner  8626 Jul 26 01:27 functional-test.spec.js
+-rw-r--r--  1 runner runner  2685 Jul 26 01:27 helpers.js
+-rw-r--r--  1 runner runner  3335 Jul 26 01:27 screenshot.spec.js
+-rw-r--r--  1 runner runner  6794 Jul 26 01:27 tab-screenshots.spec.js
 
 === BUILD OUTPUT ===
 > vedichora@1.0.0 build
@@ -53,7 +53,7 @@ Route (app)                              Size     First Load JS
 ├ ○ /dashboard                           3.37 kB         115 kB
 ├ ○ /jyoti                               5.91 kB         118 kB
 ├ ○ /learn                               2.52 kB        84.5 kB
-├ ○ /match                               16.3 kB         128 kB
+├ ○ /match                               16.2 kB         128 kB
 ├ ○ /muhurta                             2.58 kB         115 kB
 ├ ○ /numerology                          3.73 kB         113 kB
 ├ ○ /phone-login                         2.14 kB         121 kB
