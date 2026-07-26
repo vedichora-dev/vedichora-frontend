@@ -550,12 +550,18 @@ export default function WesternPage(){
     setCompatLoading(true); setCompatErr(''); setLoveResult(null)
     try {
       const CHART_URL = 'https://enchanting-dedication-production.up.railway.app'
-      // DatePicker gives d1.hour, d1.minute directly (from showUnknownTime)
-      const tm1 = d1.unknownTime ? {hour:12,minute:0} : {hour:d1.hour||0,minute:d1.minute||0}
-      const tm2 = d2.unknownTime ? {hour:12,minute:0} : {hour:d2.hour||0,minute:d2.minute||0}
+      // DatePicker stores time inside DateValue: d1.hr, d1.mi, d1.ap
+      const to24 = (hr:number|undefined, mi:number|undefined, ap:string|undefined) => {
+        let h = hr || 12
+        if (ap === 'PM' && h !== 12) h += 12
+        if (ap === 'AM' && h === 12) h = 0
+        return { hour: h, minute: mi || 0 }
+      }
+      const tm1 = (d1.unknownTime) ? {hour:12,minute:0} : to24(d1.hr, d1.mi, d1.ap)
+      const tm2 = (d2.unknownTime) ? {hour:12,minute:0} : to24(d2.hr, d2.mi, d2.ap)
       // Geocode places to get lat/lng/UTC offset
       const geocode = async (place: string, lat?: number, lng?: number) => {
-        if (lat && lng) return { lat, lng, utc: 0 }
+        if (lat !== undefined && lng !== undefined && lat !== 0 && lng !== 0) return { lat, lng, utc: Math.round(lng / 15 * 2) / 2 }
         if (!place.trim()) return { lat: 0, lng: 0, utc: 0 }
         try {
           const r = await fetch('https://nominatim.openstreetmap.org/search?q='+encodeURIComponent(place)+'&format=json&limit=1',
@@ -817,12 +823,10 @@ export default function WesternPage(){
                   <div style={{fontSize:'11px',color:'var(--w-acc)',fontWeight:700,textTransform:'uppercase',letterSpacing:'.08em',marginBottom:'12px'}}>♥ Person 1</div>
                   <input value={n1} onChange={e=>setN1(e.target.value)} placeholder="Name"
                     style={{width:'100%',padding:'10px 12px',borderRadius:'10px',border:'1.5px solid var(--w-bd)',background:'var(--w-bg)',color:'var(--w-tx)',fontSize:'14px',marginBottom:'8px',boxSizing:'border-box',fontFamily:'inherit',outline:'none'}} />
-                  <DatePicker value={d1} onChange={setD1}
-                    showUnknownTime={true}
-                    style={{marginBottom:'8px'}} />
+                  <DatePicker value={d1} onChange={setD1} showTime showUnknown />
                   <CityAutocomplete
                     value={place1} onChange={setPlace1}
-                    onSelect={(p,lat,lng)=>{setPlace1(p);setLat1c(lat);setLng1c(lng)}}
+                    onChange={(city,la,ln)=>{setPlace1(city);setLat1c(la);setLng1c(ln)}}
                     placeholder="Place of birth" />
                 </div>
                 <div style={{textAlign:'center',paddingTop:'60px',fontSize:'24px',color:'#EF4444'}}>♥</div>
@@ -831,12 +835,10 @@ export default function WesternPage(){
                   <div style={{fontSize:'11px',color:'var(--w-acc)',fontWeight:700,textTransform:'uppercase',letterSpacing:'.08em',marginBottom:'12px'}}>♥ Person 2</div>
                   <input value={n2} onChange={e=>setN2(e.target.value)} placeholder="Name (optional)"
                     style={{width:'100%',padding:'10px 12px',borderRadius:'10px',border:'1.5px solid var(--w-bd)',background:'var(--w-bg)',color:'var(--w-tx)',fontSize:'14px',marginBottom:'8px',boxSizing:'border-box',fontFamily:'inherit',outline:'none'}} />
-                  <DatePicker value={d2} onChange={setD2}
-                    showUnknownTime={true}
-                    style={{marginBottom:'8px'}} />
+                  <DatePicker value={d2} onChange={setD2} showTime showUnknown />
                   <CityAutocomplete
                     value={place2} onChange={setPlace2}
-                    onSelect={(p,lat,lng)=>{setPlace2(p);setLat2c(lat);setLng2c(lng)}}
+                    onChange={(city,la,ln)=>{setPlace2(city);setLat2c(la);setLng2c(ln)}}
                     placeholder="Place of birth" />
                   <div style={{fontSize:'10px',color:'var(--w-tx2)',marginTop:'3px',marginBottom:'6px'}}>Time of birth (optional — improves accuracy)</div>
                 </div>
