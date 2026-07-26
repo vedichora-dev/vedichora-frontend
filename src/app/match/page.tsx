@@ -744,8 +744,7 @@ export default function MatchPage() {
         'Nadi':         {en:'Nadi',         ta:'நாடி',         meaning_en:'Health & progeny — critical (max 8)',   meaning_ta:'ஆரோக்கியம் & சந்ததி (முக்கியம்)'},
       }
 
-      const safe = (v: any) => String(v ?? '')
-      const pathuScore2 = data.PathuPoruthamScore  ?? 0
+            const pathuScore2 = data.PathuPoruthamScore  ?? 0
       const pathuTotal2 = data.PathuPoruthamTotal  ?? 24
       const ashtaScore2 = data.AshtaKootaScore     ?? 0
       const ashtaTotal2 = data.AshtaKootaTotal     ?? 36
