@@ -1,18 +1,18 @@
 === CURRENT e2e FILES ===
 total 88
-drwxr-xr-x  2 runner runner  4096 Jul 26 03:44 .
-drwxr-xr-x 11 runner runner  4096 Jul 26 03:44 ..
--rw-r--r--  1 runner runner  4428 Jul 26 03:44 01-auth.spec.js
--rw-r--r--  1 runner runner 13487 Jul 26 03:44 02-chart.spec.js
--rw-r--r--  1 runner runner  2851 Jul 26 03:44 03-match.spec.js
--rw-r--r--  1 runner runner  2685 Jul 26 03:44 04-horoscope.spec.js
--rw-r--r--  1 runner runner  3485 Jul 26 03:44 05-deployment.spec.js
--rw-r--r--  1 runner runner  5636 Jul 26 03:44 06-match-10.spec.js
--rw-r--r--  1 runner runner  4744 Jul 26 03:44 07-western.spec.js
--rw-r--r--  1 runner runner  8626 Jul 26 03:44 functional-test.spec.js
--rw-r--r--  1 runner runner  2685 Jul 26 03:44 helpers.js
--rw-r--r--  1 runner runner  3335 Jul 26 03:44 screenshot.spec.js
--rw-r--r--  1 runner runner  6794 Jul 26 03:44 tab-screenshots.spec.js
+drwxr-xr-x  2 runner runner  4096 Jul 26 03:50 .
+drwxr-xr-x 11 runner runner  4096 Jul 26 03:51 ..
+-rw-r--r--  1 runner runner  4428 Jul 26 03:50 01-auth.spec.js
+-rw-r--r--  1 runner runner 13487 Jul 26 03:50 02-chart.spec.js
+-rw-r--r--  1 runner runner  2851 Jul 26 03:50 03-match.spec.js
+-rw-r--r--  1 runner runner  2685 Jul 26 03:50 04-horoscope.spec.js
+-rw-r--r--  1 runner runner  3485 Jul 26 03:50 05-deployment.spec.js
+-rw-r--r--  1 runner runner  5636 Jul 26 03:50 06-match-10.spec.js
+-rw-r--r--  1 runner runner  4744 Jul 26 03:50 07-western.spec.js
+-rw-r--r--  1 runner runner  8626 Jul 26 03:50 functional-test.spec.js
+-rw-r--r--  1 runner runner  2685 Jul 26 03:50 helpers.js
+-rw-r--r--  1 runner runner  3335 Jul 26 03:50 screenshot.spec.js
+-rw-r--r--  1 runner runner  6794 Jul 26 03:50 tab-screenshots.spec.js
 
 === BUILD OUTPUT ===
 > vedichora@1.0.0 build
@@ -64,7 +64,7 @@ Route (app)                              Size     First Load JS
 ├ ○ /signup                              3.46 kB         122 kB
 ├ ○ /transits                            4.09 kB          86 kB
 ├ ○ /varshaphal                          1.89 kB         114 kB
-├ ○ /western                             14.8 kB         134 kB
+├ ○ /western                             15.1 kB         134 kB
 └ ○ /yogas                               1.78 kB        86.7 kB
 + First Load JS shared by all            81.9 kB
   ├ chunks/938-cac2006256170abd.js       26.7 kB
