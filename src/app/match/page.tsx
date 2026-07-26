@@ -902,7 +902,7 @@ export default function MatchPage() {
         <div class="remedy-body">
           <ul>
             <li><strong>${ta('Bride','மணமகள')} — ${ta('Nakshatra Devata Varuna','நட்சத்திர தேவதை வருணன்')}: </strong>${ta('Perform Varuna Abhisheka at Varuna temple or Varuna shrine. Varuna protects longevity and health. This addresses any Dinam shortfall.','வருண பகவான் கோவிலில் அல்லது வருணேஸ்வரர் சன்னதியில் அபிஷேகம் செய்யவும். திணம் பொருத்தம் இல்லாத குறையை இந்த வழிபாடு சரிசெய்யும்.')}</li>
-            <li><strong>${ta('Groom','மணமகன்)} — ${ta('Nakshatra Devata Pitru (Magha)','நட்சத்திர தேவதை பித்ருக்கள் (மகம்)')}: </strong>${ta('Perform Pitru Tarpana at Rameshwaram or ancestral shrine. Pitru blessings strengthen children and longevity — addresses Mahendra shortfall.','ராமேஸ்வரம் அல்லது குல கேஷேத்திரத்தில் பித்ரு தர்ப்பணம் செய்யவும். மகேந்திர பொருத்தம் இல்லாத குறை சரிசெய்யும்.')}</li>
+            <li><strong>${ta('Groom','மணமகன்')} — ${ta('Nakshatra Devata Pitru (Magha)','நட்சத்திர தேவதை பித்ருக்கள் (மகம்)')}: </strong>${ta('Perform Pitru Tarpana at Rameshwaram or ancestral shrine. Pitru blessings strengthen children and longevity — addresses Mahendra shortfall.','ராமேஸ்வரம் அல்லது குல கேஷேத்திரத்தில் பித்ரு தர்ப்பணம் செய்யவும். மகேந்திர பொருத்தம் இல்லாத குறை சரிசெய்யும்.')}</li>
           </ul>
         </div>
       </div>`
