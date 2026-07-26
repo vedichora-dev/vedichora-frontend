@@ -837,7 +837,7 @@ export default function WesternPage(){
                     style={{width:'100%',padding:'10px 12px',borderRadius:'10px',border:'1.5px solid var(--w-bd)',background:'var(--w-bg)',color:'var(--w-tx)',fontSize:'14px',marginBottom:'8px',boxSizing:'border-box',fontFamily:'inherit',outline:'none'}} />
                   <DatePicker value={d2} onChange={setD2} showTime showUnknown />
                   <CityAutocomplete
-                    value={place2} onChange={setPlace2}
+                    value={place2}
                     onChange={(city,la,ln)=>{setPlace2(city);setLat2c(la);setLng2c(ln)}}
                     placeholder="Place of birth" />
                   <div style={{fontSize:'10px',color:'var(--w-tx2)',marginTop:'3px',marginBottom:'6px'}}>Time of birth (optional — improves accuracy)</div>
