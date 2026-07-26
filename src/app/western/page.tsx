@@ -183,21 +183,34 @@ function WesternDashaSection({
   const summary = r?.Summary ?? r?.summary ?? ''
   const poruthams = r?.Poruthams ?? r?.poruthams ?? []
   const kootas    = r?.KootaDetails ?? r?.kootaDetails ?? []
-  const hasSaved  = !!(r?.hid1 || r?.horoscopeId1)
+  const hid1 = r?.hid1 || r?.horoscopeId1
+  const hid2 = r?.hid2 || r?.horoscopeId2
+  const hasSaved = !!(hid1 && hid2)
+  const [relType, setRelType] = useState('Other')
+  const [mode, setMode] = useState<'future'|'past'|'full'>('future')
 
   const loadDeep = async () => {
-    const hid1 = r?.hid1 || r?.horoscopeId1
-    const hid2 = r?.hid2 || r?.horoscopeId2
     if (!hid1 || !hid2) return
     setLoading(true)
     try {
-      const { chartApi } = await import('@/api/client')
-      const [sr, sy] = await Promise.all([
-        chartApi.post('/api/compat/score',      { HoroscopeIdA: hid1, HoroscopeIdB: hid2 }).catch(() => null),
-        chartApi.post('/api/compat/dasha-sync', { HoroscopeIdA: hid1, HoroscopeIdB: hid2 }, { params:{ years:15 } }).catch(() => null),
-      ])
-      setDeep(sr?.data?.data ?? sr?.data)
-      setDashaYears((sy?.data?.data ?? sy?.data)?.years ?? [])
+      const CHART_URL = 'https://enchanting-dedication-production.up.railway.app'
+      const now = new Date().getFullYear()
+      const body: any = {
+        GroomId: hid1, BrideId: hid2,
+        RelationshipType: relType,
+        GroomName: r?.name1 || name1,
+        BrideName: r?.name2 || name2,
+      }
+      if (mode === 'past')   { body.FromYear = now - 10; body.ToYear = now }
+      if (mode === 'future') { body.FromYear = now; body.ToYear = now + 10 }
+      if (mode === 'full')   { body.FullRange = true }
+      const token = typeof window !== 'undefined' ? localStorage.getItem('vh_token') : null
+      const headers: any = { 'Content-Type': 'application/json' }
+      if (token) headers['Authorization'] = `Bearer ${token}`
+      const res = await fetch(`${CHART_URL}/api/matchmaking/deep`, {
+        method: 'POST', headers, body: JSON.stringify(body)
+      }).then(r => r.json())
+      setDeep(res?.data?.data ?? res?.data ?? res)
     } catch {}
     setLoading(false); setLoaded(true)
   }
