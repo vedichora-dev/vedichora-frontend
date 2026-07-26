@@ -1,5 +1,5 @@
 'use client'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
 import dynamic from 'next/dynamic'
 const CityAutocomplete = dynamic(() => import('@/components/ui/CityAutocomplete'), { ssr: false })
@@ -503,6 +503,8 @@ export default function WesternPage(){
   const [place2,setPlace2]=useState(''); const [lat2c,setLat2c]=useState<number|undefined>(undefined); const [lng2c,setLng2c]=useState<number|undefined>(undefined)
   const { token, user } = useStore()
   const [saved, setSaved] = useState<any[]>([])
+  const [collapsed, setCollapsed] = useState(false)
+  const resultsRef = useRef<HTMLDivElement>(null)
   const [selId1, setSelId1] = useState(''); const [useSaved1, setUseSaved1] = useState(false)
   const [selId2, setSelId2] = useState(''); const [useSaved2, setUseSaved2] = useState(false)
   const [loveResult,setLoveResult]=useState<any>(null)
@@ -685,6 +687,10 @@ export default function WesternPage(){
         deepResult,
       }
       setCompatResult(enrichedResult)
+      setCollapsed(true)
+      setTimeout(() => {
+        resultsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      }, 150)
     } catch (e: any) {
       setCompatErr(e?.message || 'Calculation failed')
     }
@@ -878,6 +884,18 @@ export default function WesternPage(){
               <p style={{fontSize:'14px',color:'var(--w-tx2)',maxWidth:'400px',margin:'0 auto',lineHeight:1.7}}>Enter both birth details to reveal your compatibility score and year-by-year outlook.</p>
             </div>
 
+            {/* Edit button when result showing */}
+            {collapsed && (
+              <div style={{textAlign:'center',marginBottom:'16px'}}>
+                <button onClick={()=>{setCollapsed(false);setCompatResult(null)}}
+                  style={{padding:'8px 20px',background:'transparent',border:'1.5px solid var(--w-bd)',
+                    borderRadius:'8px',cursor:'pointer',fontSize:'12px',color:'var(--w-tx2)',fontFamily:'inherit'}}>
+                  ✎ Edit Details
+                </button>
+              </div>
+            )}
+
+            {!collapsed && (<>
             {/* Saved chart selector */}
             {token && saved.length > 0 && (
               <div style={{background:'var(--w-surf)',border:'1px solid var(--w-bd)',borderRadius:'16px',padding:'20px',marginBottom:'24px',boxShadow:'0 2px 12px rgba(0,0,0,.05)'}}>
@@ -917,9 +935,12 @@ export default function WesternPage(){
                           })
                         }).then(r=>r.json())
                         const mdata=mres?.data?.data??mres?.data??mres
-                        setCompatResult({...mdata,hid1:selId1,hid2:selId2,
+                        const enriched = {...mdata,hid1:selId1,hid2:selId2,
                           name1:saved.find((c:any)=>(c.horoscopeId||c.HoroscopeId)===selId1)?.personName||'Person 1',
-                          name2:saved.find((c:any)=>(c.horoscopeId||c.HoroscopeId)===selId2)?.personName||'Person 2'})
+                          name2:saved.find((c:any)=>(c.horoscopeId||c.HoroscopeId)===selId2)?.personName||'Person 2'}
+                      setCompatResult(enriched)
+                      setCollapsed(true)
+                      setTimeout(()=>{ resultsRef.current?.scrollIntoView({behavior:'smooth',block:'start'}) },150)
                       } catch(e:any){ setCompatErr(e?.message||'Failed') }
                       setCompatLoading(false)
                     }}
@@ -939,6 +960,8 @@ export default function WesternPage(){
                   <div style={{fontSize:'11px',color:'var(--w-acc)',fontWeight:700,textTransform:'uppercase',letterSpacing:'.08em',marginBottom:'12px'}}>♥ Person 1</div>
                   <input value={n1} onChange={e=>setN1(e.target.value)} placeholder="Name"
                     style={{width:'100%',padding:'10px 12px',borderRadius:'10px',border:'1.5px solid var(--w-bd)',background:'var(--w-bg)',color:'var(--w-tx)',fontSize:'14px',marginBottom:'8px',boxSizing:'border-box',fontFamily:'inherit',outline:'none'}} />
+                  {/* Hide manual entry if saved chart selected */}
+                  {!selId1 && (<>
                   {/* DOB */}
                   <div style={{display:'flex',gap:'6px',marginBottom:'8px'}}>
                     <Sel value={d1.dd||''} onChange={v=>setD1(d=>({...d,dd:+v}))} placeholder="Day" w="30%"
@@ -966,6 +989,10 @@ export default function WesternPage(){
                     value={place1}
                     onChange={(city, la, ln) => { setPlace1(city); if(la) setLat1c(la); if(ln) setLng1c(ln); }}
                     placeholder="Place of birth" />
+                  </>)}
+                  {selId1 && <div style={{fontSize:'11px',color:'var(--w-tx2)',padding:'8px 0'}}>
+                    ✓ Using saved chart
+                  </div>}
                 </div>
                 <div style={{textAlign:'center',paddingTop:'60px',fontSize:'24px',color:'#EF4444'}}>♥</div>
                 {/* Person 2 */}
@@ -973,6 +1000,8 @@ export default function WesternPage(){
                   <div style={{fontSize:'11px',color:'var(--w-acc)',fontWeight:700,textTransform:'uppercase',letterSpacing:'.08em',marginBottom:'12px'}}>♥ Person 2</div>
                   <input value={n2} onChange={e=>setN2(e.target.value)} placeholder="Name (optional)"
                     style={{width:'100%',padding:'10px 12px',borderRadius:'10px',border:'1.5px solid var(--w-bd)',background:'var(--w-bg)',color:'var(--w-tx)',fontSize:'14px',marginBottom:'8px',boxSizing:'border-box',fontFamily:'inherit',outline:'none'}} />
+                  {/* Hide manual entry if saved chart selected */}
+                  {!selId2 && (<>
                   {/* DOB */}
                   <div style={{display:'flex',gap:'6px',marginBottom:'8px'}}>
                     <Sel value={d2.dd||''} onChange={v=>setD2(d=>({...d,dd:+v}))} placeholder="Day" w="30%"
@@ -1000,6 +1029,10 @@ export default function WesternPage(){
                     value={place2}
                     onChange={(city, la, ln) => { setPlace2(city); if(la) setLat2c(la); if(ln) setLng2c(ln); }}
                     placeholder="Place of birth" />
+                  </>)}
+                  {selId2 && <div style={{fontSize:'11px',color:'var(--w-tx2)',padding:'8px 0'}}>
+                    ✓ Using saved chart
+                  </div>}
                   <div style={{fontSize:'10px',color:'var(--w-tx2)',marginTop:'3px',marginBottom:'6px'}}>Time of birth (optional — improves accuracy)</div>
                 </div>
               </div>
@@ -1062,7 +1095,7 @@ export default function WesternPage(){
 
             {/* ── VedicHora Layered Matching Results ── */}
             {compatResult && (
-              <div style={{marginTop:'20px'}}>
+              <div ref={resultsRef} style={{marginTop:'20px'}}>
                 <WesternDashaSection compatResult={compatResult} name1={n1||'Person 1'} name2={n2||'Person 2'} scoreColor={scoreColor} saved={saved} token={token} />
               </div>
             )}
