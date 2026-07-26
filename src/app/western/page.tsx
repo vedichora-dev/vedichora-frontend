@@ -170,26 +170,29 @@ function WesternDashaSection({
   compatResult: any; name1: string; name2: string; scoreColor: (n:number)=>string
 }) {
   const [deep, setDeep] = useState<any>(null)
-  const [dashaYears, setDashaYears] = useState<any[]>([])
   const [loading, setLoading] = useState(false)
   const [loaded, setLoaded] = useState(false)
+  const [relType, setRelType] = useState('Other')
+  const [mode, setMode] = useState<'future'|'past'|'full'>('future')
 
   const r = compatResult as any
   const ashta   = r?.AshtaKootaScore  ?? r?.ashtaKootaScore  ?? 0
   const aTotal  = r?.AshtaKootaTotal  ?? r?.ashtaKootaTotal  ?? 36
   const pathu   = r?.PathuPoruthamScore ?? r?.pathuPoruthamScore ?? 0
-  const pTotal  = r?.PathuPoruthamTotal ?? r?.pathuPoruthamTotal ?? 24
+  const pTotal  = r?.PathuPoruthamTotal ?? r?.pathuPoruthamTotal ?? 10
   const isRec   = r?.IsRecommended ?? r?.isRecommended ?? false
   const rajjuOk = r?.RajjuPass ?? r?.rajjuPass ?? true
   const rajjuWarn = r?.RajjuWarning ?? r?.rajjuWarning ?? ''
-  const summary = r?.Summary ?? r?.summary ?? ''
-  const poruthams = r?.Poruthams ?? r?.poruthams ?? []
-  const kootas    = r?.KootaDetails ?? r?.kootaDetails ?? []
   const hid1 = r?.hid1 || r?.horoscopeId1
   const hid2 = r?.hid2 || r?.horoscopeId2
   const hasSaved = !!(hid1 && hid2)
-  const [relType, setRelType] = useState('Other')
-  const [mode, setMode] = useState<'future'|'past'|'full'>('future')
+
+  // Overall score: blend ashta + pathu
+  const overallPct = Math.round((ashta/aTotal * 0.5 + pathu/pTotal * 0.5) * 100)
+  const overallLabel = overallPct >= 75 ? 'Excellent Match'
+    : overallPct >= 60 ? 'Good Match'
+    : overallPct >= 45 ? 'Average Match'
+    : 'Needs Consideration'
 
   const loadDeep = async () => {
     if (!hid1 || !hid2) return
@@ -217,186 +220,212 @@ function WesternDashaSection({
     setLoading(false); setLoaded(true)
   }
 
-  const combined = deep?.combined
-  const bestYrs: string[] = combined?.bestYears ?? []
-  const badYrs: string[]  = combined?.challengingYears ?? []
+  // deep fields from /api/matchmaking/deep
+  const yearSummary: any[] = deep?.yearSummary ?? []
+  const bestYears: any[]   = deep?.bestYears ?? []
+  const chalYears: any[]   = deep?.challengingYears ?? []
+  const crossPreds: any[]  = deep?.crossPredictions ?? []
   const now = new Date().getFullYear()
-  const syncTable = dashaYears.filter((y:any) => y.year >= now && y.year <= now + 12)
 
-  const catColor = (cat: string) => {
-    if (!cat) return '#888'
-    const c = cat.toUpperCase()
-    if (c.includes('EXCELLENT') || c.includes('BOTH')) return '#16a34a'
-    if (c.includes('CHALLENGING') || c.includes('DIFFICULT')) return '#dc2626'
+  const verdictColor = (v: string) => {
+    if (!v) return '#888'
+    const u = v.toUpperCase()
+    if (u.includes('FAVOUR') || u.includes('POSITIVE')) return '#16a34a'
+    if (u.includes('DIFFICULT') || u.includes('CHALLENG')) return '#dc2626'
     return '#d97706'
   }
 
   return (
     <div style={{display:'flex',flexDirection:'column',gap:'16px'}}>
 
-      {/* Vedic compatibility scores */}
+      {/* ── Compatibility score — plain English, no Indian terms ─────── */}
       <div style={{background:'var(--w-surf)',border:'1px solid var(--w-bd)',borderRadius:'20px',padding:'28px',boxShadow:'0 4px 24px rgba(0,0,0,.06)'}}>
-        <div style={{textAlign:'center',marginBottom:'20px'}}>
-          <div style={{fontSize:'11px',fontWeight:700,letterSpacing:'.1em',textTransform:'uppercase',color:'var(--w-acc)',marginBottom:'6px'}}>
-            VedicHora Layered Matching
+        <div style={{textAlign:'center',marginBottom:'24px'}}>
+          <div style={{fontSize:'11px',fontWeight:700,letterSpacing:'.1em',textTransform:'uppercase',color:'var(--w-acc)',marginBottom:'10px'}}>
+            Compatibility Score
           </div>
-          <div style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:'28px',fontWeight:700,color:'var(--w-tx)',marginBottom:'4px'}}>
+          <div style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:'52px',fontWeight:800,color:scoreColor(overallPct),lineHeight:1}}>
+            {overallPct}%
+          </div>
+          <div style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:'18px',color:'var(--w-tx)',marginTop:'8px',fontWeight:600}}>
+            {overallLabel}
+          </div>
+          <div style={{fontSize:'13px',color:'var(--w-tx2)',marginTop:'6px'}}>
             {name1} & {name2}
-          </div>
-          <div style={{fontSize:'13px',color:'var(--w-tx2)'}}>
-            {isRec && rajjuOk ? '✅ Recommended Match' : '⚠️ Needs Consideration'}
           </div>
         </div>
 
-        {/* 3-box score row */}
-        <div style={{display:'grid',gridTemplateColumns:'repeat(3,1fr)',gap:'10px',marginBottom:'20px'}}>
+        {/* 3 plain-English score boxes */}
+        <div style={{display:'grid',gridTemplateColumns:'repeat(3,1fr)',gap:'10px',marginBottom:'16px'}}>
           {[
-            { label:'Ashta Koota', val:`${ashta}/${aTotal}`, pct:Math.round(ashta/aTotal*100), ok: ashta >= aTotal*0.6 },
-            { label:'Pathu Porutham', val:`${pathu}/${pTotal}`, pct:Math.round(pathu/pTotal*100), ok: pathu >= pTotal*0.5 },
-            { label:'Rajju & Vedha', val: rajjuOk ? '✓ Clear' : '✗ Dosha', pct: rajjuOk ? 100 : 0, ok: rajjuOk },
+            { label:'Star Harmony', val:`${ashta}/${aTotal}`, pct:Math.round(ashta/aTotal*100), ok: ashta >= aTotal*0.58 },
+            { label:'Life Compatibility', val:`${pathu}/${pTotal}`, pct:Math.round(pathu/pTotal*100), ok: pathu >= pTotal*0.5 },
+            { label:'Partnership Bond', val: rajjuOk ? '✓ Harmonious' : '⚠ Needs Care', pct: rajjuOk ? 100 : 30, ok: rajjuOk },
           ].map(({label,val,pct,ok}) => (
-            <div key={label} style={{textAlign:'center',padding:'16px 8px',borderRadius:'12px',background:'var(--w-bg)',border:`1px solid ${ok?'#16a34a44':'#ef444444'}`}}>
-              <div style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:'22px',fontWeight:800,color:scoreColor(pct)}}>{val}</div>
+            <div key={label} style={{textAlign:'center',padding:'14px 8px',borderRadius:'12px',background:'var(--w-bg)',border:`1px solid ${ok?'#16a34a44':'#ef444444'}`}}>
+              <div style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:'18px',fontWeight:800,color:scoreColor(pct)}}>{val}</div>
               <div style={{fontSize:'10px',color:'var(--w-tx2)',marginTop:'4px',textTransform:'uppercase',letterSpacing:'.04em'}}>{label}</div>
             </div>
           ))}
         </div>
 
-        {/* Rajju warning */}
         {rajjuWarn && (
-          <div style={{background:'#fef2f2',border:'1px solid #fca5a5',borderRadius:'8px',padding:'10px 14px',fontSize:'12px',color:'#dc2626',marginBottom:'14px'}}>
+          <div style={{background:'#fef2f2',border:'1px solid #fca5a5',borderRadius:'8px',padding:'10px 14px',fontSize:'12px',color:'#dc2626',marginBottom:'12px'}}>
             ⚠ {rajjuWarn}
           </div>
         )}
 
-        {/* Pathu Porutham list */}
-        {poruthams.length > 0 && (
-          <div style={{marginBottom:'16px'}}>
-            <div style={{fontSize:'11px',fontWeight:700,color:'var(--w-acc)',textTransform:'uppercase',letterSpacing:'.08em',marginBottom:'10px'}}>
-              Pathu Porutham — 10 Compatibility Factors
-            </div>
-            <div style={{display:'flex',flexDirection:'column',gap:'4px'}}>
-              {poruthams.map((p:any, i:number) => {
-                const pass = p.Verdict==='Compatible' || p.pass || p.Pass
-                const name = p.KootaName || p.kootaName || `Porutham ${i+1}`
-                const desc = p.Description || p.description || ''
-                return (
-                  <div key={i} style={{display:'grid',gridTemplateColumns:'24px 1fr auto',gap:'8px',alignItems:'start',padding:'6px 0',borderBottom:'1px solid var(--w-bd)'}}>
-                    <div style={{fontSize:'10px',color:'var(--w-tx2)',paddingTop:'1px'}}>{i+1}</div>
-                    <div>
-                      <div style={{fontSize:'12px',fontWeight:600,color:'var(--w-tx)'}}>{name}</div>
-                      {desc && <div style={{fontSize:'10px',color:'var(--w-tx2)',marginTop:'2px',lineHeight:1.4}}>{desc}</div>}
-                    </div>
-                    <div style={{fontSize:'11px',fontWeight:700,color:pass?'#16a34a':'#dc2626',paddingTop:'1px',whiteSpace:'nowrap'}}>
-                      {pass ? '✓ Pass' : '✗ Fail'}
-                    </div>
-                  </div>
-                )
-              })}
-            </div>
-          </div>
-        )}
-
-        {/* Ashta Koota table */}
-        {kootas.length > 0 && (
-          <div>
-            <div style={{fontSize:'11px',fontWeight:700,color:'var(--w-acc)',textTransform:'uppercase',letterSpacing:'.08em',marginBottom:'10px'}}>
-              Ashta Koota — 8 Factor Analysis
-            </div>
-            <div style={{display:'grid',gridTemplateColumns:'repeat(4,1fr)',gap:'6px'}}>
-              {kootas.map((k:any) => {
-                const score = k.Score ?? k.score ?? 0
-                const max   = k.MaxScore ?? k.maxScore ?? 1
-                const ok    = score >= max * 0.5
-                return (
-                  <div key={k.KootaName||k.kootaName} style={{padding:'10px',borderRadius:'10px',background:'var(--w-bg)',border:`1px solid ${ok?'#16a34a33':'#ef444433'}`,textAlign:'center'}}>
-                    <div style={{fontSize:'18px',fontWeight:800,color:scoreColor(Math.round(score/max*100))}}>{score}</div>
-                    <div style={{fontSize:'8.5px',color:'var(--w-tx2)',marginTop:'2px'}}>/{max}</div>
-                    <div style={{fontSize:'9px',color:'var(--w-tx2)',marginTop:'3px',lineHeight:1.2}}>{k.KootaName||k.kootaName}</div>
-                  </div>
-                )
-              })}
-            </div>
-          </div>
-        )}
-
-        {summary && (
-          <div style={{marginTop:'14px',padding:'10px 14px',background:'var(--w-bg)',borderRadius:'8px',fontSize:'12px',color:'var(--w-tx2)',lineHeight:1.6,borderLeft:'3px solid var(--w-acc)'}}>
-            {summary}
-          </div>
-        )}
+        <div style={{fontSize:'13px',color:'var(--w-tx2)',lineHeight:1.7,padding:'12px 14px',background:'var(--w-bg)',borderRadius:'8px',borderLeft:'3px solid var(--w-acc)'}}>
+          {overallPct >= 75
+            ? `${name1} and ${name2} show strong natural alignment across all major compatibility factors. The foundation for this relationship is genuinely solid.`
+            : overallPct >= 60
+            ? `${name1} and ${name2} show good compatibility with some areas requiring conscious attention. Overall the relationship has a strong foundation.`
+            : overallPct >= 45
+            ? `${name1} and ${name2} show average compatibility. The relationship can thrive with awareness and effort in specific areas.`
+            : `${name1} and ${name2} show significant differences in core compatibility areas. This does not preclude a meaningful relationship, but it calls for conscious navigation.`
+          }
+        </div>
       </div>
 
-      {/* Dasha sync section */}
+      {/* ── Deep compatibility — year-by-year ──────────────────────────── */}
       <div style={{background:'var(--w-surf)',border:'1px solid var(--w-bd)',borderRadius:'20px',padding:'28px',boxShadow:'0 4px 24px rgba(0,0,0,.06)'}}>
         <div style={{fontSize:'11px',fontWeight:700,letterSpacing:'.1em',textTransform:'uppercase',color:'var(--w-acc)',marginBottom:'16px',textAlign:'center'}}>
-          VedicHora Dasha Compatibility — Year-by-Year Analysis
+          Compatibility Timeline
         </div>
 
+        {/* Relationship type + time window + load button */}
         {hasSaved && !loaded && (
-          <button onClick={loadDeep} disabled={loading}
-            style={{width:'100%',padding:'12px',background:'var(--w-acc)',color:'#fff',border:'none',borderRadius:'10px',cursor:'pointer',fontSize:'13px',fontWeight:600,marginBottom:'12px'}}>
-            {loading ? 'Analysing Dasha periods…' : 'Load Full Dasha Sync Analysis →'}
-          </button>
-        )}
-
-        {combined && (
-          <div style={{textAlign:'center',marginBottom:'16px'}}>
-            <div style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:'32px',fontWeight:800,color:scoreColor(combined.score??0)}}>{combined.score}%</div>
-            <div style={{fontSize:'14px',fontWeight:600,color:'var(--w-acc)',margin:'4px 0'}}>{combined.label}</div>
-            {combined.mainStrengths?.length > 0 && (
-              <div style={{fontSize:'12px',color:'#16a34a'}}>✓ {combined.mainStrengths.slice(0,3).join(' · ')}</div>
-            )}
-            {combined.mainChallenges?.length > 0 && (
-              <div style={{fontSize:'12px',color:'#dc2626',marginTop:'4px'}}>⚠ {combined.mainChallenges.slice(0,2).join(' · ')}</div>
-            )}
+          <div>
+            <div style={{display:'flex',gap:'6px',flexWrap:'wrap',marginBottom:'10px'}}>
+              {['Marriage','Business','Sibling','Friendship','Other'].map(rt=>(
+                <button key={rt} onClick={()=>setRelType(rt)}
+                  style={{padding:'5px 12px',fontSize:'11px',borderRadius:'6px',cursor:'pointer',border:'none',
+                    background:relType===rt?'var(--w-acc)':'var(--w-bg)',
+                    color:relType===rt?'#fff':'var(--w-tx)',fontWeight:relType===rt?700:400}}>
+                  {rt}
+                </button>
+              ))}
+            </div>
+            <div style={{display:'flex',gap:'6px',flexWrap:'wrap',marginBottom:'14px'}}>
+              {([['future',`Next 10 years (${now}–${now+10})`],['past',`Past 10 years (${now-10}–${now})`],['full','Full lifetime ★']] as [string,string][]).map(([v,l])=>(
+                <button key={v} onClick={()=>setMode(v as any)}
+                  style={{padding:'5px 12px',fontSize:'11px',borderRadius:'6px',cursor:'pointer',border:'none',
+                    background:mode===v?'var(--w-acc)':'var(--w-bg)',
+                    color:mode===v?'#fff':'var(--w-tx)',fontWeight:mode===v?700:400}}>
+                  {l}
+                </button>
+              ))}
+            </div>
+            <button onClick={loadDeep} disabled={loading}
+              style={{width:'100%',padding:'12px',background:'var(--w-acc)',color:'#fff',border:'none',borderRadius:'10px',cursor:'pointer',fontSize:'13px',fontWeight:600}}>
+              {loading ? 'Analysing…' : 'Analyse Compatibility Timeline →'}
+            </button>
           </div>
         )}
 
-        {(bestYrs.length > 0 || badYrs.length > 0) && (
-          <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:'10px',marginBottom:'16px'}}>
-            {bestYrs.length > 0 && (
-              <div style={{padding:'14px',background:'#f0fdf4',border:'1px solid #16a34a',borderRadius:'10px'}}>
-                <div style={{fontSize:'10px',fontWeight:700,color:'#15803d',marginBottom:'6px',textTransform:'uppercase'}}>🌟 Best Years</div>
-                {bestYrs.slice(0,4).map((y:string) => <div key={y} style={{fontSize:'12px',color:'#15803d',fontWeight:600}}>{y}</div>)}
-              </div>
-            )}
-            {badYrs.length > 0 && (
-              <div style={{padding:'14px',background:'#fef2f2',border:'1px solid #fca5a5',borderRadius:'10px'}}>
-                <div style={{fontSize:'10px',fontWeight:700,color:'#dc2626',marginBottom:'6px',textTransform:'uppercase'}}>⚠ Challenging Years</div>
-                {badYrs.slice(0,4).map((y:string) => <div key={y} style={{fontSize:'12px',color:'#dc2626',fontWeight:600}}>{y}</div>)}
-              </div>
-            )}
+        {/* After loaded — year timeline bar */}
+        {loaded && yearSummary.length > 0 && (
+          <div style={{marginBottom:'20px'}}>
+            <div style={{display:'flex',gap:'3px',flexWrap:'wrap',marginBottom:'8px'}}>
+              {yearSummary.map((y:any)=>(
+                <div key={y.year} title={y.note||y.verdict}
+                  style={{width:'30px',height:'30px',borderRadius:'4px',display:'flex',flexDirection:'column',
+                    alignItems:'center',justifyContent:'center',fontSize:'8px',fontWeight:700,cursor:'default',
+                    background: y.verdict==='Favourable'?'#bbf7d0':y.verdict==='Difficult'?'#fecaca':y.verdict==='Challenging'?'#fed7aa':'#e5e7eb',
+                    color: y.verdict==='Favourable'?'#15803d':y.verdict==='Difficult'?'#dc2626':y.verdict==='Challenging'?'#b45309':'#6b7280',
+                    border: y.isPast?'1px dashed #9ca3af':'none',opacity:y.isPast?0.7:1}}>
+                  {String(y.year).slice(2)}
+                </div>
+              ))}
+            </div>
+            <div style={{display:'flex',gap:'12px',fontSize:'9px'}}>
+              {[['#bbf7d0','#15803d','Favourable'],['#fed7aa','#b45309','Mixed'],['#fecaca','#dc2626','Difficult']].map(([bg,c,l])=>(
+                <div key={l} style={{display:'flex',alignItems:'center',gap:'3px'}}>
+                  <div style={{width:'10px',height:'10px',borderRadius:'2px',background:bg}}/>
+                  <span style={{color:c}}>{l}</span>
+                </div>
+              ))}
+              <span style={{color:'#9ca3af'}}>Dashed = past</span>
+            </div>
           </div>
         )}
 
-        {syncTable.length > 0 && (
-          <div style={{overflowX:'auto'}}>
-            <table style={{width:'100%',borderCollapse:'collapse',fontSize:'11px'}}>
-              <thead>
-                <tr style={{borderBottom:'2px solid var(--w-bd)'}}>
-                  {['Year','Person 1 Dasha','Person 2 Dasha','Match'].map(h => (
-                    <th key={h} style={{padding:'6px 10px',textAlign:'left',fontSize:'9px',fontWeight:700,textTransform:'uppercase',color:'var(--w-tx2)',letterSpacing:'.05em'}}>{h}</th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
-                {syncTable.map((y:any, i:number) => (
-                  <tr key={y.year} style={{borderBottom:'1px solid var(--w-bd)',background:i%2?'var(--w-bg)':'transparent'}}>
-                    <td style={{padding:'6px 10px',fontWeight:700,color:'var(--w-tx)'}}>{y.year}</td>
-                    <td style={{padding:'6px 10px',color:'var(--w-tx2)'}}>{y.personA?.dasha||y.personA?.Dasha||'—'}</td>
-                    <td style={{padding:'6px 10px',color:'var(--w-tx2)'}}>{y.personB?.dasha||y.personB?.Dasha||'—'}</td>
-                    <td style={{padding:'6px 10px',fontWeight:600,color:catColor(y.combined||y.combinedCategory||'')}}>{y.syncLabel||y.combined||y.combinedCategory||'—'}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+        {/* Best years */}
+        {bestYears.length > 0 && (
+          <div style={{marginBottom:'14px',padding:'14px',background:'#f0fdf4',border:'1px solid #16a34a55',borderRadius:'10px'}}>
+            <div style={{fontSize:'10px',fontWeight:700,color:'#15803d',marginBottom:'8px',textTransform:'uppercase'}}>🌟 Best Periods</div>
+            {bestYears.slice(0,3).map((y:any,i:number)=>(
+              <div key={i} style={{marginBottom:'6px'}}>
+                <div style={{fontSize:'12px',fontWeight:700,color:'#15803d'}}>
+                  {new Date(y.startDate).getFullYear()}–{new Date(y.endDate).getFullYear()} · {y.label}
+                </div>
+                {y.note && <div style={{fontSize:'11px',color:'#166534',marginTop:'2px',lineHeight:1.4}}>{y.note.slice(0,120)}</div>}
+              </div>
+            ))}
+          </div>
+        )}
+
+        {/* Challenging years */}
+        {chalYears.length > 0 && (
+          <div style={{marginBottom:'14px',padding:'14px',background:'#fef2f2',border:'1px solid #fca5a555',borderRadius:'10px'}}>
+            <div style={{fontSize:'10px',fontWeight:700,color:'#dc2626',marginBottom:'8px',textTransform:'uppercase'}}>⚠ Periods Requiring Awareness</div>
+            {chalYears.slice(0,3).map((y:any,i:number)=>(
+              <div key={i} style={{marginBottom:'6px'}}>
+                <div style={{fontSize:'12px',fontWeight:700,color:'#dc2626'}}>
+                  {new Date(y.startDate).getFullYear()}–{new Date(y.endDate).getFullYear()} · {y.label}
+                </div>
+                {y.note && <div style={{fontSize:'11px',color:'#991b1b',marginTop:'2px',lineHeight:1.4}}>{y.note.slice(0,120)}</div>}
+              </div>
+            ))}
+          </div>
+        )}
+
+        {/* Cross predictions — dual narrative */}
+        {crossPreds.filter((p:any)=>p.intensity==='SEVERE'||p.intensity==='POSITIVE').slice(0,4).map((p:any,i:number)=>(
+          <div key={i} style={{marginBottom:'10px',padding:'12px 14px',borderRadius:'10px',
+            background:p.intensity==='POSITIVE'?'#f0fdf4':'#fef2f2',
+            border:`1px solid ${p.intensity==='POSITIVE'?'#16a34a55':'#fca5a555'}`}}>
+            <div style={{fontSize:'10px',fontWeight:700,color:p.intensity==='POSITIVE'?'#15803d':'#dc2626',marginBottom:'6px',textTransform:'uppercase'}}>
+              {p.intensity==='POSITIVE'?'🌟':'⚠'} {p.yearRange} · {p.who}
+              {p.isCurrent&&<span style={{marginLeft:'6px',fontSize:'9px',background:'var(--w-acc)',color:'#fff',padding:'1px 5px',borderRadius:'3px'}}>Now</span>}
+            </div>
+            {p.fromTheirSide && <div style={{fontSize:'12px',color:'var(--w-tx)',lineHeight:1.5,marginBottom:'4px'}}>{p.fromTheirSide}</div>}
+            {p.fromPartnerSide && <div style={{fontSize:'11px',color:'var(--w-tx2)',lineHeight:1.5,fontStyle:'italic'}}>{p.fromPartnerSide}</div>}
+          </div>
+        ))}
+
+        {/* Re-run switcher */}
+        {loaded && (
+          <div style={{display:'flex',gap:'6px',flexWrap:'wrap',marginTop:'12px',alignItems:'center'}}>
+            {(['future','past','full'] as const).map(m=>(
+              <button key={m} onClick={()=>{setMode(m);setLoaded(false);setTimeout(loadDeep,50)}}
+                style={{padding:'4px 10px',fontSize:'9px',borderRadius:'5px',cursor:'pointer',border:'none',
+                  background:mode===m?'var(--w-acc)':'var(--w-bg)',
+                  color:mode===m?'#fff':'var(--w-tx)',fontWeight:mode===m?700:400}}>
+                {m==='future'?`${now}+`:m==='past'?'Past 10yr':'70yr ★'}
+              </button>
+            ))}
+            <button
+              onClick={()=>{
+                fetch('/western-report.html').then(res=>res.text()).then(tmpl=>{
+                  const d={name1:r?.name1||name1,name2:r?.name2||name2,
+                    gender1:'Male',gender2:'Female',
+                    fromYear:mode==='past'?now-10:now,
+                    toYear:mode==='full'?now+70:now+10,deep};
+                  const inj=tmpl.replace('</head>',`<script>window.__VH_DATA=${JSON.stringify(d)}<\/script></head>`);
+                  const w=window.open('','_blank');
+                  if(w){w.document.write(inj);w.document.close();setTimeout(()=>w.print(),800);}
+                });
+              }}
+              style={{marginLeft:'auto',padding:'6px 14px',background:'#0F1117',color:'#D4AF55',border:'none',borderRadius:'7px',cursor:'pointer',fontFamily:"'Playfair Display',Georgia,serif",fontSize:'11px',fontWeight:600}}>
+              ⬇ Download PDF
+            </button>
           </div>
         )}
 
         {!hasSaved && (
           <div style={{padding:'14px',background:'var(--w-bg)',borderRadius:'10px',fontSize:'12px',color:'var(--w-tx2)',lineHeight:1.6,textAlign:'center'}}>
-            <strong style={{color:'var(--w-tx)'}}>Sign in & save charts</strong> to unlock year-by-year Dasha Sync, Best Marriage Window, and Deep Compatibility Analysis.{' '}
+            <strong style={{color:'var(--w-tx)'}}>Sign in & save charts</strong> to unlock year-by-year timeline, best periods, and deep compatibility analysis.{' '}
             <a href="/signin" style={{color:'var(--w-acc)',fontWeight:600}}>Sign in →</a>
           </div>
         )}
@@ -404,6 +433,7 @@ function WesternDashaSection({
     </div>
   )
 }
+
 
 // ── Download western PDF ──────────────────────────────────────────────────
 async function downloadWesternPdf(
