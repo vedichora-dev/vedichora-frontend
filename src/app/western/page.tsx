@@ -1,6 +1,12 @@
 'use client'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
+import DatePicker, { DateValue } from '@/components/ui/DatePicker'
+import CityAutocomplete from '@/components/ui/CityAutocomplete'
+import { calculateChart, calculateChartGuest, listCharts } from '@/api'
+import { useStore } from '@/store'
+
+const EMPTY: DateValue = { dd: 0, mm: 0, yyyy: 0 }
 
 const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December']
 
@@ -528,6 +534,17 @@ export default function WesternPage(){
     setChartLoading(false)
   }
 
+  // Load saved charts when logged in
+  const { token } = useStore()
+  useEffect(() => {
+    if (token) {
+      listCharts().then(res => {
+        const c = res?.data?.data ?? res?.data ?? []
+        setSaved(Array.isArray(c) ? c : [])
+      }).catch(() => {})
+    }
+  }, [token])
+
   const calcRealCompat = async () => {
     if (!d1.yyyy || !d2.yyyy) { setCompatErr('Enter both dates of birth'); return }
     setCompatLoading(true); setCompatErr(''); setLoveResult(null)
@@ -817,10 +834,10 @@ export default function WesternPage(){
                   <DatePicker value={d2} onChange={setD2}
                     showUnknownTime={true}
                     style={{marginBottom:'8px'}} />
-                  <div style={{display:'none'}}>
-                    <Sel value={t2.ap} onChange={v=>setT2(t=>({...t,ap:v}))} placeholder="AM/PM" w="33%"
-                      opts={[{v:'AM',l:'AM'},{v:'PM',l:'PM'}]} />
-                  </div>
+                  <CityAutocomplete
+                    value={place2} onChange={setPlace2}
+                    onSelect={(p,lat,lng)=>{setPlace2(p);setLat2c(lat);setLng2c(lng)}}
+                    placeholder="Place of birth" />
                   <div style={{fontSize:'10px',color:'var(--w-tx2)',marginTop:'3px',marginBottom:'6px'}}>Time of birth (optional — improves accuracy)</div>
                 </div>
               </div>
