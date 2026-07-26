@@ -578,21 +578,14 @@ export default function WesternPage(){
         body:JSON.stringify({Person1:p1,Person2:p2})
       }).then(r=>r.json())
       const mdata = mres?.data?.data ?? mres?.data ?? mres
-      // Try LoveMeter if both charts were created (need horoscopeId)
+      // Store chart horoscopeIds in result so WesternDashaSection can load deep analysis
       const h1 = c1?.horoscopeId || c1?.HoroscopeId
       const h2 = c2?.horoscopeId || c2?.HoroscopeId
-      let loveMeter = null
-      if (h1 && h2) {
-        try {
-          const lr = await fetch(`${CHART_URL}/api/western-profile/love-meter`,{
-            method:'POST',headers:{'Content-Type':'application/json'},
-            body:JSON.stringify({horoscopeId1:h1,horoscopeId2:h2})
-          }).then(r=>r.json())
-          loveMeter = lr?.data?.data ?? lr?.data ?? lr
-        } catch {}
-      }
-      setCompatResult(mdata)
-      if (loveMeter) setLoveResult(loveMeter)
+      // Merge IDs into mdata so WesternDashaSection gets them
+      const enrichedResult = { ...mdata, hid1: h1, hid2: h2,
+        name1: n1||'Person 1', name2: n2||'Person 2',
+        gender1: g1, gender2: g2 }
+      setCompatResult(enrichedResult)
     } catch (e: any) {
       setCompatErr(e?.message || 'Calculation failed')
     }
@@ -782,9 +775,9 @@ export default function WesternPage(){
         {tab==='compatibility' && (
           <div>
             <div style={{textAlign:'center',marginBottom:'40px'}}>
-              <div style={{fontSize:'11px',color:'var(--w-gold)',fontWeight:700,letterSpacing:'.12em',textTransform:'uppercase',marginBottom:'12px'}}>Moon Sign Compatibility</div>
-              <h1 style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:'clamp(28px,4vw,44px)',fontWeight:700,color:'var(--w-tx)',lineHeight:1.15,marginBottom:'12px'}}>Are You Truly Compatible?</h1>
-              <p style={{fontSize:'15px',color:'var(--w-tx2)',maxWidth:'440px',margin:'0 auto',lineHeight:1.7}}>Moon sign compatibility reveals the emotional foundation of any relationship -- the most reliable measure of long-term harmony.</p>
+              <div style={{fontSize:'11px',color:'var(--w-gold)',fontWeight:700,letterSpacing:'.12em',textTransform:'uppercase',marginBottom:'12px'}}>Compatibility Analysis</div>
+              <h1 style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:'clamp(28px,4vw,44px)',fontWeight:700,color:'var(--w-tx)',lineHeight:1.15,marginBottom:'12px'}}>How Compatible Are You?</h1>
+              <p style={{fontSize:'15px',color:'var(--w-tx2)',maxWidth:'440px',margin:'0 auto',lineHeight:1.7}}>Enter both birth details below to reveal how your lives interact — the windows of alignment, friction, and shared direction.</p>
             </div>
 
             <div style={{background:'var(--w-surf)',border:'1px solid var(--w-bd)',borderRadius:'20px',padding:'36px',boxShadow:'0 4px 24px rgba(0,0,0,.06)',marginBottom:'28px'}}>
@@ -903,19 +896,6 @@ export default function WesternPage(){
             {compatResult && (
               <div style={{marginTop:'20px'}}>
                 <WesternDashaSection compatResult={compatResult} name1={n1||'Person 1'} name2={n2||'Person 2'} scoreColor={scoreColor} />
-                {/* Download western PDF */}
-                {deep && (
-                  <div style={{textAlign:'center',marginTop:'24px'}}>
-                    <button
-                      onClick={()=>downloadWesternPdf(compatResult, deep, n1||'Person 1', n2||'Person 2', d1, d2, g1, g2)}
-                      style={{padding:'12px 28px',background:'#0F1117',color:'#D4AF55',border:'none',borderRadius:'10px',cursor:'pointer',fontFamily:"'Playfair Display',Georgia,serif",fontSize:'13px',fontWeight:600,boxShadow:'0 4px 20px rgba(0,0,0,.15)'}}>
-                      ⬇ Download Compatibility Report PDF
-                    </button>
-                    <div style={{fontSize:'11px',color:'var(--w-tx2)',marginTop:'8px'}}>
-                      Requires "Analyse Deep Compatibility" to be loaded first
-                    </div>
-                  </div>
-                )}
               </div>
             )}
 
