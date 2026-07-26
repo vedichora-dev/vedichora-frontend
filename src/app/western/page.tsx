@@ -170,14 +170,13 @@ function WesternDashaSection({
   compatResult: any; name1: string; name2: string
   scoreColor: (n:number)=>string; saved: any[]; token: string|null
 }) {
+  const r       = compatResult as any
   const preloaded = r?.deepResult ?? null
   const [deep, setDeep]       = useState<any>(preloaded)
   const [loading, setLoading] = useState(false)
   const [loaded, setLoaded]   = useState<boolean>(preloaded !== null)
   const [relType, setRelType] = useState('Other')
   const [mode, setMode]       = useState<'future'|'past'|'full'>('future')
-
-  const r       = compatResult as any
   const ashta   = r?.AshtaKootaScore   ?? r?.ashtaKootaScore   ?? 0
   const aTotal  = r?.AshtaKootaTotal   ?? r?.ashtaKootaTotal   ?? 36
   const pathu   = r?.PathuPoruthamScore?? r?.pathuPoruthamScore?? 0
