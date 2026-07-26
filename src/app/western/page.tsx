@@ -417,8 +417,8 @@ function WesternDashaSection({
                 fetch('/western-report.html').then(res=>res.text()).then(tmpl=>{
                   const d={name1:r?.name1||name1,name2:r?.name2||name2,
                     gender1:'Male',gender2:'Female',
-                    fromYear:mode==='past'?now-10:now,
-                    toYear:mode==='full'?now+70:now+10,deep};
+                    fromYear:yearSummary.length>0?yearSummary[0].year:(mode==='past'?now-10:now),
+                    toYear:yearSummary.length>0?yearSummary[yearSummary.length-1].year:(mode==='full'?now+70:now+10),deep};
                   const inj=tmpl.replace('</head>',`<script>window.__VH_DATA=${JSON.stringify(d)}<\/script></head>`);
                   const w=window.open('','_blank');
                   if(w){w.document.write(inj);w.document.close();setTimeout(()=>w.print(),800);}
@@ -454,6 +454,10 @@ async function downloadWesternPdf(
   try {
     const tmpl = await fetch('/western-report.html').then(r => r.text())
     const now = 2026
+    // Derive year range from actual yearSummary if available
+    const ys = deep?.yearSummary || []
+    const fromYear = ys.length > 0 ? ys[0].year : now
+    const toYear   = ys.length > 0 ? ys[ys.length-1].year : now + 12
     const data = {
       name1: n1 || 'Person 1',
       name2: n2 || 'Person 2',
@@ -461,8 +465,8 @@ async function downloadWesternPdf(
       gender2: g2 || 'Female',
       dob1: d1?.yyyy ? `${d1.dd}/${d1.mm}/${d1.yyyy}` : '',
       dob2: d2?.yyyy ? `${d2.dd}/${d2.mm}/${d2.yyyy}` : '',
-      fromYear: now,
-      toYear:   now + 12,
+      fromYear,
+      toYear,
       // From guest-match result
       GroomNakshatra: compatResult?.GroomNakshatra || '',
       BrideNakshatra: compatResult?.BrideNakshatra || '',
