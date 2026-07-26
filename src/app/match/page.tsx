@@ -705,101 +705,239 @@ export default function MatchPage() {
         ? Math.round((data.AshtaKootaScore / data.AshtaKootaTotal) * 100) : 0
       const doshaCount = (data.VedhaPresent ? 1 : 0) + (data.MangalDosha ? 1 : 0)
 
-      // Porutham label map
-      const PATHU_LABELS: Record<string,{en:string,ta:string,meaning:string}> = {
-        'Dinam':         {en:'Dinam',        ta:'தினம்',            meaning:'Day star harmony — health & longevity'},
-        'Ganam':         {en:'Ganam',        ta:'கணம்',             meaning:'Nature & temperament match'},
-        'Mahendram':     {en:'Mahendram',    ta:'மஹேந்திரம்',       meaning:'Prosperity, strength & protection'},
-        'Sthree Dheerga':{en:'Sthree Dheerga',ta:'ஸ்திரீ தீர்க்கம்',meaning:'Long life for the wife'},
-        'Yoni':          {en:'Yoni',         ta:'யோனி',             meaning:'Physical & sexual compatibility'},
-        'Rasi':          {en:'Rasi',         ta:'ராசி',             meaning:'Moon sign compatibility'},
-        'Rasiyathipati': {en:'Rasyadhipati', ta:'ராசியதிபதி',       meaning:'Lord of rasi — harmony & prosperity'},
-        'Rajju':         {en:'Rajju',        ta:'ரஜ்ஜு',            meaning:'Life force — must match (critical)'},
-        'Vedha':         {en:'Vedha',        ta:'வேதை',             meaning:'Affliction check (must be absent)'},
-      }
-      const KOOTA_LABELS: Record<string,{en:string,ta:string,meaning:string}> = {
-        'Varna':        {en:'Varna',        ta:'வர்ணம்',     meaning:'Spiritual compatibility'},
-        'Vashya':       {en:'Vashya',       ta:'வசியம்',     meaning:'Mutual attraction'},
-        'Tara':         {en:'Tara',         ta:'தாரா',       meaning:'Birth star compatibility'},
-        'Yoni':         {en:'Yoni',         ta:'யோனி',       meaning:'Physical compatibility'},
-        'Graha Maitri': {en:'Graha Maitri', ta:'கிரக மைத்திரி',meaning:'Mental harmony'},
-        'Gana':         {en:'Gana',         ta:'கணம்',       meaning:'Temperament match'},
-        'Bhakoota':     {en:'Bhakoota',     ta:'பகூட்டம்',   meaning:'Wealth & progeny'},
-        'Nadi':         {en:'Nadi',         ta:'நாடி',       meaning:'Health & longevity (critical)'},
-      }
+      // ── Language labels ──────────────────────────────────────────
       const L = reportLang
-      const t = (obj: any) => obj?.[L] || obj?.en || ''
+      const ta = (en: string, ta_: string, hi?: string) =>
+        L === 'ta' ? ta_ : (L === 'hi' && hi ? hi : en)
 
-      // Build Pathu Porutham rows as inline HTML
-      const poruthams: any[] = data.Poruthams || []
+      // ── Pathu Porutham labels (Tamil names from sample PDF) ──────
+      const PATHU_LABELS: Record<string,{en:string;ta:string;meaning_en:string;meaning_ta:string}> = {
+        'Dinam':         {en:'1. திணம் (Dinam)',        ta:'1. திணம் (திணம்)',       meaning_en:'Day star compatibility — health & longevity', meaning_ta:'உடல்நலம் & ஆயுள்'},
+        'Ganam':         {en:'2. Ganam',                ta:'2. கணம்',                meaning_en:'Nature & temperament — mutual understanding',   meaning_ta:'குணம் & மனோபாவம்'},
+        'Mahendram':     {en:'3. Mahendram',            ta:'3. மகேந்திரம்',          meaning_en:'Prosperity, strength & children',               meaning_ta:'செல்வம் & சந்ததி'},
+        'Sthree Dheerga':{en:'4. Sthree Dheerga',      ta:'4. ஸ்திரீ தீர்க்கம்',   meaning_en:"Long life for the wife",                        meaning_ta:'மனைவியின் நலன்'},
+        'Yoni':          {en:'5. Yoni',                 ta:'5. யோனி',               meaning_en:'Physical & intimate compatibility',              meaning_ta:'உடல் & நெருக்கம்'},
+        'Rasi':          {en:'6. Rasi',                 ta:'6. ராசி',               meaning_en:'Moon sign — family harmony',                    meaning_ta:'குடும்ப நல்லிணக்கம்'},
+        'Rasiyathipati': {en:'7. Rasiyathipati',        ta:'7. ராசியதிபதி',         meaning_en:'Lord of rasi — prosperity & harmony',           meaning_ta:'செல்வம் & நல்வாழ்வு'},
+        'Rajju':         {en:'8. Rajju ★ critical',    ta:'8. ரஜ்ஜு ★ முக்கியம்', meaning_en:'Husband longevity — most critical dosha',       meaning_ta:'கணவனின் ஆயுள் — மிக முக்கியம்'},
+        'Vedha':         {en:'9. Vedha',                ta:'9. வேதை',               meaning_en:'Affliction — must be absent',                   meaning_ta:'தோஷம் — இல்லாமல் இருக்க வேண்டும்'},
+      }
+
+      // ── Ashta Koota labels ────────────────────────────────────────
+      const KOOTA_LABELS: Record<string,{en:string;ta:string;meaning_en:string;meaning_ta:string}> = {
+        'Varna':        {en:'Varna',        ta:'வர்ணம்',       meaning_en:'Spiritual compatibility',              meaning_ta:'ஆன்மீக இணக்கம்'},
+        'Vashya':       {en:'Vashya',       ta:'வசியம்',       meaning_en:'Mutual attraction & control',           meaning_ta:'பரஸ்பர ஈர்ப்பு'},
+        'Tara':         {en:'Tara',         ta:'தாரா',         meaning_en:'Birth star compatibility — health',     meaning_ta:'நட்சத்திர இணக்கம்'},
+        'Yoni':         {en:'Yoni',         ta:'யோனி',         meaning_en:'Physical compatibility',                meaning_ta:'உடல் இணக்கம்'},
+        'Graha Maitri': {en:'Graha Maitri', ta:'கிரக மைத்திரி',meaning_en:'Mental harmony & friendship',          meaning_ta:'மன இணக்கம்'},
+        'Gana':         {en:'Gana',         ta:'கணம்',         meaning_en:'Temperament & nature match',            meaning_ta:'குண இணக்கம்'},
+        'Bhakoota':     {en:'Bhakoota',     ta:'பகூட்டம்',     meaning_en:'Wealth, progeny & family harmony',      meaning_ta:'செல்வம் & சந்ததி'},
+        'Nadi':         {en:'Nadi',         ta:'நாடி',         meaning_en:'Health & progeny — critical (max 8)',   meaning_ta:'ஆரோக்கியம் & சந்ததி (முக்கியம்)'},
+      }
+
+      const safe = (v: any) => String(v ?? '')
+      const pathuScore2 = data.PathuPoruthamScore  ?? 0
+      const pathuTotal2 = data.PathuPoruthamTotal  ?? 24
+      const ashtaScore2 = data.AshtaKootaScore     ?? 0
+      const ashtaTotal2 = data.AshtaKootaTotal     ?? 36
+      const pathuPct2   = pathuTotal2 > 0 ? Math.round((pathuScore2/pathuTotal2)*100) : 0
+      const ashtaPct2   = ashtaTotal2 > 0 ? Math.round((ashtaScore2/ashtaTotal2)*100) : 0
+
+      // Failed porutham count
+      const failedCount = (data.Poruthams || []).filter((p: any) => !p.Pass && !p.pass).length
+
+      // ── Pathu Porutham table rows ─────────────────────────────────
       const PATHU_ORDER = ['Dinam','Ganam','Mahendram','Sthree Dheerga','Yoni','Rasi','Rasiyathipati','Rajju']
-      const pathuRows = poruthams.map((p: any, i: number) => {
-        const key  = p.KootaName || p.kootaName || PATHU_ORDER[i] || ('Porutham ' + (i+1))
-        const lbl  = PATHU_LABELS[key] || {en:key,ta:key,meaning:''}
-        const name = t(lbl) || key
-        const isPass = p.Verdict === 'Compatible' || p.Pass || p.pass
-        const isCritical = key === 'Rajju' || key === 'Vedha'
-        const score = p.Score ?? '', max = p.MaxScore ?? ''
-        const scoreStr = (score !== '' && max !== '') ? (score + '/' + max) : (isPass ? '✓' : '✗')
-        const desc = p.Description || lbl.meaning || ''
-        const pColor = isPass ? '#15803D' : '#DC2626'
-        const pText  = isPass ? ('✓ ' + (L==='ta'?'பொருத்தம்':'Pass')) : ('✗ ' + (L==='ta'?'பொருந்தாது':'Fail'))
-        const crit = isCritical ? '<span style="background:#7A1F1F;color:#C8A96A;font-size:9px;padding:1px 5px;border-radius:3px;margin-left:6px">' + (L==='ta'?'முக்கியம்':'critical') + '</span>' : ''
-        const bg = i % 2 ? '#FDF6EE' : '#fff'
-        return '<tr style="border-bottom:1px solid #E8D8C0;background:' + bg + '">' +
-          '<td style="padding:8px 10px;color:#6B4C2A;font-size:11px">' + (i+1) + '</td>' +
-          '<td style="padding:8px 10px"><div style="font-family:Cinzel,serif;font-weight:600;font-size:13px;color:#3D0808">' + name + crit + '</div>' +
-          '<div style="font-size:10px;color:#8B6A3A;margin-top:3px">' + desc + '</div></td>' +
-          '<td style="padding:8px 10px;font-size:11px;color:#6B4C2A;text-align:center">' + scoreStr + '</td>' +
-          '<td style="padding:8px 10px;font-weight:700;color:' + pColor + ';font-size:13px">' + pText + '</td>' +
-          '</tr>'
+      const pathuRows = (data.Poruthams || []).map((p: any, i: number) => {
+        const key     = p.KootaName || p.kootaName || PATHU_ORDER[i] || `Porutham ${i+1}`
+        const lbl     = PATHU_LABELS[key]
+        const name    = lbl ? (L === 'ta' ? lbl.ta : lbl.en) : key
+        const meaning = lbl ? (L === 'ta' ? lbl.meaning_ta : lbl.meaning_en) : (p.Description || p.description || '')
+        const isPass  = p.Pass || p.pass || p.Verdict === 'Compatible'
+        const isCrit  = key === 'Rajju' || key === 'Vedha'
+        const score   = p.Score ?? p.score ?? ''
+        const max     = p.MaxScore ?? p.maxScore ?? ''
+        const scoreStr = (score !== '' && max !== '') ? `${score}/${max}` : (isPass ? '✓' : '✗')
+        const passCell = isPass
+          ? `<td class="td-pass">✓ ${ta('Pass','உண்டு')}</td>`
+          : `<td class="td-fail">✗ ${ta('Fail','இல்லை')}</td>`
+        const critBadge = isCrit ? `<span class="badge-critical">${ta('critical','முக்கியம்')}</span>` : ''
+        const bg = i % 2 ? '#FAF5EC' : '#fff'
+        return `<tr style="background:${bg}">
+          <td style="color:#6B4C2A;font-size:11px">${i+1}</td>
+          <td><div class="td-name">${name}${critBadge}</div><div class="td-sub">${meaning}</div></td>
+          <td style="font-size:11px;color:#6B4C2A">${scoreStr}</td>
+          ${passCell}
+        </tr>`
       }).join('')
 
-      // Build Ashta Koota rows as inline HTML
-      const kootas: any[] = data.KootaDetails || []
-      const ashtaRows = kootas.map((k: any, i: number) => {
-        const key  = k.KootaName || k.kootaName || ''
-        const lbl  = KOOTA_LABELS[key] || {en:key,ta:key,meaning:''}
-        const name = t(lbl) || key
-        const score = k.Score ?? 0, max = k.MaxScore ?? 0
-        const pct   = max > 0 ? Math.round((score/max)*100) : 0
-        const ok    = score >= max * 0.5
-        const oColor = ok ? '#15803D' : '#DC2626'
-        const oText  = ok ? ('✓ '+(L==='ta'?'நல்லது':'Good')) : ('✗ '+(L==='ta'?'குறைவு':'Low'))
-        const bg = i % 2 ? '#FDF6EE' : '#fff'
-        return '<tr style="border-bottom:1px solid #E8D8C0;background:' + bg + '">' +
-          '<td style="padding:8px 10px"><div style="font-family:Cinzel,serif;font-weight:600;font-size:13px;color:#3D0808">' + name + '</div>' +
-          '<div style="font-size:10px;color:#8B6A3A;margin-top:3px">' + lbl.meaning + '</div></td>' +
-          '<td style="padding:8px 10px;text-align:center;font-weight:700;color:#3D0808">' + max + '</td>' +
-          '<td style="padding:8px 10px;text-align:center"><span style="font-size:16px;font-weight:700;color:' + oColor + '">' + score + '</span>' +
-          '<div style="background:#E8D8C0;height:4px;border-radius:2px;margin-top:4px"><div style="background:' + oColor + ';height:4px;border-radius:2px;width:' + pct + '%"></div></div></td>' +
-          '<td style="padding:8px 10px;font-weight:700;color:' + oColor + ';font-size:13px">' + oText + '</td>' +
-          '</tr>'
+      // ── Ashta Koota table rows ────────────────────────────────────
+      const ashtaRows = (data.KootaDetails || []).map((k: any, i: number) => {
+        const key     = k.KootaName || k.kootaName || ''
+        const lbl     = KOOTA_LABELS[key]
+        const name    = lbl ? (L === 'ta' ? lbl.ta : lbl.en) : key
+        const meaning = lbl ? (L === 'ta' ? lbl.meaning_ta : lbl.meaning_en) : ''
+        const score   = k.Score   ?? k.score   ?? 0
+        const max     = k.MaxScore ?? k.maxScore ?? 0
+        const pct     = max > 0 ? Math.round((score/max)*100) : 0
+        const ok      = score > 0 && score >= max * 0.5
+        const oColor  = ok ? '#15803D' : '#DC2626'
+        const barW    = max > 0 ? Math.round((score/max)*80) : 0
+        const oText   = ok
+          ? `<span style="color:#15803D;font-weight:700">✓ ${ta('Good','நல்லது')}</span>`
+          : `<span style="color:#DC2626;font-weight:700">✗ ${ta('Low','குறைவு')}</span>`
+        const bg = i % 2 ? '#FAF5EC' : '#fff'
+        return `<tr style="background:${bg}">
+          <td><div class="td-name">${name}</div><div class="td-sub">${meaning}</div></td>
+          <td style="text-align:center;font-weight:700;color:#3D0808">${max}</td>
+          <td style="text-align:center">
+            <span style="font-size:18px;font-weight:700;color:${oColor}">${score}</span>
+            <div class="score-bar-wrap"><div class="score-bar" style="background:${oColor};width:${barW}px"></div></div>
+          </td>
+          <td>${oText}</td>
+          <td style="font-size:11px;color:#6B4C2A">${meaning}</td>
+        </tr>`
       }).join('')
 
-      // Dosha section inline HTML
+      // ── Dosha warnings ────────────────────────────────────────────
       const doshas: string[] = []
-      if (data.MangalDosha && data.MangalNote && !data.MangalNote.includes('cancels'))  doshas.push(L==='ta' ? '⚠️ மாங்கலிக தோஷம் — ' + data.MangalNote : '⚠️ Mangal Dosha — ' + data.MangalNote)
-      if (data.VedhaPresent)  doshas.push(L==='ta' ? '⚠️ வேதை தோஷம் உளது — முகூர்த்த திருத்தம் தேவை' : '⚠️ Vedha Dosha present — Muhurtha correction required')
-      if (data.MangalDosha)   doshas.push(L==='ta' ? '⚠️ மாங்கலிக தோஷம் உளது' : '⚠️ Mangal Dosha present')
-      if (!data.RajjuPass)    doshas.push(L==='ta' ? '⚠️ ரஜ்ஜு பொருத்தமில்லை — திருமணம் பரிந்துரைக்கப்படவில்லை' : '⚠️ Rajju mismatch — marriage not recommended')
-      const doshaHtml = doshas.length > 0
-        ? doshas.map((d: string) => '<div style="padding:10px 14px;background:#FFF0F0;border-left:4px solid #DC2626;margin:6px 0;color:#7A1F1F;font-size:12px">' + d + '</div>').join('')
-        : '<div style="padding:10px 14px;background:#F0FFF4;border-left:4px solid #15803D;color:#166534;font-size:12px">' + (L==='ta'?'✓ தோஷங்கள் இல்லை — நல்ல திருமண பொருத்தம்':'✓ No blocking doshas — auspicious match') + '</div>'
+      if (data.MangalDosha && data.MangalNote && !data.MangalNote.includes('cancel'))
+        doshas.push(`<div class="alert-bad">⚠️ ${ta('Mangal Dosha','மாங்கலிக தோஷம்')} — ${safe(data.MangalNote)}</div>`)
+      if (data.VedhaPresent)
+        doshas.push(`<div class="alert-bad">⚠️ ${ta('Vedha Dosha present — Muhurtha correction required','வேதை தோஷம் உளது — முகூர்த்த திருத்தம் தேவை')}</div>`)
+      const doshaHtml = doshas.join('')
+
+      // ── Rajju warning ─────────────────────────────────────────────
       const rajjuWarn = data.RajjuWarning
-        ? '<div style="padding:8px 14px;background:#FFF8E7;border-left:4px solid #B7862C;color:#7A4A00;font-size:11px;margin:6px 0">⚠️ ' + data.RajjuWarning + '</div>' : ''
+        ? `<div class="alert-warn">🔔 <strong>${ta('Important','முக்கியக் குறிப்பு')}</strong> — ${safe(data.RajjuWarning)}</div>`
+        : (!data.RajjuPass
+          ? `<div class="alert-warn">⚠️ ${ta('Rajju mismatch — marriage not recommended without Muhurtha correction','ரஜ்ஜு பொருத்தமில்லை — முகூர்த்தம் இல்லாமல் திருமணம் பரிந்துரைக்கப்படவில்லை')}</div>`
+          : '')
 
-      // Overall verdict
-      const pathuScore2 = data.PathuPoruthamScore ?? 0
-      const ashtaScore2 = data.AshtaKootaScore ?? 0
-      const isGood = (pathuScore2 >= 12) && (ashtaScore2 >= 18) && data.RajjuPass && !data.VedhaPresent
-      const verdictColor = isGood ? '#15803D' : (pathuScore2 >= 8 ? '#B4530A' : '#DC2626')
+      // ── Verdict ───────────────────────────────────────────────────
+      const isGood = ashtaScore2 >= 18 && pathuScore2 >= 12 && (data.RajjuPass !== false) && !data.VedhaPresent
+      const isMod  = ashtaScore2 >= 14 && pathuScore2 >= 8
+      const verdictColor = isGood ? '#15803D' : (isMod ? '#B4530A' : '#DC2626')
       const verdictText  = isGood
-        ? (L==='ta' ? '✓ திருமணம் பரிந்துரைக்கப்படுகிறது' : '✓ Marriage Recommended')
-        : (pathuScore2 >= 8 ? (L==='ta'?'⚠️ நடுத்தர பொருத்தம்':'⚠️ Moderate Match') : (L==='ta'?'✗ பொருத்தமில்லை':'✗ Not Recommended'))
+        ? `✓ ${ta('Marriage Recommended','திருமணம் பரிந்துரைக்கப்படுகிறது')}`
+        : (isMod ? `⚠ ${ta('Moderate Match — Check Muhurtha','நடுத்தர பொருத்தம் — முகூர்த்தம் அவசியம்')}`
+                 : `✗ ${ta('Not Recommended','பரிந்துரைக்கப்படவில்லை')}`)
+      const verdictBody = isGood
+        ? ta(`Ashta Koota: ${ashtaScore2}/36 (${ashtaPct2}%) · Pathu Porutham: ${pathuScore2}/24 · Doshas: Clear`,
+             `அஷ்டகூட: ${ashtaScore2}/36 (${ashtaPct2}%) · பத்து பொருத்தம்: ${pathuScore2}/24 · தோஷங்கள்: இல்லை`)
+        : ta(`Ashta Koota: ${ashtaScore2}/36 · Pathu Porutham: ${pathuScore2}/24 — Remedies recommended`,
+             `அஷ்டகூட: ${ashtaScore2}/36 · பத்து பொருத்தம்: ${pathuScore2}/24 — பரிகாரங்கள் தேவை`)
+      const ashtaVerdictNote = ashtaScore2 >= 21 ? ta('Excellent match','சிறந்த இணக்கம்')
+        : ashtaScore2 >= 18 ? ta('Good match','நல்ல இணக்கம்')
+        : ashtaScore2 >= 14 ? ta('Average match','சராசரி இணக்கம்')
+        : ta('Below average','குறைவான இணக்கம்')
 
-      // Replace all template vars including dynamic table rows
+      // ── Strengths section ─────────────────────────────────────────
+      const passedList = (data.Poruthams || []).filter((p: any) => p.Pass || p.pass)
+      const strengthsHtml = passedList.slice(0,6).map((p: any) => {
+        const key = p.KootaName || p.kootaName || ''
+        const lbl = PATHU_LABELS[key]
+        const name = lbl ? (L==='ta' ? lbl.ta : lbl.en) : key
+        const meaning = lbl ? (L==='ta' ? lbl.meaning_ta : lbl.meaning_en) : ''
+        const desc = p.Description || p.description || meaning
+        return `<div class="strength-item">
+          <div class="s-title">${name} — ${ta('Excellent match','முழுப் பொருத்தம்')}</div>
+          <div class="s-body">${desc}</div>
+        </div>`
+      }).join('')
+
+      // ── Remedies (from sample PDF — 3 standard remedies) ──────────
+      const failedNames = (data.Poruthams || [])
+        .filter((p: any) => !p.Pass && !p.pass)
+        .map((p: any) => {
+          const key = p.KootaName || p.kootaName || ''
+          const lbl = PATHU_LABELS[key]
+          return lbl ? (L==='ta' ? lbl.ta : lbl.en) : key
+        }).join(', ')
+
+      const remediesHtml = `
+      <div class="remedy-card">
+        <div class="remedy-hd"><div class="remedy-num">1</div>${ta('Muhurtha Selection — Most Important Remedy','முகூர்த்த தேர்வு — மிக முக்கியமான பரிகாரம்')}</div>
+        <div class="remedy-body">
+          <p>${ta(
+            'Selecting an auspicious Muhurtha (wedding date/time) is the primary remedy. BV Raman (Ch XVIII): "Many doshas in a horoscope can be neutralised through proper Muhurtha."',
+            'சரியான திருமண முகூர்த்தம் தேர்வு செய்வதே பிரதான பரிகாரம். BV ராமன் (அத்தியாயம் XVIII): "திருமண முகூர்த்தம் மூலம் ராசிகளிலுள்ள பல தோஷங்களை நிவர்த்தி செய்யலாம்."'
+          )}</p>
+          <ul>
+            <li><strong>${ta('Wedding Nakshatra','திருமண நட்சத்திரம்')}: </strong>${ta('Rohini, Mrigasira, Uttara Phalguni, Hasta, Swati, Anuradha, Uttara Ashadha or Revati','ரோஹிணி, மிருகசீர்ஷம், உத்திர பல்குணி, ஹஸ்தம், சுவாதி, அனுராதா, உத்திராடம் அல்லது ரேவதி')} — ${ta('especially if Shatabhisha/Magha are to be avoided','சதயம் மற்றும் மகம் நட்சத்திரங்களை தவிர்க்கவும்')}</li>
+            <li><strong>${ta('Tara Bala','தாரா பலம்')}: </strong>${ta('Count 2nd, 4th, 6th or 8th Nakshatra from either partner','இருவரிடமிருந்தும் 2வது, 4வது, 6வது அல்லது 8வது நட்சத்திரத்தில் சந்திரன் இருக்கக்கூடாது')}</li>
+            <li><strong>${ta('Lagna','லக்னம்')}: </strong>${ta('Female signs (Taurus, Virgo, Scorpio, Aquarius) preferred. Avoid Gemini and Pisces Lagna (8th from Leo).','பெண் ராசிகள் (ரிஷபம், கன்னி, விருச்சிகம், கும்பம்) சிறந்தவை')}</li>
+            <li><strong>${ta('Jupiter position','குரு நிலை')}: </strong>${ta('Jupiter in kendra (1,4,7,10) or trikona (5,9) from Muhurtha Lagna eliminates many minor doshas','முகூர்த்த லக்னத்திலிருந்து குரு கேந்திரம் (1, 4, 7, 10) அல்லது திரிகோணம் (5, 9) இல் இருக்க வேண்டும்')}</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="remedy-card">
+        <div class="remedy-hd"><div class="remedy-num">2</div>${ta('Navagraha Shanti Homam','நவக்கிரக சாந்தி ஹோமம்')}</div>
+        <div class="remedy-body">
+          <p>${ta(
+            'Sun-Saturn Rasi conflict (lord relationship) may cause friction, but performing Navagraha Shanti Homam before the wedding is highly recommended.',
+            'சூரியன்-சனி ராசியதிபதி பகை விதிவிலக்கால் ரத்தாகிறது என்றாலும், முன்னெச்சரிக்கையாக திருமணத்திற்கு முன் நவக்கிரக சாந்தி ஹோமம் செய்வது மிகவும் நல்லது.'
+          )}</p>
+          <ul>
+            <li><strong>${ta('Special Ahuti','சிறப்பு ஆஹுதி')}: </strong>${ta('Separate special Ahuti for Sun (Groom\'s Rasi lord) and Saturn (Bride\'s Rasi lord)','சூரியனுக்கும் (மணமகன் ராசியதிபதி) சனிக்கும் (மணமகள் ராசியதிபதி) தனியாக சிறப்பு ஆஹுதி கொடுக்கவும்')}</li>
+            <li><strong>${ta('Best time','உத்தம நேரம்')}: </strong>${ta('Sunday morning (Surya Hora) or Saturday morning (Shani Hora) in Pushyami or Uttara Ashadha Nakshatra','ஞாயிற்றுக்கிழமை (சூரிய ஹோரை) அல்லது சனிக்கிழமை (சனி ஹோரை) — புஷ்யமி அல்லது உத்திராடம் நட்சத்திரத்தில் செய்வது சிறந்தது')}</li>
+            <li><strong>${ta('Location','இடம்')}: </strong>${ta('Family temple or any Navagraha shrine with Shiva/Vishnu','குல தெய்வ கோவில் அல்லது நவக்கிரக சன்னதி உள்ள சிவன்/விஷ்ணு கோவில்')}</li>
+            <li><strong>${ta('When','எப்போது')}: </strong>${ta('At least one month before the wedding','திருமணத்திற்கு குறைந்தது ஒரு மாதத்திற்கு முன்')}</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="remedy-card">
+        <div class="remedy-hd"><div class="remedy-num">3</div>${ta('Nakshatra Devata Pooja','நட்சத்திர தேவதா பூஜை')}</div>
+        <div class="remedy-body">
+          <ul>
+            <li><strong>${ta('Bride','மணமகள')} — ${ta('Nakshatra Devata Varuna','நட்சத்திர தேவதை வருணன்')}: </strong>${ta('Perform Varuna Abhisheka at Varuna temple or Varuna shrine. Varuna protects longevity and health. This addresses any Dinam shortfall.','வருண பகவான் கோவிலில் அல்லது வருணேஸ்வரர் சன்னதியில் அபிஷேகம் செய்யவும். திணம் பொருத்தம் இல்லாத குறையை இந்த வழிபாடு சரிசெய்யும்.')}</li>
+            <li><strong>${ta('Groom','மணமகன்)} — ${ta('Nakshatra Devata Pitru (Magha)','நட்சத்திர தேவதை பித்ருக்கள் (மகம்)')}: </strong>${ta('Perform Pitru Tarpana at Rameshwaram or ancestral shrine. Pitru blessings strengthen children and longevity — addresses Mahendra shortfall.','ராமேஸ்வரம் அல்லது குல கேஷேத்திரத்தில் பித்ரு தர்ப்பணம் செய்யவும். மகேந்திர பொருத்தம் இல்லாத குறை சரிசெய்யும்.')}</li>
+          </ul>
+        </div>
+      </div>`
+
+      // ── Language-specific labels ──────────────────────────────────
+      const labels: Record<string,string> = {
+        REPORT_TITLE:        ta('Vivaha Porutham Report', 'திருமண பொருத்த அறிக்கை'),
+        BRIDE_LABEL:         ta('மணமகள்', 'மணமகள்'),
+        GROOM_LABEL:         ta('மணமகன்', 'மணமகன்'),
+        DOB_LABEL:           ta('Date of Birth', 'பிறந்த தேதி'),
+        NAK_LABEL:           ta('Nakshatra', 'நட்சத்திரம்'),
+        RASI_LABEL:          ta('Rasi (Moon Sign)', 'ராசி'),
+        LAGNA_LABEL:         ta('Lagna', 'லக்னம்'),
+        GANA_LABEL:          ta('Gana', 'கணம்'),
+        NADI_LABEL:          ta('Nadi', 'நாடி'),
+        RAJJU_LABEL:         ta('Rajju Group', 'ரஜ்ஜு'),
+        PATHU_LABEL:         ta('PATHU PORUTHAM', 'பத்து பொருத்தம்'),
+        ASHTA_LABEL:         ta('ASHTA KOOTA', 'அஷ்டகூட குணங்கள்'),
+        DOSHA_LABEL:         ta('BLOCKING DOSHAS', 'கடுமையான தோஷங்கள்'),
+        FAILED_LABEL:        ta('FAILED PORUTHAMS', 'இல்லாத பொருத்தங்கள்'),
+        FAILED_NOTE:         ta('(min 5 required)','(குறைந்தது 5 வேண்டும்)'),
+        PATHU_TABLE_TITLE:   ta('Pathu Porutham — Detailed Table', 'பத்து பொருத்தம் — விரிவான அட்டவணை'),
+        ASHTA_TABLE_TITLE:   ta('Ashta Koota — Detailed Breakdown', 'அஷ்டகூட — விரிவான பகுப்பாய்வு'),
+        PORUTHAM_COL:        ta('Porutham', 'பொருத்தம்'),
+        CALC_COL:            ta('Calculation & Explanation', 'கணக்கீடு & விளக்கம்'),
+        RESULT_COL:          ta('Result', 'முடிவு'),
+        KOOTA_COL:           ta('Koota', 'கூட்டம்'),
+        MAX_COL:             ta('Max', 'அதிகபட்சம்'),
+        SCORE_COL:           ta('Score', 'மதிப்பு'),
+        STATUS_COL:          ta('Status', 'நிலை'),
+        MEANING_COL:         ta('What it Measures', 'பொருள்'),
+        TOTAL_LABEL:         ta('Total', 'மொத்தம்'),
+        REMEDIES_TITLE:      ta('Remedies & Final Verdict', 'பரிகாரங்கள் மற்றும் இறுதி முடிவு'),
+        STRENGTHS_TITLE:     ta('Strengths of this Match','பொருத்தத்தின் பலன்கள்'),
+        REMEDIES_WHAT_TITLE: ta('Remedies — What to Do', 'பரிகாரங்கள் — என்ன செய்ய வேண்டும்'),
+        ASTROLOGER_NOTE:     ta('VedicHora Report', 'ஜோதிட ஆசிரியர் | VedicHora'),
+        CONTACT_LABEL:       ta('Generated by', 'தொடர்பு கொள்ள'),
+        WORLD_ACCURATE:      ta("World's Most Accurate Vedic Astrology", 'உலகின் மிகச் சிறந்த வேத ஜோதிட கணிப்பு'),
+        CLOSING_LINE:        ta('Vivaha Porutham Report', 'விவாஹ பொருத்த அறிக்கை'),
+      }
+
+      // ── Apply all replacements ────────────────────────────────────
       tmpl = tmpl
+        // Core data
         .replaceAll('{{NAME1}}',        safe(data.name1))
         .replaceAll('{{NAME2}}',        safe(data.name2))
         .replaceAll('{{DOB1}}',         safe(data.dob1))
@@ -814,21 +952,38 @@ export default function MatchPage() {
         .replaceAll('{{LAGNA2}}',       safe(data.brideLagna))
         .replaceAll('{{NADI1}}',        safe(data.groomNadi))
         .replaceAll('{{NADI2}}',        safe(data.brideNadi))
+        .replaceAll('{{GANA1}}',        safe(data.groomGana  || ''))
+        .replaceAll('{{GANA2}}',        safe(data.brideGana  || ''))
+        // Scores
         .replaceAll('{{PATHU_SCORE}}',  safe(pathuScore2))
-        .replaceAll('{{PATHU_TOTAL}}',  safe(data.PathuPoruthamTotal ?? 24))
-        .replaceAll('{{PATHU_PCT}}',    safe((data.PathuPoruthamTotal ?? 24) > 0 ? Math.round((pathuScore2/(data.PathuPoruthamTotal ?? 24))*100) : 0))
+        .replaceAll('{{PATHU_TOTAL}}',  safe(pathuTotal2))
+        .replaceAll('{{PATHU_PCT}}',    safe(pathuPct2))
         .replaceAll('{{ASHTA_SCORE}}',  safe(ashtaScore2))
-        .replaceAll('{{ASHTA_TOTAL}}',  safe(data.AshtaKootaTotal ?? 36))
-        .replaceAll('{{ASHTA_PCT}}',    safe((data.AshtaKootaTotal ?? 36) > 0 ? Math.round((ashtaScore2/(data.AshtaKootaTotal ?? 36))*100) : 0))
+        .replaceAll('{{ASHTA_TOTAL}}',  safe(ashtaTotal2))
+        .replaceAll('{{ASHTA_PCT}}',    safe(ashtaPct2))
         .replaceAll('{{DOSHA_COUNT}}',  safe(doshaCount))
-        .replaceAll('{{DOSHA_STATUS}}', doshaCount === 0 ? (L==='ta'?'தூய்மை':'Clear') : (L==='ta'?'திருத்தம் தேவை':'Needs remedy'))
+        .replaceAll('{{DOSHA_STATUS}}', doshaCount === 0 ? ta('Clear','இல்லை') : ta('Present','உளது'))
+        .replaceAll('{{FAILED_COUNT}}', safe(failedCount))
+        // Dynamic HTML
         .replaceAll('{{PATHU_ROWS}}',   pathuRows)
         .replaceAll('{{ASHTA_ROWS}}',   ashtaRows)
         .replaceAll('{{DOSHA_HTML}}',   doshaHtml)
         .replaceAll('{{RAJJU_WARN}}',   rajjuWarn)
+        // Verdict
         .replaceAll('{{VERDICT_COLOR}}',verdictColor)
         .replaceAll('{{VERDICT_TEXT}}', verdictText)
-        .replaceAll('{{LANG}}',         safe(reportLang))
+        .replaceAll('{{VERDICT_BODY}}', verdictBody)
+        .replaceAll('{{ASHTA_VERDICT_NOTE}}', ashtaVerdictNote)
+        // Strengths & Remedies
+        .replaceAll('{{STRENGTHS_HTML}}',strengthsHtml)
+        .replaceAll('{{REMEDIES_HTML}}', remediesHtml)
+        // Labels
+        .replaceAll('{{LANG}}',          safe(reportLang))
+      
+      // Apply all text labels
+      for (const [key, val] of Object.entries(labels)) {
+        tmpl = tmpl.replaceAll(`{{${key}}}`, val)
+      }
 
             // Also inject data for JS-rendered tables (poruthams, kootas)
       const dataScript = '<script>window.__VH_DATA = ' + JSON.stringify(data) + ';<\/script>'
