@@ -1038,6 +1038,7 @@ export default function WesternPage(){
               </div>
               <div style={{textAlign:'center'}}>{btn(compatLoading?'Calculating...':'Reveal Compatibility ✦',calcRealCompat,!d1.yyyy||!d2.yyyy)}</div>
             </div>
+            </>)}{/* end !collapsed */}
 
             {/* Compat result */}
             {compat&&ms1&&ms2&&(
