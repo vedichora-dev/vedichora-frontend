@@ -1,6 +1,7 @@
 'use client'
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
+import CityAutocomplete from '@/components/ui/CityAutocomplete'
 import { calculateChart, calculateChartGuest, listCharts } from '@/api'
 import { useStore } from '@/store'
 
@@ -947,21 +948,11 @@ export default function WesternPage(){
                       Unknown
                     </label>
                   </div>
-                  {/* City */}
-                  <input value={place1} onChange={e=>setPlace1(e.target.value)}
-                    onBlur={async()=>{
-                      if(!place1.trim()||lat1c) return
-                      try {
-                        const r=await fetch('https://photon.komoot.io/api/?q='+encodeURIComponent(place1)+'&limit=1')
-                        const j=await r.json()
-                        const f=j?.features?.[0]
-                        if(f){setLat1c(f.geometry.coordinates[1]);setLng1c(f.geometry.coordinates[0])}
-                      } catch {}
-                    }}
-                    placeholder="Place of birth (city, country)"
-                    style={{width:'100%',padding:'10px 12px',borderRadius:'10px',border:'1.5px solid var(--w-bd)',
-                      background:'var(--w-bg)',color:'var(--w-tx)',fontSize:'14px',
-                      boxSizing:'border-box',fontFamily:'inherit',outline:'none'}} />
+                  {/* City — same autocomplete as match page */}
+                  <CityAutocomplete
+                    value={place1}
+                    onChange={(city, la, ln) => { setPlace1(city); if(la) setLat1c(la); if(ln) setLng1c(ln); }}
+                    placeholder="Place of birth" />
                 </div>
                 <div style={{textAlign:'center',paddingTop:'60px',fontSize:'24px',color:'#EF4444'}}>♥</div>
                 {/* Person 2 */}
@@ -991,21 +982,11 @@ export default function WesternPage(){
                       Unknown
                     </label>
                   </div>
-                  {/* City */}
-                  <input value={place2} onChange={e=>setPlace2(e.target.value)}
-                    onBlur={async()=>{
-                      if(!place2.trim()||lat2c) return
-                      try {
-                        const r=await fetch('https://photon.komoot.io/api/?q='+encodeURIComponent(place2)+'&limit=1')
-                        const j=await r.json()
-                        const f=j?.features?.[0]
-                        if(f){setLat2c(f.geometry.coordinates[1]);setLng2c(f.geometry.coordinates[0])}
-                      } catch {}
-                    }}
-                    placeholder="Place of birth (city, country)"
-                    style={{width:'100%',padding:'10px 12px',borderRadius:'10px',border:'1.5px solid var(--w-bd)',
-                      background:'var(--w-bg)',color:'var(--w-tx)',fontSize:'14px',
-                      boxSizing:'border-box',fontFamily:'inherit',outline:'none'}} />
+                  {/* City — same autocomplete as match page */}
+                  <CityAutocomplete
+                    value={place2}
+                    onChange={(city, la, ln) => { setPlace2(city); if(la) setLat2c(la); if(ln) setLng2c(ln); }}
+                    placeholder="Place of birth" />
                   <div style={{fontSize:'10px',color:'var(--w-tx2)',marginTop:'3px',marginBottom:'6px'}}>Time of birth (optional — improves accuracy)</div>
                 </div>
               </div>
