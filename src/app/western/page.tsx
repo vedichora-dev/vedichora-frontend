@@ -177,12 +177,16 @@ function WesternDashaSection({
   const [loading, setLoading] = useState(false)
   const [loaded, setLoaded]   = useState(false)
 
-  // Populate deep from preloaded data (from overlay engine called during initial calc)
+  // Auto-load deep whenever compatResult arrives with chart IDs
   useEffect(() => {
     const preloaded = (compatResult as any)?.deepResult ?? null
     if (preloaded && !loaded) {
+      // Deep result came bundled with compatResult (from calcRealCompat)
       setDeep(preloaded)
       setLoaded(true)
+    } else if (!preloaded && hid1 && hid2 && !loaded && !loading) {
+      // No bundled deep — auto-load it immediately
+      loadDeep()
     }
   }, [compatResult])
   const [relType, setRelType] = useState('Other')
