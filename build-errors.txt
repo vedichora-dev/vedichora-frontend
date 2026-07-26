@@ -1,77 +1,77 @@
 === CURRENT e2e FILES ===
 total 88
-drwxr-xr-x  2 runner runner  4096 Jul 26 03:40 .
-drwxr-xr-x 11 runner runner  4096 Jul 26 03:40 ..
--rw-r--r--  1 runner runner  4428 Jul 26 03:40 01-auth.spec.js
--rw-r--r--  1 runner runner 13487 Jul 26 03:40 02-chart.spec.js
--rw-r--r--  1 runner runner  2851 Jul 26 03:40 03-match.spec.js
--rw-r--r--  1 runner runner  2685 Jul 26 03:40 04-horoscope.spec.js
--rw-r--r--  1 runner runner  3485 Jul 26 03:40 05-deployment.spec.js
--rw-r--r--  1 runner runner  5636 Jul 26 03:40 06-match-10.spec.js
--rw-r--r--  1 runner runner  4744 Jul 26 03:40 07-western.spec.js
--rw-r--r--  1 runner runner  8626 Jul 26 03:40 functional-test.spec.js
--rw-r--r--  1 runner runner  2685 Jul 26 03:40 helpers.js
--rw-r--r--  1 runner runner  3335 Jul 26 03:40 screenshot.spec.js
--rw-r--r--  1 runner runner  6794 Jul 26 03:40 tab-screenshots.spec.js
+drwxr-xr-x  2 runner runner  4096 Jul 26 03:44 .
+drwxr-xr-x 11 runner runner  4096 Jul 26 03:44 ..
+-rw-r--r--  1 runner runner  4428 Jul 26 03:44 01-auth.spec.js
+-rw-r--r--  1 runner runner 13487 Jul 26 03:44 02-chart.spec.js
+-rw-r--r--  1 runner runner  2851 Jul 26 03:44 03-match.spec.js
+-rw-r--r--  1 runner runner  2685 Jul 26 03:44 04-horoscope.spec.js
+-rw-r--r--  1 runner runner  3485 Jul 26 03:44 05-deployment.spec.js
+-rw-r--r--  1 runner runner  5636 Jul 26 03:44 06-match-10.spec.js
+-rw-r--r--  1 runner runner  4744 Jul 26 03:44 07-western.spec.js
+-rw-r--r--  1 runner runner  8626 Jul 26 03:44 functional-test.spec.js
+-rw-r--r--  1 runner runner  2685 Jul 26 03:44 helpers.js
+-rw-r--r--  1 runner runner  3335 Jul 26 03:44 screenshot.spec.js
+-rw-r--r--  1 runner runner  6794 Jul 26 03:44 tab-screenshots.spec.js
 
 === BUILD OUTPUT ===
+> vedichora@1.0.0 build
+> next build
 
-./src/app/match/page.tsx
-Error: 
-  [31mx[0m the name `safe` is defined multiple times
-     ,-[[36;1;4m/home/runner/work/vedichora-frontend/vedichora-frontend/src/app/match/page.tsx[0m:707:1]
- [2m707[0m |       // Replace ALL {{placeholders}} directly in HTML string
- [2m708[0m |       // This works even if scripts don't execute in the popup
- [2m709[0m |       const r2 = result as any
- [2m710[0m |       const safe = (v: any) => String(v ?? '')
-     : [31;1m            ^^|^[0m
-     :               [31;1m`-- [31;1mprevious definition of `safe` here[0m[0m
- [2m711[0m |       const pathuPct = data.PathuPoruthamTotal > 0
- [2m712[0m |         ? Math.round((data.PathuPoruthamScore / data.PathuPoruthamTotal) * 100) : 0
- [2m713[0m |       const ashtaPct = data.AshtaKootaTotal > 0
- [2m714[0m |         ? Math.round((data.AshtaKootaScore / data.AshtaKootaTotal) * 100) : 0
- [2m715[0m |       const doshaCount = (data.VedhaPresent ? 1 : 0) + (data.MangalDosha ? 1 : 0)
- [2m716[0m | 
- [2m717[0m |       // ── Language labels ──────────────────────────────────────────
- [2m718[0m |       const L = reportLang
- [2m719[0m |       const ta = (en: string, ta_: string, hi?: string) =>
- [2m720[0m |         L === 'ta' ? ta_ : (L === 'hi' && hi ? hi : en)
- [2m721[0m | 
- [2m722[0m |       // ── Pathu Porutham labels (Tamil names from sample PDF) ──────
- [2m723[0m |       const PATHU_LABELS: Record<string,{en:string;ta:string;meaning_en:string;meaning_ta:string}> = {
- [2m724[0m |         'Dinam':         {en:'1. திணம் (Dinam)',        ta:'1. திணம் (திணம்)',       meaning_en:'Day star compatibility — health & longevity', meaning_ta:'உடல்நலம் & ஆயுள்'},
- [2m725[0m |         'Ganam':         {en:'2. Ganam',                ta:'2. கணம்',                meaning_en:'Nature & temperament — mutual understanding',   meaning_ta:'குணம் & மனோபாவம்'},
- [2m726[0m |         'Mahendram':     {en:'3. Mahendram',            ta:'3. மகேந்திரம்',          meaning_en:'Prosperity, strength & children',               meaning_ta:'செல்வம் & சந்ததி'},
- [2m727[0m |         'Sthree Dheerga':{en:'4. Sthree Dheerga',      ta:'4. ஸ்திரீ தீர்க்கம்',   meaning_en:"Long life for the wife",                        meaning_ta:'மனைவியின் நலன்'},
- [2m728[0m |         'Yoni':          {en:'5. Yoni',                 ta:'5. யோனி',               meaning_en:'Physical & intimate compatibility',              meaning_ta:'உடல் & நெருக்கம்'},
- [2m729[0m |         'Rasi':          {en:'6. Rasi',                 ta:'6. ராசி',               meaning_en:'Moon sign — family harmony',                    meaning_ta:'குடும்ப நல்லிணக்கம்'},
- [2m730[0m |         'Rasiyathipati': {en:'7. Rasiyathipati',        ta:'7. ராசியதிபதி',         meaning_en:'Lord of rasi — prosperity & harmony',           meaning_ta:'செல்வம் & நல்வாழ்வு'},
- [2m731[0m |         'Rajju':         {en:'8. Rajju ★ critical',    ta:'8. ரஜ்ஜு ★ முக்கியம்', meaning_en:'Husband longevity — most critical dosha',       meaning_ta:'கணவனின் ஆயுள் — மிக முக்கியம்'},
- [2m732[0m |         'Vedha':         {en:'9. Vedha',                ta:'9. வேதை',               meaning_en:'Affliction — must be absent',                   meaning_ta:'தோஷம் — இல்லாமல் இருக்க வேண்டும்'},
- [2m733[0m |       }
- [2m734[0m | 
- [2m735[0m |       // ── Ashta Koota labels ────────────────────────────────────────
- [2m736[0m |       const KOOTA_LABELS: Record<string,{en:string;ta:string;meaning_en:string;meaning_ta:string}> = {
- [2m737[0m |         'Varna':        {en:'Varna',        ta:'வர்ணம்',       meaning_en:'Spiritual compatibility',              meaning_ta:'ஆன்மீக இணக்கம்'},
- [2m738[0m |         'Vashya':       {en:'Vashya',       ta:'வசியம்',       meaning_en:'Mutual attraction & control',           meaning_ta:'பரஸ்பர ஈர்ப்பு'},
- [2m739[0m |         'Tara':         {en:'Tara',         ta:'தாரா',         meaning_en:'Birth star compatibility — health',     meaning_ta:'நட்சத்திர இணக்கம்'},
- [2m740[0m |         'Yoni':         {en:'Yoni',         ta:'யோனி',         meaning_en:'Physical compatibility',                meaning_ta:'உடல் இணக்கம்'},
- [2m741[0m |         'Graha Maitri': {en:'Graha Maitri', ta:'கிரக மைத்திரி',meaning_en:'Mental harmony & friendship',          meaning_ta:'மன இணக்கம்'},
- [2m742[0m |         'Gana':         {en:'Gana',         ta:'கணம்',         meaning_en:'Temperament & nature match',            meaning_ta:'குண இணக்கம்'},
- [2m743[0m |         'Bhakoota':     {en:'Bhakoota',     ta:'பகூட்டம்',     meaning_en:'Wealth, progeny & family harmony',      meaning_ta:'செல்வம் & சந்ததி'},
- [2m744[0m |         'Nadi':         {en:'Nadi',         ta:'நாடி',         meaning_en:'Health & progeny — critical (max 8)',   meaning_ta:'ஆரோக்கியம் & சந்ததி (முக்கியம்)'},
- [2m745[0m |       }
- [2m746[0m | 
- [2m747[0m |       const safe = (v: any) => String(v ?? '')
-     : [33;1m            ^^|^[0m
-     :               [33;1m`-- [33;1m`safe` redefined here[0m[0m
- [2m748[0m |       const pathuScore2 = data.PathuPoruthamScore  ?? 0
- [2m749[0m |       const pathuTotal2 = data.PathuPoruthamTotal  ?? 24
- [2m750[0m |       const ashtaScore2 = data.AshtaKootaScore     ?? 0
-     `----
+⚠ No build cache found. Please configure build caching for faster rebuilds. Read more: https://nextjs.org/docs/messages/no-cache
+Attention: Next.js now collects completely anonymous telemetry regarding usage.
+This information is used to shape Next.js' roadmap and prioritize features.
+You can learn more, including how to opt-out if you'd not like to participate in this anonymous program, by visiting the following URL:
+https://nextjs.org/telemetry
 
-Import trace for requested module:
-./src/app/match/page.tsx
+   ▲ Next.js 14.0.4
+   - Environments: .env.local
+
+   Creating an optimized production build ...
+   Using tsconfig file: ./tsconfig.json
+ ✓ Compiled successfully
+   Skipping validation of types
+   Linting ...
+   Collecting page data ...
+   Generating static pages (0/25) ...
+ ⚠ Entire page /checkout deopted into client-side rendering. https://nextjs.org/docs/messages/deopted-into-client-rendering /checkout
+   Generating static pages (6/25) 
+   Generating static pages (12/25) 
+   Generating static pages (18/25) 
+ ✓ Generating static pages (25/25) 
+   Finalizing page optimization ...
+   Collecting build traces ...
+
+Route (app)                              Size     First Load JS
+┌ ○ /                                    5.02 kB         124 kB
+├ ○ /_not-found                          869 B          82.8 kB
+├ ○ /about                               2.46 kB        84.4 kB
+├ ○ /admin                               5.37 kB         117 kB
+├ ○ /api-docs                            1.87 kB        86.8 kB
+├ ○ /chart                               20.2 kB         139 kB
+├ ○ /checkout                            5.07 kB          90 kB
+├ ○ /consult                             5.5 kB         90.4 kB
+├ ○ /dashboard                           3.37 kB         115 kB
+├ ○ /jyoti                               5.91 kB         118 kB
+├ ○ /learn                               2.52 kB        84.4 kB
+├ ○ /match                               19.8 kB         132 kB
+├ ○ /muhurta                             2.58 kB         115 kB
+├ ○ /numerology                          3.73 kB         113 kB
+├ ○ /phone-login                         2.14 kB         121 kB
+├ ○ /remedies                            1.85 kB        83.8 kB
+├ ○ /shop                                2.09 kB         114 kB
+├ ○ /signin                              2.93 kB         122 kB
+├ ○ /signup                              3.46 kB         122 kB
+├ ○ /transits                            4.09 kB          86 kB
+├ ○ /varshaphal                          1.89 kB         114 kB
+├ ○ /western                             14.8 kB         134 kB
+└ ○ /yogas                               1.78 kB        86.7 kB
++ First Load JS shared by all            81.9 kB
+  ├ chunks/938-cac2006256170abd.js       26.7 kB
+  ├ chunks/fd9d1056-591193791e59a9f8.js  53.3 kB
+  ├ chunks/main-app-b4533ec2e702cf2a.js  220 B
+  └ chunks/webpack-39c204afb6cf78af.js   1.74 kB
 
 
-> Build failed because of webpack errors
+○  (Static)  prerendered as static content
+
