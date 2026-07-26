@@ -930,21 +930,33 @@ export default function WesternPage(){
                       setCompatLoading(true); setCompatErr(''); setCompatResult(null)
                       try {
                         const CHART_URL='https://enchanting-dedication-production.up.railway.app'
-                        const hdrs={'Content-Type':'application/json','Authorization':`Bearer ${token}`}
-                        const mres=await fetch(`${CHART_URL}/api/chart/guest-match`,{
-                          method:'POST',headers:{'Content-Type':'application/json'},
-                          body:JSON.stringify({
-                            Person1:{HoroscopeId:selId1},
-                            Person2:{HoroscopeId:selId2}
-                          })
-                        }).then(r=>r.json())
+                        const authHdrs={'Content-Type':'application/json','Authorization':`Bearer ${token}`}
+                        const name1=saved.find((c:any)=>(c.horoscopeId||c.HoroscopeId)===selId1)?.personName||'Person 1'
+                        const name2=saved.find((c:any)=>(c.horoscopeId||c.HoroscopeId)===selId2)?.personName||'Person 2'
+                        const now=2026
+                        // Call guest-match for Ashta Koota scores
+                        const [mres, deepRes] = await Promise.all([
+                          fetch(`${CHART_URL}/api/chart/guest-match`,{
+                            method:'POST',headers:{'Content-Type':'application/json'},
+                            body:JSON.stringify({Person1:{HoroscopeId:selId1},Person2:{HoroscopeId:selId2}})
+                          }).then(r=>r.json()),
+                          // Call matchmaking/deep directly for full analysis
+                          fetch(`${CHART_URL}/api/matchmaking/deep`,{
+                            method:'POST',headers:authHdrs,
+                            body:JSON.stringify({
+                              GroomId:selId1,BrideId:selId2,
+                              GroomName:name1,BrideName:name2,
+                              RelationshipType:'Other',
+                              FromYear:now,ToYear:now+10
+                            })
+                          }).then(r=>r.json())
+                        ])
                         const mdata=mres?.data?.data??mres?.data??mres
-                        const enriched = {...mdata,hid1:selId1,hid2:selId2,
-                          name1:saved.find((c:any)=>(c.horoscopeId||c.HoroscopeId)===selId1)?.personName||'Person 1',
-                          name2:saved.find((c:any)=>(c.horoscopeId||c.HoroscopeId)===selId2)?.personName||'Person 2'}
-                      setCompatResult(enriched)
-                      setCollapsed(true)
-                      setTimeout(()=>{ resultsRef.current?.scrollIntoView({behavior:'smooth',block:'start'}) },150)
+                        const deepResult=deepRes?.data?.data??deepRes?.data??deepRes
+                        const enriched={...mdata,hid1:selId1,hid2:selId2,name1,name2,deepResult}
+                        setCompatResult(enriched)
+                        setCollapsed(true)
+                        setTimeout(()=>{ resultsRef.current?.scrollIntoView({behavior:'smooth',block:'start'}) },150)
                       } catch(e:any){ setCompatErr(e?.message||'Failed') }
                       setCompatLoading(false)
                     }}
