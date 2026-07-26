@@ -1,18 +1,18 @@
 === CURRENT e2e FILES ===
 total 88
-drwxr-xr-x  2 runner runner  4096 Jul 26 03:30 .
-drwxr-xr-x 11 runner runner  4096 Jul 26 03:30 ..
--rw-r--r--  1 runner runner  4428 Jul 26 03:30 01-auth.spec.js
--rw-r--r--  1 runner runner 13487 Jul 26 03:30 02-chart.spec.js
--rw-r--r--  1 runner runner  2851 Jul 26 03:30 03-match.spec.js
--rw-r--r--  1 runner runner  2685 Jul 26 03:30 04-horoscope.spec.js
--rw-r--r--  1 runner runner  3485 Jul 26 03:30 05-deployment.spec.js
--rw-r--r--  1 runner runner  5636 Jul 26 03:30 06-match-10.spec.js
--rw-r--r--  1 runner runner  4744 Jul 26 03:30 07-western.spec.js
--rw-r--r--  1 runner runner  8626 Jul 26 03:30 functional-test.spec.js
--rw-r--r--  1 runner runner  2685 Jul 26 03:30 helpers.js
--rw-r--r--  1 runner runner  3335 Jul 26 03:30 screenshot.spec.js
--rw-r--r--  1 runner runner  6794 Jul 26 03:30 tab-screenshots.spec.js
+drwxr-xr-x  2 runner runner  4096 Jul 26 03:33 .
+drwxr-xr-x 11 runner runner  4096 Jul 26 03:34 ..
+-rw-r--r--  1 runner runner  4428 Jul 26 03:33 01-auth.spec.js
+-rw-r--r--  1 runner runner 13487 Jul 26 03:33 02-chart.spec.js
+-rw-r--r--  1 runner runner  2851 Jul 26 03:33 03-match.spec.js
+-rw-r--r--  1 runner runner  2685 Jul 26 03:33 04-horoscope.spec.js
+-rw-r--r--  1 runner runner  3485 Jul 26 03:33 05-deployment.spec.js
+-rw-r--r--  1 runner runner  5636 Jul 26 03:33 06-match-10.spec.js
+-rw-r--r--  1 runner runner  4744 Jul 26 03:33 07-western.spec.js
+-rw-r--r--  1 runner runner  8626 Jul 26 03:33 functional-test.spec.js
+-rw-r--r--  1 runner runner  2685 Jul 26 03:33 helpers.js
+-rw-r--r--  1 runner runner  3335 Jul 26 03:33 screenshot.spec.js
+-rw-r--r--  1 runner runner  6794 Jul 26 03:33 tab-screenshots.spec.js
 
 === BUILD OUTPUT ===
 
@@ -42,7 +42,7 @@ Error:
      ,-[[36;1;4m/home/runner/work/vedichora-frontend/vedichora-frontend/src/app/match/page.tsx[0m:902:1]
  [2m902[0m |         <div class="remedy-body">
  [2m903[0m |           <ul>
- [2m904[0m |             <li><strong>${ta('Bride','மணமகள')} — ${ta('Nakshatra Devata Varuna','நட்சத்திர தேவதை வருணன்')}: </strong>${ta('Perform Varuna Abhisheka at Varuna temple or Varuna shrine. Varuna protects longevity and health. This addresses any Dinam shortfall.','வருண பகவான் கோவிலில் அல்லது வருணேஸ்வரர் சன்னதியில் அபிஷேகம் செய்யவும். திணம் பொருத்தம் இல்லாத குறையை இந்த வழிபாடு சரிசெய்யும்.')}</li>
+ [2m904[0m |             <li><strong>${ta('Bride','மணமகள்')} — ${ta('Nakshatra Devata Varuna','நட்சத்திர தேவதை வருணன்')}: </strong>${ta('Perform Varuna Abhisheka at Varuna temple or Varuna shrine. Varuna protects longevity and health. This addresses any Dinam shortfall.','வருண பகவான் கோவிலில் அல்லது வருணேஸ்வரர் சன்னதியில் அபிஷேகம் செய்யவும். திணம் பொருத்தம் இல்லாத குறையை இந்த வழிபாடு சரிசெய்யும்.')}</li>
  [2m905[0m |             <li><strong>${ta('Groom','மணமகன்)} — ${ta('Nakshatra Devata Pitru (Magha)','நட்சத்திர தேவதை பித்ருக்கள் (மகம்)')}: </strong>${ta('Perform Pitru Tarpana at Rameshwaram or ancestral shrine. Pitru blessings strengthen children and longevity — addresses Mahendra shortfall.','ராமேஸ்வரம் அல்லது குல கேஷேத்திரத்தில் பித்ரு தர்ப்பணம் செய்யவும். மகேந்திர பொருத்தம் இல்லாத குறை சரிசெய்யும்.')}</li>
      : [31;1m                                                                     ^^^^^^^^^[0m
  [2m906[0m |           </ul>
