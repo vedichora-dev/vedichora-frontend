@@ -172,10 +172,18 @@ function WesternDashaSection({
   scoreColor: (n:number)=>string; saved: any[]; token: string|null
 }) {
   const r       = compatResult as any
-  const preloaded = r?.deepResult ?? null
-  const [deep, setDeep]       = useState<any>(preloaded)
+  const [deep, setDeep]       = useState<any>(null)
   const [loading, setLoading] = useState(false)
-  const [loaded, setLoaded]   = useState<boolean>(preloaded !== null)
+  const [loaded, setLoaded]   = useState(false)
+
+  // Populate deep from preloaded data (from overlay engine called during initial calc)
+  useEffect(() => {
+    const preloaded = (compatResult as any)?.deepResult ?? null
+    if (preloaded && !loaded) {
+      setDeep(preloaded)
+      setLoaded(true)
+    }
+  }, [compatResult])
   const [relType, setRelType] = useState('Other')
   const [mode, setMode]       = useState<'future'|'past'|'full'>('future')
   const ashta   = r?.AshtaKootaScore   ?? r?.ashtaKootaScore   ?? 0
