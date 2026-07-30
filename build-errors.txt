@@ -1,20 +1,9 @@
-=== CURRENT e2e FILES ===
-total 88
-drwxr-xr-x  2 runner runner  4096 Jul 26 13:58 .
-drwxr-xr-x 11 runner runner  4096 Jul 26 13:58 ..
--rw-r--r--  1 runner runner  4428 Jul 26 13:58 01-auth.spec.js
--rw-r--r--  1 runner runner 13487 Jul 26 13:58 02-chart.spec.js
--rw-r--r--  1 runner runner  2851 Jul 26 13:58 03-match.spec.js
--rw-r--r--  1 runner runner  2685 Jul 26 13:58 04-horoscope.spec.js
--rw-r--r--  1 runner runner  3485 Jul 26 13:58 05-deployment.spec.js
--rw-r--r--  1 runner runner  5636 Jul 26 13:58 06-match-10.spec.js
--rw-r--r--  1 runner runner  4744 Jul 26 13:58 07-western.spec.js
--rw-r--r--  1 runner runner  8626 Jul 26 13:58 functional-test.spec.js
--rw-r--r--  1 runner runner  2685 Jul 26 13:58 helpers.js
--rw-r--r--  1 runner runner  3335 Jul 26 13:58 screenshot.spec.js
--rw-r--r--  1 runner runner  6794 Jul 26 13:58 tab-screenshots.spec.js
-
 === BUILD OUTPUT ===
+
+> vedichora@1.0.1 prebuild
+> node -e "const fs=require('fs');const t=JSON.parse(fs.readFileSync('tsconfig.json','utf8'));t.exclude=['node_modules','e2e','e2e/**','playwright.config.ts','**/*.spec.ts','**/*.spec.js'];t.include=['next-env.d.ts','src/**/*.ts','src/**/*.tsx','.next/types/**/*.ts'];fs.writeFileSync('tsconfig.json',JSON.stringify(t,null,2))"
+
+
 > vedichora@1.0.1 build
 > next build
 
@@ -43,28 +32,28 @@ https://nextjs.org/telemetry
    Collecting build traces ...
 
 Route (app)                              Size     First Load JS
-┌ ○ /                                    5.02 kB         124 kB
+┌ ○ /                                    5.02 kB         118 kB
 ├ ○ /_not-found                          869 B          82.8 kB
 ├ ○ /about                               2.46 kB        84.4 kB
-├ ○ /admin                               5.37 kB         117 kB
+├ ○ /admin                               5.37 kB         112 kB
 ├ ○ /api-docs                            1.87 kB        86.8 kB
-├ ○ /chart                               20.2 kB         139 kB
+├ ○ /chart                               20.2 kB         133 kB
 ├ ○ /checkout                            5.07 kB          90 kB
 ├ ○ /consult                             5.5 kB         90.4 kB
-├ ○ /dashboard                           3.37 kB         115 kB
-├ ○ /jyoti                               5.91 kB         118 kB
+├ ○ /dashboard                           3.37 kB         110 kB
+├ ○ /jyoti                               5.91 kB         112 kB
 ├ ○ /learn                               2.52 kB        84.5 kB
-├ ○ /match                               19.9 kB         132 kB
-├ ○ /muhurta                             2.58 kB         115 kB
-├ ○ /numerology                          3.73 kB         113 kB
-├ ○ /phone-login                         2.14 kB         121 kB
+├ ○ /match                               19.9 kB         126 kB
+├ ○ /muhurta                             2.58 kB         109 kB
+├ ○ /numerology                          3.73 kB         107 kB
+├ ○ /phone-login                         2.14 kB         115 kB
 ├ ○ /remedies                            1.85 kB        83.8 kB
-├ ○ /shop                                2.09 kB         114 kB
-├ ○ /signin                              2.93 kB         122 kB
-├ ○ /signup                              3.46 kB         122 kB
+├ ○ /shop                                2.09 kB         108 kB
+├ ○ /signin                              2.93 kB         116 kB
+├ ○ /signup                              3.46 kB         116 kB
 ├ ○ /transits                            4.09 kB          86 kB
-├ ○ /varshaphal                          1.89 kB         114 kB
-├ ○ /western                             16.4 kB         135 kB
+├ ○ /varshaphal                          1.89 kB         108 kB
+├ ○ /western                             16.4 kB         129 kB
 └ ○ /yogas                               1.78 kB        86.7 kB
 + First Load JS shared by all            81.9 kB
   ├ chunks/938-cac2006256170abd.js       26.7 kB
