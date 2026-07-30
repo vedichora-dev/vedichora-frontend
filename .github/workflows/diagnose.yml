@@ -1,35 +1,40 @@
 name: Diagnose Build Errors
 on:
-  workflow_dispatch:
   push:
     branches: [main]
+  workflow_dispatch:
+
 jobs:
-  build:
+  build-and-deploy:
     runs-on: ubuntu-latest
     permissions:
       contents: write
     steps:
       - uses: actions/checkout@v4
+
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
-      - run: npm install --legacy-peer-deps
-      - name: Build
+
+      - name: Install dependencies
+        run: npm install --legacy-peer-deps
+
+      - name: Build and capture errors
         run: |
-          echo "=== CURRENT e2e FILES ===" > build-errors.txt
-          ls -la e2e/ >> build-errors.txt 2>&1 || echo "no e2e/" >> build-errors.txt
-          echo "" >> build-errors.txt
-          echo "=== BUILD OUTPUT ===" >> build-errors.txt
-          npm run build 2>&1 | tail -60 >> build-errors.txt || true
-      - name: Commit
+          echo "=== BUILD OUTPUT ===" > build-errors.txt
+          npm run build 2>&1 | tail -80 >> build-errors.txt || true
+
+      - name: Commit build errors
         run: |
           git config user.email "ci@vedichora.com"
           git config user.name "CI Bot"
           git add build-errors.txt
           git diff --staged --quiet || git commit -m "ci: build errors [skip ci]"
           git push || true
-      - name: Deploy to Vercel
-        if: success()
+
+      - name: Deploy to Vercel Production
         run: |
-          npm install -g vercel@latest --legacy-peer-deps 2>/dev/null
-          vercel --token=${{ secrets.VERCEL_TOKEN }} --prod --yes 2>&1 || echo "Vercel deploy skipped (token not set)"
+          npm install -g vercel --legacy-peer-deps 2>/dev/null
+          vercel --token=${{ secrets.VERCEL_TOKEN }} --prod --yes
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
