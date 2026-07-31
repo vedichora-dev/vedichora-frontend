@@ -17,6 +17,9 @@
     body{background:#fff;}
     @page{margin:12mm 14mm;size:A4;}
     .no-print{display:none!important;}
+  .result-pass{color:#2E7D32;font-weight:700;}
+  .result-fail{color:#B71C1C;font-weight:700;}
+  .result-critical{color:#B71C1C;font-weight:800;font-size:13px;}
     .page-break{page-break-before:always;}
   }
   /* ── Cover ── */
@@ -102,7 +105,7 @@
 </style>
 </head>
 <body>
-<button class="dl-btn no-print" onclick="window.print()">⬇ Save as PDF</button>
+<button class="dl-btn no-print" onclick="window.print()" id="save-pdf-btn">⬇ Save as PDF</button>
 
 <!-- Page 1: Cover + Birth Details + Scores -->
 <div class="cover" style="padding:28px 32px 22px;">
@@ -602,11 +605,31 @@ function renderRemedies(poruthams) {
     return;
   }
   const remedies = {
-    'Dina':           'Select a marriage Muhurtha with Moon in an auspicious nakshatra. Navagraha Homam before the wedding is beneficial.',
-    'Mahendra':       'Conduct a Santana Gopala puja for blessings of children. Muhurtha correction can offset this.',
-    'Sthree Dheerga': 'Rasi Koota compatibility can partially compensate. Select Muhurtha carefully with the Lagna in a strong position.',
-    'Yoni':           'Perform a Yoni Nivarana puja. Marriage during an auspicious planetary transit can mitigate.',
-    'Rasi':           'Strong Muhurtha with favourable Moon position can offset Rasi incompatibility.',
+    'Dina': {
+      en: 'Dinam (Day Star) mismatch affects long-term health and longevity harmony. Remedy: Perform Navagraha Homam before the wedding. Choose a Muhurtha day where the Moon is in the 2nd, 4th, 6th, 8th, or 10th star from the bride's birth star.',
+      ta: 'திணம் பொருத்தமின்மை ஆரோக்கியம் மற்றும் ஆயுள் நீடிப்பை பாதிக்கும். பரிகாரம்: திருமணத்திற்கு முன் நவகிரக ஹோமம் செய்யவும். மணமகளின் நட்சத்திரத்திலிருந்து 2, 4, 6, 8 அல்லது 10வது நட்சத்திரத்தில் சந்திரன் இருக்கும் முகூர்த்தம் தேர்வு செய்யவும்.',
+      hi: 'दिनम् (तारा) असंगति दीर्घकालिक स्वास्थ्य और आयु सामंजस्य को प्रभावित करती है। उपाय: विवाह से पूर्व नवग्रह होम करें।'
+    },
+    'Mahendra': {
+      en: 'Mahendram affects children, prosperity, and the strength of the family lineage. Remedy: Perform Santana Gopala Homam and Punyahavachanam before the wedding. A strong Jupiter Muhurtha compensates significantly.',
+      ta: 'மகேந்திரம் குழந்தை பாக்கியம், செல்வம் மற்றும் குலவிருத்தியை பாதிக்கும். பரிகாரம்: சந்தான கோபால ஹோமம் மற்றும் புண்யாஹவாசனம் செய்யவும். குரு பலமுள்ள முகூர்த்தம் இதை சரி செய்யும்.',
+      hi: 'महेंद्रम् संतान, समृद्धि और वंश बल को प्रभावित करता है। उपाय: संतान गोपाल होम करें।'
+    },
+    'Sthree Dheerga': {
+      en: 'Sthree Dheerga mismatch affects the longevity and wellbeing of the bride. Remedy: The groom's family should conduct Ayushya Homam on the wedding day. A Muhurtha with strong Lagna and 8th house protection compensates.',
+      ta: 'ஸ்திரீ தீர்க்கம் மணமகளின் ஆயுளை பாதிக்கும். பரிகாரம்: மணமகன் குடும்பத்தினர் திருமண நாளில் ஆயுஷ்ய ஹோமம் செய்யவும். லக்னம் பலமுள்ள முகூர்த்தம் தேர்வு செய்யவும்.',
+      hi: 'स्त्री दीर्घ असंगति वधू की आयु और कल्याण को प्रभावित करती है। उपाय: विवाह दिवस पर आयुष्य होम करें।'
+    },
+    'Yoni': {
+      en: 'Yoni mismatch affects physical and intimate compatibility between partners. Remedy: Perform a Ganapati Homam and Swayamvara Parvathi Puja before the wedding. This removes obstacles to marital harmony.',
+      ta: 'யோனி பொருத்தமின்மை தம்பதியர் இடையே உடல் ஒற்றுமையை பாதிக்கும். பரிகாரம்: கணபதி ஹோமம் மற்றும் சுயம்வர பார்வதி பூஜை செய்யவும்.',
+      hi: 'योनि असंगति दांपत्य जीवन को प्रभावित करती है। उपाय: गणपति होम और स्वयंवर पार्वती पूजा करें।'
+    },
+    'Rasi': {
+      en: 'Rasi (Moon Sign) mismatch affects emotional and mental compatibility. Remedy: Perform Chandra Graha Shanti and choose a Muhurtha with Moon in a friendly sign from both charts. Strong 7th house Muhurtha compensates.',
+      ta: 'ராசி பொருத்தமின்மை மனோ ஒற்றுமையை பாதிக்கும். பரிகாரம்: சந்திர கிரக சாந்தி செய்யவும். இருவரின் ராசியிலிருந்தும் நட்பு ராசியில் சந்திரன் இருக்கும் முகூர்த்தம் தேர்வு செய்யவும்.',
+      hi: 'राशि असंगति भावनात्मक और मानसिक सामंजस्य को प्रभावित करती है। उपाय: चंद्र ग्रह शांति करें।'
+    },
     'Rasyadhipa':     'Per BV Raman: if Moon lords are in 1-7 from each other, enmity is cancelled. Check with your astrologer.',
     'Vasiya':         'Muhurtha correction and Navagraha puja are recommended.',
     'Rajju':          'Critical: Mandatory Muhurtha correction required. Marriage Nakshatra must be chosen from a compatible Rajju group. Perform Rajju Dosha Nivarana Homam.',
