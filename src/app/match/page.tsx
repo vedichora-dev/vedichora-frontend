@@ -976,12 +976,12 @@ export default function MatchPage() {
       // Strip all scripts so no old JS overrides our static HTML
       tmpl = tmpl.replace(/<script[\s\S]*?<\/script>/gi, '')
       // Try window.open + document.write (works in all browsers)
-      // Render in hidden iframe, then use html2pdf to generate real PDF
+      // Render in hidden iframe (scripts execute), wait for init(), then html2pdf
       const n1clean = (n1 || 'Person1').replace(/[^a-zA-Z0-9]/g, '_')
       const n2clean = (n2 || 'Person2').replace(/[^a-zA-Z0-9]/g, '_')
       const filename = `VedicHora_${n1clean}_${n2clean}_Porutham.pdf`
 
-      // Load html2pdf.js dynamically
+      // Load html2pdf.js
       await new Promise<void>((resolve, reject) => {
         if ((window as any).html2pdf) { resolve(); return }
         const s = document.createElement('script')
@@ -991,23 +991,30 @@ export default function MatchPage() {
         document.head.appendChild(s)
       })
 
-      // Render template in hidden div
-      const container = document.createElement('div')
-      container.style.cssText = 'position:fixed;left:-9999px;top:0;width:794px;background:#fff;'
-      container.innerHTML = tmpl
-      document.body.appendChild(container)
-      await new Promise(r => setTimeout(r, 1500)) // let JS init() run
-
+      // Step 1: Render in hidden iframe so <script> tags execute and init() runs
+      const iframe = document.createElement('iframe')
+      iframe.style.cssText = 'position:fixed;left:-9999px;top:0;width:794px;height:1200px;border:none;'
+      document.body.appendChild(iframe)
+      const iDoc = iframe.contentDocument!
+      iDoc.open(); iDoc.write(tmpl); iDoc.close()
+      
+      // Step 2: Wait for init() to fully render all content
+      await new Promise(r => setTimeout(r, 2500))
+      
+      // Step 3: html2pdf from the already-rendered iframe body
+      const iBody = iframe.contentDocument?.body
+      if (!iBody) throw new Error('iframe body not found')
+      
       const opt = {
         margin: 0,
         filename,
         image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { scale: 2, useCORS: true, logging: false },
+        html2canvas: { scale: 2, useCORS: true, logging: false, allowTaint: true },
         jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
-        pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
+        pagebreak: { mode: ['css', 'legacy'], before: '.page-break' }
       }
-      await (window as any).html2pdf().set(opt).from(container).save()
-      document.body.removeChild(container)
+      await (window as any).html2pdf().set(opt).from(iBody).save()
+      document.body.removeChild(iframe)
           } catch(e) { alert('Report failed: ' + String(e)) }
     setPdfLoading(null)
   }
