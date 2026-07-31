@@ -537,15 +537,15 @@ function renderScoreBand() {
 
   const ashEl = document.getElementById('sc-ashta-val');
   if(ashEl){ashEl.textContent=ashtaScore+'/'+ashtaTotal;ashEl.style.color=ap>=75?'#2E7D32':ap>=50?'#B45309':'#C62828';}
-  document.getElementById('sc-ashta-val').className = 'score-num ' + scoreClass(ap);
+  { const _ce_sc_ashta_val=document.getElementById('sc-ashta-val'); if(_ce_sc_ashta_val) _ce_sc_ashta_val.className='score-num ' + scoreClass(ap); }
   document.getElementById('sc-ashta-pct').textContent = ap + '%';
 
   document.getElementById('sc-pathu-val').textContent = pathuScore + '/' + pathuTotal;
-  document.getElementById('sc-pathu-val').className = 'score-num ' + scoreClass(pp);
+  { const _ce_sc_pathu_val=document.getElementById('sc-pathu-val'); if(_ce_sc_pathu_val) _ce_sc_pathu_val.className='score-num ' + scoreClass(pp); }
   document.getElementById('sc-pathu-pct').textContent = pp + '%';
 
   document.getElementById('sc-dosha-val').textContent = String(doshaCount);
-  document.getElementById('sc-dosha-val').className = 'score-num ' + (doshaCount === 0 ? 'score-good' : 'score-bad');
+  { const _ce_sc_dosha_val=document.getElementById('sc-dosha-val'); if(_ce_sc_dosha_val) _ce_sc_dosha_val.className='score-num ' + (doshaCount === 0 ? 'score-good' : 'score-bad'); }
   document.getElementById('sc-dosha-sub').textContent = doshaCount === 0 ? L.noDosha : L.dosha;
 }
 
@@ -553,7 +553,7 @@ function renderVerdict() {
   const isRec  = DATA.IsRecommended ?? DATA.isRecommended ?? false;
   const summary = DATA.Summary ?? DATA.summary ?? '';
   const box = document.getElementById('verdict-box');
-  box.className = 'verdict ' + (isRec ? 'verdict-good' : 'verdict-warn');
+  if(box) box.className = 'verdict ' + (isRec ? 'verdict-good' : 'verdict-warn');
   document.getElementById('verdict-icon').textContent = isRec ? '🌟' : '⚠️';
   document.getElementById('verdict-title').textContent = isRec ? L.recommended : L.needsReview;
   document.getElementById('verdict-body').textContent = summary;
