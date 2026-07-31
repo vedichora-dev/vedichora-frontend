@@ -608,37 +608,48 @@ function renderRemedies(poruthams) {
     list.innerHTML = '<div class="info-box">✓ All poruthams are compatible. Standard auspicious Muhurtha selection is sufficient.</div>';
     return;
   }
-  const remedies = {
+    const remedies = {
     'Dina': {
-      en: 'Dinam (Day Star) mismatch affects long-term health and longevity harmony. Remedy: Perform Navagraha Homam before the wedding. Choose a Muhurtha day where the Moon is in the 2nd, 4th, 6th, 8th, or 10th star from the bride's birth star.',
-      ta: 'திணம் பொருத்தமின்மை ஆரோக்கியம் மற்றும் ஆயுள் நீடிப்பை பாதிக்கும். பரிகாரம்: திருமணத்திற்கு முன் நவகிரக ஹோமம் செய்யவும். மணமகளின் நட்சத்திரத்திலிருந்து 2, 4, 6, 8 அல்லது 10வது நட்சத்திரத்தில் சந்திரன் இருக்கும் முகூர்த்தம் தேர்வு செய்யவும்.',
-      hi: 'दिनम् (तारा) असंगति दीर्घकालिक स्वास्थ्य और आयु सामंजस्य को प्रभावित करती है। उपाय: विवाह से पूर्व नवग्रह होम करें।'
+      en: "Dinam (Day Star) mismatch affects long-term health and longevity. Remedy: Perform Navagraha Homam before the wedding. Choose a Muhurtha day where Moon is in the 2nd, 4th, 6th, 8th, or 10th star from the bride's birth star.",
+      ta: "திணம் பொருத்தமின்மை ஆரோக்கியம் மற்றும் ஆயுளை பாதிக்கும். பரிகாரம்: திருமணத்திற்கு முன் நவகிரக ஹோமம் செய்யவும். மணமகளின் நட்சத்திரத்திலிருந்து 2, 4, 6, 8 அல்லது 10வது நட்சத்திரத்தில் சந்திரன் இருக்கும் முகூர்த்தம் தேர்வு செய்யவும்.",
+      hi: "दिनम् असंगति स्वास्थ्य और आयु को प्रभावित करती है। उपाय: नवग्रह होम करें।"
     },
     'Mahendra': {
-      en: 'Mahendram affects children, prosperity, and the strength of the family lineage. Remedy: Perform Santana Gopala Homam and Punyahavachanam before the wedding. A strong Jupiter Muhurtha compensates significantly.',
-      ta: 'மகேந்திரம் குழந்தை பாக்கியம், செல்வம் மற்றும் குலவிருத்தியை பாதிக்கும். பரிகாரம்: சந்தான கோபால ஹோமம் மற்றும் புண்யாஹவாசனம் செய்யவும். குரு பலமுள்ள முகூர்த்தம் இதை சரி செய்யும்.',
-      hi: 'महेंद्रम् संतान, समृद्धि और वंश बल को प्रभावित करता है। उपाय: संतान गोपाल होम करें।'
+      en: "Mahendram affects children, prosperity and family strength. Remedy: Perform Santana Gopala Homam before the wedding. Choose a Muhurtha with Jupiter in a kendra or trikona.",
+      ta: "மகேந்திரம் குழந்தை பாக்கியம் மற்றும் செல்வத்தை பாதிக்கும். பரிகாரம்: சந்தான கோபால ஹோமம் செய்யவும். குரு கேந்திரத்தில் அல்லது திரிகோணத்தில் இருக்கும் முகூர்த்தம் தேர்வு செய்யவும்.",
+      hi: "महेंद्रम् संतान और समृद्धि को प्रभावित करता है। उपाय: संतान गोपाल होम करें।"
     },
     'Sthree Dheerga': {
-      en: 'Sthree Dheerga mismatch affects the longevity and wellbeing of the bride. Remedy: The groom's family should conduct Ayushya Homam on the wedding day. A Muhurtha with strong Lagna and 8th house protection compensates.',
-      ta: 'ஸ்திரீ தீர்க்கம் மணமகளின் ஆயுளை பாதிக்கும். பரிகாரம்: மணமகன் குடும்பத்தினர் திருமண நாளில் ஆயுஷ்ய ஹோமம் செய்யவும். லக்னம் பலமுள்ள முகூர்த்தம் தேர்வு செய்யவும்.',
-      hi: 'स्त्री दीर्घ असंगति वधू की आयु और कल्याण को प्रभावित करती है। उपाय: विवाह दिवस पर आयुष्य होम करें।'
+      en: "Sthree Dheerga affects the longevity and wellbeing of the bride. Remedy: Conduct Ayushya Homam on the wedding day. Choose a Muhurtha with strong Lagna and protected 8th house.",
+      ta: "ஸ்திரீ தீர்க்கம் மணமகளின் ஆயுளை பாதிக்கும். பரிகாரம்: திருமண நாளில் ஆயுஷ்ய ஹோமம் செய்யவும். லக்னம் பலமுள்ள முகூர்த்தம் தேர்வு செய்யவும்.",
+      hi: "स्त्री दीर्घ वधू की आयु को प्रभावित करती है। उपाय: आयुष्य होम करें।"
     },
     'Yoni': {
-      en: 'Yoni mismatch affects physical and intimate compatibility between partners. Remedy: Perform a Ganapati Homam and Swayamvara Parvathi Puja before the wedding. This removes obstacles to marital harmony.',
-      ta: 'யோனி பொருத்தமின்மை தம்பதியர் இடையே உடல் ஒற்றுமையை பாதிக்கும். பரிகாரம்: கணபதி ஹோமம் மற்றும் சுயம்வர பார்வதி பூஜை செய்யவும்.',
-      hi: 'योनि असंगति दांपत्य जीवन को प्रभावित करती है। उपाय: गणपति होम और स्वयंवर पार्वती पूजा करें।'
+      en: "Yoni mismatch affects physical compatibility. Remedy: Perform Ganapati Homam and Swayamvara Parvathi Puja before the wedding.",
+      ta: "யோனி பொருத்தமின்மை உடல் ஒற்றுமையை பாதிக்கும். பரிகாரம்: கணபதி ஹோமம் மற்றும் சுயம்வர பார்வதி பூஜை செய்யவும்.",
+      hi: "योनि असंगति शारीरिक सामंजस्य को प्रभावित करती है। उपाय: गणपति होम करें।"
     },
     'Rasi': {
-      en: 'Rasi (Moon Sign) mismatch affects emotional and mental compatibility. Remedy: Perform Chandra Graha Shanti and choose a Muhurtha with Moon in a friendly sign from both charts. Strong 7th house Muhurtha compensates.',
-      ta: 'ராசி பொருத்தமின்மை மனோ ஒற்றுமையை பாதிக்கும். பரிகாரம்: சந்திர கிரக சாந்தி செய்யவும். இருவரின் ராசியிலிருந்தும் நட்பு ராசியில் சந்திரன் இருக்கும் முகூர்த்தம் தேர்வு செய்யவும்.',
-      hi: 'राशि असंगति भावनात्मक और मानसिक सामंजस्य को प्रभावित करती है। उपाय: चंद्र ग्रह शांति करें।'
+      en: "Rasi mismatch affects emotional and mental compatibility. Remedy: Perform Chandra Graha Shanti. Choose a Muhurtha with Moon in a friendly sign.",
+      ta: "ராசி பொருத்தமின்மை மனோ ஒற்றுமையை பாதிக்கும். பரிகாரம்: சந்திர கிரக சாந்தி செய்யவும்.",
+      hi: "राशि असंगति भावनात्मक सामंजस्य को प्रभावित करती है। उपाय: चंद्र ग्रह शांति करें।"
     },
-    'Rasyadhipa':     'Per BV Raman: if Moon lords are in 1-7 from each other, enmity is cancelled. Check with your astrologer.',
-    'Vasiya':         'Muhurtha correction and Navagraha puja are recommended.',
-    'Rajju':          'Critical: Mandatory Muhurtha correction required. Marriage Nakshatra must be chosen from a compatible Rajju group. Perform Rajju Dosha Nivarana Homam.',
-    'Vedha':          'Select a Muhurtha where neither the marriage Nakshatra nor the Lagna nakshatra is in Vedha with bride or groom\'s nakshatra.',
-  };
+    'Rajju': {
+      en: "Rajju mismatch is critical — same Rajju group causes affliction to marital longevity. This requires Muhurtha correction. Remedy: Choose a wedding date where Moon is in a Rajju-free nakshatra. Perform Maha Mrityunjaya Homam. Consult an astrologer for detailed Muhurtha selection.",
+      ta: "ரஜ்ஜு பொருத்தமின்மை மிக முக்கியமானது — ஒரே ரஜ்ஜு குழுவில் இருப்பது திருமண ஆயுளை பாதிக்கும். இதற்கு முகூர்த்த திருத்தம் அவசியம். பரிகாரம்: சந்திரன் வேறு ரஜ்ஜு நட்சத்திரத்தில் இருக்கும் திருமண நாள் தேர்வு செய்யவும். மஹா மிருத்யுஞ்சய ஹோமம் செய்யவும்.",
+      hi: "राजू असंगति महत्वपूर्ण है — समान राजू समूह वैवाहिक दीर्घायु को प्रभावित करता है। उपाय: महा मृत्युंजय होम करें।"
+    },
+    'Vedha': {
+      en: "Vedha affliction creates obstacles between the stars. Remedy: Perform Navagraha Shanti and choose a Muhurtha where the Moon avoids both afflicted nakshatras.",
+      ta: "வேதை தோஷம் நட்சத்திரங்களுக்கு இடையே தடைகளை உருவாக்கும். பரிகாரம்: நவகிரக சாந்தி செய்யவும்.",
+      hi: "वेध दोष बाधाएं उत्पन्न करता है। उपाय: नवग्रह शांति करें।"
+    },
+    'Nadi': {
+      en: "Nadi dosha (same Nadi) can affect health of offspring. Remedy: Perform Nadi Nivarana Puja. Some traditions allow exceptions when both share the same birth star.",
+      ta: "நாடி தோஷம் (ஒரே நாடி) குழந்தைகளின் ஆரோக்கியத்தை பாதிக்கலாம். பரிகாரம்: நாடி நிவாரண பூஜை செய்யவும்.",
+      hi: "नाड़ी दोष संतान के स्वास्थ्य को प्रभावित कर सकता है। उपाय: नाड़ी निवारण पूजा करें।"
+    }
+  };;
   failed.forEach(p => {
     const key = p.KootaName || p.kootaName || '';
     const def = PORUTHAM_DEF[key];
