@@ -393,38 +393,38 @@ function pct(n, d) { return d > 0 ? Math.round(n/d*100) : 0; }
 function scoreClass(p) { return p >= 60 ? 'score-good' : p >= 40 ? 'score-warn' : 'score-bad'; }
 
 function applyLabels() {
-  document.getElementById('cover-title').textContent = L.title;
-  document.getElementById('lbl-pathu').textContent = L.pathu;
-  document.getElementById('lbl-ashta').textContent = L.ashta;
-  document.getElementById('lbl-dosha').textContent = L.doshas;
-  document.getElementById('lbl-pathu-sec').textContent = L.pathuSec;
-  document.getElementById('lbl-ashta-sec').textContent = L.ashtaSec;
+  { const _t_cover_title=document.getElementById('cover-title'); if(_t_cover_title) _t_cover_title.textContent=L.title; }
+  { const _t_lbl_pathu=document.getElementById('lbl-pathu'); if(_t_lbl_pathu) _t_lbl_pathu.textContent=L.pathu; }
+  { const _t_lbl_ashta=document.getElementById('lbl-ashta'); if(_t_lbl_ashta) _t_lbl_ashta.textContent=L.ashta; }
+  { const _t_lbl_dosha=document.getElementById('lbl-dosha'); if(_t_lbl_dosha) _t_lbl_dosha.textContent=L.doshas; }
+  { const _t_lbl_pathu_se=document.getElementById('lbl-pathu-sec'); if(_t_lbl_pathu_se) _t_lbl_pathu_se.textContent=L.pathuSec; }
+  { const _t_lbl_ashta_se=document.getElementById('lbl-ashta-sec'); if(_t_lbl_ashta_se) _t_lbl_ashta_se.textContent=L.ashtaSec; }
   // Update parihara section header in current language
   const parEl = document.getElementById('lbl-parihara');
   if(parEl) parEl.textContent = LANG==='ta'?'பரிகாரங்கள்':LANG==='hi'?'परिहार':L.parihara||'Parihara (Remedies)';
-  document.getElementById('lbl-strengths').textContent = L.strengths;
-  document.getElementById('lbl-muhurtha').textContent = L.muhurtha;
-  document.getElementById('th-porutham').textContent = L.porutham;
-  document.getElementById('th-calc').textContent = L.calc;
-  document.getElementById('th-result').textContent = L.result;
-  document.getElementById('th-koota').textContent = L.koota;
-  document.getElementById('th-max').textContent = L.max;
-  document.getElementById('th-score').textContent = L.score;
-  document.getElementById('th-status').textContent = L.status;
-  document.getElementById('th-meaning').textContent = L.meaning;
-  document.getElementById('lbl-total').textContent = L.total;
-  document.getElementById('lbl-total2').textContent = L.total;
-  document.getElementById('lbl-dob').textContent = L.dob;
-  document.getElementById('lbl-nak').textContent = L.nak;
-  document.getElementById('lbl-rasi').textContent = L.rasi;
-  document.getElementById('lbl-lagna').textContent = L.lagna;
-  document.getElementById('lbl-nadi').textContent = L.nadi;
-  document.getElementById('lbl-rajju').textContent = L.rajju;
-  document.getElementById('lbl-groom').textContent = L.groom;
-  document.getElementById('lbl-bride').textContent = L.bride;
-  document.getElementById('pathu-note').textContent = L.note;
-  document.getElementById('muhurtha-note').textContent = L.muhurthaNote;
-  document.getElementById('footer-date').textContent = 'Generated: ' + new Date().toLocaleDateString();
+  { const _t_lbl_strength=document.getElementById('lbl-strengths'); if(_t_lbl_strength) _t_lbl_strength.textContent=L.strengths; }
+  { const _t_lbl_muhurtha=document.getElementById('lbl-muhurtha'); if(_t_lbl_muhurtha) _t_lbl_muhurtha.textContent=L.muhurtha; }
+  { const _t_th_porutham=document.getElementById('th-porutham'); if(_t_th_porutham) _t_th_porutham.textContent=L.porutham; }
+  { const _t_th_calc=document.getElementById('th-calc'); if(_t_th_calc) _t_th_calc.textContent=L.calc; }
+  { const _t_th_result=document.getElementById('th-result'); if(_t_th_result) _t_th_result.textContent=L.result; }
+  { const _t_th_koota=document.getElementById('th-koota'); if(_t_th_koota) _t_th_koota.textContent=L.koota; }
+  { const _t_th_max=document.getElementById('th-max'); if(_t_th_max) _t_th_max.textContent=L.max; }
+  { const _t_th_score=document.getElementById('th-score'); if(_t_th_score) _t_th_score.textContent=L.score; }
+  { const _t_th_status=document.getElementById('th-status'); if(_t_th_status) _t_th_status.textContent=L.status; }
+  { const _t_th_meaning=document.getElementById('th-meaning'); if(_t_th_meaning) _t_th_meaning.textContent=L.meaning; }
+  { const _t_lbl_total=document.getElementById('lbl-total'); if(_t_lbl_total) _t_lbl_total.textContent=L.total; }
+  { const _t_lbl_total2=document.getElementById('lbl-total2'); if(_t_lbl_total2) _t_lbl_total2.textContent=L.total; }
+  { const _t_lbl_dob=document.getElementById('lbl-dob'); if(_t_lbl_dob) _t_lbl_dob.textContent=L.dob; }
+  { const _t_lbl_nak=document.getElementById('lbl-nak'); if(_t_lbl_nak) _t_lbl_nak.textContent=L.nak; }
+  { const _t_lbl_rasi=document.getElementById('lbl-rasi'); if(_t_lbl_rasi) _t_lbl_rasi.textContent=L.rasi; }
+  { const _t_lbl_lagna=document.getElementById('lbl-lagna'); if(_t_lbl_lagna) _t_lbl_lagna.textContent=L.lagna; }
+  { const _t_lbl_nadi=document.getElementById('lbl-nadi'); if(_t_lbl_nadi) _t_lbl_nadi.textContent=L.nadi; }
+  { const _t_lbl_rajju=document.getElementById('lbl-rajju'); if(_t_lbl_rajju) _t_lbl_rajju.textContent=L.rajju; }
+  { const _t_lbl_groom=document.getElementById('lbl-groom'); if(_t_lbl_groom) _t_lbl_groom.textContent=L.groom; }
+  { const _t_lbl_bride=document.getElementById('lbl-bride'); if(_t_lbl_bride) _t_lbl_bride.textContent=L.bride; }
+  { const _t_pathu_note=document.getElementById('pathu-note'); if(_t_pathu_note) _t_pathu_note.textContent=L.note; }
+  { const _t_muhurtha_not=document.getElementById('muhurtha-note'); if(_t_muhurtha_not) _t_muhurtha_not.textContent=L.muhurthaNote; }
+  { const _t_footer_date=document.getElementById('footer-date'); if(_t_footer_date) _t_footer_date.textContent='Generated: ' + new Date().toLocaleDateString(); }
 }
 
 function renderPathu(poruthams) {
@@ -538,15 +538,15 @@ function renderScoreBand() {
   const ashEl = document.getElementById('sc-ashta-val');
   if(ashEl){ashEl.textContent=ashtaScore+'/'+ashtaTotal;ashEl.style.color=ap>=75?'#2E7D32':ap>=50?'#B45309':'#C62828';}
   { const _ce_sc_ashta_val=document.getElementById('sc-ashta-val'); if(_ce_sc_ashta_val) _ce_sc_ashta_val.className='score-num ' + scoreClass(ap); }
-  document.getElementById('sc-ashta-pct').textContent = ap + '%';
+  { const _t_sc_ashta_pct=document.getElementById('sc-ashta-pct'); if(_t_sc_ashta_pct) _t_sc_ashta_pct.textContent=ap + '%'; }
 
-  document.getElementById('sc-pathu-val').textContent = pathuScore + '/' + pathuTotal;
+  { const _t_sc_pathu_val=document.getElementById('sc-pathu-val'); if(_t_sc_pathu_val) _t_sc_pathu_val.textContent=pathuScore + '/' + pathuTotal; }
   { const _ce_sc_pathu_val=document.getElementById('sc-pathu-val'); if(_ce_sc_pathu_val) _ce_sc_pathu_val.className='score-num ' + scoreClass(pp); }
-  document.getElementById('sc-pathu-pct').textContent = pp + '%';
+  { const _t_sc_pathu_pct=document.getElementById('sc-pathu-pct'); if(_t_sc_pathu_pct) _t_sc_pathu_pct.textContent=pp + '%'; }
 
-  document.getElementById('sc-dosha-val').textContent = String(doshaCount);
+  { const _t_sc_dosha_val=document.getElementById('sc-dosha-val'); if(_t_sc_dosha_val) _t_sc_dosha_val.textContent=String(doshaCount); }
   { const _ce_sc_dosha_val=document.getElementById('sc-dosha-val'); if(_ce_sc_dosha_val) _ce_sc_dosha_val.className='score-num ' + (doshaCount === 0 ? 'score-good' : 'score-bad'); }
-  document.getElementById('sc-dosha-sub').textContent = doshaCount === 0 ? L.noDosha : L.dosha;
+  { const _t_sc_dosha_sub=document.getElementById('sc-dosha-sub'); if(_t_sc_dosha_sub) _t_sc_dosha_sub.textContent=doshaCount === 0 ? L.noDosha : L.dosha; }
 }
 
 function renderVerdict() {
@@ -554,9 +554,9 @@ function renderVerdict() {
   const summary = DATA.Summary ?? DATA.summary ?? '';
   const box = document.getElementById('verdict-box');
   if(box) box.className = 'verdict ' + (isRec ? 'verdict-good' : 'verdict-warn');
-  document.getElementById('verdict-icon').textContent = isRec ? '🌟' : '⚠️';
-  document.getElementById('verdict-title').textContent = isRec ? L.recommended : L.needsReview;
-  document.getElementById('verdict-body').textContent = summary;
+  { const _t_verdict_icon=document.getElementById('verdict-icon'); if(_t_verdict_icon) _t_verdict_icon.textContent=isRec ? '🌟' : '⚠️'; }
+  { const _t_verdict_titl=document.getElementById('verdict-title'); if(_t_verdict_titl) _t_verdict_titl.textContent=isRec ? L.recommended : L.needsReview; }
+  { const _t_verdict_body=document.getElementById('verdict-body'); if(_t_verdict_body) _t_verdict_body.textContent=summary; }
 }
 
 function renderStrengths(poruthams, kootas) {
