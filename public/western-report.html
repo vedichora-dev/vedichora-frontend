@@ -349,8 +349,9 @@ function buildPeriods(deep, name1, name2) {
     shared.slice(0,3).forEach(w => {
       const ys = new Date(w.startDate).getFullYear(), ye = new Date(w.endDate).getFullYear();
       // Person 1 period
-      const p1period = w.groomPeriod || w.GroomPeriod || '';
-      const p2period = w.bridePeriod || w.BridePeriod || '';
+      const stripPlanets = s => (s||'').replace(/\b(Saturn|Jupiter|Mars|Venus|Mercury|Moon|Sun|Rahu|Ketu|MD|AD|Mahadasha|Antardasha)\b/g,'').replace(/\s+/g,' ').trim();
+      const p1period = stripPlanets(w.groomPeriod || w.GroomPeriod || '');
+      const p2period = stripPlanets(w.bridePeriod || w.BridePeriod || '');
       html += `<div class="card-hard">
         <div class="card-label">${ys === ye ? ys : `${ys}–${ye}`} · ${w.riskLevel} RISK · ${Math.round(w.durationMonths)} months</div>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:10px;">
