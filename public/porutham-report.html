@@ -602,6 +602,7 @@ function renderStrengths(poruthams, kootas) {
 
 function renderRemedies(poruthams) {
   const list = document.getElementById('remedies-list');
+  if(!list) return;
   list.innerHTML = '';
   const failed = poruthams.filter(p => p.Verdict !== 'Compatible');
   if (failed.length === 0) {
