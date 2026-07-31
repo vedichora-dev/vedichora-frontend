@@ -648,8 +648,8 @@ export default function MatchPage() {
         name2: (typeof n2 !== 'undefined' && n2 && n2 !== (typeof g2 !== 'undefined' ? g2 : ''))
           ? n2 : (r.name2 || gp2?.PersonName || n2 || (typeof g2 !== 'undefined' ? g2 : '') || 'Person 2'),
         // DOB from form date pickers
-        dob1: r.dob1 || (typeof d1 !== 'undefined' && d1?.yyyy ? `${d1.dd}/${d1.mm}/${d1.yyyy}` : '') || '',
-        dob2: r.dob2 || (typeof d2 !== 'undefined' && d2?.yyyy ? `${d2.dd}/${d2.mm}/${d2.yyyy}` : '') || '',
+        dob1: d1?.yyyy ? `${String(d1.dd).padStart(2,'0')}/${String(d1.mm).padStart(2,'0')}/${d1.yyyy}` : (r.dob1 || ''),
+        dob2: d2?.yyyy ? `${String(d2.dd).padStart(2,'0')}/${String(d2.mm).padStart(2,'0')}/${d2.yyyy}` : (r.dob2 || ''),
         // Ashta Koota
         AshtaKootaScore:  r.AshtaKootaScore  ?? r.ashtaKootaScore  ?? 0,
         AshtaKootaTotal:  r.AshtaKootaTotal  ?? r.ashtaKootaTotal  ?? 36,
@@ -976,7 +976,11 @@ export default function MatchPage() {
       // Strip all scripts so no old JS overrides our static HTML
       tmpl = tmpl.replace(/<script[\s\S]*?<\/script>/gi, '')
       // Try window.open + document.write (works in all browsers)
-      const win = window.open('', '_blank')
+      // Blob URL avoids about:blank title
+      const blob = new Blob([tmpl], { type: 'text/html;charset=utf-8' })
+      const blobUrl = URL.createObjectURL(blob)
+      const win = window.open(blobUrl, '_blank')
+      setTimeout(() => URL.revokeObjectURL(blobUrl), 30000)
       if (win) {
         win.document.open()
         win.document.write(tmpl)
