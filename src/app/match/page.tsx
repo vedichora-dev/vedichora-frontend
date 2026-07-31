@@ -976,28 +976,19 @@ export default function MatchPage() {
       // Strip all scripts so no old JS overrides our static HTML
       tmpl = tmpl.replace(/<script[\s\S]*?<\/script>/gi, '')
       // Try window.open + document.write (works in all browsers)
-      // Blob URL avoids about:blank title
-      const blob = new Blob([tmpl], { type: 'text/html;charset=utf-8' })
-      const blobUrl = URL.createObjectURL(blob)
-      const win = window.open(blobUrl, '_blank')
-      setTimeout(() => URL.revokeObjectURL(blobUrl), 30000)
-      if (win) {
-        win.document.open()
-        win.document.write(tmpl)
-        win.document.close()
-        setTimeout(() => { try { win.focus() } catch {} }, 500)
-      } else {
-        // Popup blocked — auto-download as HTML file
-        const blob = new Blob([tmpl], {type: 'text/html;charset=utf-8'})
-        const url = URL.createObjectURL(blob)
-        const a = document.createElement('a')
-        a.href = url
-        a.download = 'Porutham_Report.html'
-        document.body.appendChild(a); a.click()
-        document.body.removeChild(a)
-        setTimeout(() => URL.revokeObjectURL(url), 2000)
-        alert('Report downloaded as Porutham_Report.html — open it in your browser and print to PDF')
-      }
+      // Direct download — no new tab, no print dialog
+      const n1clean = (n1 || 'Person1').replace(/[^a-zA-Z0-9]/g, '_')
+      const n2clean = (n2 || 'Person2').replace(/[^a-zA-Z0-9]/g, '_')
+      const filename = `VedicHora_${n1clean}_${n2clean}_Porutham.html`
+      const dlBlob = new Blob([tmpl], { type: 'text/html;charset=utf-8' })
+      const dlUrl = URL.createObjectURL(dlBlob)
+      const a = document.createElement('a')
+      a.href = dlUrl
+      a.download = filename
+      document.body.appendChild(a)
+      a.click()
+      document.body.removeChild(a)
+      setTimeout(() => URL.revokeObjectURL(dlUrl), 5000)
           } catch(e) { alert('Report failed: ' + String(e)) }
     setPdfLoading(null)
   }
