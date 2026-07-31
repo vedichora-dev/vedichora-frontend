@@ -535,7 +535,8 @@ function renderScoreBand() {
   const ap = pct(ashtaScore, ashtaTotal);
   const pp = pct(pathuScore, pathuTotal);
 
-  document.getElementById('sc-ashta-val').textContent = ashtaScore + '/' + ashtaTotal;
+  const ashEl = document.getElementById('sc-ashta-val');
+  if(ashEl){ashEl.textContent=ashtaScore+'/'+ashtaTotal;ashEl.style.color=ap>=75?'#2E7D32':ap>=50?'#B45309':'#C62828';}
   document.getElementById('sc-ashta-val').className = 'score-num ' + scoreClass(ap);
   document.getElementById('sc-ashta-pct').textContent = ap + '%';
 
@@ -642,7 +643,10 @@ function renderRemedies(poruthams) {
     const key = p.KootaName || p.kootaName || '';
     const def = PORUTHAM_DEF[key];
     const name = def ? (def[LANG]?.name || def.en.name) : key;
-    const remedy = remedies[key] || 'Consult a qualified astrologer for specific remediation guidance.';
+    const remedyObj = remedies[key];
+    const remedy = remedyObj 
+      ? (typeof remedyObj==='object' ? (remedyObj[LANG]||remedyObj.en) : remedyObj)
+      : (LANG==='ta'?'தகுதியான ஜோதிட நிபுணரை அணுகவும்.':LANG==='hi'?'योग्य ज्योतिषी से परामर्श करें।':'Consult a qualified astrologer for specific remediation guidance.');
     const div = document.createElement('div');
     div.className = 'strength-item strength-fail';
     div.innerHTML = `<div class="strength-name">❌ ${name} — Remedy Required</div><div class="strength-body">${remedy}</div>`;
