@@ -976,45 +976,36 @@ export default function MatchPage() {
       // Strip all scripts so no old JS overrides our static HTML
       tmpl = tmpl.replace(/<script[\s\S]*?<\/script>/gi, '')
       // Try window.open + document.write (works in all browsers)
-      // Render in hidden iframe (scripts execute), wait for init(), then html2pdf
+      // Send to server-side PDF generation API
       const n1clean = (n1 || 'Person1').replace(/[^a-zA-Z0-9]/g, '_')
       const n2clean = (n2 || 'Person2').replace(/[^a-zA-Z0-9]/g, '_')
       const filename = `VedicHora_${n1clean}_${n2clean}_Porutham.pdf`
 
-      // Load html2pdf.js
-      await new Promise<void>((resolve, reject) => {
-        if ((window as any).html2pdf) { resolve(); return }
-        const s = document.createElement('script')
-        s.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js'
-        s.onload = () => resolve()
-        s.onerror = () => reject(new Error('Failed to load html2pdf'))
-        document.head.appendChild(s)
+      const res = await fetch('/api/pdf/generate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ html: tmpl, filename })
       })
 
-      // Step 1: Render in hidden iframe so <script> tags execute and init() runs
-      const iframe = document.createElement('iframe')
-      iframe.style.cssText = 'position:fixed;left:-9999px;top:0;width:794px;height:1200px;border:none;'
-      document.body.appendChild(iframe)
-      const iDoc = iframe.contentDocument!
-      iDoc.open(); iDoc.write(tmpl); iDoc.close()
+      if (!res.ok) throw new Error('PDF generation failed')
+
+      const contentType = res.headers.get('content-type') || ''
       
-      // Step 2: Wait for init() to fully render all content
-      await new Promise(r => setTimeout(r, 2500))
-      
-      // Step 3: html2pdf from the already-rendered iframe body
-      const iBody = iframe.contentDocument?.body
-      if (!iBody) throw new Error('iframe body not found')
-      
-      const opt = {
-        margin: 0,
-        filename,
-        image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { scale: 2, useCORS: true, logging: false, allowTaint: true },
-        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
-        pagebreak: { mode: ['css', 'legacy'], before: '.page-break' }
+      if (contentType.includes('application/pdf')) {
+        // Server returned real PDF — download directly
+        const blob = await res.blob()
+        const url = URL.createObjectURL(blob)
+        const a = document.createElement('a')
+        a.href = url; a.download = filename
+        document.body.appendChild(a); a.click()
+        document.body.removeChild(a)
+        setTimeout(() => URL.revokeObjectURL(url), 5000)
+      } else {
+        // Fallback: server returned HTML — open print dialog
+        const html = await res.text()
+        const w = window.open('', '_blank')
+        if (w) { w.document.write(html); w.document.close(); setTimeout(() => w.print(), 1000) }
       }
-      await (window as any).html2pdf().set(opt).from(iBody).save()
-      document.body.removeChild(iframe)
           } catch(e) { alert('Report failed: ' + String(e)) }
     setPdfLoading(null)
   }
