@@ -3,7 +3,7 @@
 const nextConfig = {
   typescript: { ignoreBuildErrors: true, tsconfigPath: "./tsconfig.json" },
   reactStrictMode: true,
-  serverExternalPackages: ['puppeteer-core', '@sparticuz/chromium'],
+  experimental: { serverComponentsExternalPackages: ['puppeteer-core', '@sparticuz/chromium'] },
   async headers() {
     return [
       {
