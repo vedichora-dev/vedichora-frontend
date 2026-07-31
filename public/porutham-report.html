@@ -693,7 +693,10 @@ function renderBirthDetails() {
   const el2 = document.getElementById('pada2'); if(el2) el2.textContent = bridePada ? bridePada + '/4' : '';
   const cdEl = document.getElementById('cover-date'); if(cdEl) cdEl.textContent = [DATA.dob1, DATA.dob2].filter(Boolean).join(' · ');
 
-  const warn = DATA.RajjuWarning || DATA.rajjuWarning;
+  const warnEn = DATA.RajjuWarning || DATA.rajjuWarning || '';
+  const warnTa = DATA.RajjuWarningTa || DATA.rajjuWarningTa || '';
+  const warnHi = DATA.RajjuWarningHi || DATA.rajjuWarningHi || '';
+  const warn = LANG==='ta' && warnTa ? warnTa : LANG==='hi' && warnHi ? warnHi : warnEn;
   if (warn) {
     const rwEl = document.getElementById('rajju-warning'); if(rwEl) rwEl.style.display = '';
     const rwtEl = document.getElementById('rajju-warning-text'); if(rwtEl) rwtEl.textContent = warn;
