@@ -984,7 +984,7 @@ export default function MatchPage() {
       const res = await fetch('/api/pdf/generate', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ html: tmpl, filename })
+        body: JSON.stringify({ html: tmpl, filename, data: pdfData })
       })
 
       if (!res.ok) throw new Error('PDF generation failed')
