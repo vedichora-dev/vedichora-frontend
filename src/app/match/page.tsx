@@ -634,7 +634,7 @@ export default function MatchPage() {
     setPdfLoading('gen')
     try {
       // Fetch HTML template
-      const tmplRes = await fetch('/porutham-report.html')
+      const tmplRes = await fetch(`/porutham-report.html?v=${Date.now()}`)
       let tmpl = await tmplRes.text()
 
       // Build data object with all normalised field names
@@ -991,21 +991,15 @@ export default function MatchPage() {
 
       const contentType = res.headers.get('content-type') || ''
       
-      if (contentType.includes('application/pdf')) {
-        // Server returned real PDF — download directly
-        const blob = await res.blob()
-        const url = URL.createObjectURL(blob)
-        const a = document.createElement('a')
-        a.href = url; a.download = filename
-        document.body.appendChild(a); a.click()
-        document.body.removeChild(a)
-        setTimeout(() => URL.revokeObjectURL(url), 5000)
-      } else {
-        // Fallback: server returned HTML — open print dialog
-        const html = await res.text()
-        const w = window.open('', '_blank')
-        if (w) { w.document.write(html); w.document.close(); setTimeout(() => w.print(), 1000) }
-      }
+      const blob = await res.blob()
+      const isPdf = contentType.includes('application/pdf')
+      const dlFilename = isPdf ? filename : filename.replace('.pdf', '.html')
+      const url = URL.createObjectURL(blob)
+      const a = document.createElement('a')
+      a.href = url; a.download = dlFilename
+      document.body.appendChild(a); a.click()
+      document.body.removeChild(a)
+      setTimeout(() => URL.revokeObjectURL(url), 5000)
           } catch(e) { alert('Report failed: ' + String(e)) }
     setPdfLoading(null)
   }
