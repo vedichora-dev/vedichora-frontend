@@ -267,7 +267,8 @@ export default function ChartPage() {
         Year:dob.yyyy, Month:dob.mm, Day:dob.dd,
         Hour:hour, Minute:minute, Second:0,
         PlaceName: place||'Chennai, India',
-        UtcOffsetHours:5.5, AyanamsaType:'Lahiri',
+        // UtcOffsetHours intentionally omitted — backend auto-resolves from place+date (incl DST)
+        AyanamsaType:'Lahiri',
         Language:language,
       }
       // If no lat/lng from city autocomplete selection, try to geocode first
