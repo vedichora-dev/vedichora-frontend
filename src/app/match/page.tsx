@@ -1022,22 +1022,10 @@ export default function MatchPage() {
       const n2clean = (n2 || 'Person2').replace(/[^a-zA-Z0-9]/g, '_')
       const filename = `VedicHora_${n1clean}_${n2clean}_Porutham.pdf`
 
-      // Inject __VH_DATA so HTML fallback also renders correctly when opened in browser
+      // Inject __VH_DATA then download directly as HTML
       const tmplWithData = tmpl.replace('</head>', `<script>window.__VH_DATA=${JSON.stringify(data)}<\/script></head>`)
-
-      const res = await fetch('/api/pdf/generate', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ html: tmplWithData, filename, data: data })
-      })
-
-      if (!res.ok) throw new Error('PDF generation failed')
-
-      const contentType = res.headers.get('content-type') || ''
-      
-      const blob = await res.blob()
-      const isPdf = contentType.includes('application/pdf')
-      const dlFilename = isPdf ? filename : filename.replace('.pdf', '.html')
+      const dlFilename = filename.replace('.pdf', '.html')
+      const blob = new Blob([tmplWithData], { type: 'text/html;charset=utf-8' })
       const url = URL.createObjectURL(blob)
       const a = document.createElement('a')
       a.href = url; a.download = dlFilename
@@ -1532,6 +1520,68 @@ export default function MatchPage() {
               </div>
             </div>
           </div>
+
+          {/* VedicHora Rating + Advanced Report Hook */}
+          {result && (() => {
+            const r = result as any
+            const ashta = r.AshtaKootaTotal > 0 ? (r.AshtaKootaScore / r.AshtaKootaTotal) * 4 : 2
+            const pathu = r.PathuPoruthamTotal > 0 ? (r.PathuPoruthamScore / r.PathuPoruthamTotal) * 4 : 2
+            const doshaPenalty = (!r.RajjuPass ? 1.5 : 0) + (r.VedhaPresent ? 0.5 : 0)
+            const rawScore = Math.max(0, Math.min(10, ashta + pathu - doshaPenalty))
+            const score = Math.round(rawScore * 10) / 10
+            const stars = score >= 8.5 ? '★★★★★' : score >= 7 ? '★★★★☆' : score >= 5 ? '★★★☆☆' : score >= 3 ? '★★☆☆☆' : '★☆☆☆☆'
+            const ratingText = score >= 8.5 ? 'Exceptional match' : score >= 7 ? 'Good compatibility with caution periods' : score >= 5 ? 'Moderate match — conscious effort needed' : 'Challenging match — consult an astrologer'
+            return (
+              <div style={{ background:'linear-gradient(135deg,#3D0808 0%,#6B0000 100%)',
+                borderRadius:'12px', padding:'20px', color:'#fff', textAlign:'center', marginBottom:'16px' }}>
+                <div style={{ fontSize:'10px', letterSpacing:'.15em', textTransform:'uppercase',
+                  color:'#C8A96A', marginBottom:'6px', fontFamily:'Cinzel,serif' }}>ॐ VedicHora Couple Rating</div>
+                <div style={{ fontSize:'24px', marginBottom:'2px' }}>{stars}</div>
+                <div style={{ fontSize:'26px', fontWeight:700, fontFamily:'Cinzel,serif', marginBottom:'4px' }}>{score.toFixed(1)} / 10</div>
+                <div style={{ fontSize:'12px', color:'#C8A96A', marginBottom:'16px' }}>{ratingText}</div>
+
+                {/* Teaser — upcoming challenge windows */}
+                <div style={{ background:'rgba(255,255,255,.1)', borderRadius:'8px',
+                  padding:'12px 16px', marginBottom:'14px', textAlign:'left' }}>
+                  <div style={{ fontSize:'9px', fontWeight:700, textTransform:'uppercase',
+                    letterSpacing:'.1em', color:'#C8A96A', marginBottom:'8px' }}>⚠ Upcoming Challenge Windows</div>
+                  {!r.RajjuPass && (
+                    <div style={{ display:'flex', alignItems:'center', gap:'8px', marginBottom:'6px' }}>
+                      <span style={{ fontFamily:'Cinzel,serif', fontWeight:700, color:'#fff', minWidth:'80px' }}>
+                        Rajju Dosha
+                      </span>
+                      <div style={{ flex:1, height:'6px', borderRadius:'3px', background:'rgba(255,255,255,.2)' }}>
+                        <div style={{ width:'85%', height:'100%', borderRadius:'3px', background:'#C62828' }}></div>
+                      </div>
+                      <span style={{ fontSize:'9px', color:'#ff9999' }}>CRITICAL</span>
+                    </div>
+                  )}
+                  <div style={{ display:'flex', alignItems:'center', gap:'8px', filter:'blur(3px)', opacity:0.5 }}>
+                    <span style={{ fontFamily:'Cinzel,serif', fontWeight:700, color:'#fff', minWidth:'80px' }}>20XX–20XX</span>
+                    <div style={{ flex:1, height:'6px', borderRadius:'3px', background:'rgba(255,255,255,.2)' }}>
+                      <div style={{ width:'70%', height:'100%', borderRadius:'3px', background:'#C62828' }}></div>
+                    </div>
+                    <span style={{ fontSize:'9px', color:'#ff9999' }}>HIGH</span>
+                  </div>
+                  <div style={{ fontSize:'9px', color:'rgba(200,169,106,.7)', marginTop:'8px', textAlign:'center' }}>
+                    Get advanced report to see all challenge &amp; alignment windows
+                  </div>
+                </div>
+
+                {/* Buy button — in future this triggers payment */}
+                <button onClick={() => downloadPdf('en')}
+                  style={{ display:'block', width:'100%', padding:'13px',
+                    background:'#C8A96A', color:'#3D0808', border:'none', borderRadius:'8px',
+                    fontFamily:'Cinzel,serif', fontSize:'12px', fontWeight:700,
+                    letterSpacing:'.08em', cursor:'pointer', textTransform:'uppercase' }}>
+                  ✦ Download Full Vedic Report
+                </button>
+                <div style={{ fontSize:'9px', color:'rgba(200,169,106,.6)', marginTop:'6px' }}>
+                  Includes year-by-year planetary overlay predictions &amp; remedies
+                </div>
+              </div>
+            )
+          })()}
 
           {/* PDF Download — works for everyone, no login required */}
           <div style={{ background:'var(--bg2)', border:'1px solid var(--bd)', borderRadius:'12px', padding:'18px 20px' }}>
