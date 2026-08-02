@@ -102,6 +102,32 @@
   .lang-bar{background:var(--crim);padding:6px 20px;display:flex;gap:8px;justify-content:center;}
   .lang-btn{background:transparent;border:1px solid rgba(255,255,255,.3);color:rgba(255,255,255,.7);padding:3px 12px;border-radius:20px;cursor:pointer;font-size:10px;}
   .lang-btn.active{background:var(--gold2);border-color:var(--gold2);color:#000;font-weight:700;}
+
+  /* ── Overlay predictions ── */
+  .overlay-section{margin-top:30px;}
+  .overlay-title{font-family:'Cinzel',serif;font-size:13px;font-weight:700;color:var(--crim);
+    text-transform:uppercase;letter-spacing:.12em;text-align:center;margin-bottom:6px;}
+  .overlay-rule{border:none;border-top:1px solid var(--gold2);margin:0 0 20px;}
+  .year-bar-wrap{display:flex;gap:2px;flex-wrap:wrap;margin-bottom:16px;}
+  .year-bar{display:flex;flex-direction:column;align-items:center;gap:2px;flex:1;min-width:28px;}
+  .year-bar-block{width:100%;height:28px;border-radius:3px;}
+  .year-bar-label{font-size:7px;color:var(--sub);text-align:center;}
+  .bar-good{background:#2E7D32;}
+  .bar-mixed{background:#B45309;}
+  .bar-hard{background:#8B0000;}
+  .conflict-card{background:#FFF5F5;border-left:3px solid #8B0000;border-radius:6px;
+    padding:12px 14px;margin-bottom:10px;}
+  .align-card{background:#F0FFF4;border-left:3px solid #2E7D32;border-radius:6px;
+    padding:12px 14px;margin-bottom:10px;}
+  .overlay-card-year{font-size:9px;font-weight:700;color:var(--sub);
+    text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px;}
+  .overlay-card-title{font-size:11px;font-weight:700;color:var(--crim);margin-bottom:6px;}
+  .overlay-card-body{font-size:10px;line-height:1.6;color:#333;}
+  .overlay-card-body.good-text{color:#1A4D2E;}
+  .two-col{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:8px;}
+  .two-col-hd{font-size:8px;font-weight:700;text-transform:uppercase;
+    letter-spacing:.06em;margin-bottom:4px;color:var(--sub);}
+
 </style>
 </head>
 <body>
@@ -244,6 +270,23 @@
     Per BV Raman (Ch XVIII): "Through a proper marriage Muhurtha, many doshas can be neutralised." Selection of an auspicious Muhurtha is the primary remedy for incompatible poruthams.
   </div>
   <div id="remedies-list"><!-- filled by JS --></div>
+
+  
+  <!-- ── OVERLAY PREDICTIONS SECTION ── -->
+  <div id="overlay-section" class="overlay-section" style="display:none;">
+    <div class="page-break"></div>
+    <h2 class="overlay-title" id="lbl-overlay-title">PLANETARY OVERLAY — YEAR-BY-YEAR PREDICTIONS</h2>
+    <hr class="overlay-rule">
+
+    <!-- Year timeline bar -->
+    <div id="year-bar-wrap" class="year-bar-wrap"></div>
+
+    <!-- Conflict windows -->
+    <div id="conflict-cards"></div>
+
+    <!-- Alignment windows -->
+    <div id="align-cards"></div>
+  </div>
 
   <div class="footer">
     ॐ VedicHora · www.vedichora.com · World's Most Accurate Vedic Astrology Predictions<br>
@@ -705,6 +748,120 @@ function renderBirthDetails() {
   if (warn) {
     const rwEl = document.getElementById('rajju-warning'); if(rwEl) rwEl.style.display = '';
     const rwtEl = document.getElementById('rajju-warning-text'); if(rwtEl) rwtEl.textContent = warn;
+  }
+}
+
+
+// ── Render overlay predictions ────────────────────────────────────────────
+function renderOverlay(deep) {
+  if (!deep) return;
+  const sec = document.getElementById('overlay-section');
+  if (!sec) return;
+  sec.style.display = '';
+
+  // Language
+  const L = LANG === 'ta';
+
+  // Year timeline bar
+  const ys = deep.yearSummary || [];
+  if (ys.length > 0) {
+    const wrap = document.getElementById('year-bar-wrap');
+    if (wrap) {
+      wrap.innerHTML = ys.map(y => {
+        const v = (y.verdict||y.Verdict||'').toLowerCase();
+        const cls = v.includes('favou') || v.includes('good') || v.includes('positive') ? 'bar-good'
+                  : v.includes('chall') || v.includes('diff') || v.includes('hard') ? 'bar-hard'
+                  : 'bar-mixed';
+        return `<div class="year-bar">
+          <div class="year-bar-block ${cls}" title="${y.note||y.Note||''}"></div>
+          <div class="year-bar-label">${y.year||y.Year}</div>
+        </div>`;
+      }).join('');
+    }
+  }
+
+  // Conflict windows (separation windows + severe cross predictions)
+  const conflicts = [];
+  (deep.separationWindows || []).forEach(w => {
+    const ys2 = w.startDate ? new Date(w.startDate).getFullYear() : '';
+    const ye2 = w.endDate   ? new Date(w.endDate).getFullYear()   : '';
+    const range = ys2 === ye2 ? String(ys2) : `${ys2}–${ye2}`;
+    conflicts.push({
+      range,
+      risk: w.riskLevel || 'HIGH',
+      p1: w.groomPeriod || w.GroomPeriod || '',
+      p2: w.bridePeriod || w.BridePeriod || '',
+      note: L ? 'இரு பேரும் கடினமான கிரக காலங்களில் இருக்கிறார்கள். இது உறவில் உராய்வை உருவாக்கலாம்.'
+              : 'Both are running demanding planetary periods simultaneously. Handle with patience — this is timing, not character.'
+    });
+  });
+  (deep.crossPredictions || []).forEach(p => {
+    if ((p.intensity||'') === 'SEVERE' || (p.intensity||'') === 'HIGH') {
+      const ys2 = p.startDate ? new Date(p.startDate).getFullYear() : '';
+      const ye2 = p.endDate   ? new Date(p.endDate).getFullYear()   : '';
+      const range = ys2 === ye2 ? String(ys2) : `${ys2}–${ye2}`;
+      conflicts.push({
+        range,
+        risk: p.intensity,
+        who: p.who || p.Who || '',
+        domain: p.domainInPartner || p.DomainInPartner || '',
+        fromTheirSide: p.fromTheirSide || '',
+        fromPartnerSide: p.fromPartnerSide || '',
+        note: ''
+      });
+    }
+  });
+
+  const cc = document.getElementById('conflict-cards');
+  if (cc && conflicts.length > 0) {
+    const hd = L ? 'சவாலான காலகட்டங்கள்' : 'Challenging Windows';
+    cc.innerHTML = `<div style="font-family:'Cinzel',serif;font-size:11px;font-weight:700;
+      color:#8B0000;text-transform:uppercase;letter-spacing:.1em;margin:16px 0 10px;">${hd}</div>`
+      + conflicts.map(c => `
+      <div class="conflict-card">
+        <div class="overlay-card-year">${c.range}${c.risk ? ' · ' + c.risk : ''}</div>
+        ${c.who ? `<div class="overlay-card-title">${c.who} — affects ${c.domain}</div>` : ''}
+        ${c.fromTheirSide && c.fromPartnerSide ? `
+          <div class="two-col">
+            <div><div class="two-col-hd">${c.who||'Person 1'}</div>
+              <div class="overlay-card-body">${c.fromTheirSide}</div></div>
+            <div><div class="two-col-hd">${L?'துணை':'Partner'}</div>
+              <div class="overlay-card-body">${c.fromPartnerSide}</div></div>
+          </div>` : `<div class="overlay-card-body">${c.p1||c.note}</div>`}
+        ${c.p1 && c.p2 ? `<div class="two-col" style="margin-top:8px;">
+          <div><div class="two-col-hd">${L?'மணமகன்':'Groom'}</div>
+            <div class="overlay-card-body">${c.p1}</div></div>
+          <div><div class="two-col-hd">${L?'மணமகள்':'Bride'}</div>
+            <div class="overlay-card-body">${c.p2}</div></div>
+        </div>` : ''}
+      </div>`).join('');
+  }
+
+  // Alignment windows
+  const aligns = (deep.bestYears || []).concat(
+    (deep.crossPredictions||[]).filter(p => p.intensity==='POSITIVE'||p.intensity==='EXCELLENT')
+  );
+
+  const ac = document.getElementById('align-cards');
+  if (ac && aligns.length > 0) {
+    const hd = L ? 'சாதகமான காலகட்டங்கள்' : 'Favourable Windows';
+    ac.innerHTML = `<div style="font-family:'Cinzel',serif;font-size:11px;font-weight:700;
+      color:#2E7D32;text-transform:uppercase;letter-spacing:.1em;margin:16px 0 10px;">${hd}</div>`
+      + aligns.map(a => {
+        const ys2 = a.startDate ? new Date(a.startDate).getFullYear() : '';
+        const ye2 = a.endDate   ? new Date(a.endDate).getFullYear()   : '';
+        const range = ys2 === ye2 ? String(ys2) : `${ys2}–${ye2}`;
+        return `<div class="align-card">
+          <div class="overlay-card-year">${range}</div>
+          <div class="overlay-card-title good-text">${a.label||a.Label||''}</div>
+          ${a.fromTheirSide ? `<div class="two-col">
+            <div><div class="two-col-hd">${a.who||'Person 1'}</div>
+              <div class="overlay-card-body good-text">${a.fromTheirSide}</div></div>
+            <div><div class="two-col-hd">${L?'துணை':'Partner'}</div>
+              <div class="overlay-card-body good-text">${a.fromPartnerSide||''}</div></div>
+          </div>` : `<div class="overlay-card-body good-text">${a.note||a.Note||''}</div>`}
+        </div>`;
+      }).join('');
   }
 }
 
