@@ -1022,10 +1022,13 @@ export default function MatchPage() {
       const n2clean = (n2 || 'Person2').replace(/[^a-zA-Z0-9]/g, '_')
       const filename = `VedicHora_${n1clean}_${n2clean}_Porutham.pdf`
 
+      // Inject __VH_DATA so HTML fallback also renders correctly when opened in browser
+      const tmplWithData = tmpl.replace('</head>', `<script>window.__VH_DATA=${JSON.stringify(data)}<\/script></head>`)
+
       const res = await fetch('/api/pdf/generate', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ html: tmpl, filename, data: pdfData })
+        body: JSON.stringify({ html: tmplWithData, filename, data: pdfData })
       })
 
       if (!res.ok) throw new Error('PDF generation failed')
