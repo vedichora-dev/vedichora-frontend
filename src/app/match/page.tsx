@@ -1539,33 +1539,60 @@ export default function MatchPage() {
                 <div style={{ fontSize:'26px', fontWeight:700, fontFamily:'Cinzel,serif', marginBottom:'4px' }}>{score.toFixed(1)} / 10</div>
                 <div style={{ fontSize:'12px', color:'#C8A96A', marginBottom:'16px' }}>{ratingText}</div>
 
-                {/* Teaser — upcoming challenge windows */}
-                <div style={{ background:'rgba(255,255,255,.1)', borderRadius:'8px',
-                  padding:'12px 16px', marginBottom:'14px', textAlign:'left' }}>
-                  <div style={{ fontSize:'9px', fontWeight:700, textTransform:'uppercase',
-                    letterSpacing:'.1em', color:'#C8A96A', marginBottom:'8px' }}>⚠ Upcoming Challenge Windows</div>
-                  {!r.RajjuPass && (
-                    <div style={{ display:'flex', alignItems:'center', gap:'8px', marginBottom:'6px' }}>
-                      <span style={{ fontFamily:'Cinzel,serif', fontWeight:700, color:'#fff', minWidth:'80px' }}>
-                        Rajju Dosha
-                      </span>
-                      <div style={{ flex:1, height:'6px', borderRadius:'3px', background:'rgba(255,255,255,.2)' }}>
-                        <div style={{ width:'85%', height:'100%', borderRadius:'3px', background:'#C62828' }}></div>
+                {/* Past challenge hook — show what already happened to build trust */}
+                {(() => {
+                  const now = 2026
+                  const pastChallenges: {year: number, label: string}[] = []
+                  // Rajju dosha affects entire relationship — show recent years
+                  if (!r.RajjuPass) {
+                    pastChallenges.push({ year: now - 4, label: 'Tension & emotional distance' })
+                    pastChallenges.push({ year: now - 2, label: 'Communication breakdown' })
+                  }
+                  // Nadi dosha
+                  if (r.groomNadi && r.brideNadi && r.groomNadi === r.brideNadi) {
+                    pastChallenges.push({ year: now - 3, label: 'Health concerns & stress' })
+                  }
+                  // Low Pathu score
+                  if (r.PathuPoruthamScore < r.PathuPoruthamTotal * 0.5) {
+                    pastChallenges.push({ year: now - 1, label: 'Friction in daily life' })
+                  }
+                  const shown = pastChallenges.slice(0, 1)
+                  const blurred = pastChallenges.slice(1, 3)
+                  return (
+                    <div style={{ background:'rgba(255,255,255,.1)', borderRadius:'8px',
+                      padding:'12px 16px', marginBottom:'14px', textAlign:'left' }}>
+                      <div style={{ fontSize:'9px', fontWeight:700, textTransform:'uppercase',
+                        letterSpacing:'.1em', color:'#C8A96A', marginBottom:'10px' }}>
+                        📍 What the planets show about the past 10 years
                       </div>
-                      <span style={{ fontSize:'9px', color:'#ff9999' }}>CRITICAL</span>
+                      {shown.map((c, i) => (
+                        <div key={i} style={{ display:'flex', alignItems:'center', gap:'8px', marginBottom:'8px' }}>
+                          <span style={{ fontFamily:'Cinzel,serif', fontWeight:700, color:'#fff', minWidth:'40px', fontSize:'13px' }}>{c.year}</span>
+                          <div style={{ flex:1, height:'6px', borderRadius:'3px', background:'rgba(255,255,255,.2)' }}>
+                            <div style={{ width:'80%', height:'100%', borderRadius:'3px', background:'#C62828' }}></div>
+                          </div>
+                          <span style={{ fontSize:'10px', color:'#ffaaaa', maxWidth:'160px' }}>{c.label}</span>
+                        </div>
+                      ))}
+                      {blurred.map((c, i) => (
+                        <div key={i} style={{ display:'flex', alignItems:'center', gap:'8px', marginBottom:'6px',
+                          filter:'blur(4px)', opacity:0.5, pointerEvents:'none' }}>
+                          <span style={{ fontFamily:'Cinzel,serif', fontWeight:700, color:'#fff', minWidth:'40px', fontSize:'13px' }}>{c.year}</span>
+                          <div style={{ flex:1, height:'6px', borderRadius:'3px', background:'rgba(255,255,255,.2)' }}>
+                            <div style={{ width:'65%', height:'100%', borderRadius:'3px', background:'#C62828' }}></div>
+                          </div>
+                          <span style={{ fontSize:'10px', color:'#ffaaaa' }}>••••••••</span>
+                        </div>
+                      ))}
+                      <div style={{ fontSize:'9px', color:'rgba(200,169,106,.8)', marginTop:'10px',
+                        textAlign:'center', fontStyle:'italic' }}>
+                        {pastChallenges.length > 1
+                          ? `${pastChallenges.length - 1} more challenge period${pastChallenges.length > 2 ? 's' : ''} hidden — see full analysis`
+                          : 'See full year-by-year analysis below'}
+                      </div>
                     </div>
-                  )}
-                  <div style={{ display:'flex', alignItems:'center', gap:'8px', filter:'blur(3px)', opacity:0.5 }}>
-                    <span style={{ fontFamily:'Cinzel,serif', fontWeight:700, color:'#fff', minWidth:'80px' }}>20XX–20XX</span>
-                    <div style={{ flex:1, height:'6px', borderRadius:'3px', background:'rgba(255,255,255,.2)' }}>
-                      <div style={{ width:'70%', height:'100%', borderRadius:'3px', background:'#C62828' }}></div>
-                    </div>
-                    <span style={{ fontSize:'9px', color:'#ff9999' }}>HIGH</span>
-                  </div>
-                  <div style={{ fontSize:'9px', color:'rgba(200,169,106,.7)', marginTop:'8px', textAlign:'center' }}>
-                    Get advanced report to see all challenge &amp; alignment windows
-                  </div>
-                </div>
+                  )
+                })()}
 
                 {/* See Details — expands overlay inline */}
                 <button onClick={() => setShowAdvanced(true)}
@@ -1573,7 +1600,7 @@ export default function MatchPage() {
                     background:'#C8A96A', color:'#3D0808', border:'none', borderRadius:'8px',
                     fontFamily:'Cinzel,serif', fontSize:'12px', fontWeight:700,
                     letterSpacing:'.08em', cursor:'pointer', textTransform:'uppercase' }}>
-                  ✦ See Year-by-Year Predictions
+                  ✦ Did you face issues in these years? See full analysis
                 </button>
                 <div style={{ fontSize:'9px', color:'rgba(200,169,106,.6)', marginTop:'6px' }}>
                   Planetary overlay · Challenge &amp; alignment windows · Remedies
