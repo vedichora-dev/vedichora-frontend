@@ -1022,16 +1022,15 @@ export default function MatchPage() {
       const n2clean = (n2 || 'Person2').replace(/[^a-zA-Z0-9]/g, '_')
       const filename = `VedicHora_${n1clean}_${n2clean}_Porutham.pdf`
 
-      // Inject __VH_DATA then download directly as HTML
-      const tmplWithData = tmpl.replace('</head>', `<script>window.__VH_DATA=${JSON.stringify(data)}<\/script></head>`)
-      const dlFilename = filename.replace('.pdf', '.html')
-      const blob = new Blob([tmplWithData], { type: 'text/html;charset=utf-8' })
-      const url = URL.createObjectURL(blob)
-      const a = document.createElement('a')
-      a.href = url; a.download = dlFilename
-      document.body.appendChild(a); a.click()
-      document.body.removeChild(a)
-      setTimeout(() => URL.revokeObjectURL(url), 5000)
+      // Open in new window and trigger print dialog (Save as PDF)
+      const tmplWithData = tmpl.replace('</head>', `<script>window.__VH_DATA=${JSON.stringify(data)}<\/script><style>@media print{.no-print{display:none!important;}}</style></head>`)
+      const w = window.open('', '_blank')
+      if (!w) throw new Error('Popup blocked — please allow popups for this site')
+      w.document.open()
+      w.document.write(tmplWithData)
+      w.document.close()
+      w.document.title = filename.replace('.pdf','')
+      setTimeout(() => { w.focus(); w.print() }, 1500)
           } catch(e) { alert('Report failed: ' + String(e)) }
     setPdfLoading(null)
   }
@@ -1568,20 +1567,37 @@ export default function MatchPage() {
                   </div>
                 </div>
 
-                {/* Buy button — in future this triggers payment */}
-                <button onClick={() => downloadPdf('en')}
+                {/* See Details — expands overlay inline */}
+                <button onClick={() => setShowAdvanced(true)}
                   style={{ display:'block', width:'100%', padding:'13px',
                     background:'#C8A96A', color:'#3D0808', border:'none', borderRadius:'8px',
                     fontFamily:'Cinzel,serif', fontSize:'12px', fontWeight:700,
                     letterSpacing:'.08em', cursor:'pointer', textTransform:'uppercase' }}>
-                  ✦ Download Full Vedic Report
+                  ✦ See Year-by-Year Predictions
                 </button>
                 <div style={{ fontSize:'9px', color:'rgba(200,169,106,.6)', marginTop:'6px' }}>
-                  Includes year-by-year planetary overlay predictions &amp; remedies
+                  Planetary overlay · Challenge &amp; alignment windows · Remedies
                 </div>
               </div>
             )
           })()}
+
+          {/* Inline Advanced — shown when user clicks See Details */}
+          {showAdvanced && result && (
+            <div style={{ border:'1px solid var(--bd)', borderRadius:'12px',
+              background:'var(--bg2)', padding:'20px', marginBottom:'16px' }}>
+              <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:'16px' }}>
+                <div style={{ fontFamily:'Cinzel,serif', fontSize:'13px', fontWeight:700,
+                  color:'var(--acc)', textTransform:'uppercase', letterSpacing:'.08em' }}>
+                  ✦ Planetary Overlay Predictions
+                </div>
+                <button onClick={() => setShowAdvanced(false)}
+                  style={{ background:'transparent', border:'none', cursor:'pointer',
+                    fontSize:'18px', color:'var(--txm)', lineHeight:1 }}>✕</button>
+              </div>
+              <DashaMatchSection result={result} lang={lang} />
+            </div>
+          )}
 
           {/* PDF Download — works for everyone, no login required */}
           <div style={{ background:'var(--bg2)', border:'1px solid var(--bd)', borderRadius:'12px', padding:'18px 20px' }}>
