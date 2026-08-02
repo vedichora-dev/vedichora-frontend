@@ -650,6 +650,10 @@ export default function MatchPage() {
         // DOB from form date pickers
         dob1: d1?.yyyy ? `${String(d1.dd).padStart(2,'0')}/${String(d1.mm).padStart(2,'0')}/${d1.yyyy}` : (r.dob1 || ''),
         dob2: d2?.yyyy ? `${String(d2.dd).padStart(2,'0')}/${String(d2.mm).padStart(2,'0')}/${d2.yyyy}` : (r.dob2 || ''),
+        tob1: d1?.unknownTime ? 'Unknown' : (d1?.hr && d1?.yyyy ? `${d1.hr}:${String(d1.mi||0).padStart(2,'0')} ${d1.ap||'AM'}` : ''),
+        tob2: d2?.unknownTime ? 'Unknown' : (d2?.hr && d2?.yyyy ? `${d2.hr}:${String(d2.mi||0).padStart(2,'0')} ${d2.ap||'AM'}` : ''),
+        pob1: typeof place1 !== 'undefined' ? place1 : '',
+        pob2: typeof place2 !== 'undefined' ? place2 : '',
         // Ashta Koota
         AshtaKootaScore:  r.AshtaKootaScore  ?? r.ashtaKootaScore  ?? 0,
         AshtaKootaTotal:  r.AshtaKootaTotal  ?? r.ashtaKootaTotal  ?? 36,
