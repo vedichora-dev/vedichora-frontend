@@ -20,7 +20,7 @@ function buildPayload(n: string, d: DateValue, p: string, lat?: number, lng?: nu
     Hour: tm.hour, Minute: tm.minute, Second: 0,
     PlaceName: p || 'Chennai, India',
     Latitude: lat, Longitude: lng,
-    UtcOffsetHours: 5.5, AyanamsaType: 'Lahiri',
+    // UtcOffsetHours omitted — backend auto-resolves timezone+DST from PlaceName+birthDate AyanamsaType: 'Lahiri',
     Gender: g,
   }
 }
@@ -1131,7 +1131,7 @@ export default function MatchPage() {
           Hour: tm.hour, Minute: tm.minute, Second: 0,
           PlaceName: 'Chennai, India',
           Latitude: geo.lat, Longitude: geo.lng,
-          UtcOffsetHours: 5.5, AyanamsaType: 'Lahiri',
+          // UtcOffsetHours omitted — backend auto-resolves timezone+DST from PlaceName+birthDate AyanamsaType: 'Lahiri',
         }
       }
 
