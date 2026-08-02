@@ -44,7 +44,7 @@ Route (app)                              Size     First Load JS
 ├ ○ /dashboard                           3.37 kB         110 kB
 ├ ○ /jyoti                               5.91 kB         112 kB
 ├ ○ /learn                               2.52 kB        84.5 kB
-├ ○ /match                               24.9 kB         131 kB
+├ ○ /match                               25.1 kB         131 kB
 ├ ○ /muhurta                             2.58 kB         109 kB
 ├ ○ /numerology                          3.73 kB         107 kB
 ├ ○ /phone-login                         2.14 kB         115 kB
