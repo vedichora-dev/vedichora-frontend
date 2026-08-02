@@ -717,6 +717,8 @@ export default function MatchPage() {
         bridePada:      r.BridePada  ?? r.bridePada  ?? '',
         groomPada:      r.groomPada  ?? r.GroomPada  ?? '',
         bridePada:      r.bridePada  ?? r.BridePada  ?? '',
+        // Deep overlay engine results for year predictions section
+        deepResult: (result as any)?.deepResult ?? null,
       }
 
       // Replace ALL {{placeholders}} directly in HTML string
