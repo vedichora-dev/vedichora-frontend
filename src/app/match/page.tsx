@@ -1542,7 +1542,7 @@ export default function MatchPage() {
                 {/* Past challenge hook — show what already happened to build trust */}
                 {(() => {
                   const now = 2026
-                  const pastChallenges: {year: number, label: string}[] = []
+                  const pastChallenges: Array<{year: number; label: string}> = []
                   // Rajju dosha affects entire relationship — show recent years
                   if (!r.RajjuPass) {
                     pastChallenges.push({ year: now - 4, label: 'Tension & emotional distance' })
