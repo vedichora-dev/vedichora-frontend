@@ -1,8 +1,8 @@
 
 Running 8 tests using 2 workers
 
-[1/8] [mobile] › e2e/functional-test.spec.js:45:3 › GUEST CHART › Guest chart — no redirect, city dropdown closes, chart generates
-[2/8] [chromium] › e2e/functional-test.spec.js:45:3 › GUEST CHART › Guest chart — no redirect, city dropdown closes, chart generates
+[1/8] [chromium] › e2e/functional-test.spec.js:45:3 › GUEST CHART › Guest chart — no redirect, city dropdown closes, chart generates
+[2/8] [mobile] › e2e/functional-test.spec.js:45:3 › GUEST CHART › Guest chart — no redirect, city dropdown closes, chart generates
 [mobile] › e2e/functional-test.spec.js:45:3 › GUEST CHART › Guest chart — no redirect, city dropdown closes, chart generates
 ✓ No redirect to signin
 
@@ -27,16 +27,10 @@ City 0 final value: "Chennai"
 
 [3/8] (retries) [chromium] › e2e/functional-test.spec.js:45:3 › GUEST CHART › Guest chart — no redirect, city dropdown closes, chart generates (retry #1)
 [4/8] (retries) [mobile] › e2e/functional-test.spec.js:45:3 › GUEST CHART › Guest chart — no redirect, city dropdown closes, chart generates (retry #1)
-[mobile] › e2e/functional-test.spec.js:45:3 › GUEST CHART › Guest chart — no redirect, city dropdown closes, chart generates
-✓ No redirect to signin
-
-[chromium] › e2e/functional-test.spec.js:45:3 › GUEST CHART › Guest chart — no redirect, city dropdown closes, chart generates
 ✓ No redirect to signin
 
 [mobile] › e2e/functional-test.spec.js:45:3 › GUEST CHART › Guest chart — no redirect, city dropdown closes, chart generates
-City dropdown for "Chennai" appeared: false
-
-No dropdown for "Chennai" — accepting typed value
+✓ No redirect to signin
 
 [chromium] › e2e/functional-test.spec.js:45:3 › GUEST CHART › Guest chart — no redirect, city dropdown closes, chart generates
 City dropdown for "Chennai" appeared: false
@@ -44,9 +38,14 @@ City dropdown for "Chennai" appeared: false
 No dropdown for "Chennai" — accepting typed value
 
 [mobile] › e2e/functional-test.spec.js:45:3 › GUEST CHART › Guest chart — no redirect, city dropdown closes, chart generates
+City dropdown for "Chennai" appeared: false
+
+No dropdown for "Chennai" — accepting typed value
+
+[chromium] › e2e/functional-test.spec.js:45:3 › GUEST CHART › Guest chart — no redirect, city dropdown closes, chart generates
 City 0 final value: "Chennai"
 
-[chromium] › e2e/functional-test.spec.js:45:3 › GUEST CHART › Guest chart — no redirect, city dropdown closes, chart generates
+[mobile] › e2e/functional-test.spec.js:45:3 › GUEST CHART › Guest chart — no redirect, city dropdown closes, chart generates
 City 0 final value: "Chennai"
 
   1) [chromium] › e2e/functional-test.spec.js:45:3 › GUEST CHART › Guest chart — no redirect, city dropdown closes, chart generates 
@@ -114,7 +113,6 @@ City 0 final value: "Chennai"
     ────────────────────────────────────────────────────────────────────────────────────────────────
 
 
-[5/8] [chromium] › e2e/functional-test.spec.js:86:3 › CITY DROPDOWN › City dropdown closes after selection
   2) [mobile] › e2e/functional-test.spec.js:45:3 › GUEST CHART › Guest chart — no redirect, city dropdown closes, chart generates 
 
     Test timeout of 60000ms exceeded.
@@ -180,6 +178,7 @@ City 0 final value: "Chennai"
     ────────────────────────────────────────────────────────────────────────────────────────────────
 
 
+[5/8] [chromium] › e2e/functional-test.spec.js:86:3 › CITY DROPDOWN › City dropdown closes after selection
 [6/8] [mobile] › e2e/functional-test.spec.js:86:3 › CITY DROPDOWN › City dropdown closes after selection
 [7/8] (retries) [chromium] › e2e/functional-test.spec.js:86:3 › CITY DROPDOWN › City dropdown closes after selection (retry #1)
 [8/8] (retries) [mobile] › e2e/functional-test.spec.js:86:3 › CITY DROPDOWN › City dropdown closes after selection (retry #1)
@@ -356,28 +355,109 @@ City 1 final value: "Coimbatore"
 Clicking Calculate button...
 
 [chromium] › e2e/functional-test.spec.js:120:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login
-Match result visible: true
+Match result visible: false
 
-[11/8] [chromium] › e2e/functional-test.spec.js:166:3 › NUMEROLOGY › Numerology — calculates life path number
-[chromium] › e2e/functional-test.spec.js:166:3 › NUMEROLOGY › Numerology — calculates life path number
-Name input visible: false
-
+[11/8] (retries) [chromium] › e2e/functional-test.spec.js:120:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login (retry #1)
 [mobile] › e2e/functional-test.spec.js:120:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login
 Match result visible: true
+
+[chromium] › e2e/functional-test.spec.js:120:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login
+Match selects count: 12
 
 [12/8] [mobile] › e2e/functional-test.spec.js:166:3 › NUMEROLOGY › Numerology — calculates life path number
 [mobile] › e2e/functional-test.spec.js:166:3 › NUMEROLOGY › Numerology — calculates life path number
 Name input visible: false
 
-[chromium] › e2e/functional-test.spec.js:166:3 › NUMEROLOGY › Numerology — calculates life path number
-Numerology result visible: true
+[chromium] › e2e/functional-test.spec.js:120:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login
+City dropdown for "Chennai" appeared: false
+
+No dropdown for "Chennai" — accepting typed value
+
+City 0 final value: "Chennai"
+
+City dropdown for "Coimbatore" appeared: false
+
+No dropdown for "Coimbatore" — accepting typed value
+
+City 1 final value: "Coimbatore"
+
+Clicking Calculate button...
 
 [mobile] › e2e/functional-test.spec.js:166:3 › NUMEROLOGY › Numerology — calculates life path number
 Numerology result visible: true
 
-  4 failed
+[chromium] › e2e/functional-test.spec.js:120:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login
+Match result visible: false
+
+  5) [chromium] › e2e/functional-test.spec.js:120:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login 
+
+    Error: expect(received).toBeTruthy()
+
+    Received: false
+
+      158 |     const hasResult = /Ashta|Koota|Porutham|\/36|score|compatible/i.test(text)
+      159 |     console.log('Match result visible:', hasResult)
+    > 160 |     expect(hasResult).toBeTruthy()
+          |                       ^
+      161 |   })
+      162 | })
+      163 |
+        at /home/runner/work/vedichora-frontend/vedichora-frontend/e2e/functional-test.spec.js:160:23
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/functional-test-GUEST-MATC-b4d71-compatibility-without-login-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/functional-test-GUEST-MATC-b4d71-compatibility-without-login-chromium/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/functional-test-GUEST-MATC-b4d71-compatibility-without-login-chromium/error-context.md
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: expect(received).toBeTruthy()
+
+    Received: false
+
+      158 |     const hasResult = /Ashta|Koota|Porutham|\/36|score|compatible/i.test(text)
+      159 |     console.log('Match result visible:', hasResult)
+    > 160 |     expect(hasResult).toBeTruthy()
+          |                       ^
+      161 |   })
+      162 | })
+      163 |
+        at /home/runner/work/vedichora-frontend/vedichora-frontend/e2e/functional-test.spec.js:160:23
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/functional-test-GUEST-MATC-b4d71-compatibility-without-login-chromium-retry1/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/functional-test-GUEST-MATC-b4d71-compatibility-without-login-chromium-retry1/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/functional-test-GUEST-MATC-b4d71-compatibility-without-login-chromium-retry1/error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/functional-test-GUEST-MATC-b4d71-compatibility-without-login-chromium-retry1/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/functional-test-GUEST-MATC-b4d71-compatibility-without-login-chromium-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+
+[13/8] [chromium] › e2e/functional-test.spec.js:166:3 › NUMEROLOGY › Numerology — calculates life path number
+[chromium] › e2e/functional-test.spec.js:166:3 › NUMEROLOGY › Numerology — calculates life path number
+Name input visible: false
+
+Numerology result visible: true
+
+  5 failed
     [chromium] › e2e/functional-test.spec.js:45:3 › GUEST CHART › Guest chart — no redirect, city dropdown closes, chart generates 
     [chromium] › e2e/functional-test.spec.js:86:3 › CITY DROPDOWN › City dropdown closes after selection 
+    [chromium] › e2e/functional-test.spec.js:120:3 › GUEST MATCHMAKING › Guest matchmaking — generates compatibility without login 
     [mobile] › e2e/functional-test.spec.js:45:3 › GUEST CHART › Guest chart — no redirect, city dropdown closes, chart generates 
     [mobile] › e2e/functional-test.spec.js:86:3 › CITY DROPDOWN › City dropdown closes after selection 
-  4 passed (4.7m)
+  3 passed (5.1m)
