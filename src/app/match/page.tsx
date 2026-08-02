@@ -572,6 +572,96 @@ function DashaMatchSection({ result, lang }: { result: any; lang: string }) {
 }
 
 
+// ── VedicHora Rating Box Component ──────────────────────────────────────
+function VHRatingBox({ result, onSeeDetails }: { result: any, onSeeDetails: () => void }) {
+  const r = result as any
+  const ashta = r.AshtaKootaTotal > 0 ? (r.AshtaKootaScore / r.AshtaKootaTotal) * 4 : 2
+  const pathu = r.PathuPoruthamTotal > 0 ? (r.PathuPoruthamScore / r.PathuPoruthamTotal) * 4 : 2
+  const doshaPenalty = (!r.RajjuPass ? 1.5 : 0) + (r.VedhaPresent ? 0.5 : 0)
+  const rawScore = Math.max(0, Math.min(10, ashta + pathu - doshaPenalty))
+  const score = Math.round(rawScore * 10) / 10
+  const stars = score >= 8.5 ? '★★★★★' : score >= 7 ? '★★★★☆' : score >= 5 ? '★★★☆☆' : score >= 3 ? '★★☆☆☆' : '★☆☆☆☆'
+  const ratingText = score >= 8.5 ? 'Exceptional match'
+    : score >= 7 ? 'Good compatibility with caution periods'
+    : score >= 5 ? 'Moderate match — conscious effort needed'
+    : 'Challenging match — consult an astrologer'
+
+  const now = 2026
+  const pastChallenges = []
+  if (!r.RajjuPass) {
+    pastChallenges.push({ year: now - 4, label: 'Tension & emotional distance' })
+    pastChallenges.push({ year: now - 2, label: 'Communication breakdown' })
+  }
+  if (r.groomNadi && r.brideNadi && r.groomNadi === r.brideNadi) {
+    pastChallenges.push({ year: now - 3, label: 'Health concerns & stress' })
+  }
+  if (r.PathuPoruthamScore < (r.PathuPoruthamTotal || 10) * 0.5) {
+    pastChallenges.push({ year: now - 1, label: 'Friction in daily life' })
+  }
+  const shown = pastChallenges.slice(0, 1)
+  const blurred = pastChallenges.slice(1, 3)
+
+  return (
+    <div style={{ background:'linear-gradient(135deg,#3D0808 0%,#6B0000 100%)',
+      borderRadius:'12px', padding:'20px', color:'#fff', textAlign:'center', marginBottom:'16px' }}>
+      <div style={{ fontSize:'10px', letterSpacing:'.15em', textTransform:'uppercase',
+        color:'#C8A96A', marginBottom:'6px', fontFamily:'Cinzel,serif' }}>ॐ VedicHora Couple Rating</div>
+      <div style={{ fontSize:'24px', marginBottom:'2px' }}>{stars}</div>
+      <div style={{ fontSize:'26px', fontWeight:700, fontFamily:'Cinzel,serif', marginBottom:'4px' }}>{score.toFixed(1)} / 10</div>
+      <div style={{ fontSize:'12px', color:'#C8A96A', marginBottom:'16px' }}>{ratingText}</div>
+
+      <div style={{ background:'rgba(255,255,255,.1)', borderRadius:'8px',
+        padding:'12px 16px', marginBottom:'14px', textAlign:'left' }}>
+        <div style={{ fontSize:'9px', fontWeight:700, textTransform:'uppercase',
+          letterSpacing:'.1em', color:'#C8A96A', marginBottom:'10px' }}>
+          📍 What the planets show about the past 10 years
+        </div>
+        {shown.map((c: any, i: number) => (
+          <div key={i} style={{ display:'flex', alignItems:'center', gap:'10px', marginBottom:'8px' }}>
+            <span style={{ fontFamily:'Cinzel,serif', fontWeight:700, color:'#fff', minWidth:'44px', fontSize:'14px' }}>{c.year}</span>
+            <div style={{ flex:1, height:'7px', borderRadius:'4px', background:'rgba(255,255,255,.15)' }}>
+              <div style={{ width:'80%', height:'100%', borderRadius:'4px', background:'#C62828' }}></div>
+            </div>
+            <span style={{ fontSize:'10px', color:'#ffaaaa', maxWidth:'170px' }}>{c.label}</span>
+          </div>
+        ))}
+        {blurred.map((c: any, i: number) => (
+          <div key={i} style={{ display:'flex', alignItems:'center', gap:'10px', marginBottom:'6px',
+            filter:'blur(4px)', opacity:0.45 }}>
+            <span style={{ fontFamily:'Cinzel,serif', fontWeight:700, color:'#fff', minWidth:'44px', fontSize:'14px' }}>{c.year}</span>
+            <div style={{ flex:1, height:'7px', borderRadius:'4px', background:'rgba(255,255,255,.15)' }}>
+              <div style={{ width:'65%', height:'100%', borderRadius:'4px', background:'#C62828' }}></div>
+            </div>
+            <span style={{ fontSize:'10px', color:'#ffaaaa' }}>••••••••••</span>
+          </div>
+        ))}
+        {pastChallenges.length === 0 && (
+          <div style={{ fontSize:'10px', color:'rgba(200,169,106,.8)' }}>
+            No major challenges found — see full analysis for details.
+          </div>
+        )}
+        <div style={{ fontSize:'9px', color:'rgba(200,169,106,.8)', marginTop:'10px',
+          textAlign:'center', fontStyle:'italic' }}>
+          {blurred.length > 0
+            ? `${blurred.length} more period${blurred.length > 1 ? 's' : ''} hidden — did these years feel difficult?`
+            : 'See full year-by-year analysis'}
+        </div>
+      </div>
+
+      <button onClick={onSeeDetails}
+        style={{ display:'block', width:'100%', padding:'13px',
+          background:'#C8A96A', color:'#3D0808', border:'none', borderRadius:'8px',
+          fontFamily:'Cinzel,serif', fontSize:'12px', fontWeight:700,
+          letterSpacing:'.08em', cursor:'pointer', textTransform:'uppercase', marginBottom:'6px' }}>
+        ✦ Did this match your experience? See full analysis
+      </button>
+      <div style={{ fontSize:'9px', color:'rgba(200,169,106,.6)' }}>
+        Year-by-year overlay predictions · Upcoming challenges · Remedies
+      </div>
+    </div>
+  )
+}
+
 export default function MatchPage() {
   const { token } = useStore()
   const [saved, setSaved] = useState<any[]>([])
@@ -1521,93 +1611,7 @@ export default function MatchPage() {
           </div>
 
           {/* VedicHora Rating + Advanced Report Hook */}
-          {result && (() => {
-            const r = result as any
-            const ashta = r.AshtaKootaTotal > 0 ? (r.AshtaKootaScore / r.AshtaKootaTotal) * 4 : 2
-            const pathu = r.PathuPoruthamTotal > 0 ? (r.PathuPoruthamScore / r.PathuPoruthamTotal) * 4 : 2
-            const doshaPenalty = (!r.RajjuPass ? 1.5 : 0) + (r.VedhaPresent ? 0.5 : 0)
-            const rawScore = Math.max(0, Math.min(10, ashta + pathu - doshaPenalty))
-            const score = Math.round(rawScore * 10) / 10
-            const stars = score >= 8.5 ? '★★★★★' : score >= 7 ? '★★★★☆' : score >= 5 ? '★★★☆☆' : score >= 3 ? '★★☆☆☆' : '★☆☆☆☆'
-            const ratingText = score >= 8.5 ? 'Exceptional match' : score >= 7 ? 'Good compatibility with caution periods' : score >= 5 ? 'Moderate match — conscious effort needed' : 'Challenging match — consult an astrologer'
-            return (
-              <div style={{ background:'linear-gradient(135deg,#3D0808 0%,#6B0000 100%)',
-                borderRadius:'12px', padding:'20px', color:'#fff', textAlign:'center', marginBottom:'16px' }}>
-                <div style={{ fontSize:'10px', letterSpacing:'.15em', textTransform:'uppercase',
-                  color:'#C8A96A', marginBottom:'6px', fontFamily:'Cinzel,serif' }}>ॐ VedicHora Couple Rating</div>
-                <div style={{ fontSize:'24px', marginBottom:'2px' }}>{stars}</div>
-                <div style={{ fontSize:'26px', fontWeight:700, fontFamily:'Cinzel,serif', marginBottom:'4px' }}>{score.toFixed(1)} / 10</div>
-                <div style={{ fontSize:'12px', color:'#C8A96A', marginBottom:'16px' }}>{ratingText}</div>
-
-                {/* Past challenge hook — show what already happened to build trust */}
-                {(() => {
-                  const now = 2026
-                  const pastChallenges: Array<{year: number; label: string}> = []
-                  // Rajju dosha affects entire relationship — show recent years
-                  if (!r.RajjuPass) {
-                    pastChallenges.push({ year: now - 4, label: 'Tension & emotional distance' })
-                    pastChallenges.push({ year: now - 2, label: 'Communication breakdown' })
-                  }
-                  // Nadi dosha
-                  if (r.groomNadi && r.brideNadi && r.groomNadi === r.brideNadi) {
-                    pastChallenges.push({ year: now - 3, label: 'Health concerns & stress' })
-                  }
-                  // Low Pathu score
-                  if (r.PathuPoruthamScore < r.PathuPoruthamTotal * 0.5) {
-                    pastChallenges.push({ year: now - 1, label: 'Friction in daily life' })
-                  }
-                  const shown = pastChallenges.slice(0, 1)
-                  const blurred = pastChallenges.slice(1, 3)
-                  return (
-                    <div style={{ background:'rgba(255,255,255,.1)', borderRadius:'8px',
-                      padding:'12px 16px', marginBottom:'14px', textAlign:'left' }}>
-                      <div style={{ fontSize:'9px', fontWeight:700, textTransform:'uppercase',
-                        letterSpacing:'.1em', color:'#C8A96A', marginBottom:'10px' }}>
-                        📍 What the planets show about the past 10 years
-                      </div>
-                      {shown.map((c, i) => (
-                        <div key={i} style={{ display:'flex', alignItems:'center', gap:'8px', marginBottom:'8px' }}>
-                          <span style={{ fontFamily:'Cinzel,serif', fontWeight:700, color:'#fff', minWidth:'40px', fontSize:'13px' }}>{c.year}</span>
-                          <div style={{ flex:1, height:'6px', borderRadius:'3px', background:'rgba(255,255,255,.2)' }}>
-                            <div style={{ width:'80%', height:'100%', borderRadius:'3px', background:'#C62828' }}></div>
-                          </div>
-                          <span style={{ fontSize:'10px', color:'#ffaaaa', maxWidth:'160px' }}>{c.label}</span>
-                        </div>
-                      ))}
-                      {blurred.map((c, i) => (
-                        <div key={i} style={{ display:'flex', alignItems:'center', gap:'8px', marginBottom:'6px',
-                          filter:'blur(4px)', opacity:0.5, pointerEvents:'none' }}>
-                          <span style={{ fontFamily:'Cinzel,serif', fontWeight:700, color:'#fff', minWidth:'40px', fontSize:'13px' }}>{c.year}</span>
-                          <div style={{ flex:1, height:'6px', borderRadius:'3px', background:'rgba(255,255,255,.2)' }}>
-                            <div style={{ width:'65%', height:'100%', borderRadius:'3px', background:'#C62828' }}></div>
-                          </div>
-                          <span style={{ fontSize:'10px', color:'#ffaaaa' }}>••••••••</span>
-                        </div>
-                      ))}
-                      <div style={{ fontSize:'9px', color:'rgba(200,169,106,.8)', marginTop:'10px',
-                        textAlign:'center', fontStyle:'italic' }}>
-                        {pastChallenges.length > 1
-                          ? `${pastChallenges.length - 1} more challenge period${pastChallenges.length > 2 ? 's' : ''} hidden — see full analysis`
-                          : 'See full year-by-year analysis below'}
-                      </div>
-                    </div>
-                  )
-                })()}
-
-                {/* See Details — expands overlay inline */}
-                <button onClick={() => setShowAdvanced(true)}
-                  style={{ display:'block', width:'100%', padding:'13px',
-                    background:'#C8A96A', color:'#3D0808', border:'none', borderRadius:'8px',
-                    fontFamily:'Cinzel,serif', fontSize:'12px', fontWeight:700,
-                    letterSpacing:'.08em', cursor:'pointer', textTransform:'uppercase' }}>
-                  ✦ Did you face issues in these years? See full analysis
-                </button>
-                <div style={{ fontSize:'9px', color:'rgba(200,169,106,.6)', marginTop:'6px' }}>
-                  Planetary overlay · Challenge &amp; alignment windows · Remedies
-                </div>
-              </div>
-            )
-          })()}
+          {result && <VHRatingBox result={result} onSeeDetails={() => setShowAdvanced(true)} />}
 
           {/* Inline Advanced — shown when user clicks See Details */}
           {showAdvanced && result && (
