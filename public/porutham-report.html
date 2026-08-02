@@ -272,6 +272,23 @@
   <div id="remedies-list"><!-- filled by JS --></div>
 
   
+
+  <!-- ── VEDICHORA RATING ── -->
+  <div id="vh-rating-section" class="no-print" style="display:none;margin:24px 0;padding:20px;background:linear-gradient(135deg,#3D0808 0%,#6B0000 100%);border-radius:12px;color:#fff;text-align:center;">
+    <div style="font-family:'Cinzel',serif;font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:#C8A96A;margin-bottom:8px;">ॐ VedicHora Couple Rating</div>
+    <div id="vh-stars" style="font-size:26px;margin-bottom:4px;">★★★★☆</div>
+    <div id="vh-score" style="font-family:'Cinzel',serif;font-size:28px;font-weight:700;color:#fff;margin-bottom:4px;">—</div>
+    <div id="vh-rating-text" style="font-size:12px;color:#C8A96A;margin-bottom:16px;">—</div>
+    <div style="background:rgba(255,255,255,.08);border-radius:8px;padding:14px 16px;margin-bottom:16px;text-align:left;">
+      <div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#C8A96A;margin-bottom:8px;">⚠ Upcoming Challenge Windows</div>
+      <div id="vh-teaser-rows"></div>
+    </div>
+    <button id="vh-buy-btn" onclick="unlockAdvanced()" style="display:block;width:100%;padding:13px;background:#C8A96A;color:#3D0808;border:none;border-radius:8px;font-family:'Cinzel',serif;font-size:12px;font-weight:700;letter-spacing:.08em;cursor:pointer;text-transform:uppercase;">
+      ✦ Get Full Advanced Report
+    </button>
+    <div style="font-size:9px;color:rgba(200,169,106,.7);margin-top:8px;">Includes year-by-year overlay predictions, planetary impact analysis &amp; pariharam</div>
+  </div>
+
   <!-- ── OVERLAY PREDICTIONS SECTION ── -->
   <div id="overlay-section" class="overlay-section" style="display:none;">
     <div class="page-break"></div>
@@ -976,9 +993,13 @@ function init() {
   renderStrengths(poruthams, kootas);
   renderVerdict();
   renderRemedies(poruthams);
+  // Rating + overlay predictions
+  var _deep = DATA.deepResult || DATA.deep || null;
+  renderRating(DATA, _deep);
+  renderOverlay(_deep);
   // Replace cover title with actual title
-  const t = document.getElementById('cover-title');
-  if(t) t.textContent = L.title;
+  var _t = document.getElementById('cover-title');
+  if(_t) _t.textContent = L.title;
 }
 
 if (document.readyState === 'loading') {
