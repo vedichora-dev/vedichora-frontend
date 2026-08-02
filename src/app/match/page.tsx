@@ -717,8 +717,28 @@ export default function MatchPage() {
         bridePada:      r.BridePada  ?? r.bridePada  ?? '',
         groomPada:      r.groomPada  ?? r.GroomPada  ?? '',
         bridePada:      r.bridePada  ?? r.BridePada  ?? '',
-        // Deep overlay engine results for year predictions section
-        deepResult: (result as any)?.deepResult ?? null,
+        // Deep overlay engine results — fetch live if not already loaded
+        deepResult: await (async () => {
+          // Already have it (e.g. from DashaMatchSection)
+          if ((result as any)?.deepResult) return (result as any).deepResult
+          // Fetch from deep engine if we have chart IDs
+          const hid1 = (result as any)?.hid1
+          const hid2 = (result as any)?.hid2
+          if (hid1 && hid2 && token) {
+            try {
+              const CHART_URL = 'https://enchanting-dedication-production.up.railway.app'
+              const dr = await fetch(`${CHART_URL}/api/matchmaking/deep`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+                body: JSON.stringify({ GroomId: hid1, BrideId: hid2, RelationshipType: 'Other',
+                  GroomName: n1||'Person 1', BrideName: n2||'Person 2',
+                  FromYear: 2025, ToYear: 2037 })
+              }).then(r => r.json())
+              return dr?.data?.data ?? dr?.data ?? null
+            } catch { return null }
+          }
+          return null
+        })(),
       }
 
       // Replace ALL {{placeholders}} directly in HTML string
