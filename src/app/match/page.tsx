@@ -945,6 +945,10 @@ export default function MatchPage() {
         .replaceAll('{{GANA2}}',        safe(data.brideGana))
         .replaceAll('{{PADA1}}',        safe(data.groomPada))
         .replaceAll('{{PADA2}}',        safe(data.bridePada))
+        .replaceAll('{{TOB1}}',         safe(data.tob1))
+        .replaceAll('{{TOB2}}',         safe(data.tob2))
+        .replaceAll('{{POB1}}',         safe(data.pob1))
+        .replaceAll('{{POB2}}',         safe(data.pob2))
         // Scores
         .replaceAll('{{PATHU_SCORE}}',  safe(pathuScore2))
         .replaceAll('{{PATHU_TOTAL}}',  safe(pathuTotal2))
