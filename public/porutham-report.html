@@ -752,6 +752,100 @@ function renderBirthDetails() {
 }
 
 
+
+// ── VedicHora Couple Rating ───────────────────────────────────────────────
+function computeVHRating(data, deep) {
+  var ashta = data.AshtaKootaTotal > 0 ? (data.AshtaKootaScore / data.AshtaKootaTotal) * 4 : 2;
+  var pathu = data.PathuPoruthamTotal > 0 ? (data.PathuPoruthamScore / data.PathuPoruthamTotal) * 4 : 2;
+  var doshaPenalty = (!data.RajjuPass ? 1.5 : 0) + (data.VedhaPresent ? 0.5 : 0);
+  var overlayScore = 0;
+  if (deep) {
+    var ys = deep.yearSummary || [];
+    var good = ys.filter(function(y) { return (y.verdict||'').toLowerCase().indexOf('favou') >= 0 || (y.verdict||'').toLowerCase().indexOf('good') >= 0; }).length;
+    var bad  = ys.filter(function(y) { return (y.verdict||'').toLowerCase().indexOf('chall') >= 0 || (y.verdict||'').toLowerCase().indexOf('diff') >= 0; }).length;
+    overlayScore = ys.length > 0 ? ((good - bad) / ys.length) * 2 : 0;
+  }
+  var raw = Math.max(0, Math.min(10, ashta + pathu + overlayScore - doshaPenalty));
+  return Math.round(raw * 10) / 10;
+}
+
+function getVHStars(score) {
+  if (score >= 8.5) return '★★★★★';
+  if (score >= 7)   return '★★★★☆';
+  if (score >= 5)   return '★★★☆☆';
+  if (score >= 3)   return '★★☆☆☆';
+  return '★☆☆☆☆';
+}
+
+function getVHRatingText(score) {
+  if (LANG === 'ta') {
+    if (score >= 8.5) return 'மிகச் சிறந்த பொருத்தம்';
+    if (score >= 7)   return 'நல்ல பொருத்தம் — சில எச்சரிக்கை காலங்கள்';
+    if (score >= 5)   return 'நடுத்தர பொருத்தம் — கவனம் தேவை';
+    return 'சவாலான பொருத்தம் — ஜோதிடர் ஆலோசனை அவசியம்';
+  }
+  if (score >= 8.5) return 'Exceptional match';
+  if (score >= 7)   return 'Good compatibility with caution periods';
+  if (score >= 5)   return 'Moderate match — conscious effort needed';
+  return 'Challenging match — consult an astrologer';
+}
+
+function renderRating(data, deep) {
+  var sec = document.getElementById('vh-rating-section');
+  if (!sec) return;
+  var score = computeVHRating(data, deep);
+  var starsEl = document.getElementById('vh-stars');
+  var scoreEl = document.getElementById('vh-score');
+  var textEl  = document.getElementById('vh-rating-text');
+  if (starsEl) starsEl.textContent = getVHStars(score);
+  if (scoreEl) scoreEl.textContent = score.toFixed(1) + ' / 10';
+  if (textEl)  textEl.textContent  = getVHRatingText(score);
+
+  // Build teaser rows from separation windows / challenging years
+  var conflicts = [];
+  ((deep && deep.separationWindows) || []).forEach(function(w) {
+    var y1 = w.startDate ? new Date(w.startDate).getFullYear() : '';
+    var y2 = w.endDate   ? new Date(w.endDate).getFullYear()   : '';
+    conflicts.push({ range: y1===y2 ? String(y1) : y1+'–'+y2, risk: w.riskLevel||'HIGH' });
+  });
+  if (conflicts.length === 0 && deep) {
+    ((deep.yearSummary)||[])
+      .filter(function(y) { return (y.verdict||'').toLowerCase().indexOf('chall') >= 0 || (y.verdict||'').toLowerCase().indexOf('diff') >= 0; })
+      .slice(0,3)
+      .forEach(function(y) { conflicts.push({ range: String(y.year||y.Year), risk: 'NOTE' }); });
+  }
+
+  var wrap = document.getElementById('vh-teaser-rows');
+  if (wrap) {
+    if (conflicts.length > 0) {
+      wrap.innerHTML = conflicts.map(function(c, i) {
+        if (i === 0) {
+          return '<div class="vh-teaser-row">'
+            + '<span class="vh-teaser-year">'+c.range+'</span>'
+            + '<div class="vh-teaser-bar"><div class="vh-teaser-bar-fill" style="width:80%;background:#C62828;"></div></div>'
+            + '<span style="font-size:9px;color:#ff9999;">'+c.risk+'</span>'
+            + '</div>';
+        }
+        return '<div class="vh-teaser-row">'
+          + '<span class="vh-teaser-year vh-teaser-blur">'+c.range+'</span>'
+          + '<div class="vh-teaser-bar"><div class="vh-teaser-bar-fill vh-teaser-blur" style="width:'+(60+i*10)+'%;background:#C62828;"></div></div>'
+          + '<span class="vh-teaser-blur" style="font-size:9px;">••••</span>'
+          + '</div>';
+      }).join('');
+    } else {
+      wrap.innerHTML = '<div style="font-size:10px;color:rgba(200,169,106,.8);">No major challenge windows in the forecast period.</div>';
+    }
+  }
+  sec.style.display = '';
+}
+
+function unlockAdvanced() {
+  var ratingSec = document.getElementById('vh-rating-section');
+  if (ratingSec) ratingSec.style.display = 'none';
+  var overlaySec = document.getElementById('overlay-section');
+  if (overlaySec) { overlaySec.style.display = ''; overlaySec.scrollIntoView({behavior:'smooth'}); }
+}
+
 // ── Render overlay predictions ────────────────────────────────────────────
 function renderOverlay(deep) {
   if (!deep) return;
