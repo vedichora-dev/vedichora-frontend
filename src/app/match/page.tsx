@@ -648,12 +648,23 @@ export default function MatchPage() {
         name2: (typeof n2 !== 'undefined' && n2 && n2 !== (typeof g2 !== 'undefined' ? g2 : ''))
           ? n2 : (r.name2 || gp2?.PersonName || n2 || (typeof g2 !== 'undefined' ? g2 : '') || 'Person 2'),
         // DOB from form date pickers
-        dob1: d1?.yyyy ? `${String(d1.dd).padStart(2,'0')}/${String(d1.mm).padStart(2,'0')}/${d1.yyyy}` : (r.dob1 || ''),
-        dob2: d2?.yyyy ? `${String(d2.dd).padStart(2,'0')}/${String(d2.mm).padStart(2,'0')}/${d2.yyyy}` : (r.dob2 || ''),
-        tob1: d1?.unknownTime ? 'Unknown' : (d1?.hr && d1?.yyyy ? `${d1.hr}:${String(d1.mi||0).padStart(2,'0')} ${d1.ap||'AM'}` : ''),
-        tob2: d2?.unknownTime ? 'Unknown' : (d2?.hr && d2?.yyyy ? `${d2.hr}:${String(d2.mi||0).padStart(2,'0')} ${d2.ap||'AM'}` : ''),
-        pob1: typeof place1 !== 'undefined' ? place1 : '',
-        pob2: typeof place2 !== 'undefined' ? place2 : '',
+        // When saved charts used, pull DOB/time/place from the saved chart data
+        dob1: d1?.yyyy ? `${String(d1.dd).padStart(2,'0')}/${String(d1.mm).padStart(2,'0')}/${d1.yyyy}` : (saved.find((c:any)=>(c.horoscopeId||c.HoroscopeId)===r.hid1)?.dateOfBirth || r.dob1 || ''),
+        dob2: d2?.yyyy ? `${String(d2.dd).padStart(2,'0')}/${String(d2.mm).padStart(2,'0')}/${d2.yyyy}` : (saved.find((c:any)=>(c.horoscopeId||c.HoroscopeId)===r.hid2)?.dateOfBirth || r.dob2 || ''),
+        tob1: (() => {
+          if (d1?.unknownTime) return 'Unknown'
+          if (d1?.hr && d1?.yyyy) return `${d1.hr}:${String(d1.mi||0).padStart(2,'0')} ${d1.ap||'AM'}`
+          const sc1 = saved.find((c:any)=>(c.horoscopeId||c.HoroscopeId)===r.hid1)
+          return sc1?.timeOfBirth || sc1?.birthTime || ''
+        })(),
+        tob2: (() => {
+          if (d2?.unknownTime) return 'Unknown'
+          if (d2?.hr && d2?.yyyy) return `${d2.hr}:${String(d2.mi||0).padStart(2,'0')} ${d2.ap||'AM'}`
+          const sc2 = saved.find((c:any)=>(c.horoscopeId||c.HoroscopeId)===r.hid2)
+          return sc2?.timeOfBirth || sc2?.birthTime || ''
+        })(),
+        pob1: (typeof place1 !== 'undefined' && place1) ? place1 : (saved.find((c:any)=>(c.horoscopeId||c.HoroscopeId)===r.hid1)?.placeOfBirth || saved.find((c:any)=>(c.horoscopeId||c.HoroscopeId)===r.hid1)?.cityName || ''),
+        pob2: (typeof place2 !== 'undefined' && place2) ? place2 : (saved.find((c:any)=>(c.horoscopeId||c.HoroscopeId)===r.hid2)?.placeOfBirth || saved.find((c:any)=>(c.horoscopeId||c.HoroscopeId)===r.hid2)?.cityName || ''),
         // Ashta Koota
         AshtaKootaScore:  r.AshtaKootaScore  ?? r.ashtaKootaScore  ?? 0,
         AshtaKootaTotal:  r.AshtaKootaTotal  ?? r.ashtaKootaTotal  ?? 36,
