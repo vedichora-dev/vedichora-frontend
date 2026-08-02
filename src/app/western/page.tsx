@@ -557,7 +557,7 @@ export default function WesternPage(){
         Year:chartYr,Month:chartMon,Day:chartDay,
         Hour:hr24,Minute:chartMi,Second:0,
         PlaceName:chartPlace||'Chennai, India',
-        UtcOffsetHours:5.5,AyanamsaType:'Lahiri',
+        // UtcOffsetHours omitted — backend auto-resolves from place+date (DST-aware)AyanamsaType:'Lahiri',
       }
       // Geocode if place entered
       if(chartPlace){
