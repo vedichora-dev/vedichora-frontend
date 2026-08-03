@@ -135,8 +135,13 @@
 
 <!-- Page 1: Cover + Birth Details + Scores -->
 <div class="cover" style="padding:28px 32px 22px;">
-  <div class="logo-mark" style="font-size:9px;margin-bottom:4px;">ॐ &nbsp; VedicHora &nbsp; ॐ</div>
-  <div class="cover-om" style="font-size:22px;margin-bottom:4px;">ॐ</div>
+  <div style="display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:6px;">
+    <img src="https://vedichora-frontend-orcin.vercel.app/icon-512.png" 
+         alt="VedicHora Logo"
+         style="width:44px;height:44px;border-radius:50%;object-fit:cover;"
+         onerror="this.outerHTML='<div style=font-size:28px>ॐ</div>'" />
+    <div style="font-family:'Cinzel',serif;font-size:14px;letter-spacing:.15em;color:#C8A96A;font-weight:600;">VEDICHORA</div>
+  </div>
   <div class="cover-title-main" id="cover-title" style="font-size:20px;margin-bottom:2px;">Vivaha Porutham Report</div>
   <div class="cover-sub" style="margin-bottom:10px;">Vivaha Porutham Report · Pathu Porutham & Ashta Koota Pagupaayvu</div>
   <div class="cover-names" id="cover-names" style="font-size:16px;margin-bottom:3px;">{{NAME1}} &amp; {{NAME2}}</div>
