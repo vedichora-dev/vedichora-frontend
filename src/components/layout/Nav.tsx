@@ -71,9 +71,7 @@ export default function Nav() {
         className="sticky top-0 z-40 h-14 flex items-center gap-3 px-4 shadow-sm">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2 mr-1 shrink-0">
-          <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{background:'var(--maroon)'}}>
-            <Star className="w-4 h-4 fill-current" style={{color:'var(--star)'}} />
-          </div>
+          <img src="/icon-192.png" alt="VedicHora" className="w-8 h-8 rounded-lg object-cover" />
           <span className="font-cinzel font-bold text-base" style={{color:'var(--maroon)'}}>
             Vedic<span style={{color:'var(--gold)'}}>Hora</span>
           </span>
