@@ -24,9 +24,9 @@ https://nextjs.org/telemetry
    Collecting page data ...
    Generating static pages (0/26) ...
    Generating static pages (6/26) 
+ ⚠ Entire page /checkout deopted into client-side rendering. https://nextjs.org/docs/messages/deopted-into-client-rendering /checkout
    Generating static pages (12/26) 
    Generating static pages (19/26) 
- ⚠ Entire page /checkout deopted into client-side rendering. https://nextjs.org/docs/messages/deopted-into-client-rendering /checkout
  ✓ Generating static pages (26/26) 
    Finalizing page optimization ...
    Collecting build traces ...
@@ -44,7 +44,7 @@ Route (app)                              Size     First Load JS
 ├ ○ /dashboard                           3.37 kB         110 kB
 ├ ○ /jyoti                               5.91 kB         112 kB
 ├ ○ /learn                               2.52 kB        84.5 kB
-├ ○ /match                               20.8 kB         127 kB
+├ ○ /match                               21.2 kB         127 kB
 ├ ○ /muhurta                             2.58 kB         109 kB
 ├ ○ /numerology                          3.73 kB         107 kB
 ├ ○ /phone-login                         2.14 kB         115 kB
