@@ -984,7 +984,7 @@ export default function MatchPage() {
       const res = await fetch('/api/pdf/generate', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ html: tmpl, filename, data: pdfData })
+        body: JSON.stringify({ html: tmpl, filename, data: data })
       })
 
       if (!res.ok) throw new Error('PDF generation failed')
@@ -1539,10 +1539,10 @@ export default function MatchPage() {
                     {hidden.length} more period{hidden.length>1?'s':''} hidden — did these years feel difficult?
                   </div>}
                 </div>
-                <button onClick={() => downloadPdf('en')} style={{display:'block',width:'100%',padding:'13px',background:'#C8A96A',color:'#3D0808',border:'none',borderRadius:'8px',fontFamily:'Cinzel,serif',fontSize:'12px',fontWeight:700,letterSpacing:'.08em',cursor:'pointer',textTransform:'uppercase',marginBottom:'6px'}}>
-                  ✦ Did this match your experience? Download full report
+                <button onClick={() => setPdfLoading('paywall')} style={{display:'block',width:'100%',padding:'13px',background:'#C8A96A',color:'#3D0808',border:'none',borderRadius:'8px',fontFamily:'Cinzel,serif',fontSize:'12px',fontWeight:700,letterSpacing:'.08em',cursor:'pointer',textTransform:'uppercase',marginBottom:'6px'}}>
+                  ✦ Did this match your experience? Get full report
                 </button>
-                <div style={{fontSize:'9px',color:'rgba(200,169,106,.6)'}}>Year-by-year overlay predictions · Remedies</div>
+                <div style={{fontSize:'9px',color:'rgba(200,169,106,.6)'}}>₹99 or 10 credits · Year-by-year overlay · Remedies</div>
               </div>
             )
           })()}
@@ -1575,6 +1575,47 @@ export default function MatchPage() {
 
         </div>
       )}
+
+      {/* ── PAYWALL MODAL ── */}
+      {pdfLoading === 'paywall' && (
+        <div style={{position:'fixed',inset:0,background:'rgba(0,0,0,.7)',
+          display:'flex',alignItems:'center',justifyContent:'center',zIndex:9999}}
+          onClick={() => setPdfLoading(null)}>
+          <div style={{background:'#fff',borderRadius:'16px',padding:'32px',maxWidth:'400px',
+            width:'90%',textAlign:'center',boxShadow:'0 20px 60px rgba(0,0,0,.4)'}}
+            onClick={e => e.stopPropagation()}>
+            <div style={{fontSize:'32px',marginBottom:'8px'}}>📄</div>
+            <div style={{fontFamily:'Cinzel,serif',fontSize:'18px',fontWeight:700,
+              color:'#3D0808',marginBottom:'8px'}}>Full Vedic Report</div>
+            <div style={{fontSize:'13px',color:'#666',marginBottom:'20px',lineHeight:1.6}}>
+              Year-by-year planetary overlay predictions<br/>
+              Past &amp; future challenge windows<br/>
+              Alignment periods &amp; remedies<br/>
+              Ashta Koota + Pathu Porutham breakdown
+            </div>
+            <div style={{display:'flex',gap:'12px',marginBottom:'16px'}}>
+              <button onClick={() => { setPdfLoading(null); downloadPdf('en') }}
+                style={{flex:1,padding:'14px',background:'#3D0808',color:'#C8A96A',
+                  border:'none',borderRadius:'10px',fontFamily:'Cinzel,serif',
+                  fontSize:'13px',fontWeight:700,cursor:'pointer'}}>
+                Use Credits<br/>
+                <span style={{fontSize:'10px',opacity:.8}}>10 credits</span>
+              </button>
+              <button onClick={() => { setPdfLoading(null); downloadPdf('en') }}
+                style={{flex:1,padding:'14px',background:'#C8A96A',color:'#3D0808',
+                  border:'none',borderRadius:'10px',fontFamily:'Cinzel,serif',
+                  fontSize:'13px',fontWeight:700,cursor:'pointer'}}>
+                Buy Report<br/>
+                <span style={{fontSize:'10px',opacity:.8}}>₹99 / $1.49</span>
+              </button>
+            </div>
+            <button onClick={() => setPdfLoading(null)}
+              style={{background:'transparent',border:'none',color:'#999',
+                fontSize:'12px',cursor:'pointer'}}>Cancel</button>
+          </div>
+        </div>
+      )}
+
     </div>
   )
 }
