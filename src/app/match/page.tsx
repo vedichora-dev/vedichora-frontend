@@ -702,6 +702,23 @@ export default function MatchPage() {
         bridePada:      r.BridePada  ?? r.bridePada  ?? '',
         groomPada:      r.groomPada  ?? r.GroomPada  ?? '',
         bridePada:      r.bridePada  ?? r.BridePada  ?? '',
+        // Overlay deep engine — fetch live for the full report annex
+        deepResult: await (async () => {
+          const hid1 = r.hid1 || r.GroomId || r.groomId
+          const hid2 = r.hid2 || r.BrideId || r.brideId
+          if (hid1 && hid2 && token) {
+            try {
+              const dr = await fetch('https://enchanting-dedication-production.up.railway.app/api/matchmaking/deep', {
+                method:'POST', headers:{'Content-Type':'application/json','Authorization':`Bearer ${token}`},
+                body: JSON.stringify({ GroomId:hid1, BrideId:hid2, RelationshipType:'Other',
+                  GroomName:data.name1||'Person 1', BrideName:data.name2||'Person 2',
+                  FromYear:2015, ToYear:2037 })
+              }).then(res=>res.json())
+              return dr?.data?.data ?? dr?.data ?? null
+            } catch(e) { return null }
+          }
+          return null
+        })(),
       }
 
       // Replace ALL {{placeholders}} directly in HTML string
@@ -1495,7 +1512,7 @@ export default function MatchPage() {
             const r = result as any
             const ashta = r.AshtaKootaTotal > 0 ? (r.AshtaKootaScore / r.AshtaKootaTotal) * 4 : 2
             const pathu = r.PathuPoruthamTotal > 0 ? (r.PathuPoruthamScore / r.PathuPoruthamTotal) * 4 : 2
-            const penalty = (r.RajjuPass === false ? 1.5 : 0) + (r.VedhaPresent ? 0.5 : 0)
+            const penalty = (r.RajjuPass === false || r.RajjuPass === 'false' ? 1.5 : 0) + (r.VedhaPresent ? 0.5 : 0)
             const score = Math.round(Math.max(0, Math.min(10, ashta + pathu - penalty)) * 10) / 10
             const stars = score >= 8.5 ? '★★★★★' : score >= 7 ? '★★★★☆' : score >= 5 ? '★★★☆☆' : score >= 3 ? '★★☆☆☆' : '★☆☆☆☆'
             const txt = score >= 7 ? 'Good compatibility with caution periods' : score >= 5 ? 'Moderate — conscious effort needed' : 'Challenging match — consult an astrologer'
