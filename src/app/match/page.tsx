@@ -999,30 +999,19 @@ export default function MatchPage() {
       const finalHtml = tmpl.replace('</head>',
         `<script>window.__VH_DATA=${JSON.stringify(data)};<\/script></head>`)
 
-      // Use the Next.js API route which uses Playwright to generate real PDF
-      const pdfRes = await fetch('/api/pdf/porutham', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ html: finalHtml, filename: pdfFilename })
-      })
-
-      if (pdfRes.ok && pdfRes.headers.get('content-type')?.includes('application/pdf')) {
-        // Real PDF from server
-        const blob = await pdfRes.blob()
-        const url = URL.createObjectURL(blob)
-        const a = document.createElement('a')
-        a.href = url; a.download = pdfFilename
-        document.body.appendChild(a); a.click()
-        document.body.removeChild(a)
-        setTimeout(() => URL.revokeObjectURL(url), 5000)
-      } else {
-        // Fallback: open in new tab, auto-trigger print dialog for Save as PDF
-        const blob = new Blob([finalHtml], { type: 'text/html;charset=utf-8' })
-        const url = URL.createObjectURL(blob)
-        const w = window.open(url, '_blank')
-        if (w) setTimeout(() => { w.focus(); w.print() }, 1800)
-        setTimeout(() => URL.revokeObjectURL(url), 15000)
+      // Open in new tab and auto-trigger browser print dialog
+      // User selects "Save as PDF" — produces a proper PDF
+      const blob = new Blob([finalHtml], { type: 'text/html;charset=utf-8' })
+      const url = URL.createObjectURL(blob)
+      const w = window.open(url, '_blank')
+      if (w) {
+        w.addEventListener('load', () => {
+          setTimeout(() => { w.focus(); w.print() }, 1000)
+        })
+        // Also try after delay in case load already fired
+        setTimeout(() => { try { w.focus(); w.print() } catch {} }, 2000)
       }
+      setTimeout(() => URL.revokeObjectURL(url), 30000)
           } catch(e) { alert('Report failed: ' + String(e)) }
     setPdfLoading(null)
   }
