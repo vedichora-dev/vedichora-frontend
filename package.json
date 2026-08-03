@@ -33,8 +33,7 @@
     "lucide-react": "^0.294.0",
     "sonner": "^1.2.4",
     "@sparticuz/chromium": "^123.0.1",
-    "puppeteer-core": "^22.8.2",
-    "playwright-core": "^1.44.0"
+    "puppeteer-core": "^22.8.2"
   },
   "devDependencies": {
     "@types/node": "^20.10.0",
