@@ -572,96 +572,6 @@ function DashaMatchSection({ result, lang }: { result: any; lang: string }) {
 }
 
 
-// ── VedicHora Rating Box Component ──────────────────────────────────────
-function VHRatingBox({ result, onSeeDetails }: { result: any, onSeeDetails: () => void }) {
-  const r = result as any
-  const ashta = r.AshtaKootaTotal > 0 ? (r.AshtaKootaScore / r.AshtaKootaTotal) * 4 : 2
-  const pathu = r.PathuPoruthamTotal > 0 ? (r.PathuPoruthamScore / r.PathuPoruthamTotal) * 4 : 2
-  const doshaPenalty = (!r.RajjuPass ? 1.5 : 0) + (r.VedhaPresent ? 0.5 : 0)
-  const rawScore = Math.max(0, Math.min(10, ashta + pathu - doshaPenalty))
-  const score = Math.round(rawScore * 10) / 10
-  const stars = score >= 8.5 ? '★★★★★' : score >= 7 ? '★★★★☆' : score >= 5 ? '★★★☆☆' : score >= 3 ? '★★☆☆☆' : '★☆☆☆☆'
-  const ratingText = score >= 8.5 ? 'Exceptional match'
-    : score >= 7 ? 'Good compatibility with caution periods'
-    : score >= 5 ? 'Moderate match — conscious effort needed'
-    : 'Challenging match — consult an astrologer'
-
-  const now = 2026
-  const pastChallenges = []
-  if (!r.RajjuPass) {
-    pastChallenges.push({ year: now - 4, label: 'Tension & emotional distance' })
-    pastChallenges.push({ year: now - 2, label: 'Communication breakdown' })
-  }
-  if (r.groomNadi && r.brideNadi && r.groomNadi === r.brideNadi) {
-    pastChallenges.push({ year: now - 3, label: 'Health concerns & stress' })
-  }
-  if (r.PathuPoruthamScore < (r.PathuPoruthamTotal || 10) * 0.5) {
-    pastChallenges.push({ year: now - 1, label: 'Friction in daily life' })
-  }
-  const shown = pastChallenges.slice(0, 1)
-  const blurred = pastChallenges.slice(1, 3)
-
-  return (
-    <div style={{ background:'linear-gradient(135deg,#3D0808 0%,#6B0000 100%)',
-      borderRadius:'12px', padding:'20px', color:'#fff', textAlign:'center', marginBottom:'16px' }}>
-      <div style={{ fontSize:'10px', letterSpacing:'.15em', textTransform:'uppercase',
-        color:'#C8A96A', marginBottom:'6px', fontFamily:'Cinzel,serif' }}>ॐ VedicHora Couple Rating</div>
-      <div style={{ fontSize:'24px', marginBottom:'2px' }}>{stars}</div>
-      <div style={{ fontSize:'26px', fontWeight:700, fontFamily:'Cinzel,serif', marginBottom:'4px' }}>{score.toFixed(1)} / 10</div>
-      <div style={{ fontSize:'12px', color:'#C8A96A', marginBottom:'16px' }}>{ratingText}</div>
-
-      <div style={{ background:'rgba(255,255,255,.1)', borderRadius:'8px',
-        padding:'12px 16px', marginBottom:'14px', textAlign:'left' }}>
-        <div style={{ fontSize:'9px', fontWeight:700, textTransform:'uppercase',
-          letterSpacing:'.1em', color:'#C8A96A', marginBottom:'10px' }}>
-          📍 What the planets show about the past 10 years
-        </div>
-        {shown.map((c: any, i: number) => (
-          <div key={i} style={{ display:'flex', alignItems:'center', gap:'10px', marginBottom:'8px' }}>
-            <span style={{ fontFamily:'Cinzel,serif', fontWeight:700, color:'#fff', minWidth:'44px', fontSize:'14px' }}>{c.year}</span>
-            <div style={{ flex:1, height:'7px', borderRadius:'4px', background:'rgba(255,255,255,.15)' }}>
-              <div style={{ width:'80%', height:'100%', borderRadius:'4px', background:'#C62828' }}></div>
-            </div>
-            <span style={{ fontSize:'10px', color:'#ffaaaa', maxWidth:'170px' }}>{c.label}</span>
-          </div>
-        ))}
-        {blurred.map((c: any, i: number) => (
-          <div key={i} style={{ display:'flex', alignItems:'center', gap:'10px', marginBottom:'6px',
-            filter:'blur(4px)', opacity:0.45 }}>
-            <span style={{ fontFamily:'Cinzel,serif', fontWeight:700, color:'#fff', minWidth:'44px', fontSize:'14px' }}>{c.year}</span>
-            <div style={{ flex:1, height:'7px', borderRadius:'4px', background:'rgba(255,255,255,.15)' }}>
-              <div style={{ width:'65%', height:'100%', borderRadius:'4px', background:'#C62828' }}></div>
-            </div>
-            <span style={{ fontSize:'10px', color:'#ffaaaa' }}>••••••••••</span>
-          </div>
-        ))}
-        {pastChallenges.length === 0 && (
-          <div style={{ fontSize:'10px', color:'rgba(200,169,106,.8)' }}>
-            No major challenges found — see full analysis for details.
-          </div>
-        )}
-        <div style={{ fontSize:'9px', color:'rgba(200,169,106,.8)', marginTop:'10px',
-          textAlign:'center', fontStyle:'italic' }}>
-          {blurred.length > 0
-            ? `${blurred.length} more period${blurred.length > 1 ? 's' : ''} hidden — did these years feel difficult?`
-            : 'See full year-by-year analysis'}
-        </div>
-      </div>
-
-      <button onClick={onSeeDetails}
-        style={{ display:'block', width:'100%', padding:'13px',
-          background:'#C8A96A', color:'#3D0808', border:'none', borderRadius:'8px',
-          fontFamily:'Cinzel,serif', fontSize:'12px', fontWeight:700,
-          letterSpacing:'.08em', cursor:'pointer', textTransform:'uppercase', marginBottom:'6px' }}>
-        ✦ Did this match your experience? See full analysis
-      </button>
-      <div style={{ fontSize:'9px', color:'rgba(200,169,106,.6)' }}>
-        Year-by-year overlay predictions · Upcoming challenges · Remedies
-      </div>
-    </div>
-  )
-}
-
 export default function MatchPage() {
   const { token } = useStore()
   const [saved, setSaved] = useState<any[]>([])
@@ -738,23 +648,8 @@ export default function MatchPage() {
         name2: (typeof n2 !== 'undefined' && n2 && n2 !== (typeof g2 !== 'undefined' ? g2 : ''))
           ? n2 : (r.name2 || gp2?.PersonName || n2 || (typeof g2 !== 'undefined' ? g2 : '') || 'Person 2'),
         // DOB from form date pickers
-        // When saved charts used, pull DOB/time/place from the saved chart data
-        dob1: d1?.yyyy ? `${String(d1.dd).padStart(2,'0')}/${String(d1.mm).padStart(2,'0')}/${d1.yyyy}` : (saved.find((c:any)=>(c.horoscopeId||c.HoroscopeId)===r.hid1)?.dateOfBirth || r.dob1 || ''),
-        dob2: d2?.yyyy ? `${String(d2.dd).padStart(2,'0')}/${String(d2.mm).padStart(2,'0')}/${d2.yyyy}` : (saved.find((c:any)=>(c.horoscopeId||c.HoroscopeId)===r.hid2)?.dateOfBirth || r.dob2 || ''),
-        tob1: (() => {
-          if (d1?.unknownTime) return 'Unknown'
-          if (d1?.hr && d1?.yyyy) return `${d1.hr}:${String(d1.mi||0).padStart(2,'0')} ${d1.ap||'AM'}`
-          const sc1 = saved.find((c:any)=>(c.horoscopeId||c.HoroscopeId)===r.hid1)
-          return sc1?.timeOfBirth || sc1?.birthTime || ''
-        })(),
-        tob2: (() => {
-          if (d2?.unknownTime) return 'Unknown'
-          if (d2?.hr && d2?.yyyy) return `${d2.hr}:${String(d2.mi||0).padStart(2,'0')} ${d2.ap||'AM'}`
-          const sc2 = saved.find((c:any)=>(c.horoscopeId||c.HoroscopeId)===r.hid2)
-          return sc2?.timeOfBirth || sc2?.birthTime || ''
-        })(),
-        pob1: (typeof place1 !== 'undefined' && place1) ? place1 : (saved.find((c:any)=>(c.horoscopeId||c.HoroscopeId)===r.hid1)?.placeOfBirth || saved.find((c:any)=>(c.horoscopeId||c.HoroscopeId)===r.hid1)?.cityName || ''),
-        pob2: (typeof place2 !== 'undefined' && place2) ? place2 : (saved.find((c:any)=>(c.horoscopeId||c.HoroscopeId)===r.hid2)?.placeOfBirth || saved.find((c:any)=>(c.horoscopeId||c.HoroscopeId)===r.hid2)?.cityName || ''),
+        dob1: d1?.yyyy ? `${String(d1.dd).padStart(2,'0')}/${String(d1.mm).padStart(2,'0')}/${d1.yyyy}` : (r.dob1 || ''),
+        dob2: d2?.yyyy ? `${String(d2.dd).padStart(2,'0')}/${String(d2.mm).padStart(2,'0')}/${d2.yyyy}` : (r.dob2 || ''),
         // Ashta Koota
         AshtaKootaScore:  r.AshtaKootaScore  ?? r.ashtaKootaScore  ?? 0,
         AshtaKootaTotal:  r.AshtaKootaTotal  ?? r.ashtaKootaTotal  ?? 36,
@@ -807,28 +702,6 @@ export default function MatchPage() {
         bridePada:      r.BridePada  ?? r.bridePada  ?? '',
         groomPada:      r.groomPada  ?? r.GroomPada  ?? '',
         bridePada:      r.bridePada  ?? r.BridePada  ?? '',
-        // Deep overlay engine results — fetch live if not already loaded
-        deepResult: await (async () => {
-          // Already have it (e.g. from DashaMatchSection)
-          if ((result as any)?.deepResult) return (result as any).deepResult
-          // Fetch from deep engine if we have chart IDs
-          const hid1 = (result as any)?.hid1
-          const hid2 = (result as any)?.hid2
-          if (hid1 && hid2 && token) {
-            try {
-              const CHART_URL = 'https://enchanting-dedication-production.up.railway.app'
-              const dr = await fetch(`${CHART_URL}/api/matchmaking/deep`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
-                body: JSON.stringify({ GroomId: hid1, BrideId: hid2, RelationshipType: 'Other',
-                  GroomName: n1||'Person 1', BrideName: n2||'Person 2',
-                  FromYear: 2025, ToYear: 2037 })
-              }).then(r => r.json())
-              return dr?.data?.data ?? dr?.data ?? null
-            } catch { return null }
-          }
-          return null
-        })(),
       }
 
       // Replace ALL {{placeholders}} directly in HTML string
@@ -1068,10 +941,6 @@ export default function MatchPage() {
         .replaceAll('{{GANA2}}',        safe(data.brideGana))
         .replaceAll('{{PADA1}}',        safe(data.groomPada))
         .replaceAll('{{PADA2}}',        safe(data.bridePada))
-        .replaceAll('{{TOB1}}',         safe(data.tob1))
-        .replaceAll('{{TOB2}}',         safe(data.tob2))
-        .replaceAll('{{POB1}}',         safe(data.pob1))
-        .replaceAll('{{POB2}}',         safe(data.pob2))
         // Scores
         .replaceAll('{{PATHU_SCORE}}',  safe(pathuScore2))
         .replaceAll('{{PATHU_TOTAL}}',  safe(pathuTotal2))
@@ -1112,15 +981,25 @@ export default function MatchPage() {
       const n2clean = (n2 || 'Person2').replace(/[^a-zA-Z0-9]/g, '_')
       const filename = `VedicHora_${n1clean}_${n2clean}_Porutham.pdf`
 
-      // Open in new window and trigger print dialog (Save as PDF)
-      const tmplWithData = tmpl.replace('</head>', `<script>window.__VH_DATA=${JSON.stringify(data)}<\/script><style>@media print{.no-print{display:none!important;}}</style></head>`)
-      const w = window.open('', '_blank')
-      if (!w) throw new Error('Popup blocked — please allow popups for this site')
-      w.document.open()
-      w.document.write(tmplWithData)
-      w.document.close()
-      w.document.title = filename.replace('.pdf','')
-      setTimeout(() => { w.focus(); w.print() }, 1500)
+      const res = await fetch('/api/pdf/generate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ html: tmpl, filename, data: pdfData })
+      })
+
+      if (!res.ok) throw new Error('PDF generation failed')
+
+      const contentType = res.headers.get('content-type') || ''
+      
+      const blob = await res.blob()
+      const isPdf = contentType.includes('application/pdf')
+      const dlFilename = isPdf ? filename : filename.replace('.pdf', '.html')
+      const url = URL.createObjectURL(blob)
+      const a = document.createElement('a')
+      a.href = url; a.download = dlFilename
+      document.body.appendChild(a); a.click()
+      document.body.removeChild(a)
+      setTimeout(() => URL.revokeObjectURL(url), 5000)
           } catch(e) { alert('Report failed: ' + String(e)) }
     setPdfLoading(null)
   }
@@ -1610,25 +1489,63 @@ export default function MatchPage() {
             </div>
           </div>
 
-          {/* VedicHora Rating + Advanced Report Hook */}
-          {result && <VHRatingBox result={result} onSeeDetails={() => setShowAdvanced(true)} />}
 
-          {/* Inline Advanced — shown when user clicks See Details */}
-          {showAdvanced && result && (
-            <div style={{ border:'1px solid var(--bd)', borderRadius:'12px',
-              background:'var(--bg2)', padding:'20px', marginBottom:'16px' }}>
-              <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:'16px' }}>
-                <div style={{ fontFamily:'Cinzel,serif', fontSize:'13px', fontWeight:700,
-                  color:'var(--acc)', textTransform:'uppercase', letterSpacing:'.08em' }}>
-                  ✦ Planetary Overlay Predictions
+          {/* VedicHora Rating + Past Challenge Hook */}
+          {result && (() => {
+            const r = result as any
+            const ashta = r.AshtaKootaTotal > 0 ? (r.AshtaKootaScore / r.AshtaKootaTotal) * 4 : 2
+            const pathu = r.PathuPoruthamTotal > 0 ? (r.PathuPoruthamScore / r.PathuPoruthamTotal) * 4 : 2
+            const penalty = (r.RajjuPass === false ? 1.5 : 0) + (r.VedhaPresent ? 0.5 : 0)
+            const score = Math.round(Math.max(0, Math.min(10, ashta + pathu - penalty)) * 10) / 10
+            const stars = score >= 8.5 ? '★★★★★' : score >= 7 ? '★★★★☆' : score >= 5 ? '★★★☆☆' : score >= 3 ? '★★☆☆☆' : '★☆☆☆☆'
+            const txt = score >= 7 ? 'Good compatibility with caution periods' : score >= 5 ? 'Moderate — conscious effort needed' : 'Challenging match — consult an astrologer'
+            const now = 2026
+            const past = []
+            if (r.RajjuPass === false) { past.push(now-4); past.push(now-2) }
+            if (r.groomNadi && r.groomNadi === r.brideNadi) past.push(now-3)
+            if ((r.PathuPoruthamScore||0) < (r.PathuPoruthamTotal||10)*0.5) past.push(now-1)
+            const shown = past.slice(0,1)
+            const hidden = past.slice(1,3)
+            return (
+              <div style={{background:'linear-gradient(135deg,#3D0808,#6B0000)',borderRadius:'12px',padding:'20px',color:'#fff',textAlign:'center',marginBottom:'16px'}}>
+                <div style={{fontSize:'10px',letterSpacing:'.15em',textTransform:'uppercase',color:'#C8A96A',marginBottom:'6px',fontFamily:'Cinzel,serif'}}>ॐ VedicHora Couple Rating</div>
+                <div style={{fontSize:'24px',marginBottom:'2px'}}>{stars}</div>
+                <div style={{fontSize:'26px',fontWeight:700,fontFamily:'Cinzel,serif',marginBottom:'4px'}}>{score.toFixed(1)} / 10</div>
+                <div style={{fontSize:'12px',color:'#C8A96A',marginBottom:'16px'}}>{txt}</div>
+                <div style={{background:'rgba(255,255,255,.1)',borderRadius:'8px',padding:'12px 16px',marginBottom:'14px',textAlign:'left'}}>
+                  <div style={{fontSize:'9px',fontWeight:700,textTransform:'uppercase',letterSpacing:'.1em',color:'#C8A96A',marginBottom:'10px'}}>
+                    📍 What the planets show about the past 10 years
+                  </div>
+                  {shown.length === 0 && <div style={{fontSize:'10px',color:'rgba(200,169,106,.8)'}}>No major challenges found in this period.</div>}
+                  {shown.map((yr,i) => (
+                    <div key={i} style={{display:'flex',alignItems:'center',gap:'10px',marginBottom:'8px'}}>
+                      <span style={{fontFamily:'Cinzel,serif',fontWeight:700,color:'#fff',minWidth:'44px',fontSize:'14px'}}>{yr}</span>
+                      <div style={{flex:1,height:'7px',borderRadius:'4px',background:'rgba(255,255,255,.15)'}}>
+                        <div style={{width:'80%',height:'100%',borderRadius:'4px',background:'#C62828'}}></div>
+                      </div>
+                      <span style={{fontSize:'10px',color:'#ffaaaa'}}>Tension &amp; friction</span>
+                    </div>
+                  ))}
+                  {hidden.map((yr,i) => (
+                    <div key={i} style={{display:'flex',alignItems:'center',gap:'10px',marginBottom:'6px',filter:'blur(4px)',opacity:0.4}}>
+                      <span style={{fontFamily:'Cinzel,serif',fontWeight:700,color:'#fff',minWidth:'44px',fontSize:'14px'}}>{yr}</span>
+                      <div style={{flex:1,height:'7px',borderRadius:'4px',background:'rgba(255,255,255,.15)'}}>
+                        <div style={{width:'65%',height:'100%',borderRadius:'4px',background:'#C62828'}}></div>
+                      </div>
+                      <span style={{fontSize:'10px',color:'#ffaaaa'}}>••••••••</span>
+                    </div>
+                  ))}
+                  {hidden.length > 0 && <div style={{fontSize:'9px',color:'rgba(200,169,106,.8)',marginTop:'8px',textAlign:'center',fontStyle:'italic'}}>
+                    {hidden.length} more period{hidden.length>1?'s':''} hidden — did these years feel difficult?
+                  </div>}
                 </div>
-                <button onClick={() => setShowAdvanced(false)}
-                  style={{ background:'transparent', border:'none', cursor:'pointer',
-                    fontSize:'18px', color:'var(--txm)', lineHeight:1 }}>✕</button>
+                <button onClick={() => downloadPdf('en')} style={{display:'block',width:'100%',padding:'13px',background:'#C8A96A',color:'#3D0808',border:'none',borderRadius:'8px',fontFamily:'Cinzel,serif',fontSize:'12px',fontWeight:700,letterSpacing:'.08em',cursor:'pointer',textTransform:'uppercase',marginBottom:'6px'}}>
+                  ✦ Did this match your experience? Download full report
+                </button>
+                <div style={{fontSize:'9px',color:'rgba(200,169,106,.6)'}}>Year-by-year overlay predictions · Remedies</div>
               </div>
-              <DashaMatchSection result={result} lang={lang} />
-            </div>
-          )}
+            )
+          })()}
 
           {/* PDF Download — works for everyone, no login required */}
           <div style={{ background:'var(--bg2)', border:'1px solid var(--bd)', borderRadius:'12px', padding:'18px 20px' }}>
