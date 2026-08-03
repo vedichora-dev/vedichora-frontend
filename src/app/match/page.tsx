@@ -990,33 +990,39 @@ export default function MatchPage() {
       }
 
             // Also inject data for JS-rendered tables (poruthams, kootas)
-      // Strip all scripts so no old JS overrides our static HTML
-      tmpl = tmpl.replace(/<script[\s\S]*?<\/script>/gi, '')
-      // Try window.open + document.write (works in all browsers)
-      // Send to server-side PDF generation API
+      // Inject data for JS rendering AND download as proper PDF
       const n1clean = (n1 || 'Person1').replace(/[^a-zA-Z0-9]/g, '_')
       const n2clean = (n2 || 'Person2').replace(/[^a-zA-Z0-9]/g, '_')
-      const filename = `VedicHora_${n1clean}_${n2clean}_Porutham.pdf`
+      const pdfFilename = `VedicHora_${n1clean}_${n2clean}_Porutham.pdf`
 
-      const res = await fetch('/api/pdf/generate', {
+      // Inject __VH_DATA into the template so init() populates tables/remedies/rating
+      const finalHtml = tmpl.replace('</head>',
+        `<script>window.__VH_DATA=${JSON.stringify(data)};<\/script></head>`)
+
+      // Use the Next.js API route which uses Playwright to generate real PDF
+      const pdfRes = await fetch('/api/pdf/porutham', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ html: tmpl, filename, data: data })
+        body: JSON.stringify({ html: finalHtml, filename: pdfFilename })
       })
 
-      if (!res.ok) throw new Error('PDF generation failed')
-
-      const contentType = res.headers.get('content-type') || ''
-      
-      const blob = await res.blob()
-      const isPdf = contentType.includes('application/pdf')
-      const dlFilename = isPdf ? filename : filename.replace('.pdf', '.html')
-      const url = URL.createObjectURL(blob)
-      const a = document.createElement('a')
-      a.href = url; a.download = dlFilename
-      document.body.appendChild(a); a.click()
-      document.body.removeChild(a)
-      setTimeout(() => URL.revokeObjectURL(url), 5000)
+      if (pdfRes.ok && pdfRes.headers.get('content-type')?.includes('application/pdf')) {
+        // Real PDF from server
+        const blob = await pdfRes.blob()
+        const url = URL.createObjectURL(blob)
+        const a = document.createElement('a')
+        a.href = url; a.download = pdfFilename
+        document.body.appendChild(a); a.click()
+        document.body.removeChild(a)
+        setTimeout(() => URL.revokeObjectURL(url), 5000)
+      } else {
+        // Fallback: open in new tab, auto-trigger print dialog for Save as PDF
+        const blob = new Blob([finalHtml], { type: 'text/html;charset=utf-8' })
+        const url = URL.createObjectURL(blob)
+        const w = window.open(url, '_blank')
+        if (w) setTimeout(() => { w.focus(); w.print() }, 1800)
+        setTimeout(() => URL.revokeObjectURL(url), 15000)
+      }
           } catch(e) { alert('Report failed: ' + String(e)) }
     setPdfLoading(null)
   }
