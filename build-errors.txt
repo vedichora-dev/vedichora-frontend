@@ -1,32 +1,45 @@
 === BUILD OUTPUT ===
-
-> vedichora@1.0.1 prebuild
-> node -e "const fs=require('fs');const t=JSON.parse(fs.readFileSync('tsconfig.json','utf8'));t.exclude=['node_modules','e2e','e2e/**','playwright.config.ts','**/*.spec.ts','**/*.spec.js'];t.include=['next-env.d.ts','src/**/*.ts','src/**/*.tsx','.next/types/**/*.ts'];fs.writeFileSync('tsconfig.json',JSON.stringify(t,null,2))"
-
-
-> vedichora@1.0.1 build
-> next build
-
-⚠ No build cache found. Please configure build caching for faster rebuilds. Read more: https://nextjs.org/docs/messages/no-cache
-Attention: Next.js now collects completely anonymous telemetry regarding usage.
-This information is used to shape Next.js' roadmap and prioritize features.
-You can learn more, including how to opt-out if you'd not like to participate in this anonymous program, by visiting the following URL:
-https://nextjs.org/telemetry
-
-   ▲ Next.js 14.0.4
-   - Environments: .env.local
-
-   Creating an optimized production build ...
-   Using tsconfig file: ./tsconfig.json
- ✓ Compiled successfully
-   Skipping validation of types
-   Linting ...
-   Collecting page data ...
-   Generating static pages (0/26) ...
- ⚠ Entire page /checkout deopted into client-side rendering. https://nextjs.org/docs/messages/deopted-into-client-rendering /checkout
-   Generating static pages (6/26) 
-   Generating static pages (12/26) 
+ ⚠ Unsupported metadata themeColor is configured in metadata export in /remedies. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ ⚠ Unsupported metadata themeColor is configured in metadata export in /remedies. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ ⚠ Unsupported metadata themeColor is configured in metadata export in /shop. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ ⚠ Unsupported metadata themeColor is configured in metadata export in /shop. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ ⚠ Unsupported metadata themeColor is configured in metadata export in /signin. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ ⚠ Unsupported metadata themeColor is configured in metadata export in /signin. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ ⚠ Unsupported metadata themeColor is configured in metadata export in /transits. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ ⚠ Unsupported metadata themeColor is configured in metadata export in /transits. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ ⚠ Unsupported metadata themeColor is configured in metadata export in /signup. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ ⚠ Unsupported metadata themeColor is configured in metadata export in /signup. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
    Generating static pages (19/26) 
+ ⚠ Unsupported metadata themeColor is configured in metadata export in /varshaphal. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ ⚠ Unsupported metadata themeColor is configured in metadata export in /varshaphal. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ ⚠ Unsupported metadata themeColor is configured in metadata export in /. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ ⚠ Unsupported metadata themeColor is configured in metadata export in /. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ ⚠ Unsupported metadata themeColor is configured in metadata export in /western. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ ⚠ Unsupported metadata themeColor is configured in metadata export in /western. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ ⚠ Unsupported metadata themeColor is configured in metadata export in /dashboard. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ ⚠ Unsupported metadata themeColor is configured in metadata export in /dashboard. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ ⚠ Unsupported metadata themeColor is configured in metadata export in /yogas. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ ⚠ Unsupported metadata themeColor is configured in metadata export in /yogas. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
  ✓ Generating static pages (26/26) 
    Finalizing page optimization ...
    Collecting build traces ...
@@ -60,7 +73,7 @@ Route (app)                              Size     First Load JS
   ├ chunks/938-cac2006256170abd.js       26.7 kB
   ├ chunks/fd9d1056-591193791e59a9f8.js  53.3 kB
   ├ chunks/main-app-b4533ec2e702cf2a.js  220 B
-  └ chunks/webpack-cf9185263601e4af.js   1.76 kB
+  └ chunks/webpack-97dedd5d473a2e47.js   1.76 kB
 
 
 ○  (Static)   prerendered as static content
