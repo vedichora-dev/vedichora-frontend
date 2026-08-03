@@ -996,7 +996,17 @@ function init() {
   // Rating + overlay predictions
   var _deep = DATA.deepResult || DATA.deep || null;
   renderRating(DATA, _deep);
-  renderOverlay(_deep);
+  // If deepResult present (paid/full report) — auto-show overlay as annex
+  if (_deep) {
+    renderOverlay(_deep);
+    var overlaySec = document.getElementById('overlay-section');
+    if (overlaySec) overlaySec.style.display = '';
+    // Hide the lock button — full report shows everything
+    var buyBtn = document.getElementById('vh-buy-btn');
+    if (buyBtn) buyBtn.style.display = 'none';
+    var unlockNote = document.getElementById('lbl-unlock-note');
+    if (unlockNote) unlockNote.style.display = 'none';
+  }
   // Replace cover title with actual title
   var _t = document.getElementById('cover-title');
   if(_t) _t.textContent = L.title;
