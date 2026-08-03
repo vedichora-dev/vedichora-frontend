@@ -1,6 +1,7 @@
 // VedicHora build trigger
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  experimental: { serverComponentsExternalPackages: ['playwright-core', '@sparticuz/chromium'] },
   typescript: { ignoreBuildErrors: true, tsconfigPath: "./tsconfig.json" },
   reactStrictMode: true,
   experimental: { serverComponentsExternalPackages: ['puppeteer-core', '@sparticuz/chromium'] },
