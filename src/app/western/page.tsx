@@ -1107,9 +1107,6 @@ export default function WesternPage(){
               </div>
             )}
 
-            {/* LoveMeter API result */}
-            }
-
             {/* ── VedicHora Layered Matching Results ── */}
             {compatResult && (
               <div ref={resultsRef} style={{marginTop:'20px'}}>
