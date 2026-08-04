@@ -1,0 +1,116 @@
+name: Deploy Gotenberg PDF Service
+
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy-gotenberg:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get Railway project info
+        id: railway
+        run: |
+          RESULT=$(curl -s -X POST https://backboard.railway.app/graphql/v2 \
+            -H "Authorization: Bearer ${{ secrets.RAILWAY_TOKEN }}" \
+            -H "Content-Type: application/json" \
+            -d '{"query":"query{me{projects{edges{node{id name environments{edges{node{id name}}}}}}}}"}')
+          echo "Railway projects: $RESULT"
+          
+          PROJECT_ID=$(echo "$RESULT" | python3 -c "
+          import sys,json
+          data=json.load(sys.stdin)
+          projects=data['data']['me']['projects']['edges']
+          print(projects[0]['node']['id'])
+          ")
+          
+          ENV_ID=$(echo "$RESULT" | python3 -c "
+          import sys,json
+          data=json.load(sys.stdin)
+          envs=data['data']['me']['projects']['edges'][0]['node']['environments']['edges']
+          prod=[x for x in envs if x['node']['name']=='production']
+          print(prod[0]['node']['id'] if prod else envs[0]['node']['id'])
+          ")
+          
+          echo "PROJECT_ID=$PROJECT_ID" >> $GITHUB_ENV
+          echo "ENV_ID=$ENV_ID" >> $GITHUB_ENV
+          echo "Project: $PROJECT_ID, Env: $ENV_ID"
+
+      - name: Create Gotenberg service on Railway
+        run: |
+          RESULT=$(curl -s -X POST https://backboard.railway.app/graphql/v2 \
+            -H "Authorization: Bearer ${{ secrets.RAILWAY_TOKEN }}" \
+            -H "Content-Type: application/json" \
+            -d "{\"query\":\"mutation{serviceCreate(input:{projectId:\\\"${{ env.PROJECT_ID }}\\\",name:\\\"gotenberg\\\"}){id name}}\"}")
+          echo "Create: $RESULT"
+          
+          SERVICE_ID=$(echo "$RESULT" | python3 -c "
+          import sys,json
+          data=json.load(sys.stdin)
+          print(data.get('data',{}).get('serviceCreate',{}).get('id',''))
+          " 2>/dev/null || echo "")
+          echo "SERVICE_ID=$SERVICE_ID" >> $GITHUB_ENV
+          echo "Service ID: $SERVICE_ID"
+
+      - name: Set Docker image for Gotenberg
+        if: env.SERVICE_ID != ''
+        run: |
+          # Update the service source to use Gotenberg Docker image
+          RESULT=$(curl -s -X POST https://backboard.railway.app/graphql/v2 \
+            -H "Authorization: Bearer ${{ secrets.RAILWAY_TOKEN }}" \
+            -H "Content-Type: application/json" \
+            -d "{\"query\":\"mutation{serviceInstanceUpdate(input:{source:{image:\\\"gotenberg/gotenberg:8\\\"},serviceId:\\\"${{ env.SERVICE_ID }}\\\",environmentId:\\\"${{ env.ENV_ID }}\\\"})}\"}")
+          echo "Image update: $RESULT"
+          
+          # Deploy
+          DEPLOY=$(curl -s -X POST https://backboard.railway.app/graphql/v2 \
+            -H "Authorization: Bearer ${{ secrets.RAILWAY_TOKEN }}" \
+            -H "Content-Type: application/json" \
+            -d "{\"query\":\"mutation{serviceInstanceDeploy(serviceId:\\\"${{ env.SERVICE_ID }}\\\",environmentId:\\\"${{ env.ENV_ID }}\\\")}\"}")
+          echo "Deploy: $DEPLOY"
+
+      - name: Generate public domain
+        if: env.SERVICE_ID != ''
+        run: |
+          sleep 30
+          RESULT=$(curl -s -X POST https://backboard.railway.app/graphql/v2 \
+            -H "Authorization: Bearer ${{ secrets.RAILWAY_TOKEN }}" \
+            -H "Content-Type: application/json" \
+            -d "{\"query\":\"mutation{serviceDomainCreate(input:{serviceId:\\\"${{ env.SERVICE_ID }}\\\",environmentId:\\\"${{ env.ENV_ID }}\\\"}){domain}}\"}")
+          echo "Domain: $RESULT"
+          
+          DOMAIN=$(echo "$RESULT" | python3 -c "
+          import sys,json
+          data=json.load(sys.stdin)
+          print(data.get('data',{}).get('serviceDomainCreate',{}).get('domain',''))
+          " 2>/dev/null || echo "")
+          echo "GOTENBERG_DOMAIN=$DOMAIN" >> $GITHUB_ENV
+          echo "Domain: $DOMAIN"
+
+      - name: Add GOTENBERG_URL to Vercel
+        if: env.GOTENBERG_DOMAIN != ''
+        run: |
+          # Get Vercel project info
+          PROJECT=$(curl -s "https://api.vercel.com/v9/projects/vedichora-frontend-orcin" \
+            -H "Authorization: Bearer ${{ secrets.VERCEL_TOKEN }}")
+          PROJECT_ID=$(echo "$PROJECT" | python3 -c "import sys,json; print(json.load(sys.stdin).get('id',''))")
+          echo "Vercel project ID: $PROJECT_ID"
+          
+          # Add env var
+          curl -s -X POST "https://api.vercel.com/v10/projects/$PROJECT_ID/env" \
+            -H "Authorization: Bearer ${{ secrets.VERCEL_TOKEN }}" \
+            -H "Content-Type: application/json" \
+            -d "{\"key\":\"GOTENBERG_URL\",\"value\":\"https://${{ env.GOTENBERG_DOMAIN }}\",\"type\":\"plain\",\"target\":[\"production\",\"preview\",\"development\"]}"
+          
+          echo "✅ GOTENBERG_URL=https://${{ env.GOTENBERG_DOMAIN }} set on Vercel"
+          
+          # Trigger Vercel redeploy  
+          npm install -g vercel --legacy-peer-deps 2>/dev/null
+          cd /tmp && vercel --token=${{ secrets.VERCEL_TOKEN }} --prod --yes --name vedichora-frontend-orcin || true
+
+      - name: Summary
+        run: |
+          echo "================================"
+          echo "Gotenberg URL: https://${{ env.GOTENBERG_DOMAIN }}"
+          echo "Service ID: ${{ env.SERVICE_ID }}"
+          echo "PDF endpoint: https://vedichora-frontend-orcin.vercel.app/api/pdf/porutham"
+          echo "================================"
