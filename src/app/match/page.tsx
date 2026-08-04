@@ -999,14 +999,15 @@ export default function MatchPage() {
       const finalHtml = tmpl.replace('</head>',
         `<script>window.__VH_DATA=${JSON.stringify(data)};<\/script></head>`)
 
-      // POST HTML to Railway backend → PuppeteerSharp generates real PDF → download
-      const pdfRes = await fetch('https://enchanting-dedication-production.up.railway.app/api/pdf/generate', {
+      // Call /api/pdf/porutham → Gotenberg on Railway → real PDF → direct download
+      const pdfRes = await fetch('/api/pdf/porutham', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ html: finalHtml, filename: pdfFilename })
       })
 
-      if (pdfRes.ok) {
+      if (pdfRes.ok && pdfRes.headers.get('content-type')?.includes('pdf')) {
+        // Server returned real PDF — download directly
         const pdfBlob = await pdfRes.blob()
         const pdfUrl = URL.createObjectURL(pdfBlob)
         const a = document.createElement('a')
@@ -1015,7 +1016,7 @@ export default function MatchPage() {
         document.body.appendChild(a); a.click(); document.body.removeChild(a)
         setTimeout(() => URL.revokeObjectURL(pdfUrl), 5000)
       } else {
-        // Fallback: open in new tab with print
+        // Gotenberg not yet available — open in new tab + print dialog
         const blobUrl = URL.createObjectURL(new Blob([finalHtml], {type:'text/html;charset=utf-8'}))
         const w = window.open(blobUrl, '_blank')
         if (w) setTimeout(() => { try { w.focus(); w.print() } catch {} }, 2000)
