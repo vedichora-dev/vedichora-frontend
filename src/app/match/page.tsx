@@ -999,82 +999,28 @@ export default function MatchPage() {
       const finalHtml = tmpl.replace('</head>',
         `<script>window.__VH_DATA=${JSON.stringify(data)};<\/script></head>`)
 
-      // Render in hidden iframe (scripts execute), capture with html2canvas → real PDF download
-      setPdfLoading('gen')
-
-      // Load jsPDF + html2canvas
-      await Promise.all([
-        new Promise<void>((res, rej) => {
-          if ((window as any).jspdf) return res()
-          const s = document.createElement('script')
-          s.src = 'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js'
-          s.onload = () => res(); s.onerror = rej
-          document.head.appendChild(s)
-        }),
-        new Promise<void>((res, rej) => {
-          if ((window as any).html2canvas) return res()
-          const s = document.createElement('script')
-          s.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js'
-          s.onload = () => res(); s.onerror = rej
-          document.head.appendChild(s)
-        })
-      ])
-
-      // Render HTML in hidden iframe so <script> tags execute and init() runs
-      const iframe = document.createElement('iframe')
-      iframe.style.cssText = 'position:fixed;left:-9999px;top:0;width:794px;height:3000px;border:none;visibility:hidden;'
-      document.body.appendChild(iframe)
-      const iDoc = iframe.contentDocument!
-      iDoc.open(); iDoc.write(finalHtml); iDoc.close()
-      await new Promise(r => setTimeout(r, 4000)) // wait for init() to fully render
-
-      // Get the rendered body
-      const iBody = iframe.contentDocument?.body
-      if (!iBody) throw new Error('iframe body not found')
-
-      // Use jsPDF with html2canvas
-      const { jsPDF } = (window as any).jspdf
-      const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' })
-      const pageW = 210, pageH = 297
-      const scale = 2
-
-      const canvas = await (window as any).html2canvas(iBody, {
-        scale, useCORS: true, allowTaint: true, logging: false,
-        width: 794, windowWidth: 794,
-        backgroundColor: '#ffffff',
-        ignoreElements: (el: Element) => el.classList?.contains('no-print')
+      // POST HTML to Railway backend → PuppeteerSharp generates real PDF → download
+      const pdfRes = await fetch('https://enchanting-dedication-production.up.railway.app/api/pdf/generate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ html: finalHtml, filename: pdfFilename })
       })
 
-      document.body.removeChild(iframe)
-
-      const imgW = pageW
-      const imgH = (canvas.height * pageW) / (canvas.width)
-      let posY = 0
-      let remaining = imgH
-
-      // Add pages
-      let firstPage = true
-      while (remaining > 0) {
-        if (!firstPage) pdf.addPage()
-        const sliceH = Math.min(remaining, pageH)
-        const srcY = posY * (canvas.height / imgH)
-        const srcH = sliceH * (canvas.height / imgH)
-
-        const pageCanvas = document.createElement('canvas')
-        pageCanvas.width = canvas.width
-        pageCanvas.height = srcH
-        const ctx = pageCanvas.getContext('2d')!
-        ctx.drawImage(canvas, 0, srcY, canvas.width, srcH, 0, 0, canvas.width, srcH)
-
-        const imgData = pageCanvas.toDataURL('image/jpeg', 0.92)
-        pdf.addImage(imgData, 'JPEG', 0, 0, imgW, sliceH)
-
-        posY += sliceH
-        remaining -= sliceH
-        firstPage = false
+      if (pdfRes.ok) {
+        const pdfBlob = await pdfRes.blob()
+        const pdfUrl = URL.createObjectURL(pdfBlob)
+        const a = document.createElement('a')
+        a.href = pdfUrl
+        a.download = pdfFilename
+        document.body.appendChild(a); a.click(); document.body.removeChild(a)
+        setTimeout(() => URL.revokeObjectURL(pdfUrl), 5000)
+      } else {
+        // Fallback: open in new tab with print
+        const blobUrl = URL.createObjectURL(new Blob([finalHtml], {type:'text/html;charset=utf-8'}))
+        const w = window.open(blobUrl, '_blank')
+        if (w) setTimeout(() => { try { w.focus(); w.print() } catch {} }, 2000)
+        setTimeout(() => URL.revokeObjectURL(blobUrl), 30000)
       }
-
-      pdf.save(pdfFilename)
           } catch(e) { alert('Report failed: ' + String(e)) }
     setPdfLoading(null)
   }
