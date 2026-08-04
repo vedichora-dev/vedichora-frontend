@@ -285,7 +285,7 @@
     <div id="vh-score" style="font-family:'Cinzel',serif;font-size:28px;font-weight:700;color:#fff;margin-bottom:4px;">—</div>
     <div id="vh-rating-text" style="font-size:12px;color:#C8A96A;margin-bottom:16px;">—</div>
     <div style="background:rgba(255,255,255,.08);border-radius:8px;padding:14px 16px;margin-bottom:16px;text-align:left;">
-      <div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#C8A96A;margin-bottom:8px;">⚠ Upcoming Challenge Windows</div>
+      <div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#C8A96A;margin-bottom:8px;">Upcoming Challenge Windows</div>
       <div id="vh-teaser-rows"></div>
     </div>
     <button id="vh-buy-btn" onclick="unlockAdvanced()" style="display:block;width:100%;padding:13px;background:#C8A96A;color:#3D0808;border:none;border-radius:8px;font-family:'Cinzel',serif;font-size:12px;font-weight:700;letter-spacing:.08em;cursor:pointer;text-transform:uppercase;">
@@ -624,7 +624,7 @@ function renderVerdict() {
   const summary = DATA.Summary ?? DATA.summary ?? '';
   const box = document.getElementById('verdict-box');
   if(box) box.className = 'verdict ' + (isRec ? 'verdict-good' : 'verdict-warn');
-  { const _t_verdict_icon=document.getElementById('verdict-icon'); if(_t_verdict_icon) _t_verdict_icon.textContent=isRec ? '🌟' : '⚠️'; }
+  { const _t_verdict_icon=document.getElementById('verdict-icon'); if(_t_verdict_icon) _t_verdict_icon.textContent=isRec ? '🌟' : ''; }
   { const _t_verdict_titl=document.getElementById('verdict-title'); if(_t_verdict_titl) _t_verdict_titl.textContent=isRec ? L.recommended : L.needsReview; }
   { const _t_verdict_body=document.getElementById('verdict-body'); if(_t_verdict_body) _t_verdict_body.textContent=summary; }
 }
