@@ -999,19 +999,82 @@ export default function MatchPage() {
       const finalHtml = tmpl.replace('</head>',
         `<script>window.__VH_DATA=${JSON.stringify(data)};<\/script></head>`)
 
-      // Open in new tab and auto-trigger browser print dialog
-      // User selects "Save as PDF" — produces a proper PDF
-      const blob = new Blob([finalHtml], { type: 'text/html;charset=utf-8' })
-      const url = URL.createObjectURL(blob)
-      const w = window.open(url, '_blank')
-      if (w) {
-        w.addEventListener('load', () => {
-          setTimeout(() => { w.focus(); w.print() }, 1000)
+      // Render in hidden iframe (scripts execute), capture with html2canvas → real PDF download
+      setPdfLoading('gen')
+
+      // Load jsPDF + html2canvas
+      await Promise.all([
+        new Promise<void>((res, rej) => {
+          if ((window as any).jspdf) return res()
+          const s = document.createElement('script')
+          s.src = 'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js'
+          s.onload = () => res(); s.onerror = rej
+          document.head.appendChild(s)
+        }),
+        new Promise<void>((res, rej) => {
+          if ((window as any).html2canvas) return res()
+          const s = document.createElement('script')
+          s.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js'
+          s.onload = () => res(); s.onerror = rej
+          document.head.appendChild(s)
         })
-        // Also try after delay in case load already fired
-        setTimeout(() => { try { w.focus(); w.print() } catch {} }, 2000)
+      ])
+
+      // Render HTML in hidden iframe so <script> tags execute and init() runs
+      const iframe = document.createElement('iframe')
+      iframe.style.cssText = 'position:fixed;left:-9999px;top:0;width:794px;height:3000px;border:none;visibility:hidden;'
+      document.body.appendChild(iframe)
+      const iDoc = iframe.contentDocument!
+      iDoc.open(); iDoc.write(finalHtml); iDoc.close()
+      await new Promise(r => setTimeout(r, 4000)) // wait for init() to fully render
+
+      // Get the rendered body
+      const iBody = iframe.contentDocument?.body
+      if (!iBody) throw new Error('iframe body not found')
+
+      // Use jsPDF with html2canvas
+      const { jsPDF } = (window as any).jspdf
+      const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' })
+      const pageW = 210, pageH = 297
+      const scale = 2
+
+      const canvas = await (window as any).html2canvas(iBody, {
+        scale, useCORS: true, allowTaint: true, logging: false,
+        width: 794, windowWidth: 794,
+        backgroundColor: '#ffffff',
+        ignoreElements: (el: Element) => el.classList?.contains('no-print')
+      })
+
+      document.body.removeChild(iframe)
+
+      const imgW = pageW
+      const imgH = (canvas.height * pageW) / (canvas.width)
+      let posY = 0
+      let remaining = imgH
+
+      // Add pages
+      let firstPage = true
+      while (remaining > 0) {
+        if (!firstPage) pdf.addPage()
+        const sliceH = Math.min(remaining, pageH)
+        const srcY = posY * (canvas.height / imgH)
+        const srcH = sliceH * (canvas.height / imgH)
+
+        const pageCanvas = document.createElement('canvas')
+        pageCanvas.width = canvas.width
+        pageCanvas.height = srcH
+        const ctx = pageCanvas.getContext('2d')!
+        ctx.drawImage(canvas, 0, srcY, canvas.width, srcH, 0, 0, canvas.width, srcH)
+
+        const imgData = pageCanvas.toDataURL('image/jpeg', 0.92)
+        pdf.addImage(imgData, 'JPEG', 0, 0, imgW, sliceH)
+
+        posY += sliceH
+        remaining -= sliceH
+        firstPage = false
       }
-      setTimeout(() => URL.revokeObjectURL(url), 30000)
+
+      pdf.save(pdfFilename)
           } catch(e) { alert('Report failed: ' + String(e)) }
     setPdfLoading(null)
   }
