@@ -1,4 +1,4 @@
-// VedicHora build trigger
+// VedicHora build trigger — Gotenberg PDF service active
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   experimental: { serverComponentsExternalPackages: ['playwright-core', '@sparticuz/chromium'] },
