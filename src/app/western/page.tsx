@@ -174,6 +174,7 @@ function WesternDashaSection({
 }) {
   const r       = compatResult as any
   const [deep, setDeep]       = useState<any>(null)
+  const [viewMode, setViewMode] = useState<'simple'|'detailed'>('simple')
   const [loading, setLoading] = useState(false)
   const [loaded, setLoaded]   = useState(false)
   const [pdfGenerating, setPdfGenerating] = useState(false)
@@ -297,8 +298,24 @@ function WesternDashaSection({
         </div>
       </div>
 
+      {/* ── View toggle ──────────────────────────────────────────────── */}
+      {loaded && (
+        <div style={{display:'flex',justifyContent:'center',gap:'8px'}}>
+          {(['simple','detailed'] as const).map(v=>(
+            <button key={v} onClick={()=>setViewMode(v)}
+              style={{padding:'7px 18px',fontSize:'11px',borderRadius:'20px',cursor:'pointer',
+                border:`1px solid ${viewMode===v?'var(--w-acc)':'var(--w-bd)'}`,
+                background:viewMode===v?'var(--w-acc)':'transparent',
+                color:viewMode===v?'#fff':'var(--w-tx2)',fontWeight:viewMode===v?700:400,
+                textTransform:'capitalize'}}>
+              {v==='simple'?'Simple':'Full Detail'}
+            </button>
+          ))}
+        </div>
+      )}
+
       {/* ── Who They Are ──────────────────────────────────────────────── */}
-      {(p1Infl.length>0 || p2Infl.length>0) && (
+      {viewMode==='detailed' && (p1Infl.length>0 || p2Infl.length>0) && (
         <div style={{background:'var(--w-surf)',border:'1px solid var(--w-bd)',borderRadius:'24px',
           padding:'28px 32px',boxShadow:'0 4px 32px rgba(0,0,0,.07)'}}>
           <div style={{fontSize:'11px',fontWeight:700,letterSpacing:'.1em',textTransform:'uppercase',
@@ -401,14 +418,16 @@ function WesternDashaSection({
         {bestYears.length > 0 && (
           <div style={{marginBottom:'14px',padding:'16px',background:'#f0fdf4',border:'1px solid #86efac',borderRadius:'12px'}}>
             <div style={{fontSize:'10px',fontWeight:700,color:'#15803d',marginBottom:'10px',textTransform:'uppercase',letterSpacing:'.06em'}}>
-              🌟 Best Periods Together
+              🌟 Good Times Together
             </div>
-            {bestYears.slice(0,3).map((y:any,i:number)=>(
-              <div key={i} style={{marginBottom:'8px',paddingBottom:'8px',borderBottom:i<bestYears.slice(0,3).length-1?'1px solid #bbf7d0':'none'}}>
+            {bestYears.slice(0,viewMode==='simple'?6:3).map((y:any,i:number)=>(
+              <div key={i} style={{marginBottom:'8px',paddingBottom:'8px',
+                borderBottom:i<bestYears.slice(0,viewMode==='simple'?6:3).length-1?'1px solid #bbf7d0':'none'}}>
                 <div style={{fontSize:'13px',fontWeight:700,color:'#15803d'}}>
-                  {new Date(y.startDate).getFullYear()}–{new Date(y.endDate).getFullYear()}
+                  {new Date(y.startDate).toLocaleDateString('en-US',{month:'short',year:'numeric'})} – {new Date(y.endDate).toLocaleDateString('en-US',{month:'short',year:'numeric'})}
+                  {viewMode==='simple' && y.label && <span style={{fontWeight:400,color:'#166534'}}> · {y.label}</span>}
                 </div>
-                {y.note && <div style={{fontSize:'12px',color:'#166534',marginTop:'3px',lineHeight:1.5}}>{truncate(y.note,220)}</div>}
+                {viewMode==='detailed' && y.note && <div style={{fontSize:'12px',color:'#166534',marginTop:'3px',lineHeight:1.5}}>{truncate(y.note,220)}</div>}
               </div>
             ))}
           </div>
@@ -418,21 +437,23 @@ function WesternDashaSection({
         {chalYears.length > 0 && (
           <div style={{marginBottom:'14px',padding:'16px',background:'#fef2f2',border:'1px solid #fca5a5',borderRadius:'12px'}}>
             <div style={{fontSize:'10px',fontWeight:700,color:'#dc2626',marginBottom:'10px',textTransform:'uppercase',letterSpacing:'.06em'}}>
-              ⚠ Periods Requiring Awareness
+              ⚠ Difficult Times to Watch
             </div>
-            {chalYears.slice(0,3).map((y:any,i:number)=>(
-              <div key={i} style={{marginBottom:'8px',paddingBottom:'8px',borderBottom:i<chalYears.slice(0,3).length-1?'1px solid #fecaca':'none'}}>
+            {chalYears.slice(0,viewMode==='simple'?6:3).map((y:any,i:number)=>(
+              <div key={i} style={{marginBottom:'8px',paddingBottom:'8px',
+                borderBottom:i<chalYears.slice(0,viewMode==='simple'?6:3).length-1?'1px solid #fecaca':'none'}}>
                 <div style={{fontSize:'13px',fontWeight:700,color:'#dc2626'}}>
-                  {new Date(y.startDate).getFullYear()}–{new Date(y.endDate).getFullYear()}
+                  {new Date(y.startDate).toLocaleDateString('en-US',{month:'short',year:'numeric'})} – {new Date(y.endDate).toLocaleDateString('en-US',{month:'short',year:'numeric'})}
+                  {viewMode==='simple' && y.label && <span style={{fontWeight:400,color:'#991b1b'}}> · {y.label}</span>}
                 </div>
-                {y.note && <div style={{fontSize:'12px',color:'#991b1b',marginTop:'3px',lineHeight:1.5}}>{truncate(y.note,220)}</div>}
+                {viewMode==='detailed' && y.note && <div style={{fontSize:'12px',color:'#991b1b',marginTop:'3px',lineHeight:1.5}}>{truncate(y.note,220)}</div>}
               </div>
             ))}
           </div>
         )}
 
-        {/* Dual narrative cards */}
-        {crossPreds.filter((p:any)=>p.intensity==='SEVERE'||p.intensity==='POSITIVE').slice(0,4).map((p:any,i:number)=>{
+        {/* Dual narrative cards — full detail only */}
+        {viewMode==='detailed' && crossPreds.filter((p:any)=>p.intensity==='SEVERE'||p.intensity==='POSITIVE').slice(0,4).map((p:any,i:number)=>{
           const other = p.who===name1 ? name2 : name1
           return (
           <div key={i} style={{marginBottom:'10px',padding:'14px',borderRadius:'12px',
