@@ -1,39 +1,39 @@
 
 Running 14 tests using 2 workers
 
-  ✓   1 [chromium] › e2e/07-western.spec.js:14:3 › Western Compat Page › W1: Page loads, compat tab visible (4.2s)
-  ✓   2 [mobile] › e2e/07-western.spec.js:14:3 › Western Compat Page › W1: Page loads, compat tab visible (4.3s)
+  ✓   1 [mobile] › e2e/07-western.spec.js:14:3 › Western Compat Page › W1: Page loads, compat tab visible (4.1s)
+  ✓   2 [chromium] › e2e/07-western.spec.js:14:3 › Western Compat Page › W1: Page loads, compat tab visible (4.2s)
 Select count: 13
 Select count: 13
-  ✓   3 [chromium] › e2e/07-western.spec.js:20:3 › Western Compat Page › W2: Has select dropdowns for Day/Month/Year — NOT plain text (3.5s)
-  ✓   4 [mobile] › e2e/07-western.spec.js:20:3 › Western Compat Page › W2: Has select dropdowns for Day/Month/Year — NOT plain text (3.9s)
+  ✓   4 [chromium] › e2e/07-western.spec.js:20:3 › Western Compat Page › W2: Has select dropdowns for Day/Month/Year — NOT plain text (3.6s)
+  ✓   3 [mobile] › e2e/07-western.spec.js:20:3 › Western Compat Page › W2: Has select dropdowns for Day/Month/Year — NOT plain text (3.9s)
 First select options: 32
-  ✓   5 [chromium] › e2e/07-western.spec.js:28:3 › Western Compat Page › W3: Day dropdown has 31 day options (3.4s)
 First select options: 32
-  ✓   6 [mobile] › e2e/07-western.spec.js:28:3 › Western Compat Page › W3: Day dropdown has 31 day options (3.5s)
+  ✓   5 [chromium] › e2e/07-western.spec.js:28:3 › Western Compat Page › W3: Day dropdown has 31 day options (3.5s)
+  ✓   6 [mobile] › e2e/07-western.spec.js:28:3 › Western Compat Page › W3: Day dropdown has 31 day options (3.7s)
 Place inputs: 2
   ✓   7 [chromium] › e2e/07-western.spec.js:36:3 › Western Compat Page › W4: City input present for both people (3.5s)
 Place inputs: 2
-  ✓   8 [mobile] › e2e/07-western.spec.js:36:3 › Western Compat Page › W4: City input present for both people (3.7s)
+  ✓   8 [mobile] › e2e/07-western.spec.js:36:3 › Western Compat Page › W4: City input present for both people (3.5s)
 Input value after typing: Mumbai
-  ✓   9 [chromium] › e2e/07-western.spec.js:43:3 › Western Compat Page › W5: City autocomplete fires suggestions on typing (5.6s)
+  ✓  10 [mobile] › e2e/07-western.spec.js:43:3 › Western Compat Page › W5: City autocomplete fires suggestions on typing (5.4s)
 Input value after typing: Mumbai
-  ✓  10 [mobile] › e2e/07-western.spec.js:43:3 › Western Compat Page › W5: City autocomplete fires suggestions on typing (5.7s)
+  ✓   9 [chromium] › e2e/07-western.spec.js:43:3 › Western Compat Page › W5: City autocomplete fires suggestions on typing (8.3s)
 Has score: true
 Has match label: true
 Body length: 10323
 PDF button present: true
-  ✓  11 [chromium] › e2e/07-western.spec.js:55:3 › Western Compat Page › W6: Fill form + Reveal shows real matchmaking result (11.9s)
+  ✓  11 [mobile] › e2e/07-western.spec.js:55:3 › Western Compat Page › W6: Fill form + Reveal shows real matchmaking result (12.1s)
 Has score: true
 Has match label: true
 Body length: 10323
 PDF button present: true
-  ✓  12 [mobile] › e2e/07-western.spec.js:55:3 › Western Compat Page › W6: Fill form + Reveal shows real matchmaking result (12.1s)
+  ✓  12 [chromium] › e2e/07-western.spec.js:55:3 › Western Compat Page › W6: Fill form + Reveal shows real matchmaking result (11.8s)
 Pathu Porutham present: false
 Ashta Koota present: false
-  ✓  13 [chromium] › e2e/07-western.spec.js:104:3 › Western Compat Page › W7: No Indian terms in visible text (3.4s)
+  ✓  13 [mobile] › e2e/07-western.spec.js:104:3 › Western Compat Page › W7: No Indian terms in visible text (3.4s)
 Pathu Porutham present: false
 Ashta Koota present: false
-  ✓  14 [mobile] › e2e/07-western.spec.js:104:3 › Western Compat Page › W7: No Indian terms in visible text (3.5s)
+  ✓  14 [chromium] › e2e/07-western.spec.js:104:3 › Western Compat Page › W7: No Indian terms in visible text (3.3s)
 
-  14 passed (39.1s)
+  14 passed (39.6s)
