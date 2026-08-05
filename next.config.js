@@ -5,6 +5,11 @@ const nextConfig = {
   typescript: { ignoreBuildErrors: true, tsconfigPath: "./tsconfig.json" },
   reactStrictMode: true,
   experimental: { serverComponentsExternalPackages: ['puppeteer-core', '@sparticuz/chromium'] },
+  async redirects() {
+    return [
+      { source: '/', destination: '/western', permanent: false },
+    ]
+  },
   async headers() {
     return [
       {
