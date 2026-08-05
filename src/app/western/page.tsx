@@ -176,6 +176,7 @@ function WesternDashaSection({
   const [deep, setDeep]       = useState<any>(null)
   const [loading, setLoading] = useState(false)
   const [loaded, setLoaded]   = useState(false)
+  const [pdfGenerating, setPdfGenerating] = useState(false)
 
   // Auto-load deep whenever compatResult arrives with chart IDs
   useEffect(() => {
@@ -250,6 +251,14 @@ function WesternDashaSection({
   const bestYears: any[]   = deep?.bestYears ?? []
   const chalYears: any[]   = deep?.challengingYears ?? []
   const crossPreds: any[]  = deep?.crossPredictions ?? []
+  const p1Infl: any[]      = deep?.p1Influences ?? []
+  const p2Infl: any[]      = deep?.p2Influences ?? []
+  const truncate = (s:string, max:number) => {
+    if (!s || s.length <= max) return s
+    const cut = s.slice(0, max)
+    const lastSpace = cut.lastIndexOf(' ')
+    return (lastSpace > 40 ? cut.slice(0, lastSpace) : cut) + '…'
+  }
   const now = 2026
 
   return (
@@ -287,6 +296,38 @@ function WesternDashaSection({
           {desc}
         </div>
       </div>
+
+      {/* ── Who They Are ──────────────────────────────────────────────── */}
+      {(p1Infl.length>0 || p2Infl.length>0) && (
+        <div style={{background:'var(--w-surf)',border:'1px solid var(--w-bd)',borderRadius:'24px',
+          padding:'28px 32px',boxShadow:'0 4px 32px rgba(0,0,0,.07)'}}>
+          <div style={{fontSize:'11px',fontWeight:700,letterSpacing:'.1em',textTransform:'uppercase',
+            color:'var(--w-acc)',marginBottom:'18px',textAlign:'center'}}>
+            Who They Are
+          </div>
+          <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:'24px'}}>
+            {[{nm:name1, infl:p1Infl},{nm:name2, infl:p2Infl}].map(({nm,infl},i)=>{
+              const narratives = infl
+                .map((p:any)=>p.narrative||p.Narrative)
+                .filter(Boolean)
+                .slice(0,3)
+              return (
+                <div key={i}>
+                  <div style={{fontFamily:"'Playfair Display',Georgia,serif",fontWeight:700,fontSize:'15px',
+                    color:'var(--w-tx)',marginBottom:'10px',paddingBottom:'8px',borderBottom:'1px solid var(--w-bd)'}}>
+                    {nm}
+                  </div>
+                  {narratives.length>0 ? narratives.map((n:string,j:number)=>(
+                    <p key={j} style={{fontSize:'12.5px',color:'var(--w-tx2)',lineHeight:1.7,marginBottom:'8px'}}>{n}</p>
+                  )) : (
+                    <p style={{fontSize:'12px',color:'var(--w-tx2)',opacity:.6}}>Loading personality details…</p>
+                  )}
+                </div>
+              )
+            })}
+          </div>
+        </div>
+      )}
 
       {/* ── Timeline ─────────────────────────────────────────────────── */}
       <div style={{background:'var(--w-surf)',border:'1px solid var(--w-bd)',borderRadius:'24px',
@@ -367,7 +408,7 @@ function WesternDashaSection({
                 <div style={{fontSize:'13px',fontWeight:700,color:'#15803d'}}>
                   {new Date(y.startDate).getFullYear()}–{new Date(y.endDate).getFullYear()}
                 </div>
-                {y.note && <div style={{fontSize:'12px',color:'#166534',marginTop:'3px',lineHeight:1.5}}>{y.note.slice(0,150)}</div>}
+                {y.note && <div style={{fontSize:'12px',color:'#166534',marginTop:'3px',lineHeight:1.5}}>{truncate(y.note,220)}</div>}
               </div>
             ))}
           </div>
@@ -384,27 +425,30 @@ function WesternDashaSection({
                 <div style={{fontSize:'13px',fontWeight:700,color:'#dc2626'}}>
                   {new Date(y.startDate).getFullYear()}–{new Date(y.endDate).getFullYear()}
                 </div>
-                {y.note && <div style={{fontSize:'12px',color:'#991b1b',marginTop:'3px',lineHeight:1.5}}>{y.note.slice(0,150)}</div>}
+                {y.note && <div style={{fontSize:'12px',color:'#991b1b',marginTop:'3px',lineHeight:1.5}}>{truncate(y.note,220)}</div>}
               </div>
             ))}
           </div>
         )}
 
         {/* Dual narrative cards */}
-        {crossPreds.filter((p:any)=>p.intensity==='SEVERE'||p.intensity==='POSITIVE').slice(0,4).map((p:any,i:number)=>(
+        {crossPreds.filter((p:any)=>p.intensity==='SEVERE'||p.intensity==='POSITIVE').slice(0,4).map((p:any,i:number)=>{
+          const other = p.who===name1 ? name2 : name1
+          return (
           <div key={i} style={{marginBottom:'10px',padding:'14px',borderRadius:'12px',
             background:p.intensity==='POSITIVE'?'#f0fdf4':'#fef2f2',
             border:`1px solid ${p.intensity==='POSITIVE'?'#86efac':'#fca5a5'}`}}>
             <div style={{fontSize:'10px',fontWeight:700,
               color:p.intensity==='POSITIVE'?'#15803d':'#dc2626',
               marginBottom:'6px',textTransform:'uppercase',letterSpacing:'.05em'}}>
-              {p.intensity==='POSITIVE'?'🌟':'⚠'} {p.yearRange} · {p.who}
+              {p.intensity==='POSITIVE'?'🌟':'⚠'} About {p.who} · {p.yearRange}
               {p.isCurrent&&<span style={{marginLeft:'6px',fontSize:'9px',background:'var(--w-acc)',color:'#fff',padding:'1px 5px',borderRadius:'3px'}}>Now</span>}
             </div>
             {p.fromTheirSide&&<div style={{fontSize:'12px',color:'var(--w-tx)',lineHeight:1.6,marginBottom:'4px'}}>{p.fromTheirSide}</div>}
-            {p.fromPartnerSide&&<div style={{fontSize:'11px',color:'var(--w-tx2)',lineHeight:1.5,fontStyle:'italic'}}>{p.fromPartnerSide}</div>}
+            {p.fromPartnerSide&&<div style={{fontSize:'11px',color:'var(--w-tx2)',lineHeight:1.5,fontStyle:'italic'}}>How this shows up for {other}: {p.fromPartnerSide}</div>}
           </div>
-        ))}
+          )
+        })}
 
         {/* Re-run + PDF */}
         {loaded && (
@@ -417,21 +461,45 @@ function WesternDashaSection({
                 {m==='future'?`${now}–${now+10}`:m==='past'?`${now-10}–${now}`:'Full 70yr ★'}
               </button>
             ))}
-            <button onClick={()=>{
-                fetch('/western-report.html').then(res=>res.text()).then(tmpl=>{
-                  const d={name1:r?.name1||name1,name2:r?.name2||name2,
-                    gender1:'Male',gender2:'Female',
+            <button disabled={pdfGenerating} onClick={async ()=>{
+                setPdfGenerating(true)
+                try {
+                  const tmpl = await fetch('/western-report.html').then(res=>res.text())
+                  const d={
+                    name1:r?.name1||name1, name2:r?.name2||name2,
+                    gender1:r?.gender1||'Male', gender2:r?.gender2||'Female',
+                    groomLagna:deep?.groomLagna||deep?.GroomLagna, brideLagna:deep?.brideLagna||deep?.BrideLagna,
                     fromYear:yearSummary.length>0?yearSummary[0].year:(mode==='past'?now-10:now),
-                    toYear:yearSummary.length>0?yearSummary[yearSummary.length-1].year:(mode==='full'?now+70:now+10),deep};
-                  const inj=tmpl.replace('</head>',`<script>window.__VH_DATA=${JSON.stringify(d)}<\/script></head>`);
-                  const w=window.open('','_blank');
-                  if(w){w.document.write(inj);w.document.close();setTimeout(()=>w.print(),800);}
-                });
+                    toYear:yearSummary.length>0?yearSummary[yearSummary.length-1].year:(mode==='full'?now+70:now+10),
+                    deep,
+                  }
+                  const html=tmpl.replace('</head>',`<script>window.__VH_DATA=${JSON.stringify(d)}<\/script></head>`)
+                  const res=await fetch('/api/pdf/generate',{
+                    method:'POST', headers:{'Content-Type':'application/json'},
+                    body:JSON.stringify({html, filename:`${(r?.name1||name1)}-${(r?.name2||name2)}-Compatibility.pdf`})
+                  })
+                  const isPdf=(res.headers.get('Content-Type')||'').includes('application/pdf')
+                  if (isPdf) {
+                    // Real PDF bytes — trigger an actual file download
+                    const blob=await res.blob()
+                    const url=URL.createObjectURL(blob)
+                    const a=document.createElement('a')
+                    a.href=url; a.download=`${(r?.name1||name1)}-${(r?.name2||name2)}-Compatibility.pdf`
+                    document.body.appendChild(a); a.click(); a.remove()
+                    setTimeout(()=>URL.revokeObjectURL(url),2000)
+                  } else {
+                    // Serverless Chromium unavailable — fall back to opening the report so the
+                    // person can still use the browser's own Print → Save as PDF.
+                    const w=window.open('','_blank')
+                    if (w) { w.document.write(html); w.document.close(); setTimeout(()=>w.print(),800) }
+                  }
+                } catch(e) { console.error('PDF generation failed', e) }
+                setPdfGenerating(false)
               }}
               style={{marginLeft:'auto',padding:'7px 16px',background:'#0F1117',color:'#D4AF55',
-                border:'none',borderRadius:'8px',cursor:'pointer',
+                border:'none',borderRadius:'8px',cursor:pdfGenerating?'wait':'pointer',opacity:pdfGenerating?0.6:1,
                 fontFamily:"'Playfair Display',Georgia,serif",fontSize:'11px',fontWeight:600}}>
-              ⬇ Download PDF
+              {pdfGenerating?'Generating PDF…':'⬇ Download PDF'}
             </button>
           </div>
         )}
