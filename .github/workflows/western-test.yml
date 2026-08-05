@@ -1,0 +1,78 @@
+name: Western Matchmaking Test
+on:
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: write
+    env:
+      BASE_URL: https://vedichora-frontend-orcin.vercel.app
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: '20' }
+      - run: npm install --legacy-peer-deps
+      - run: npx playwright install chromium --with-deps
+      - name: Create results dir
+        run: mkdir -p test-results
+
+      - name: Run western matchmaking tests
+        run: |
+          npx playwright test e2e/07-western.spec.js --reporter=list 2>&1 | tee western-output.txt
+          exit ${PIPESTATUS[0]}
+        continue-on-error: true
+
+      - name: Push output to repo
+        if: always()
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO: ${{ github.repository }}
+        run: |
+          CONTENT=$(base64 -w 0 western-output.txt)
+          EXISTING=$(curl -s -H "Authorization: token $GH_TOKEN" \
+            "https://api.github.com/repos/$REPO/contents/western-test-output.txt" | python3 -c "import sys,json; print(json.load(sys.stdin).get('sha',''))" 2>/dev/null)
+          if [ -n "$EXISTING" ]; then
+            curl -s -X PUT -H "Authorization: token $GH_TOKEN" -H "Content-Type: application/json" \
+              -d "{\"message\":\"test: western results $(date +%H%M) [skip ci]\",\"content\":\"$CONTENT\",\"sha\":\"$EXISTING\"}" \
+              "https://api.github.com/repos/$REPO/contents/western-test-output.txt" > /dev/null
+          else
+            curl -s -X PUT -H "Authorization: token $GH_TOKEN" -H "Content-Type: application/json" \
+              -d "{\"message\":\"test: western results $(date +%H%M) [skip ci]\",\"content\":\"$CONTENT\"}" \
+              "https://api.github.com/repos/$REPO/contents/western-test-output.txt" > /dev/null
+          fi
+
+      - name: Push screenshots to repo
+        if: always()
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO: ${{ github.repository }}
+        run: |
+          for f in test-results/W*.png; do
+            [ -f "$f" ] || continue
+            NAME=$(basename "$f")
+            CONTENT_IMG=$(base64 -w 0 "$f")
+            EXISTING_IMG=$(curl -s -H "Authorization: token $GH_TOKEN" \
+              "https://api.github.com/repos/$REPO/contents/test-screenshots/$NAME" | python3 -c "import sys,json; print(json.load(sys.stdin).get('sha',''))" 2>/dev/null || echo "")
+            if [ -n "$EXISTING_IMG" ]; then
+              curl -s -X PUT -H "Authorization: token $GH_TOKEN" -H "Content-Type: application/json" \
+                -d "{\"message\":\"ci: $NAME [skip ci]\",\"content\":\"$CONTENT_IMG\",\"sha\":\"$EXISTING_IMG\"}" \
+                "https://api.github.com/repos/$REPO/contents/test-screenshots/$NAME" > /dev/null
+            else
+              curl -s -X PUT -H "Authorization: token $GH_TOKEN" -H "Content-Type: application/json" \
+                -d "{\"message\":\"ci: $NAME [skip ci]\",\"content\":\"$CONTENT_IMG\"}" \
+                "https://api.github.com/repos/$REPO/contents/test-screenshots/$NAME" > /dev/null
+            fi
+            echo "Committed $NAME"
+          done
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: western-test-${{ github.run_id }}
+          path: |
+            western-output.txt
+            test-results/
+          retention-days: 7
