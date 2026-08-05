@@ -50,23 +50,38 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           REPO: ${{ github.repository }}
         run: |
-          for f in test-results/W*.png; do
-            [ -f "$f" ] || continue
-            NAME=$(basename "$f")
-            CONTENT_IMG=$(base64 -w 0 "$f")
-            EXISTING_IMG=$(curl -s -H "Authorization: token $GH_TOKEN" \
-              "https://api.github.com/repos/$REPO/contents/test-screenshots/$NAME" | python3 -c "import sys,json; print(json.load(sys.stdin).get('sha',''))" 2>/dev/null || echo "")
-            if [ -n "$EXISTING_IMG" ]; then
-              curl -s -X PUT -H "Authorization: token $GH_TOKEN" -H "Content-Type: application/json" \
-                -d "{\"message\":\"ci: $NAME [skip ci]\",\"content\":\"$CONTENT_IMG\",\"sha\":\"$EXISTING_IMG\"}" \
-                "https://api.github.com/repos/$REPO/contents/test-screenshots/$NAME" > /dev/null
-            else
-              curl -s -X PUT -H "Authorization: token $GH_TOKEN" -H "Content-Type: application/json" \
-                -d "{\"message\":\"ci: $NAME [skip ci]\",\"content\":\"$CONTENT_IMG\"}" \
-                "https://api.github.com/repos/$REPO/contents/test-screenshots/$NAME" > /dev/null
-            fi
-            echo "Committed $NAME"
-          done
+          python3 - <<'PYEOF'
+          import os, glob, base64, json, urllib.request
+
+          token = os.environ["GH_TOKEN"]
+          repo  = os.environ["REPO"]
+
+          def api(method, path, body=None):
+              url = f"https://api.github.com/repos/{repo}/{path}"
+              data = json.dumps(body).encode() if body else None
+              req = urllib.request.Request(url, data=data, method=method, headers={
+                  "Authorization": f"token {token}",
+                  "Accept": "application/vnd.github.v3+json",
+                  "User-Agent": "VH/1",
+                  "Content-Type": "application/json",
+              })
+              try:
+                  with urllib.request.urlopen(req) as resp:
+                      return resp.status, json.loads(resp.read() or b"{}")
+              except urllib.error.HTTPError as e:
+                  return e.code, {}
+
+          for f in sorted(glob.glob("test-results/W*.png")):
+              name = os.path.basename(f)
+              content = base64.b64encode(open(f, "rb").read()).decode()
+              status, existing = api("GET", f"contents/test-screenshots/{name}")
+              sha = existing.get("sha")
+              body = {"message": f"ci: {name} [skip ci]", "content": content}
+              if sha:
+                  body["sha"] = sha
+              status, _ = api("PUT", f"contents/test-screenshots/{name}", body)
+              print(name, "->", status)
+          PYEOF
 
       - uses: actions/upload-artifact@v4
         if: always()
