@@ -249,8 +249,6 @@ function WesternDashaSection({
   }
 
   const yearSummary: any[] = deep?.yearSummary ?? []
-  const bestYears: any[]   = deep?.bestYears ?? []
-  const chalYears: any[]   = deep?.challengingYears ?? []
   const crossPreds: any[]  = deep?.crossPredictions ?? []
   const p1Infl: any[]      = deep?.p1Influences ?? []
   const p2Infl: any[]      = deep?.p2Influences ?? []
@@ -261,6 +259,39 @@ function WesternDashaSection({
     return (lastSpace > 40 ? cut.slice(0, lastSpace) : cut) + '…'
   }
   const now = 2026
+
+  // Backend windows can overlap each other and can extend slightly outside the
+  // selected range — clamp every period to the actual selected window, then merge
+  // any that now overlap/duplicate so the list never shows two rows for the same
+  // stretch of time or a date outside the tab that's selected.
+  const rangeStart = new Date((deep?.fromYear ?? now - 10), 0, 1)
+  const rangeEnd   = new Date((deep?.toYear   ?? now + 10), 11, 31)
+  const sevRank: Record<string, number> = { MILD:1, MODERATE:2, MIXED:2, SEVERE:3, HIGH:4, CRITICAL:5 }
+  const mergePeriods = (periods: any[]) => {
+    const clamped = periods
+      .map((p: any) => {
+        const s = new Date(p.startDate), e = new Date(p.endDate)
+        return { ...p, _s: s < rangeStart ? rangeStart : s, _e: e > rangeEnd ? rangeEnd : e }
+      })
+      .filter((p: any) => p._s <= p._e)
+      .sort((a: any, b: any) => a._s.getTime() - b._s.getTime())
+    const merged: any[] = []
+    for (const p of clamped) {
+      const last = merged[merged.length - 1]
+      if (last && p._s.getTime() <= last._e.getTime()) {
+        if (p._e.getTime() > last._e.getTime()) last._e = p._e
+        const curRank = sevRank[(p.label || '').toUpperCase()] || 0
+        const lastRank = sevRank[(last.label || '').toUpperCase()] || 0
+        if (curRank > lastRank) { last.label = p.label; if (p.note) last.note = p.note }
+        else if (!last.note && p.note) { last.note = p.note }
+      } else {
+        merged.push({ ...p })
+      }
+    }
+    return merged.map((p: any) => ({ ...p, startDate: p._s.toISOString(), endDate: p._e.toISOString() }))
+  }
+  const bestYears: any[] = mergePeriods(deep?.bestYears ?? [])
+  const chalYears: any[] = mergePeriods(deep?.challengingYears ?? [])
 
   return (
     <div style={{display:'flex',flexDirection:'column',gap:'20px'}}>
@@ -390,26 +421,29 @@ function WesternDashaSection({
         {/* Year timeline */}
         {loaded && yearSummary.length > 0 && (
           <div style={{marginBottom:'20px'}}>
-            <div style={{display:'flex',gap:'3px',flexWrap:'wrap',marginBottom:'8px'}}>
+            <div style={{fontSize:'11px',color:'var(--w-tx2)',textAlign:'center',marginBottom:'12px'}}>
+              Showing {yearSummary[0]?.year} – {yearSummary[yearSummary.length-1]?.year} · each tile is one year
+            </div>
+            <div style={{display:'flex',gap:'4px',flexWrap:'wrap',marginBottom:'8px',justifyContent:'center'}}>
               {yearSummary.map((y:any)=>(
                 <div key={y.year} title={y.note||y.verdict}
-                  style={{width:'32px',height:'32px',borderRadius:'5px',display:'flex',alignItems:'center',
-                    justifyContent:'center',fontSize:'8.5px',fontWeight:700,cursor:'default',
-                    background:y.verdict==='Favourable'?'#bbf7d0':y.verdict==='Difficult'?'#fecaca':y.verdict==='Challenging'?'#fed7aa':'#e5e7eb',
-                    color:y.verdict==='Favourable'?'#15803d':y.verdict==='Difficult'?'#dc2626':y.verdict==='Challenging'?'#92400e':'#6b7280',
+                  style={{width:'42px',height:'34px',borderRadius:'5px',display:'flex',alignItems:'center',
+                    justifyContent:'center',fontSize:'10.5px',fontWeight:700,cursor:'default',
+                    background:y.verdict==='Favourable'?'#bbf7d0':y.verdict==='Mixed'?'#fed7aa':y.verdict==='Challenging'?'#fdba74':y.verdict==='Difficult'?'#fecaca':'#e5e7eb',
+                    color:y.verdict==='Favourable'?'#15803d':y.verdict==='Mixed'?'#92400e':y.verdict==='Challenging'?'#c2410c':y.verdict==='Difficult'?'#dc2626':'#6b7280',
                     border:y.isPast?'1px dashed #9ca3af':'none',opacity:y.isPast?0.7:1}}>
-                  {String(y.year).slice(2)}
+                  {y.year}
                 </div>
               ))}
             </div>
-            <div style={{display:'flex',gap:'14px',fontSize:'9px',marginBottom:'16px'}}>
-              {[['#bbf7d0','#15803d','Favourable'],['#fed7aa','#92400e','Mixed'],['#fecaca','#dc2626','Difficult']].map(([bg,c,l])=>(
+            <div style={{display:'flex',gap:'14px',fontSize:'9px',marginBottom:'16px',flexWrap:'wrap',justifyContent:'center'}}>
+              {[['#bbf7d0','#15803d','Favourable'],['#fed7aa','#92400e','Mixed'],['#fdba74','#c2410c','Challenging'],['#fecaca','#dc2626','Difficult']].map(([bg,c,l])=>(
                 <div key={l} style={{display:'flex',alignItems:'center',gap:'3px'}}>
                   <div style={{width:'10px',height:'10px',borderRadius:'2px',background:bg}}/>
                   <span style={{color:c}}>{l}</span>
                 </div>
               ))}
-              <span style={{color:'#9ca3af'}}>Dashed = past</span>
+              <span style={{color:'#9ca3af'}}>Dashed border = already past</span>
             </div>
           </div>
         )}
