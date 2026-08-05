@@ -26,7 +26,7 @@ test.describe('Western Compat Page', () => {
   })
 
   test('W3: Day dropdown has 31 day options', async ({ page }) => {
-    const firstSelect = page.locator('select').first()
+    const firstSelect = page.locator('select').filter({ hasText: 'Day' }).first()
     const optionCount = await firstSelect.locator('option').count()
     console.log(`First select options: ${optionCount}`)
     await page.screenshot({ path: 'test-results/W3_day_opts.png' })
@@ -52,41 +52,53 @@ test.describe('Western Compat Page', () => {
     expect(val.length).toBeGreaterThan(0)
   })
 
-  test('W6: Fill form + Reveal shows result', async ({ page }) => {
+  test('W6: Fill form + Reveal shows real matchmaking result', async ({ page }) => {
+    test.setTimeout(90000)
     // Fill names
     const nameInputs = page.locator('input[placeholder*="Name"], input[placeholder*="name"]')
     if (await nameInputs.count() >= 1) await nameInputs.nth(0).fill('Karthik')
     if (await nameInputs.count() >= 2) await nameInputs.nth(1).fill('Priya')
 
-    // Select dates via dropdowns
-    const selects = await page.locator('select').all()
+    // Select dates via dropdowns — filter by placeholder text to skip the nav currency selector
+    const daySelects = page.locator('select').filter({ hasText: 'Day' })
+    const monSelects = page.locator('select').filter({ hasText: 'Month' })
+    const yrSelects  = page.locator('select').filter({ hasText: 'Year' })
     try {
-      if (selects[0]) await selects[0].selectOption('15')   // Day P1
-      if (selects[1]) await selects[1].selectOption('6')    // Month P1
-      if (selects[2]) await selects[2].selectOption('1990') // Year P1
+      await daySelects.nth(0).selectOption('15')   // Day P1
+      await monSelects.nth(0).selectOption('6')    // Month P1
+      await yrSelects.nth(0).selectOption('1990')  // Year P1
     } catch(e) { console.log('P1 date select error:', e.message) }
     try {
-      // P2 selects (index 6,7,8 or 3,4,5 depending on time selects)
-      const daySelects = page.locator('select').filter({ hasText: 'Day' })
-      if (await daySelects.count() >= 2) await daySelects.nth(1).selectOption('22')
-      const monSelects = page.locator('select').filter({ hasText: 'Month' })
-      if (await monSelects.count() >= 2) await monSelects.nth(1).selectOption('3')
-      const yrSelects = page.locator('select').filter({ hasText: 'Year' })
-      if (await yrSelects.count() >= 2) await yrSelects.nth(1).selectOption('1993')
+      await daySelects.nth(1).selectOption('22')   // Day P2
+      await monSelects.nth(1).selectOption('3')    // Month P2
+      await yrSelects.nth(1).selectOption('1993')  // Year P2
     } catch(e) { console.log('P2 date select error:', e.message) }
 
     await page.screenshot({ path: 'test-results/W6_filled.png' })
 
     // Click Reveal
     const reveal = page.locator('button').filter({ hasText: /Reveal/i })
-    if (await reveal.count() > 0) {
-      await reveal.first().click()
-      await page.waitForTimeout(6000)
-      await page.screenshot({ path: 'test-results/W6_result.png' })
-      const body = await page.textContent('body')
-      const hasScore = /\d+\/36|\d+%|Score|Compatibility|compatible/i.test(body)
-      console.log(`Has result: ${hasScore}`)
-    }
+    expect(await reveal.count()).toBeGreaterThan(0)
+    await reveal.first().click()
+
+    // Wait for the result card (real API round-trip: guest chart calc + deep engine)
+    await page.waitForTimeout(8000)
+    await page.screenshot({ path: 'test-results/W6_result.png' })
+
+    const body = await page.textContent('body')
+    const hasScore = /\d{1,3}\s*(out of 100|%)/i.test(body)
+    const hasLabel = /(Exceptional|Strong|Good|Average|Needs Consideration) Match/i.test(body)
+    const hasStrayBrace = /[^{]\}\s*\}?\s*(\n|$)/.test(body) // crude sanity check, not exhaustive
+    console.log(`Has score: ${hasScore}`)
+    console.log(`Has match label: ${hasLabel}`)
+    console.log(`Body length: ${body.length}`)
+
+    expect(hasScore).toBeTruthy()
+    expect(hasLabel).toBeTruthy()
+
+    // PDF download button should be present once a result is showing
+    const pdfBtn = page.locator('button').filter({ hasText: /Download PDF/i })
+    console.log(`PDF button present: ${await pdfBtn.count() > 0}`)
   })
 
   test('W7: No Indian terms in visible text', async ({ page }) => {
