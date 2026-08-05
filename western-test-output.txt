@@ -1,0 +1,355 @@
+
+Running 14 tests using 2 workers
+
+  ✓   1 [chromium] › e2e/07-western.spec.js:14:3 › Western Compat Page › W1: Page loads, compat tab visible (4.4s)
+  ✓   2 [mobile] › e2e/07-western.spec.js:14:3 › Western Compat Page › W1: Page loads, compat tab visible (4.5s)
+Select count: 13
+Select count: 13
+  ✓   3 [chromium] › e2e/07-western.spec.js:20:3 › Western Compat Page › W2: Has select dropdowns for Day/Month/Year — NOT plain text (3.5s)
+  ✓   4 [mobile] › e2e/07-western.spec.js:20:3 › Western Compat Page › W2: Has select dropdowns for Day/Month/Year — NOT plain text (3.8s)
+First select options: 7
+First select options: 7
+  ✘   5 [chromium] › e2e/07-western.spec.js:28:3 › Western Compat Page › W3: Day dropdown has 31 day options (4.0s)
+  ✘   6 [mobile] › e2e/07-western.spec.js:28:3 › Western Compat Page › W3: Day dropdown has 31 day options (3.7s)
+First select options: 7
+First select options: 7
+  ✘   7 [chromium] › e2e/07-western.spec.js:28:3 › Western Compat Page › W3: Day dropdown has 31 day options (retry #1) (3.9s)
+  ✘   8 [mobile] › e2e/07-western.spec.js:28:3 › Western Compat Page › W3: Day dropdown has 31 day options (retry #1) (4.1s)
+Place inputs: 2
+Place inputs: 2
+  ✓   9 [chromium] › e2e/07-western.spec.js:36:3 › Western Compat Page › W4: City input present for both people (3.8s)
+  ✓  10 [mobile] › e2e/07-western.spec.js:36:3 › Western Compat Page › W4: City input present for both people (3.9s)
+Input value after typing: Mumbai
+  ✓  11 [chromium] › e2e/07-western.spec.js:43:3 › Western Compat Page › W5: City autocomplete fires suggestions on typing (5.5s)
+Input value after typing: Mumbai
+  ✓  12 [mobile] › e2e/07-western.spec.js:43:3 › Western Compat Page › W5: City autocomplete fires suggestions on typing (5.7s)
+P1 date select error: locator.selectOption: Test timeout of 60000ms exceeded.
+Call log:
+  - waiting for locator('select').first()
+    - locator resolved to <select>…</select>
+  - attempting select option action
+    2 × waiting for element to be visible and enabled
+      - did not find some options
+    - retrying select option action
+    - waiting 20ms
+    2 × waiting for element to be visible and enabled
+      - did not find some options
+    - retrying select option action
+      - waiting 100ms
+    113 × waiting for element to be visible and enabled
+        - did not find some options
+      - retrying select option action
+        - waiting 500ms
+
+P2 date select error: locator.count: Target page, context or browser has been closed
+  ✘  13 [chromium] › e2e/07-western.spec.js:55:3 › Western Compat Page › W6: Fill form + Reveal shows result (1.0m)
+P1 date select error: locator.selectOption: Test timeout of 60000ms exceeded.
+Call log:
+  - waiting for locator('select').first()
+    - locator resolved to <select>…</select>
+  - attempting select option action
+    2 × waiting for element to be visible and enabled
+      - did not find some options
+    - retrying select option action
+    - waiting 20ms
+    2 × waiting for element to be visible and enabled
+      - did not find some options
+    - retrying select option action
+      - waiting 100ms
+    114 × waiting for element to be visible and enabled
+        - did not find some options
+      - retrying select option action
+        - waiting 500ms
+
+P2 date select error: locator.count: Target page, context or browser has been closed
+  ✘  14 [mobile] › e2e/07-western.spec.js:55:3 › Western Compat Page › W6: Fill form + Reveal shows result (1.0m)
+P1 date select error: locator.selectOption: Test timeout of 60000ms exceeded.
+Call log:
+  - waiting for locator('select').first()
+    - locator resolved to <select>…</select>
+  - attempting select option action
+    2 × waiting for element to be visible and enabled
+      - did not find some options
+    - retrying select option action
+    - waiting 20ms
+    2 × waiting for element to be visible and enabled
+      - did not find some options
+    - retrying select option action
+      - waiting 100ms
+    112 × waiting for element to be visible and enabled
+        - did not find some options
+      - retrying select option action
+        - waiting 500ms
+
+P2 date select error: locator.count: Target page, context or browser has been closed
+  ✘  15 [chromium] › e2e/07-western.spec.js:55:3 › Western Compat Page › W6: Fill form + Reveal shows result (retry #1) (1.0m)
+P1 date select error: locator.selectOption: Test timeout of 60000ms exceeded.
+Call log:
+  - waiting for locator('select').first()
+    - locator resolved to <select>…</select>
+  - attempting select option action
+    2 × waiting for element to be visible and enabled
+      - did not find some options
+    - retrying select option action
+    - waiting 20ms
+    2 × waiting for element to be visible and enabled
+      - did not find some options
+    - retrying select option action
+      - waiting 100ms
+    113 × waiting for element to be visible and enabled
+        - did not find some options
+      - retrying select option action
+        - waiting 500ms
+
+P2 date select error: locator.count: Target page, context or browser has been closed
+  ✘  16 [mobile] › e2e/07-western.spec.js:55:3 › Western Compat Page › W6: Fill form + Reveal shows result (retry #1) (1.0m)
+Pathu Porutham present: false
+Ashta Koota present: false
+  ✓  17 [chromium] › e2e/07-western.spec.js:92:3 › Western Compat Page › W7: No Indian terms in visible text (3.7s)
+Pathu Porutham present: false
+Ashta Koota present: false
+  ✓  18 [mobile] › e2e/07-western.spec.js:92:3 › Western Compat Page › W7: No Indian terms in visible text (3.6s)
+
+
+  1) [chromium] › e2e/07-western.spec.js:28:3 › Western Compat Page › W3: Day dropdown has 31 day options 
+
+    Error: expect(received).toBeGreaterThan(expected)
+
+    Expected: > 10
+    Received:   7
+
+      31 |     console.log(`First select options: ${optionCount}`)
+      32 |     await page.screenshot({ path: 'test-results/W3_day_opts.png' })
+    > 33 |     expect(optionCount).toBeGreaterThan(10)
+         |                         ^
+      34 |   })
+      35 |
+      36 |   test('W4: City input present for both people', async ({ page }) => {
+        at /home/runner/work/vedichora-frontend/vedichora-frontend/e2e/07-western.spec.js:33:25
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/07-western-Western-Compat--92cce-dropdown-has-31-day-options-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/07-western-Western-Compat--92cce-dropdown-has-31-day-options-chromium/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/07-western-Western-Compat--92cce-dropdown-has-31-day-options-chromium/error-context.md
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: expect(received).toBeGreaterThan(expected)
+
+    Expected: > 10
+    Received:   7
+
+      31 |     console.log(`First select options: ${optionCount}`)
+      32 |     await page.screenshot({ path: 'test-results/W3_day_opts.png' })
+    > 33 |     expect(optionCount).toBeGreaterThan(10)
+         |                         ^
+      34 |   })
+      35 |
+      36 |   test('W4: City input present for both people', async ({ page }) => {
+        at /home/runner/work/vedichora-frontend/vedichora-frontend/e2e/07-western.spec.js:33:25
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/07-western-Western-Compat--92cce-dropdown-has-31-day-options-chromium-retry1/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/07-western-Western-Compat--92cce-dropdown-has-31-day-options-chromium-retry1/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/07-western-Western-Compat--92cce-dropdown-has-31-day-options-chromium-retry1/error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/07-western-Western-Compat--92cce-dropdown-has-31-day-options-chromium-retry1/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/07-western-Western-Compat--92cce-dropdown-has-31-day-options-chromium-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) [chromium] › e2e/07-western.spec.js:55:3 › Western Compat Page › W6: Fill form + Reveal shows result 
+
+    Test timeout of 60000ms exceeded.
+
+    Error: page.screenshot: Target page, context or browser has been closed
+
+      76 |     } catch(e) { console.log('P2 date select error:', e.message) }
+      77 |
+    > 78 |     await page.screenshot({ path: 'test-results/W6_filled.png' })
+         |                ^
+      79 |
+      80 |     // Click Reveal
+      81 |     const reveal = page.locator('button').filter({ hasText: /Reveal/i })
+        at /home/runner/work/vedichora-frontend/vedichora-frontend/e2e/07-western.spec.js:78:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/07-western-Western-Compat--e590b-ll-form-Reveal-shows-result-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/07-western-Western-Compat--e590b-ll-form-Reveal-shows-result-chromium/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/07-western-Western-Compat--e590b-ll-form-Reveal-shows-result-chromium/error-context.md
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Test timeout of 60000ms exceeded.
+
+    Error: page.screenshot: Target page, context or browser has been closed
+
+      76 |     } catch(e) { console.log('P2 date select error:', e.message) }
+      77 |
+    > 78 |     await page.screenshot({ path: 'test-results/W6_filled.png' })
+         |                ^
+      79 |
+      80 |     // Click Reveal
+      81 |     const reveal = page.locator('button').filter({ hasText: /Reveal/i })
+        at /home/runner/work/vedichora-frontend/vedichora-frontend/e2e/07-western.spec.js:78:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/07-western-Western-Compat--e590b-ll-form-Reveal-shows-result-chromium-retry1/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/07-western-Western-Compat--e590b-ll-form-Reveal-shows-result-chromium-retry1/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/07-western-Western-Compat--e590b-ll-form-Reveal-shows-result-chromium-retry1/error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/07-western-Western-Compat--e590b-ll-form-Reveal-shows-result-chromium-retry1/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/07-western-Western-Compat--e590b-ll-form-Reveal-shows-result-chromium-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  3) [mobile] › e2e/07-western.spec.js:28:3 › Western Compat Page › W3: Day dropdown has 31 day options 
+
+    Error: expect(received).toBeGreaterThan(expected)
+
+    Expected: > 10
+    Received:   7
+
+      31 |     console.log(`First select options: ${optionCount}`)
+      32 |     await page.screenshot({ path: 'test-results/W3_day_opts.png' })
+    > 33 |     expect(optionCount).toBeGreaterThan(10)
+         |                         ^
+      34 |   })
+      35 |
+      36 |   test('W4: City input present for both people', async ({ page }) => {
+        at /home/runner/work/vedichora-frontend/vedichora-frontend/e2e/07-western.spec.js:33:25
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/07-western-Western-Compat--92cce-dropdown-has-31-day-options-mobile/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/07-western-Western-Compat--92cce-dropdown-has-31-day-options-mobile/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/07-western-Western-Compat--92cce-dropdown-has-31-day-options-mobile/error-context.md
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: expect(received).toBeGreaterThan(expected)
+
+    Expected: > 10
+    Received:   7
+
+      31 |     console.log(`First select options: ${optionCount}`)
+      32 |     await page.screenshot({ path: 'test-results/W3_day_opts.png' })
+    > 33 |     expect(optionCount).toBeGreaterThan(10)
+         |                         ^
+      34 |   })
+      35 |
+      36 |   test('W4: City input present for both people', async ({ page }) => {
+        at /home/runner/work/vedichora-frontend/vedichora-frontend/e2e/07-western.spec.js:33:25
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/07-western-Western-Compat--92cce-dropdown-has-31-day-options-mobile-retry1/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/07-western-Western-Compat--92cce-dropdown-has-31-day-options-mobile-retry1/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/07-western-Western-Compat--92cce-dropdown-has-31-day-options-mobile-retry1/error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/07-western-Western-Compat--92cce-dropdown-has-31-day-options-mobile-retry1/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/07-western-Western-Compat--92cce-dropdown-has-31-day-options-mobile-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  4) [mobile] › e2e/07-western.spec.js:55:3 › Western Compat Page › W6: Fill form + Reveal shows result 
+
+    Test timeout of 60000ms exceeded.
+
+    Error: page.screenshot: Target page, context or browser has been closed
+
+      76 |     } catch(e) { console.log('P2 date select error:', e.message) }
+      77 |
+    > 78 |     await page.screenshot({ path: 'test-results/W6_filled.png' })
+         |                ^
+      79 |
+      80 |     // Click Reveal
+      81 |     const reveal = page.locator('button').filter({ hasText: /Reveal/i })
+        at /home/runner/work/vedichora-frontend/vedichora-frontend/e2e/07-western.spec.js:78:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/07-western-Western-Compat--e590b-ll-form-Reveal-shows-result-mobile/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/07-western-Western-Compat--e590b-ll-form-Reveal-shows-result-mobile/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/07-western-Western-Compat--e590b-ll-form-Reveal-shows-result-mobile/error-context.md
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Test timeout of 60000ms exceeded.
+
+    Error: page.screenshot: Target page, context or browser has been closed
+
+      76 |     } catch(e) { console.log('P2 date select error:', e.message) }
+      77 |
+    > 78 |     await page.screenshot({ path: 'test-results/W6_filled.png' })
+         |                ^
+      79 |
+      80 |     // Click Reveal
+      81 |     const reveal = page.locator('button').filter({ hasText: /Reveal/i })
+        at /home/runner/work/vedichora-frontend/vedichora-frontend/e2e/07-western.spec.js:78:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/07-western-Western-Compat--e590b-ll-form-Reveal-shows-result-mobile-retry1/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/07-western-Western-Compat--e590b-ll-form-Reveal-shows-result-mobile-retry1/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/07-western-Western-Compat--e590b-ll-form-Reveal-shows-result-mobile-retry1/error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/07-western-Western-Compat--e590b-ll-form-Reveal-shows-result-mobile-retry1/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/07-western-Western-Compat--e590b-ll-form-Reveal-shows-result-mobile-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  4 failed
+    [chromium] › e2e/07-western.spec.js:28:3 › Western Compat Page › W3: Day dropdown has 31 day options 
+    [chromium] › e2e/07-western.spec.js:55:3 › Western Compat Page › W6: Fill form + Reveal shows result 
+    [mobile] › e2e/07-western.spec.js:28:3 › Western Compat Page › W3: Day dropdown has 31 day options 
+    [mobile] › e2e/07-western.spec.js:55:3 › Western Compat Page › W6: Fill form + Reveal shows result 
+  10 passed (2.6m)
