@@ -83,7 +83,7 @@ test.describe('Western Compat Page', () => {
 
     // Wait for the result card (real API round-trip: guest chart calc + deep engine)
     await page.waitForTimeout(8000)
-    await page.screenshot({ path: 'test-results/W6_result.png' })
+    await page.screenshot({ path: 'test-results/W6_result.png', fullPage: true })
 
     const body = await page.textContent('body')
     const hasScore = /\d{1,3}\s*(out of 100|%)/i.test(body)
