@@ -167,10 +167,10 @@ function Sel({value,onChange,opts,placeholder,w}:{value:number|string,onChange:(
 
 // ── Western Layered Matching Section ─────────────────────────────────────
 function WesternDashaSection({
-  compatResult, name1, name2, scoreColor, saved, token
+  compatResult, name1, name2, scoreColor, saved, token, together
 }: {
   compatResult: any; name1: string; name2: string
-  scoreColor: (n:number)=>string; saved: any[]; token: string|null
+  scoreColor: (n:number)=>string; saved: any[]; token: string|null; together: 'yes'|'no'
 }) {
   const r       = compatResult as any
   const [deep, setDeep]       = useState<any>(null)
@@ -192,7 +192,7 @@ function WesternDashaSection({
     }
   }, [compatResult])
   const [relType, setRelType] = useState('Other')
-  const [mode, setMode]       = useState<'future'|'past'|'full'>('future')
+  const [mode, setMode]       = useState<'6m'|'5y'|'10y'|'past'|'full'>('10y')
   const ashta   = r?.AshtaKootaScore   ?? r?.ashtaKootaScore   ?? 0
   const aTotal  = r?.AshtaKootaTotal   ?? r?.ashtaKootaTotal   ?? 36
   const pathu   = r?.PathuPoruthamScore?? r?.pathuPoruthamScore?? 0
@@ -214,7 +214,8 @@ function WesternDashaSection({
                 : score >= 38 ? 'Average Match'
                 : score >= 22 ? 'Needs Consideration'
                 : 'Not Compatible'
-  const desc    = score >= 80
+  const desc    = together === 'yes' ? (
+    score >= 80
     ? `${name1} and ${name2} show exceptional alignment across all major factors. The foundations here are genuinely strong.`
     : score >= 65
     ? `${name1} and ${name2} show strong compatibility. The relationship has solid foundations with a few areas worth conscious attention.`
@@ -225,6 +226,19 @@ function WesternDashaSection({
     : score >= 22
     ? `${name1} and ${name2} face real friction in core areas. This can still work, but it will take sustained, deliberate effort from both sides — go in aware of that.`
     : `${name1} and ${name2} show fundamental incompatibility across the areas that matter most here. This isn't a small gap to work around — it's worth taking seriously before committing further.`
+  ) : (
+    score >= 80
+    ? `If ${name1} and ${name2} were to be together, they would show exceptional alignment across all major factors — genuinely strong foundations to build on.`
+    : score >= 65
+    ? `If ${name1} and ${name2} were to be together, they would have solid foundations, with a few areas worth conscious attention going in.`
+    : score >= 50
+    ? `If ${name1} and ${name2} were to be together, the compatibility looks good overall — some differences exist but the relationship could thrive with awareness.`
+    : score >= 38
+    ? `If ${name1} and ${name2} were to be together, compatibility would be average — conscious effort in specific areas would make the difference.`
+    : score >= 22
+    ? `If ${name1} and ${name2} were to be together, there would be real friction in core areas. It could still work, but would take sustained, deliberate effort from both sides.`
+    : `If ${name1} and ${name2} were to be together, there would be fundamental incompatibility across the areas that matter most here. Worth knowing clearly before going further.`
+  )
 
   const loadDeep = async () => {
     if (!hid1 || !hid2) return
@@ -238,9 +252,17 @@ function WesternDashaSection({
         GroomName: r?.name1 || name1,
         BrideName: r?.name2 || name2,
       }
-      if (mode === 'past')   { body.FromYear = now - 10; body.ToYear = now }
-      if (mode === 'future') { body.FromYear = now; body.ToYear = now + 10 }
-      if (mode === 'full')   { body.FullRange = true }
+      if (mode === '6m')  {
+        const t = new Date()
+        const from6 = new Date(t); from6.setMonth(from6.getMonth() - 1)   // 1mo buffer into the past for testing
+        const to6   = new Date(t); to6.setMonth(to6.getMonth() + 6)
+        body.FromDate = from6.toISOString().slice(0,10)
+        body.ToDate   = to6.toISOString().slice(0,10)
+      }
+      if (mode === '5y')   { body.FromYear = now - 1;  body.ToYear = now + 5 }   // small past buffer for testing
+      if (mode === '10y')  { body.FromYear = now;      body.ToYear = now + 10 }
+      if (mode === 'past') { body.FromYear = now - 10; body.ToYear = now }
+      if (mode === 'full') { body.FullRange = true }
       const hdrs: any = { 'Content-Type': 'application/json' }
       if (token) hdrs['Authorization'] = `Bearer ${token}`
       const res = await fetch(`${CHART_URL}/api/matchmaking/deep`, {
@@ -410,7 +432,7 @@ function WesternDashaSection({
               ))}
             </div>
             <div style={{display:'flex',gap:'6px',flexWrap:'wrap',marginBottom:'14px'}}>
-              {([['future',`Next 10 years`],['past',`Past 10 years`],['full','Full lifetime ★']] as [string,string][]).map(([v,l])=>(
+              {([['6m','Next 6 months'],['5y','Next 5 years'],['10y','Next 10 years'],['past','Past 10 years'],['full','Full lifetime ★']] as [string,string][]).map(([v,l])=>(
                 <button key={v} onClick={()=>setMode(v as any)}
                   style={{padding:'5px 12px',fontSize:'11px',borderRadius:'6px',cursor:'pointer',border:'none',
                     background:mode===v?'var(--w-acc)':'var(--w-bg)',
@@ -518,12 +540,12 @@ function WesternDashaSection({
         {/* Re-run + PDF */}
         {loaded && (
           <div style={{display:'flex',gap:'6px',flexWrap:'wrap',marginTop:'14px',alignItems:'center'}}>
-            {(['future','past','full'] as const).map(m=>(
+            {(['6m','5y','10y','past','full'] as const).map(m=>(
               <button key={m} onClick={()=>{setMode(m);setLoaded(false);setTimeout(loadDeep,50)}}
                 style={{padding:'5px 10px',fontSize:'10px',borderRadius:'6px',cursor:'pointer',border:'none',
                   background:mode===m?'var(--w-acc)':'var(--w-bg)',
                   color:mode===m?'#fff':'var(--w-tx)',fontWeight:mode===m?700:400}}>
-                {m==='future'?`${now}–${now+10}`:m==='past'?`${now-10}–${now}`:'Full 70yr ★'}
+                {m==='6m'?'6mo':m==='5y'?`${now-1}–${now+5}`:m==='10y'?`${now}–${now+10}`:m==='past'?`${now-10}–${now}`:'Full 70yr ★'}
               </button>
             ))}
             <button disabled={pdfGenerating} onClick={async ()=>{
@@ -534,8 +556,8 @@ function WesternDashaSection({
                     name1:r?.name1||name1, name2:r?.name2||name2,
                     gender1:r?.gender1||'Male', gender2:r?.gender2||'Female',
                     groomLagna:deep?.groomLagna||deep?.GroomLagna, brideLagna:deep?.brideLagna||deep?.BrideLagna,
-                    fromYear:yearSummary.length>0?yearSummary[0].year:(mode==='past'?now-10:now),
-                    toYear:yearSummary.length>0?yearSummary[yearSummary.length-1].year:(mode==='full'?now+70:now+10),
+                    fromYear:yearSummary.length>0?yearSummary[0].year:(mode==='past'?now-10:mode==='5y'?now-1:now),
+                    toYear:yearSummary.length>0?yearSummary[yearSummary.length-1].year:(mode==='full'?now+70:mode==='5y'?now+5:mode==='10y'?now+10:now),
                     deep,
                   }
                   const html=tmpl.replace('</head>',`<script>window.__VH_DATA=${JSON.stringify(d)}<\/script></head>`)
@@ -636,6 +658,7 @@ export default function WesternPage(){
   const [n2,setN2]=useState('')
   const [g1,setG1]=useState<'Male'|'Female'>('Male')
   const [g2,setG2]=useState<'Male'|'Female'>('Female')
+  const [together,setTogether]=useState<'yes'|'no'>('yes')
   const [place1,setPlace1]=useState(''); const [lat1c,setLat1c]=useState<number|undefined>(undefined); const [lng1c,setLng1c]=useState<number|undefined>(undefined)
   const [place2,setPlace2]=useState(''); const [lat2c,setLat2c]=useState<number|undefined>(undefined); const [lng2c,setLng2c]=useState<number|undefined>(undefined)
   const { token, user } = useStore()
@@ -1185,6 +1208,19 @@ export default function WesternPage(){
                   <div style={{fontSize:'10px',color:'var(--w-tx2)',marginTop:'3px',marginBottom:'6px'}}>Time of birth (optional — improves accuracy)</div>
                 </div>
               </div>
+              <div style={{textAlign:'center',marginBottom:'10px'}}>
+                <div style={{fontSize:'10px',color:'var(--w-tx2)',marginBottom:'6px'}}>Are they already together?</div>
+                <div style={{display:'inline-flex',gap:'6px'}}>
+                  {(['yes','no'] as const).map(v=>(
+                    <button key={v} onClick={()=>setTogether(v)}
+                      style={{padding:'5px 14px',fontSize:'11px',borderRadius:'6px',cursor:'pointer',border:'none',
+                        background:together===v?'var(--w-acc)':'var(--w-bg)',
+                        color:together===v?'#fff':'var(--w-tx)',fontWeight:together===v?700:400}}>
+                      {v==='yes'?'Yes, together':'Not yet — considering'}
+                    </button>
+                  ))}
+                </div>
+              </div>
               <div style={{textAlign:'center'}}>{btn(compatLoading?'Calculating...':'Reveal Compatibility ✦',calcRealCompat,!d1.yyyy||!d2.yyyy)}</div>
             </div>
             </>)}{/* end !collapsed */}
@@ -1243,7 +1279,7 @@ export default function WesternPage(){
             {/* ── VedicHora Layered Matching Results ── */}
             {compatResult && (
               <div ref={resultsRef} style={{marginTop:'20px'}}>
-                <WesternDashaSection compatResult={compatResult} name1={n1||'Person 1'} name2={n2||'Person 2'} scoreColor={scoreColor} saved={saved} token={token} />
+                <WesternDashaSection compatResult={compatResult} name1={n1||'Person 1'} name2={n2||'Person 2'} scoreColor={scoreColor} saved={saved} token={token} together={together} />
               </div>
             )}
 
