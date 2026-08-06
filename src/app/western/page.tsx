@@ -179,6 +179,12 @@ function WesternDashaSection({
   const [loaded, setLoaded]   = useState(false)
   const [pdfGenerating, setPdfGenerating] = useState(false)
   const [showPaywall, setShowPaywall] = useState(false)
+  const [demoMode, setDemoMode] = useState(false)
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      setDemoMode(new URLSearchParams(window.location.search).get('demo') === '1')
+    }
+  }, [])
 
   // Auto-load deep whenever compatResult arrives with chart IDs
   useEffect(() => {
@@ -241,9 +247,10 @@ function WesternDashaSection({
     : `If ${name1} and ${name2} were to be together, there would be fundamental incompatibility across the areas that matter most here. Worth knowing clearly before going further.`
   )
 
-  const loadDeep = async () => {
+  const loadDeep = async (overrideMode?: typeof mode) => {
+    const useMode = overrideMode ?? mode
     if (!hid1 || !hid2) return
-    if (mode === 'full') { setShowPaywall(true); return }
+    if (useMode === 'full' && !demoMode) { setShowPaywall(true); return }
     setLoading(true)
     try {
       const CHART_URL = 'https://enchanting-dedication-production.up.railway.app'
@@ -254,24 +261,24 @@ function WesternDashaSection({
         GroomName: r?.name1 || name1,
         BrideName: r?.name2 || name2,
       }
-      if (mode === '3m')  {
+      if (useMode === '3m')  {
         const t = new Date()
         const from3 = new Date(t); from3.setMonth(from3.getMonth() - 1)   // small past buffer for testing
         const to3   = new Date(t); to3.setMonth(to3.getMonth() + 3)
         body.FromDate = from3.toISOString().slice(0,10)
         body.ToDate   = to3.toISOString().slice(0,10)
       }
-      if (mode === '6m')  {
+      if (useMode === '6m')  {
         const t = new Date()
         const from6 = new Date(t); from6.setMonth(from6.getMonth() - 1)   // 1mo buffer into the past for testing
         const to6   = new Date(t); to6.setMonth(to6.getMonth() + 6)
         body.FromDate = from6.toISOString().slice(0,10)
         body.ToDate   = to6.toISOString().slice(0,10)
       }
-      if (mode === '5y')   { body.FromYear = now - 1;  body.ToYear = now + 5 }   // small past buffer for testing
-      if (mode === '10y')  { body.FromYear = now;      body.ToYear = now + 10 }
-      if (mode === 'past') { body.FromYear = now - 10; body.ToYear = now }
-      if (mode === 'full') { body.FullRange = true }
+      if (useMode === '5y')   { body.FromYear = now - 1;  body.ToYear = now + 5 }   // small past buffer for testing
+      if (useMode === '10y')  { body.FromYear = now;      body.ToYear = now + 10 }
+      if (useMode === 'past') { body.FromYear = now - 10; body.ToYear = now }
+      if (useMode === 'full') { body.FullRange = true }
       const hdrs: any = { 'Content-Type': 'application/json' }
       if (token) hdrs['Authorization'] = `Bearer ${token}`
       const res = await fetch(`${CHART_URL}/api/matchmaking/deep`, {
@@ -434,6 +441,8 @@ function WesternDashaSection({
         <div style={{fontSize:'11px',fontWeight:700,letterSpacing:'.1em',textTransform:'uppercase',
           color:'var(--w-acc)',marginBottom:'18px',textAlign:'center'}}>
           Compatibility Timeline
+          {demoMode && <span style={{marginLeft:'10px',fontSize:'9px',background:'#0F1117',color:'#D4AF55',
+            padding:'2px 8px',borderRadius:'10px',letterSpacing:'.05em'}}>DEMO MODE — ALL UNLOCKED</span>}
         </div>
 
         {/* Saved charts → load deep */}
@@ -592,15 +601,42 @@ function WesternDashaSection({
 
         {/* Re-run + PDF */}
         {loaded && (
-          <div style={{display:'flex',gap:'6px',flexWrap:'wrap',marginTop:'14px',alignItems:'center'}}>
-            {(['3m','6m','5y','10y','past','full'] as const).map(m=>(
-              <button key={m} onClick={()=>{setMode(m);setLoaded(false);setTimeout(loadDeep,50)}}
-                style={{padding:'5px 10px',fontSize:'10px',borderRadius:'6px',cursor:'pointer',border:'none',
-                  background:mode===m?'var(--w-acc)':'var(--w-bg)',
-                  color:mode===m?'#fff':'var(--w-tx)',fontWeight:mode===m?700:400}}>
-                {m==='3m'?'3mo':m==='6m'?'6mo':m==='5y'?`${now-1}–${now+5}`:m==='10y'?`${now}–${now+10}`:m==='past'?`${now-10}–${now}`:'Full 70yr ★'}
+          <div style={{marginTop:'14px'}}>
+            <div style={{fontSize:'10px',color:'var(--w-tx2)',marginBottom:'8px'}}>
+              Recent past shows how accurate this is for events that already happened. Longer future ranges help you plan ahead.
+            </div>
+            <div style={{display:'flex',gap:'6px',flexWrap:'wrap',alignItems:'center',marginBottom:'10px'}}>
+              {(['past','3m','6m','5y','10y'] as const).map(m=>(
+                <button key={m}
+                  title={
+                    m==='past' ? 'Last 10 years — see how well this matches what already happened between you.'
+                    : m==='3m' ? 'Next 3 months — a quick close-up view.'
+                    : m==='6m' ? 'Next 6 months — a bit more runway to plan around.'
+                    : m==='5y' ? 'Next 5 years — good for near-term decisions like marriage or a joint venture.'
+                    : 'Next 10 years — the default full free view.'
+                  }
+                  onClick={()=>{setMode(m);setLoaded(false);loadDeep(m)}}
+                  style={{padding:'6px 12px',fontSize:'10px',borderRadius:'6px',cursor:'pointer',border:'none',
+                    background:mode===m?'var(--w-acc)':'var(--w-bg)',
+                    color:mode===m?'#fff':'var(--w-tx)',fontWeight:mode===m?700:400}}>
+                  {m==='past'?`Past · ${now-10}–${now}`:m==='3m'?'Next 3mo':m==='6m'?'Next 6mo':m==='5y'?`5yr · ${now-1}–${now+5}`:`10yr · ${now}–${now+10}`}
+                </button>
+              ))}
+              <span style={{width:'1px',height:'22px',background:'var(--w-bd)',margin:'0 2px'}} />
+              <button
+                title="Your entire life, birth to your 70s — every friction and best-period window, not just the next 10 years."
+                onClick={()=>{setMode('full');setLoaded(false);loadDeep('full')}}
+                style={{padding:'6px 12px',fontSize:'10px',borderRadius:'6px',cursor:'pointer',
+                  border:demoMode?'1px dashed var(--w-acc)':'1px solid var(--w-acc)',
+                  background:mode==='full'?'var(--w-acc)':'transparent',
+                  color:mode==='full'?'#fff':'var(--w-acc)',fontWeight:700}}>
+                {demoMode ? '🔓 Full 70yr (Demo)' : '🔒 Full 70yr ★ Premium'}
               </button>
-            ))}
+            </div>
+          </div>
+        )}
+        {loaded && (
+          <div style={{display:'flex',gap:'6px',flexWrap:'wrap',alignItems:'center'}}>
             <button disabled={pdfGenerating} onClick={async ()=>{
                 setPdfGenerating(true)
                 try {
@@ -671,7 +707,7 @@ function WesternDashaSection({
               • The same year-by-year timeline and PDF report — just the full span<br/>
             </div>
             <div style={{display:'flex',gap:'10px',marginBottom:'14px'}}>
-              <button onClick={()=>{setShowPaywall(false); setMode('full'); setLoaded(false); setTimeout(loadDeep,50)}}
+              <button onClick={()=>{setShowPaywall(false); setMode('full'); setLoaded(false); loadDeep('full')}}
                 style={{flex:1,padding:'14px',background:'#0F1117',color:'#D4AF55',
                   border:'none',borderRadius:'10px',fontFamily:"'Playfair Display',Georgia,serif",
                   fontSize:'13px',fontWeight:700,cursor:'pointer'}}>
