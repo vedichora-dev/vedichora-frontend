@@ -212,7 +212,8 @@ function WesternDashaSection({
                 : score >= 65 ? 'Strong Match'
                 : score >= 50 ? 'Good Match'
                 : score >= 38 ? 'Average Match'
-                : 'Needs Consideration'
+                : score >= 22 ? 'Needs Consideration'
+                : 'Not Compatible'
   const desc    = score >= 80
     ? `${name1} and ${name2} show exceptional alignment across all major factors. The foundations here are genuinely strong.`
     : score >= 65
@@ -221,7 +222,9 @@ function WesternDashaSection({
     ? `${name1} and ${name2} show good compatibility overall. Some differences exist but the relationship can thrive with awareness.`
     : score >= 38
     ? `${name1} and ${name2} show average compatibility. Conscious effort in specific areas will make the difference.`
-    : `${name1} and ${name2} have significant differences in core areas. A meaningful relationship is possible with deliberate work.`
+    : score >= 22
+    ? `${name1} and ${name2} face real friction in core areas. This can still work, but it will take sustained, deliberate effort from both sides — go in aware of that.`
+    : `${name1} and ${name2} show fundamental incompatibility across the areas that matter most here. This isn't a small gap to work around — it's worth taking seriously before committing further.`
 
   const loadDeep = async () => {
     if (!hid1 || !hid2) return
@@ -299,6 +302,13 @@ function WesternDashaSection({
       {/* ── Big score ─────────────────────────────────────────────────── */}
       <div style={{background:'var(--w-surf)',border:'1px solid var(--w-bd)',borderRadius:'24px',
         padding:'40px 32px',boxShadow:'0 4px 32px rgba(0,0,0,.07)',textAlign:'center'}}>
+
+        {score < 22 && (
+          <div style={{background:'#DC2626',color:'#fff',padding:'10px 16px',borderRadius:'10px',
+            fontSize:'12px',fontWeight:700,letterSpacing:'.03em',marginBottom:'24px'}}>
+            ⚠ Significant Incompatibility Detected
+          </div>
+        )}
 
         {/* Circular score */}
         <div style={{position:'relative',width:'160px',height:'160px',margin:'0 auto 24px'}}>
