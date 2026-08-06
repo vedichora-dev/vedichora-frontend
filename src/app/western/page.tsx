@@ -178,6 +178,7 @@ function WesternDashaSection({
   const [loading, setLoading] = useState(false)
   const [loaded, setLoaded]   = useState(false)
   const [pdfGenerating, setPdfGenerating] = useState(false)
+  const [showPaywall, setShowPaywall] = useState(false)
 
   // Auto-load deep whenever compatResult arrives with chart IDs
   useEffect(() => {
@@ -192,7 +193,7 @@ function WesternDashaSection({
     }
   }, [compatResult])
   const [relType, setRelType] = useState('Other')
-  const [mode, setMode]       = useState<'6m'|'5y'|'10y'|'past'|'full'>('10y')
+  const [mode, setMode]       = useState<'3m'|'6m'|'5y'|'10y'|'past'|'full'>('10y')
   const ashta   = r?.AshtaKootaScore   ?? r?.ashtaKootaScore   ?? 0
   const aTotal  = r?.AshtaKootaTotal   ?? r?.ashtaKootaTotal   ?? 36
   const pathu   = r?.PathuPoruthamScore?? r?.pathuPoruthamScore?? 0
@@ -242,6 +243,7 @@ function WesternDashaSection({
 
   const loadDeep = async () => {
     if (!hid1 || !hid2) return
+    if (mode === 'full') { setShowPaywall(true); return }
     setLoading(true)
     try {
       const CHART_URL = 'https://enchanting-dedication-production.up.railway.app'
@@ -251,6 +253,13 @@ function WesternDashaSection({
         RelationshipType: relType,
         GroomName: r?.name1 || name1,
         BrideName: r?.name2 || name2,
+      }
+      if (mode === '3m')  {
+        const t = new Date()
+        const from3 = new Date(t); from3.setMonth(from3.getMonth() - 1)   // small past buffer for testing
+        const to3   = new Date(t); to3.setMonth(to3.getMonth() + 3)
+        body.FromDate = from3.toISOString().slice(0,10)
+        body.ToDate   = to3.toISOString().slice(0,10)
       }
       if (mode === '6m')  {
         const t = new Date()
@@ -282,6 +291,14 @@ function WesternDashaSection({
     const cut = s.slice(0, max)
     const lastSpace = cut.lastIndexOf(' ')
     return (lastSpace > 40 ? cut.slice(0, lastSpace) : cut) + '…'
+  }
+  const friendlyLabel = (label:string) => {
+    const L = (label||'').toUpperCase()
+    if (L==='CRITICAL')  return 'Very Challenging'
+    if (L==='SEVERE')    return 'Highly Challenging'
+    if (L==='HIGH')      return 'Challenging'
+    if (L==='MODERATE')  return 'Somewhat Challenging'
+    return label
   }
   const now = 2026
 
@@ -433,7 +450,7 @@ function WesternDashaSection({
               ))}
             </div>
             <div style={{display:'flex',gap:'6px',flexWrap:'wrap',marginBottom:'14px'}}>
-              {([['6m','Next 6 months'],['5y','Next 5 years'],['10y','Next 10 years'],['past','Past 10 years'],['full','Full lifetime ★']] as [string,string][]).map(([v,l])=>(
+              {([['3m','Next 3 months'],['6m','Next 6 months'],['5y','Next 5 years'],['10y','Next 10 years'],['past','Past 10 years'],['full','Full lifetime ★']] as [string,string][]).map(([v,l])=>(
                 <button key={v} onClick={()=>setMode(v as any)}
                   style={{padding:'5px 12px',fontSize:'11px',borderRadius:'6px',cursor:'pointer',border:'none',
                     background:mode===v?'var(--w-acc)':'var(--w-bg)',
@@ -452,7 +469,8 @@ function WesternDashaSection({
         )}
 
         {/* Year timeline */}
-        {loaded && yearSummary.length > 0 && (
+        {loaded && yearSummary.length > 2 && (
+
           <div style={{marginBottom:'20px'}}>
             <div style={{fontSize:'11px',color:'var(--w-tx2)',textAlign:'center',marginBottom:'12px'}}>
               Showing {yearSummary[0]?.year} – {yearSummary[yearSummary.length-1]?.year} · each tile is one year
@@ -478,6 +496,12 @@ function WesternDashaSection({
               ))}
               <span style={{color:'#9ca3af'}}>Dashed border = already past</span>
             </div>
+          </div>
+        )}
+        {loaded && yearSummary.length <= 2 && (
+          <div style={{fontSize:'11px',color:'var(--w-tx2)',textAlign:'center',marginBottom:'16px',
+            padding:'10px',background:'var(--w-bg)',borderRadius:'8px'}}>
+            Short window selected — showing the specific periods below instead of a year-by-year grid.
           </div>
         )}
 
@@ -506,21 +530,27 @@ function WesternDashaSection({
             <div style={{fontSize:'10px',fontWeight:700,color:'#fca5a5',marginBottom:'10px',textTransform:'uppercase',letterSpacing:'.06em'}}>
               🔺 Biggest Friction Periods
             </div>
-            {enmityWindows.slice(0,viewMode==='simple'?6:3).map((y:any,i:number)=>(
-              <div key={i} style={{marginBottom:'8px',paddingBottom:'8px',
+            {enmityWindows.slice(0,viewMode==='simple'?6:3).map((y:any,i:number)=>{
+              const isSevere = y.label==='Definitive Enemy'
+              const displayLabel = isSevere ? 'Severe Clash — Almost Enemy Level' : 'High Friction'
+              return (
+              <div key={i} style={{marginBottom:'10px',paddingBottom:'10px',
+                borderLeft:isSevere?'4px solid #f87171':'4px solid #fca5a5',paddingLeft:'10px',
                 borderBottom:i<enmityWindows.slice(0,viewMode==='simple'?6:3).length-1?'1px solid #7f1d1d':'none'}}>
-                <div style={{fontSize:'13px',fontWeight:700,color:'#fff'}}>
+                <div style={{fontSize:isSevere?'14px':'13px',fontWeight:700,color:'#fff'}}>
                   {new Date(y.startDate).toLocaleDateString('en-US',{month:'short',year:'numeric'})} – {new Date(y.endDate).toLocaleDateString('en-US',{month:'short',year:'numeric'})}
-                  <span style={{fontWeight:700,color:y.label==='Definitive Enemy'?'#f87171':'#fca5a5',marginLeft:'6px',
-                    fontSize:'10px',textTransform:'uppercase',letterSpacing:'.03em'}}>
-                    {y.label}
-                  </span>
                 </div>
-                {viewMode==='detailed' && y.note && <div style={{fontSize:'12px',color:'#fecaca',marginTop:'3px',lineHeight:1.5}}>{truncate(y.note,220)}</div>}
+                <div style={{fontWeight:700,color:isSevere?'#f87171':'#fca5a5',marginTop:'2px',
+                  fontSize:isSevere?'11px':'10px',textTransform:'uppercase',letterSpacing:'.03em'}}>
+                  {isSevere ? '🔴🔴🔴 ' : '🔴 '}{displayLabel}
+                </div>
+                {viewMode==='detailed' && y.note && <div style={{fontSize:'12px',color:'#fecaca',marginTop:'4px',lineHeight:1.5}}>{truncate(y.note,220)}</div>}
               </div>
-            ))}
+              )
+            })}
           </div>
         )}
+
 
         {/* Challenging periods */}
         {chalYears.length > 0 && (
@@ -533,7 +563,7 @@ function WesternDashaSection({
                 borderBottom:i<chalYears.slice(0,viewMode==='simple'?6:3).length-1?'1px solid #fecaca':'none'}}>
                 <div style={{fontSize:'13px',fontWeight:700,color:'#dc2626'}}>
                   {new Date(y.startDate).toLocaleDateString('en-US',{month:'short',year:'numeric'})} – {new Date(y.endDate).toLocaleDateString('en-US',{month:'short',year:'numeric'})}
-                  {viewMode==='simple' && y.label && <span style={{fontWeight:400,color:'#991b1b'}}> · {y.label}</span>}
+                  {viewMode==='simple' && y.label && <span style={{fontWeight:400,color:'#991b1b'}}> · {friendlyLabel(y.label)}</span>}
                 </div>
                 {viewMode==='detailed' && y.note && <div style={{fontSize:'12px',color:'#991b1b',marginTop:'3px',lineHeight:1.5}}>{truncate(y.note,220)}</div>}
               </div>
@@ -563,12 +593,12 @@ function WesternDashaSection({
         {/* Re-run + PDF */}
         {loaded && (
           <div style={{display:'flex',gap:'6px',flexWrap:'wrap',marginTop:'14px',alignItems:'center'}}>
-            {(['6m','5y','10y','past','full'] as const).map(m=>(
+            {(['3m','6m','5y','10y','past','full'] as const).map(m=>(
               <button key={m} onClick={()=>{setMode(m);setLoaded(false);setTimeout(loadDeep,50)}}
                 style={{padding:'5px 10px',fontSize:'10px',borderRadius:'6px',cursor:'pointer',border:'none',
                   background:mode===m?'var(--w-acc)':'var(--w-bg)',
                   color:mode===m?'#fff':'var(--w-tx)',fontWeight:mode===m?700:400}}>
-                {m==='6m'?'6mo':m==='5y'?`${now-1}–${now+5}`:m==='10y'?`${now}–${now+10}`:m==='past'?`${now-10}–${now}`:'Full 70yr ★'}
+                {m==='3m'?'3mo':m==='6m'?'6mo':m==='5y'?`${now-1}–${now+5}`:m==='10y'?`${now}–${now+10}`:m==='past'?`${now-10}–${now}`:'Full 70yr ★'}
               </button>
             ))}
             <button disabled={pdfGenerating} onClick={async ()=>{
@@ -623,6 +653,44 @@ function WesternDashaSection({
           </div>
         )}
       </div>
+
+      {/* ── FULL 70-YEAR PAYWALL ── */}
+      {showPaywall && (
+        <div style={{position:'fixed',inset:0,background:'rgba(0,0,0,.7)',
+          display:'flex',alignItems:'center',justifyContent:'center',zIndex:9999}}
+          onClick={()=>setShowPaywall(false)}>
+          <div style={{background:'var(--w-surf)',borderRadius:'16px',padding:'32px',maxWidth:'400px',
+            width:'90%',textAlign:'center',boxShadow:'0 20px 60px rgba(0,0,0,.4)'}}
+            onClick={e=>e.stopPropagation()}>
+            <div style={{fontSize:'32px',marginBottom:'8px'}}>✦</div>
+            <div style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:'18px',fontWeight:700,
+              color:'var(--w-tx)',marginBottom:'8px'}}>Full 70-Year Compatibility</div>
+            <div style={{fontSize:'13px',color:'var(--w-tx2)',marginBottom:'20px',lineHeight:1.7,textAlign:'left'}}>
+              • Your entire life's compatibility, birth to your 70s<br/>
+              • Every biggest-friction and best-period window, not just the next 10 years<br/>
+              • The same year-by-year timeline and PDF report — just the full span<br/>
+            </div>
+            <div style={{display:'flex',gap:'10px',marginBottom:'14px'}}>
+              <button onClick={()=>{setShowPaywall(false); setMode('full'); setLoaded(false); setTimeout(loadDeep,50)}}
+                style={{flex:1,padding:'14px',background:'#0F1117',color:'#D4AF55',
+                  border:'none',borderRadius:'10px',fontFamily:"'Playfair Display',Georgia,serif",
+                  fontSize:'13px',fontWeight:700,cursor:'pointer'}}>
+                Use Credits<br/><span style={{fontSize:'10px',opacity:.8}}>10 credits</span>
+              </button>
+              <a href="/pricing" style={{flex:1,padding:'14px',background:'var(--w-acc)',color:'#fff',
+                  border:'none',borderRadius:'10px',fontFamily:"'Playfair Display',Georgia,serif",textDecoration:'none',
+                  fontSize:'13px',fontWeight:700,cursor:'pointer',display:'flex',flexDirection:'column',
+                  alignItems:'center',justifyContent:'center'}}>
+                Upgrade Plan<br/><span style={{fontSize:'10px',opacity:.85}}>Unlimited</span>
+              </a>
+            </div>
+            <button onClick={()=>setShowPaywall(false)} style={{background:'none',border:'none',
+              color:'var(--w-tx2)',fontSize:'12px',cursor:'pointer',textDecoration:'underline'}}>
+              Maybe later
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
