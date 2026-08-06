@@ -771,7 +771,7 @@ async function downloadWesternPdf(
 
 export default function WesternPage(){
   const [tab,setTab]=useState<Tab>('compatibility')
-  const [themeKey,setThemeKey]=useState('cream')
+  const [themeKey,setThemeKey]=useState('sage')
   const [curr,setCurr]=useState({code:'USD',sym:'$'})
   // Horoscope
   const [dob,setDob]=useState({dd:0,mm:0,yyyy:0,hr:0,mi:0,ap:'AM'})
