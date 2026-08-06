@@ -1,32 +1,24 @@
 === BUILD OUTPUT ===
 Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ ⚠ Unsupported metadata themeColor is configured in metadata export in /. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
  ⚠ Unsupported metadata themeColor is configured in metadata export in /phone-login. Please move it to viewport export instead.
 Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
- ⚠ Unsupported metadata themeColor is configured in metadata export in /. Please move it to viewport export instead.
-Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
- ⚠ Unsupported metadata themeColor is configured in metadata export in /. Please move it to viewport export instead.
+ ⚠ Unsupported metadata themeColor is configured in metadata export in /phone-login. Please move it to viewport export instead.
 Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
  ⚠ Unsupported metadata themeColor is configured in metadata export in /shop. Please move it to viewport export instead.
 Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
  ⚠ Unsupported metadata themeColor is configured in metadata export in /shop. Please move it to viewport export instead.
 Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
- ⚠ Unsupported metadata themeColor is configured in metadata export in /signin. Please move it to viewport export instead.
+ ⚠ Unsupported metadata themeColor is configured in metadata export in /remedies. Please move it to viewport export instead.
 Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
- ⚠ Unsupported metadata themeColor is configured in metadata export in /signin. Please move it to viewport export instead.
+ ⚠ Unsupported metadata themeColor is configured in metadata export in /remedies. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ ⚠ Unsupported metadata themeColor is configured in metadata export in /signup. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ ⚠ Unsupported metadata themeColor is configured in metadata export in /signup. Please move it to viewport export instead.
 Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
    Generating static pages (20/27) 
- ⚠ Unsupported metadata themeColor is configured in metadata export in /remedies. Please move it to viewport export instead.
-Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
- ⚠ Unsupported metadata themeColor is configured in metadata export in /remedies. Please move it to viewport export instead.
-Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
- ⚠ Unsupported metadata themeColor is configured in metadata export in /signup. Please move it to viewport export instead.
-Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
- ⚠ Unsupported metadata themeColor is configured in metadata export in /signup. Please move it to viewport export instead.
-Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
- ⚠ Unsupported metadata themeColor is configured in metadata export in /varshaphal. Please move it to viewport export instead.
-Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
- ⚠ Unsupported metadata themeColor is configured in metadata export in /varshaphal. Please move it to viewport export instead.
-Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
  ⚠ Unsupported metadata themeColor is configured in metadata export in /transits. Please move it to viewport export instead.
 Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
  ⚠ Unsupported metadata themeColor is configured in metadata export in /transits. Please move it to viewport export instead.
@@ -35,9 +27,17 @@ Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
 Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
  ⚠ Unsupported metadata themeColor is configured in metadata export in /yogas. Please move it to viewport export instead.
 Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ ⚠ Unsupported metadata themeColor is configured in metadata export in /varshaphal. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ ⚠ Unsupported metadata themeColor is configured in metadata export in /varshaphal. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
  ⚠ Unsupported metadata themeColor is configured in metadata export in /western. Please move it to viewport export instead.
 Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
  ⚠ Unsupported metadata themeColor is configured in metadata export in /western. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ ⚠ Unsupported metadata themeColor is configured in metadata export in /signin. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ ⚠ Unsupported metadata themeColor is configured in metadata export in /signin. Please move it to viewport export instead.
 Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
  ✓ Generating static pages (27/27) 
    Finalizing page optimization ...
