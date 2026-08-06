@@ -27,8 +27,8 @@ export default function SignIn() {
           displayName: d.displayName || email.split('@')[0],
           email, plan: d.plan || 'free',
         })
-        // Go to intended page or chart
-        const dest = redirectAfterLogin || '/chart'
+        // Go to intended page or the default landing page
+        const dest = redirectAfterLogin || '/western'
         setRedirectAfterLogin(null)
         router.push(dest)
       } else {
