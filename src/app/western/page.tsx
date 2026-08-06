@@ -822,6 +822,10 @@ export default function WesternPage(){
   const vars={
     '--w-bg':theme.bg,'--w-surf':theme.surf,'--w-tx':theme.tx,
     '--w-tx2':theme.tx2,'--w-acc':theme.acc,'--w-gold':theme.gold,'--w-bd':theme.bd,
+    // Aliases for shared components (e.g. CityAutocomplete) built against the site's generic
+    // theme variable names rather than this page's --w- prefixed ones
+    '--gold':theme.acc,'--surf':theme.surf,'--bd':theme.bd,'--tx':theme.tx,
+    '--txm':theme.tx2,'--bg2':theme.bg,'--acc':theme.acc,
   } as React.CSSProperties
 
   const moon=moonIdx!==null?MOON_SIGNS[moonIdx]:null
@@ -1513,6 +1517,72 @@ export default function WesternPage(){
                 <p style={{textAlign:'center',fontSize:'11px',color:'var(--w-tx2)',margin:0,opacity:.6}}>Premium reports from {curr.sym}19 · No subscription</p>
               </div>
             </div>
+
+            {/* ── Chart Result ── */}
+            {chartResult && (() => {
+              const cr = chartResult
+              const planets: any[] = cr?.planets || cr?.Planets || []
+              const lagna    = cr?.ascendantName || cr?.AscendantName || '—'
+              const moon     = planets.find((p:any) => (p.planet||p.Planet||'').toLowerCase()==='moon')
+              const moonRasi = moon?.rasiName || moon?.RasiName || cr?.moonRasi || cr?.MoonRasi || '—'
+              const naksh    = moon?.nakshatraName || moon?.NakshatraName || cr?.nakshatraName || cr?.NakshatraName || '—'
+              const dasha    = cr?.currentDasha || cr?.CurrentDasha || ''
+              return (
+                <div style={{background:'var(--w-surf)',border:'1px solid var(--w-bd)',borderRadius:'20px',
+                  padding:'32px',maxWidth:'640px',margin:'24px auto 0',boxShadow:'0 4px 24px rgba(0,0,0,.06)'}}>
+                  <div style={{textAlign:'center',marginBottom:'24px'}}>
+                    <div style={{fontSize:'10px',color:'var(--w-acc)',fontWeight:700,letterSpacing:'.1em',
+                      textTransform:'uppercase',marginBottom:'8px'}}>Your Chart</div>
+                    <div style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:'22px',fontWeight:700,
+                      color:'var(--w-tx)'}}>{chartName || 'Your'} Birth Chart</div>
+                  </div>
+                  <div style={{display:'grid',gridTemplateColumns:'repeat(3,1fr)',gap:'12px',marginBottom:'24px'}}>
+                    {[['Ascendant',lagna],['Moon Sign',moonRasi],['Nakshatra',naksh]].map(([l,v])=>(
+                      <div key={l} style={{textAlign:'center',padding:'14px 8px',background:'var(--w-bg)',borderRadius:'12px'}}>
+                        <div style={{fontSize:'9px',color:'var(--w-tx2)',textTransform:'uppercase',letterSpacing:'.05em',marginBottom:'4px'}}>{l}</div>
+                        <div style={{fontSize:'14px',fontWeight:700,color:'var(--w-tx)'}}>{v}</div>
+                      </div>
+                    ))}
+                  </div>
+                  {dasha && (
+                    <div style={{textAlign:'center',marginBottom:'20px',fontSize:'12px',color:'var(--w-tx2)'}}>
+                      Current period: <span style={{fontWeight:700,color:'var(--w-tx)'}}>{dasha}</span>
+                    </div>
+                  )}
+                  {planets.length > 0 && (
+                    <table style={{width:'100%',borderCollapse:'collapse',fontSize:'12px'}}>
+                      <thead>
+                        <tr style={{borderBottom:'2px solid var(--w-bd)'}}>
+                          {['Planet','Sign','House','Degree',''].map(h=>(
+                            <th key={h} style={{textAlign:'left',padding:'8px 6px',color:'var(--w-tx2)',
+                              fontSize:'10px',textTransform:'uppercase',letterSpacing:'.04em'}}>{h}</th>
+                          ))}
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {planets.map((p:any,i:number)=>{
+                          const nm  = p.planet || p.Planet || '—'
+                          const rs  = p.rasiName || p.RasiName || '—'
+                          const hs  = p.house || p.House || '—'
+                          const lon = +(p.longitude || p.Longitude || 0)
+                          const deg = (lon % 30).toFixed(1)
+                          const ret = p.isRetrograde || p.IsRetrograde
+                          return (
+                            <tr key={i} style={{borderBottom:'1px solid var(--w-bd)'}}>
+                              <td style={{padding:'8px 6px',fontWeight:600,color:'var(--w-tx)'}}>{nm}</td>
+                              <td style={{padding:'8px 6px',color:'var(--w-tx)'}}>{rs}</td>
+                              <td style={{padding:'8px 6px',color:'var(--w-tx)'}}>{hs}</td>
+                              <td style={{padding:'8px 6px',color:'var(--w-tx2)'}}>{deg}°</td>
+                              <td style={{padding:'8px 6px',color:'#DC2626',fontSize:'10px',fontWeight:700}}>{ret?'R':''}</td>
+                            </tr>
+                          )
+                        })}
+                      </tbody>
+                    </table>
+                  )}
+                </div>
+              )
+            })()}
           </div>
         )}
       </div>
