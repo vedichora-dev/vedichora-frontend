@@ -114,7 +114,7 @@ export default function SignupPage() {
   }
 
   const goToApp = () => {
-    const dest = redirectAfterLogin || '/chart'
+    const dest = redirectAfterLogin || '/western'
     setRedirectAfterLogin(null)
     router.push(dest)
   }
@@ -341,7 +341,7 @@ export default function SignupPage() {
                 Resend SMS
               </button>
               <span style={{color:'var(--bd)'}}> · </span>
-              <button type="button" onClick={() => router.push('/chart')}
+              <button type="button" onClick={() => router.push('/western')}
                 style={{background:'none',border:'none',cursor:'pointer',
                   fontSize:'12px',color:'var(--txm)',fontFamily:'inherit'}}>
                 Skip phone verification
