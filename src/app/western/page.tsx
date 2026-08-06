@@ -291,7 +291,7 @@ function WesternDashaSection({
   // stretch of time or a date outside the tab that's selected.
   const rangeStart = new Date((deep?.fromYear ?? now - 10), 0, 1)
   const rangeEnd   = new Date((deep?.toYear   ?? now + 10), 11, 31)
-  const sevRank: Record<string, number> = { MILD:1, MODERATE:2, MIXED:2, SEVERE:3, HIGH:4, CRITICAL:5 }
+  const sevRank: Record<string, number> = { MILD:1, MODERATE:2, MIXED:2, SEVERE:3, HIGH:4, CRITICAL:5, ENEMY:3, 'DEFINITIVE ENEMY':5 }
   const mergePeriods = (periods: any[]) => {
     const clamped = periods
       .map((p: any) => {
@@ -317,6 +317,7 @@ function WesternDashaSection({
   }
   const bestYears: any[] = mergePeriods(deep?.bestYears ?? [])
   const chalYears: any[] = mergePeriods(deep?.challengingYears ?? [])
+  const enmityWindows: any[] = mergePeriods(deep?.adEnmityWindows ?? [])
 
   return (
     <div style={{display:'flex',flexDirection:'column',gap:'20px'}}>
@@ -494,6 +495,28 @@ function WesternDashaSection({
                   {viewMode==='simple' && y.label && <span style={{fontWeight:400,color:'#166534'}}> · {y.label}</span>}
                 </div>
                 {viewMode==='detailed' && y.note && <div style={{fontSize:'12px',color:'#166534',marginTop:'3px',lineHeight:1.5}}>{truncate(y.note,220)}</div>}
+              </div>
+            ))}
+          </div>
+        )}
+
+        {/* Biggest friction periods — AD-level planetary enmity, highlighted distinctly */}
+        {enmityWindows.length > 0 && (
+          <div style={{marginBottom:'14px',padding:'16px',background:'#1c0a0a',border:'2px solid #dc2626',borderRadius:'12px'}}>
+            <div style={{fontSize:'10px',fontWeight:700,color:'#fca5a5',marginBottom:'10px',textTransform:'uppercase',letterSpacing:'.06em'}}>
+              🔺 Biggest Friction Periods
+            </div>
+            {enmityWindows.slice(0,viewMode==='simple'?6:3).map((y:any,i:number)=>(
+              <div key={i} style={{marginBottom:'8px',paddingBottom:'8px',
+                borderBottom:i<enmityWindows.slice(0,viewMode==='simple'?6:3).length-1?'1px solid #7f1d1d':'none'}}>
+                <div style={{fontSize:'13px',fontWeight:700,color:'#fff'}}>
+                  {new Date(y.startDate).toLocaleDateString('en-US',{month:'short',year:'numeric'})} – {new Date(y.endDate).toLocaleDateString('en-US',{month:'short',year:'numeric'})}
+                  <span style={{fontWeight:700,color:y.label==='Definitive Enemy'?'#f87171':'#fca5a5',marginLeft:'6px',
+                    fontSize:'10px',textTransform:'uppercase',letterSpacing:'.03em'}}>
+                    {y.label}
+                  </span>
+                </div>
+                {viewMode==='detailed' && y.note && <div style={{fontSize:'12px',color:'#fecaca',marginTop:'3px',lineHeight:1.5}}>{truncate(y.note,220)}</div>}
               </div>
             ))}
           </div>
