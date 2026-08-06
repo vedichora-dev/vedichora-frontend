@@ -410,7 +410,7 @@ function WesternDashaSection({
             color:'var(--w-acc)',marginBottom:'18px',textAlign:'center'}}>
             Who They Are
           </div>
-          <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:'24px'}}>
+          <div className="vh-2col" style={{gap:'24px'}}>
             {[{nm:name1, infl:p1Infl},{nm:name2, infl:p2Infl}].map(({nm,infl},i)=>{
               const narratives = infl
                 .map((p:any)=>p.narrative||p.Narrative)
@@ -999,9 +999,24 @@ export default function WesternPage(){
 
   return(
     <div style={{...vars,minHeight:'100vh',background:'var(--w-bg)',color:'var(--w-tx)',fontFamily:"'Inter',system-ui,sans-serif"} as React.CSSProperties}>
+      <style jsx global>{`
+        .vh-2col { display:grid; grid-template-columns:1fr 1fr; }
+        .vh-2col-heart { display:grid; grid-template-columns:1fr 48px 1fr; }
+        @media (max-width: 680px) {
+          .vh-2col, .vh-2col-heart { grid-template-columns: 1fr !important; }
+          .vh-2col-heart > *:nth-child(2) { margin: 4px auto; }
+          .vh-nav { flex-wrap: wrap !important; height:auto !important; padding:10px 12px !important; gap:8px; }
+          .vh-nav-tabs { order: 3; width:100%; overflow-x:auto; }
+          .vh-nav-right { gap:6px !important; }
+          .vh-nav-right > * { font-size:11px !important; padding:5px 8px !important; }
+          .vh-theme-swatches { display:none !important; }
+          body, html { overflow-x: hidden; }
+        }
+      `}</style>
+
 
       {/* ── NAV ── */}
-      <nav style={{position:'sticky',top:0,zIndex:100,height:'58px',
+      <nav className="vh-nav" style={{position:'sticky',top:0,zIndex:100,height:'58px',
         background:'var(--w-surf)',borderBottom:'1px solid var(--w-bd)',
         display:'flex',alignItems:'center',justifyContent:'space-between',
         padding:'0 24px',boxShadow:'0 1px 8px rgba(0,0,0,.06)'}}>
@@ -1016,20 +1031,20 @@ export default function WesternPage(){
         </div>
 
         {/* Tabs */}
-        <div style={{display:'flex',gap:'2px',background:'var(--w-bg)',borderRadius:'8px',padding:'3px'}}>
+        <div className="vh-nav-tabs" style={{display:'flex',gap:'2px',background:'var(--w-bg)',borderRadius:'8px',padding:'3px'}}>
           {(['horoscope','compatibility','chart'] as Tab[]).map(t=>(
             <button key={t} onClick={()=>setTab(t)} style={{
               padding:'6px 16px',borderRadius:'6px',fontSize:'13px',fontWeight:600,
               border:'none',cursor:'pointer',fontFamily:'inherit',textTransform:'capitalize',
               background:tab===t?`linear-gradient(135deg,${theme.acc},${theme.gold})`:`transparent`,
-              color:tab===t?(isDark?'#0D0D14':'#fff'):'var(--w-tx2)',transition:'all .15s'}}>
+              color:tab===t?(isDark?'#0D0D14':'#fff'):'var(--w-tx2)',transition:'all .15s',whiteSpace:'nowrap'}}>
               {t==='horoscope'?'🌙 Horoscope':t==='compatibility'?'♥ Compatibility':'✦ Birth Chart'}
             </button>
           ))}
         </div>
 
         {/* Right controls */}
-        <div style={{display:'flex',alignItems:'center',gap:'10px'}}>
+        <div className="vh-nav-right" style={{display:'flex',alignItems:'center',gap:'10px'}}>
           {/* Currency */}
           <select value={curr.code} onChange={e=>{const c=CURRENCIES.find(x=>x.code===e.target.value)!;setCurr({code:c.code,sym:c.sym})}}
             style={{padding:'5px 10px',borderRadius:'8px',border:'1px solid var(--w-bd)',
@@ -1037,7 +1052,7 @@ export default function WesternPage(){
             {CURRENCIES.map(c=><option key={c.code} value={c.code}>{c.flag} {c.sym} {c.code}</option>)}
           </select>
           {/* Theme swatches */}
-          <div style={{display:'flex',gap:'4px'}}>
+          <div className="vh-theme-swatches" style={{display:'flex',gap:'4px'}}>
             {THEMES.map(t=>(
               <button key={t.key} title={t.label} onClick={()=>setThemeKey(t.key)} style={{
                 width:'20px',height:'20px',borderRadius:'50%',border:themeKey===t.key?`2px solid ${theme.gold}`:`2px solid ${t.bd}`,
@@ -1222,7 +1237,7 @@ export default function WesternPage(){
                 <div style={{fontSize:'11px',fontWeight:700,color:'var(--w-acc)',textTransform:'uppercase',letterSpacing:'.08em',marginBottom:'14px'}}>
                   Use Saved Charts
                 </div>
-                <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:'12px'}}>
+                <div className="vh-2col" style={{gap:'12px'}}>
                   {[{label:'Person 1',id:selId1,set:setSelId1},{label:'Person 2',id:selId2,set:setSelId2}].map(({label,id,set})=>(
                     <div key={label}>
                       <div style={{fontSize:'11px',color:'var(--w-tx2)',marginBottom:'6px'}}>{label}</div>
@@ -1286,7 +1301,7 @@ export default function WesternPage(){
             )}
 
             <div style={{background:'var(--w-surf)',border:'1px solid var(--w-bd)',borderRadius:'20px',padding:'36px',boxShadow:'0 4px 24px rgba(0,0,0,.06)',marginBottom:'28px'}}>
-              <div style={{display:'grid',gridTemplateColumns:'1fr 48px 1fr',gap:'20px',alignItems:'start',marginBottom:'28px'}}>
+              <div className="vh-2col-heart" style={{gap:'20px',alignItems:'start',marginBottom:'28px'}}>
                 {/* Person 1 */}
                 <div>
                   <div style={{fontSize:'11px',color:'var(--w-acc)',fontWeight:700,textTransform:'uppercase',letterSpacing:'.08em',marginBottom:'12px'}}>♥ Person 1</div>
