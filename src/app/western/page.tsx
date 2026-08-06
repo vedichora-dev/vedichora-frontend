@@ -684,7 +684,8 @@ export default function WesternPage(){
   const [together,setTogether]=useState<'yes'|'no'>('yes')
   const [place1,setPlace1]=useState(''); const [lat1c,setLat1c]=useState<number|undefined>(undefined); const [lng1c,setLng1c]=useState<number|undefined>(undefined)
   const [place2,setPlace2]=useState(''); const [lat2c,setLat2c]=useState<number|undefined>(undefined); const [lng2c,setLng2c]=useState<number|undefined>(undefined)
-  const { token, user } = useStore()
+  const { token, user, logout } = useStore()
+  const [acctOpen, setAcctOpen] = useState(false)
   const [saved, setSaved] = useState<any[]>([])
   const [collapsed, setCollapsed] = useState(false)
   const resultsRef = useRef<HTMLDivElement>(null)
@@ -943,6 +944,38 @@ export default function WesternPage(){
             border:'1px solid var(--w-bd)',borderRadius:'6px',padding:'5px 10px',whiteSpace:'nowrap'}}>
             🪔 Vedic Mode
           </Link>
+          {token && user ? (
+            <div style={{position:'relative'}}>
+              <button onClick={()=>setAcctOpen(v=>!v)} style={{display:'flex',alignItems:'center',gap:'6px',
+                padding:'5px 10px',borderRadius:'6px',border:'1px solid var(--w-bd)',background:'var(--w-bg)',
+                color:'var(--w-tx)',fontSize:'12px',cursor:'pointer',whiteSpace:'nowrap'}}>
+                <span style={{width:'18px',height:'18px',borderRadius:'50%',background:'var(--w-acc)',color:'#fff',
+                  display:'flex',alignItems:'center',justifyContent:'center',fontSize:'10px',fontWeight:700}}>
+                  {(user.displayName||'U')[0].toUpperCase()}
+                </span>
+                {(user.displayName||'Account').split(' ')[0]}
+              </button>
+              {acctOpen && (
+                <div style={{position:'absolute',top:'40px',right:0,background:'var(--w-surf)',
+                  border:'1px solid var(--w-bd)',borderRadius:'8px',boxShadow:'0 8px 24px rgba(0,0,0,.12)',
+                  minWidth:'160px',padding:'6px',zIndex:200}}>
+                  <div style={{padding:'8px 10px',fontSize:'11px',color:'var(--w-tx2)',borderBottom:'1px solid var(--w-bd)',marginBottom:'4px'}}>
+                    {user.email}
+                  </div>
+                  <button onClick={()=>{logout();setAcctOpen(false)}} style={{width:'100%',textAlign:'left',
+                    padding:'8px 10px',fontSize:'12px',border:'none',background:'transparent',color:'var(--w-tx)',
+                    cursor:'pointer',borderRadius:'6px'}}>
+                    Sign out
+                  </button>
+                </div>
+              )}
+            </div>
+          ) : (
+            <Link href="/signin" style={{fontSize:'12px',fontWeight:700,color:'#fff',textDecoration:'none',
+              background:'var(--w-acc)',borderRadius:'6px',padding:'6px 14px',whiteSpace:'nowrap'}}>
+              Sign In
+            </Link>
+          )}
         </div>
       </nav>
 
