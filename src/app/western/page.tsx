@@ -810,6 +810,8 @@ export default function WesternPage(){
   const [chartMi,setChartMi]=useState(0)
   const [chartAp,setChartAp]=useState('AM')
   const [chartPlace,setChartPlace]=useState('')
+  const [chartLat,setChartLat]=useState<number|undefined>(undefined)
+  const [chartLng,setChartLng]=useState<number|undefined>(undefined)
   const [chartLoading,setChartLoading]=useState(false)
   const [chartResult,setChartResult]=useState<any>(null)
   const [chartErr,setChartErr]=useState('')
@@ -841,10 +843,13 @@ export default function WesternPage(){
         Year:chartYr,Month:chartMon,Day:chartDay,
         Hour:hr24,Minute:chartMi,Second:0,
         PlaceName:chartPlace||'Chennai, India',
-        // UtcOffsetHours omitted — backend auto-resolves from place+date (DST-aware)AyanamsaType:'Lahiri',
+        AyanamsaType:'Lahiri',
+        // UtcOffsetHours omitted — backend auto-resolves from place+date (DST-aware)
       }
-      // Geocode if place entered
-      if(chartPlace){
+      // Use autocomplete-resolved coordinates if available; otherwise fall back to geocoding the typed text
+      if(chartLat && chartLng){
+        (payload as any).Latitude=chartLat;(payload as any).Longitude=chartLng
+      } else if(chartPlace){
         try{
           const geo=await fetch(`https://photon.komoot.io/api/?q=${encodeURIComponent(chartPlace)}&limit=1&lang=en`).then(r=>r.json())
           const f=geo?.features?.[0]
@@ -1498,7 +1503,10 @@ export default function WesternPage(){
                 </div>
                 <div>
                   <div style={{fontSize:'10px',color:'var(--w-tx2)',fontWeight:700,textTransform:'uppercase',letterSpacing:'.06em',marginBottom:'6px'}}>Place of birth</div>
-                  <input value={chartPlace} onChange={e=>setChartPlace(e.target.value)} placeholder="City, Country" style={{width:'100%',padding:'10px 12px',borderRadius:'10px',border:'1.5px solid var(--w-bd)',background:'var(--w-bg)',color:'var(--w-tx)',fontSize:'14px',boxSizing:'border-box',fontFamily:'inherit',outline:'none'}} />
+                  <CityAutocomplete
+                    value={chartPlace}
+                    onChange={(city, la, ln) => { setChartPlace(city); if(la) setChartLat(la); if(ln) setChartLng(ln); }}
+                    placeholder="City, Country" />
                 </div>
                 <div style={{textAlign:'center'}}>{btn(chartLoading?'Generating...':'Generate My Chart -- Free ✦',generateChart,chartLoading)}</div>
                 {chartErr&&<div style={{color:'#DC2626',fontSize:'12px',textAlign:'center',marginTop:'8px'}}>{chartErr}</div>}
