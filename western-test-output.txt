@@ -1,20 +1,20 @@
 
 Running 14 tests using 2 workers
 
-  ✓   2 [chromium] › e2e/07-western.spec.js:14:3 › Western Compat Page › W1: Page loads, compat tab visible (4.1s)
-  ✓   1 [mobile] › e2e/07-western.spec.js:14:3 › Western Compat Page › W1: Page loads, compat tab visible (4.2s)
+  ✓   2 [chromium] › e2e/07-western.spec.js:14:3 › Western Compat Page › W1: Page loads, compat tab visible (4.3s)
+  ✓   1 [mobile] › e2e/07-western.spec.js:14:3 › Western Compat Page › W1: Page loads, compat tab visible (4.4s)
 Select count: 13
 Select count: 13
-  ✓   3 [chromium] › e2e/07-western.spec.js:20:3 › Western Compat Page › W2: Has select dropdowns for Day/Month/Year — NOT plain text (3.7s)
-  ✓   4 [mobile] › e2e/07-western.spec.js:20:3 › Western Compat Page › W2: Has select dropdowns for Day/Month/Year — NOT plain text (3.9s)
+  ✓   3 [chromium] › e2e/07-western.spec.js:20:3 › Western Compat Page › W2: Has select dropdowns for Day/Month/Year — NOT plain text (3.5s)
+  ✓   4 [mobile] › e2e/07-western.spec.js:20:3 › Western Compat Page › W2: Has select dropdowns for Day/Month/Year — NOT plain text (3.8s)
 First select options: 32
 First select options: 32
   ✓   5 [chromium] › e2e/07-western.spec.js:28:3 › Western Compat Page › W3: Day dropdown has 31 day options (3.6s)
   ✓   6 [mobile] › e2e/07-western.spec.js:28:3 › Western Compat Page › W3: Day dropdown has 31 day options (3.6s)
 Place inputs: 2
+  ✓   7 [chromium] › e2e/07-western.spec.js:36:3 › Western Compat Page › W4: City input present for both people (3.6s)
 Place inputs: 2
-  ✓   7 [chromium] › e2e/07-western.spec.js:36:3 › Western Compat Page › W4: City input present for both people (3.7s)
-  ✓   8 [mobile] › e2e/07-western.spec.js:36:3 › Western Compat Page › W4: City input present for both people (3.7s)
+  ✓   8 [mobile] › e2e/07-western.spec.js:36:3 › Western Compat Page › W4: City input present for both people (3.8s)
 Input value after typing: Mumbai
   ✓   9 [chromium] › e2e/07-western.spec.js:43:3 › Western Compat Page › W5: City autocomplete fires suggestions on typing (5.5s)
 Input value after typing: Mumbai
@@ -28,12 +28,12 @@ Has score: true
 Has match label: true
 Body length: 8307
 PDF button present: true
-  ✓  12 [mobile] › e2e/07-western.spec.js:55:3 › Western Compat Page › W6: Fill form + Reveal shows real matchmaking result (12.2s)
+  ✓  12 [mobile] › e2e/07-western.spec.js:55:3 › Western Compat Page › W6: Fill form + Reveal shows real matchmaking result (12.4s)
 Pathu Porutham present: false
 Ashta Koota present: false
-  ✓  13 [chromium] › e2e/07-western.spec.js:104:3 › Western Compat Page › W7: No Indian terms in visible text (3.6s)
+  ✓  13 [chromium] › e2e/07-western.spec.js:104:3 › Western Compat Page › W7: No Indian terms in visible text (3.4s)
 Pathu Porutham present: false
 Ashta Koota present: false
-  ✓  14 [mobile] › e2e/07-western.spec.js:104:3 › Western Compat Page › W7: No Indian terms in visible text (3.5s)
+  ✓  14 [mobile] › e2e/07-western.spec.js:104:3 › Western Compat Page › W7: No Indian terms in visible text (3.4s)
 
-  14 passed (37.9s)
+  14 passed (38.4s)
