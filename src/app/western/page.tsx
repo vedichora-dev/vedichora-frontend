@@ -1068,7 +1068,7 @@ export default function WesternPage(){
                 background:`linear-gradient(135deg,${t.bg},${t.acc})`,cursor:'pointer',padding:0,flexShrink:0}} />
             ))}
           </div>
-          <Link href="/" style={{fontSize:'12px',color:'var(--w-tx2)',textDecoration:'none',
+          <Link href="/jyoti" style={{fontSize:'12px',color:'var(--w-tx2)',textDecoration:'none',
             border:'1px solid var(--w-bd)',borderRadius:'6px',padding:'5px 10px',whiteSpace:'nowrap'}}>
             🪔 Vedic Mode
           </Link>
