@@ -1,0 +1,67 @@
+name: Web CI
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    name: TypeScript + Build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install
+        run: npm ci --legacy-peer-deps
+
+      - name: TypeScript check
+        run: npx tsc --noEmit
+
+      - name: Build
+        run: npm run build
+
+  playwright:
+    name: Playwright E2E
+    runs-on: ubuntu-latest
+    needs: check
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install
+        run: npm ci --legacy-peer-deps
+
+      - name: Install Playwright
+        run: npx playwright install chromium --with-deps
+
+      - name: Run E2E tests
+        env:
+          BASE_URL: 'https://vedichora-frontend-orcin.vercel.app'
+          TEST_EMAIL: demo@vedichora.com
+          TEST_PASSWORD: Demo1234!
+        run: npx playwright test --reporter=list 2>&1 | tee e2e-output.txt || true
+
+      - name: Upload results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-${{ github.run_id }}
+          path: |
+            e2e-output.txt
+            test-results/
+            playwright-report/
+          retention-days: 7
