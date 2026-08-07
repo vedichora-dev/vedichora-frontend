@@ -8,16 +8,17 @@ Ticket / requirement:
 - [ ]
 
 ## Verification
-- [ ] TypeScript passes (`tsc --noEmit`)
-- [ ] Build passes (`next build`)
-- [ ] Playwright E2E passes
-- [ ] No hardcoded UtcOffsetHours
-- [ ] Demo account tested
+- [ ] TypeScript passes
+- [ ] Build passes (`npm run build`)
+- [ ] Playwright E2E passes on Vercel preview
+- [ ] No hardcoded `UtcOffsetHours`
+- [ ] Demo account tested (demo@vedichora.com / Demo1234!)
+- [ ] No secrets committed
 
 ## Evidence
-Workflow URL:
+CI workflow URL:
 Vercel Preview URL:
-Test report:
+Playwright report:
 
 ## Risks
 -
